@@ -123,7 +123,7 @@ def create_paper_dataset():
                         "pheochromocytoma_size_cm": 3.7,
                         "pheochromocytoma_laterality": "Unilateral",
                         "hyperparathyroidism": "Yes",
-                        "men2_syndrome": "No",
+                        "men2_syndrome": "Yes",
                         "family_history_mtc": "No",
                         "genetic_testing_reason": "PHEO diagnosis"
                     },
