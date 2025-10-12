@@ -35,7 +35,7 @@ class LogisticRegressionModel(BaseModel):
             'solver': 'liblinear'  # good for small datasets
         }
         
-        # Update with any provided parameters
+        # update with any provided parameters
         default_params.update(kwargs)
         return default_params
         
