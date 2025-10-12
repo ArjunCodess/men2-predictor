@@ -6,9 +6,11 @@ from sklearn.metrics import classification_report
 import warnings
 import sys
 import os
+import argparse
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'models'))
-from logistic_model import LogisticRegressionModel
+from logistic_regression_model import LogisticRegressionModel
+from random_forest import RandomForestModel
 
 warnings.filterwarnings('ignore')
 
@@ -57,7 +59,7 @@ def prepare_features_target(df, target_column='mtc_diagnosis'):
     return features, target, df.get('source_id', df.index)
 
 
-def train_evaluate_model():
+def train_evaluate_model(model_type='logistic'):
     """main function to train and evaluate the model using new model structure"""
 
     # load data
@@ -97,29 +99,39 @@ def train_evaluate_model():
     print(f"train target distribution: {pd.Series(y_train).value_counts().to_dict()}")
     print(f"test target distribution: {pd.Series(y_test).value_counts().to_dict()}")
     
-    # Create and train logistic regression model using new structure
-    logistic_model = LogisticRegressionModel(threshold=0.15)  # medical screening threshold
+    # Create and train model based on selection
+    if model_type == 'random_forest' or model_type == 'r':
+        model = RandomForestModel(threshold=0.5)
+        model_filename = 'data/random_forest_model.pkl'
+        print(f"training random forest model...")
+    else:  # default to logistic regression
+        model = LogisticRegressionModel(threshold=0.15)  # medical screening threshold
+        model_filename = 'data/logistic_model.pkl'
+        print(f"training logistic regression model...")
     
     # Cross-validation using the model's built-in method
-    logistic_model.print_cv_results(X_train, y_train, cv_folds=3)
+    model.print_cv_results(X_train, y_train, cv_folds=3)
     
     # Train the model
-    logistic_model.train(X_train, y_train, scaler, features.columns.tolist())
+    model.train(X_train, y_train, scaler, features.columns.tolist())
     
-    # Print coefficients for interpretability
-    logistic_model.print_coefficients()
+    # Print model-specific information
+    if hasattr(model, 'print_coefficients'):
+        model.print_coefficients()
+    if hasattr(model, 'print_tree_stats'):
+        model.print_tree_stats()
     
     # Evaluate on test set
-    logistic_model.print_evaluation(X_test, y_test)
+    model.print_evaluation(X_test, y_test)
     
     # Print feature importance
-    logistic_model.print_feature_importance(top_n=10)
+    model.print_feature_importance(top_n=10)
     
     # Save the model
-    logistic_model.save('data/logistic_model.pkl')
+    model.save(model_filename)
     
-    print(f"\nLogistic regression model saved to data/logistic_model.pkl")
-    return logistic_model, scaler, X_train, X_test, y_train, y_test, features.columns.tolist()
+    print(f"\n{model.model_name} model saved to {model_filename}")
+    return model, scaler, X_train, X_test, y_train, y_test, features.columns.tolist()
 
 
 def print_model_summary():
@@ -157,5 +169,21 @@ def print_model_summary():
 
 
 if __name__ == "__main__":
-    logistic_model, scaler, X_train_scaled, X_test_scaled, y_train, y_test, feature_cols = train_evaluate_model()
+    # parse command line arguments
+    parser = argparse.ArgumentParser(description='train mtc prediction model')
+    parser.add_argument('--m', '--model', type=str, default='l', 
+                       choices=['l', 'r', 'logistic', 'random_forest'],
+                       help='model type: l/logistic for logistic regression (default), r/random_forest for random forest')
+    
+    args = parser.parse_args()
+    
+    # determine model type
+    if args.m in ['r', 'random_forest']:
+        model_type = 'random_forest'
+    else:
+        model_type = 'logistic'
+    
+    print(f"selected model type: {model_type}")
+    
+    model, scaler, X_train_scaled, X_test_scaled, y_train, y_test, feature_cols = train_evaluate_model(model_type)
     print_model_summary()

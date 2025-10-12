@@ -2,17 +2,25 @@ import pandas as pd
 import numpy as np
 import sys
 import os
+import argparse
 
 # Add models directory to path
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'models'))
-from logistic_model import LogisticRegressionModel
+from logistic_regression_model import LogisticRegressionModel
+from random_forest import RandomForestModel
 
-def load_model_and_test_data():
+def load_model_and_test_data(model_type='logistic'):
     """load trained model and test data using new model structure"""
     
-    # Load the trained logistic model
-    logistic_model = LogisticRegressionModel()
-    logistic_model.load('data/logistic_model.pkl')
+    # Load the trained model based on type
+    if model_type == 'random_forest' or model_type == 'r':
+        model = RandomForestModel()
+        model_filename = 'data/random_forest_model.pkl'
+    else:  # default to logistic regression
+        model = LogisticRegressionModel()
+        model_filename = 'data/logistic_model.pkl'
+    
+    model.load(model_filename)
     
     # Load test data
     df = pd.read_csv('data/men2_case_control_dataset.csv')
@@ -37,11 +45,11 @@ def load_model_and_test_data():
     ]
     
     # Add age group dummies if they were used in training
-    if any('age_group_' in col for col in logistic_model.feature_columns):
+    if any('age_group_' in col for col in model.feature_columns):
         age_dummies = pd.get_dummies(df['age_group'], prefix='age_group')
         features = pd.concat([df[feature_cols], age_dummies], axis=1)
         # Ensure all expected columns are present
-        for col in logistic_model.feature_columns:
+        for col in model.feature_columns:
             if col not in features.columns:
                 features[col] = 0
     else:
@@ -53,7 +61,7 @@ def load_model_and_test_data():
     features['nodule_severity'] = df['thyroid_nodules_present'] * df['multiple_nodules']
     
     # Use the SAVED scaler directly (don't create new one)
-    features_scaled = logistic_model.scaler.transform(features)
+    features_scaled = model.scaler.transform(features)
     
     # Use the EXACT same split as training
     from sklearn.model_selection import train_test_split
@@ -64,7 +72,7 @@ def load_model_and_test_data():
     # Get test patient indices
     test_indices = y_test.index
     
-    return logistic_model, X_test, y_test, df.iloc[test_indices]
+    return model, X_test, y_test, df.iloc[test_indices]
 
 def generate_predictions(model, X_test_scaled, y_test, threshold=None):
     """generate predictions and probabilities using new model structure"""
@@ -165,8 +173,12 @@ def print_individual_predictions(model, test_patients, y_test):
     print("-" * 50)
     
     risk_tiers = model.risk_stratification(y_pred_proba)
-    risk_counts = {'low risk (0.10)': 0, 'moderate risk (0.20)': 0, 'high risk (0.50)': 0, 'very high risk (1.00)': 0}
+    
+    # create dynamic risk counts based on actual risk tiers
+    risk_counts = {}
     for risk_tier in risk_tiers:
+        if risk_tier not in risk_counts:
+            risk_counts[risk_tier] = 0
         risk_counts[risk_tier] += 1
     
     for risk_tier, count in risk_counts.items():
@@ -207,8 +219,24 @@ def print_model_insights(model, X_test, y_test, test_patients):
     print("=" * 60)
 
 if __name__ == "__main__":
+    # parse command line arguments
+    parser = argparse.ArgumentParser(description='test mtc prediction model')
+    parser.add_argument('--m', '--model', type=str, default='l', 
+                       choices=['l', 'r', 'logistic', 'random_forest'],
+                       help='model type: l/logistic for logistic regression (default), r/random_forest for random forest')
+    
+    args = parser.parse_args()
+    
+    # determine model type
+    if args.m in ['r', 'random_forest']:
+        model_type = 'random_forest'
+    else:
+        model_type = 'logistic'
+    
+    print(f"testing model type: {model_type}")
+    
     # load model and test data
-    model, X_test_scaled, y_test, test_patients = load_model_and_test_data()
+    model, X_test_scaled, y_test, test_patients = load_model_and_test_data(model_type)
     
     # print results using new model structure
     print_test_metrics(model, X_test_scaled, y_test)
