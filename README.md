@@ -7,7 +7,7 @@ This project automates data preparation, exploratory analysis, dataset expansion
 ## Table of Contents
 
 - [About The Project](#about-the-project)
-- [Getting Started](#getting-started)
+- [Getting Started](#getting-started)  
 - [Usage](#usage)
 - [License](#license)
 - [Authors](#authors)
@@ -17,28 +17,43 @@ This project automates data preparation, exploratory analysis, dataset expansion
 
 MEN2 is a rare hereditary cancer syndrome associated with RET gene mutations.
 
-This repository provides a reproducible machine learning pipeline to predict MEN2 risk, primarily leveraging Python’s scientific stack.
+This repository provides a reproducible machine learning pipeline to predict MEN2 risk, primarily leveraging Python's scientific stack.
 
 **Key features:**
 - **End-to-end pipeline** managed by `main.py`, coordinating all major steps automatically.
 - **Automated data creation and expansion:** Scripts extract and structure relevant research data, and generate synthetic control samples to augment the dataset for robust modeling.
 - **Comprehensive statistical analysis:** Automatic generation of descriptive statistics and visualization of the dataset for informed modeling.
-- **Model development:** Logistic regression with cross-validation to distinguish MEN2 cases from controls.
+- **Advanced model development:** Logistic regression with cross-validation and SMOTE balancing to handle class imbalance.
+- **Clinical risk stratification:** 4-tier risk assessment (Low/Moderate/High/Very High) for actionable clinical decision-making.
 - **Artifacts generated:** Processed datasets and a trained `model.pkl`, usable for risk scoring new patients with relevant clinical/genetic data.
 
 **Pipeline steps (as run by `main.py`):**
-1. **create_datasets.py:** Extracts and formats case/control and RET K666N mutation data into CSVs.
+1. **create_datasets.py:** Extracts and formats case/control and RET K666N mutation data into CSVs (8 patients from 2 studies).
 2. **data_analysis.py:** Computes descriptive statistics and generates visualizations to aid in understanding cohort differences.
 3. **data_expansion.py:** Produces synthetic control samples to improve model balance.
-4. **train_model.py:** Trains a logistic regression model with cross-validation and saves it.
-5. **test_model.py:** Evaluates the model on test data and provides performance metrics.
+4. **train_model.py:** Trains a logistic regression model with cross-validation, SMOTE balancing, and threshold optimization.
+5. **test_model.py:** Evaluates the model on test data with risk stratification and comprehensive metrics.
 6. **Artifact summary:** Includes `ret_k666n_training_data.csv`, `ret_k666n_expanded_training_data.csv`, `men2_case_control_dataset.csv`, `model.pkl`.
 
+**Advanced features:**
+- **Data Leakage Prevention:** SMOTE applied after train/test split to ensure realistic evaluation
+- **Feature Engineering:** Polynomial features (age²) and interactions (calcitonin×age, nodule_severity)
+- **Constant Feature Removal:** Automatic detection and removal of non-informative features
+- **Risk Stratification:** 4-tier system for clinical decision support instead of binary classification
+- **Comprehensive Metrics:** ROC-AUC, F1-Score, Average Precision Score, and confidence intervals
+
 **Typical features used:**
-- Age at diagnosis/intervention
-- Calcitonin levels
+- Age at diagnosis/intervention and derived features
+- Calcitonin levels and elevation status  
+- Thyroid nodule characteristics
+- Family history of MTC
 - RET mutation status (with special focus on K666N variant)
-- Clinical markers relevant to MEN2 syndrome
+- Clinical markers (pheochromocytoma, hyperparathyroidism)
+
+**Clinical Use Case:**
+- **Screening Tool:** Optimized for high sensitivity (catches all MTC cases)
+- **Risk Stratification:** Provides actionable monitoring recommendations
+- **Research Tool:** Validated on small datasets typical of rare genetic conditions
 
 ## Getting Started
 
@@ -89,5 +104,6 @@ This project is licensed under the MIT License.
 
 ## Acknowledgements
 
-Thanks to open source communities and packages including scikit-learn, pandas, numpy, matplotlib, seaborn, and joblib for making data science and reproducibility accessible.
-Additional credit to researchers whose data informed the synthetic controls and simulations in this tool.
+Thanks to open source communities and packages including scikit-learn, pandas, numpy, matplotlib, seaborn, joblib, and imbalanced-learn for making data science and reproducibility accessible.
+
+Additional credit to researchers whose data informed the synthetic controls and simulations in this tool. Special thanks to the authors of the JCEM Case Reports (2025) and EDM Case Reports (2024) studies for providing clinical data on RET K666N carriers.
