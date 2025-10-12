@@ -106,7 +106,7 @@ def train_evaluate_model(model_type='logistic'):
         print(f"training random forest model...")
     else:  # default to logistic regression
         model = LogisticRegressionModel(threshold=0.15)  # medical screening threshold
-        model_filename = 'logistic_model.pkl'
+        model_filename = 'logistic_regression_model.pkl'
         print(f"training logistic regression model...")
     
     # Cross-validation using the model's built-in method

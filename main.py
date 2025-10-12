@@ -78,7 +78,7 @@ def main(model_type='logistic'):
     if model_type == 'random_forest':
         print("- random_forest_model.pkl")
     else:
-        print("- logistic_model.pkl")
+        print("- logistic_regression_model.pkl")
     print()
     print("The trained model can now be used for RET K666N mutation")
     print("and MEN2 syndrome risk prediction in new patients.")

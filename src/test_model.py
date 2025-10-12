@@ -18,7 +18,7 @@ def load_model_and_test_data(model_type='logistic'):
         model_filename = 'random_forest_model.pkl'
     else:  # default to logistic regression
         model = LogisticRegressionModel()
-        model_filename = 'logistic_model.pkl'
+        model_filename = 'logistic_regression_model.pkl'
     
     model.load(model_filename)
     

@@ -181,7 +181,10 @@ class BaseModel(ABC):
             'model_name': self.model_name
         }
         
-        os.makedirs(os.path.dirname(filepath), exist_ok=True)
+        # create directory if filepath contains a directory
+        dir_path = os.path.dirname(filepath)
+        if dir_path:
+            os.makedirs(dir_path, exist_ok=True)
         with open(filepath, 'wb') as f:
             pickle.dump(model_data, f)
             
