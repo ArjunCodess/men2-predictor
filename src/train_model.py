@@ -1,11 +1,15 @@
 import pandas as pd
 import numpy as np
-from sklearn.model_selection import train_test_split, cross_val_score, StratifiedKFold
+from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
-from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import accuracy_score, f1_score, roc_auc_score, classification_report, confusion_matrix
-import pickle
+from sklearn.metrics import classification_report
 import warnings
+import sys
+import os
+
+sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'models'))
+from logistic_model import LogisticRegressionModel
+
 warnings.filterwarnings('ignore')
 
 
@@ -54,7 +58,7 @@ def prepare_features_target(df, target_column='mtc_diagnosis'):
 
 
 def train_evaluate_model():
-    """main function to train and evaluate the model"""
+    """main function to train and evaluate the model using new model structure"""
 
     # load data
     df = load_expanded_dataset()
@@ -93,64 +97,29 @@ def train_evaluate_model():
     print(f"train target distribution: {pd.Series(y_train).value_counts().to_dict()}")
     print(f"test target distribution: {pd.Series(y_test).value_counts().to_dict()}")
     
-    # Train model
-    model = LogisticRegression(random_state=42, class_weight='balanced', max_iter=1000)
+    # Create and train logistic regression model using new structure
+    logistic_model = LogisticRegressionModel(threshold=0.15)  # medical screening threshold
     
-    # USE STRATIFIED K-FOLD (3 folds for small data)
-    cv = StratifiedKFold(n_splits=3, shuffle=True, random_state=42)
+    # Cross-validation using the model's built-in method
+    logistic_model.print_cv_results(X_train, y_train, cv_folds=3)
     
-    # Cross-validation scores
-    cv_scores = cross_val_score(model, X_train, y_train, cv=cv, scoring='f1')
-    cv_roc_scores = cross_val_score(model, X_train, y_train, cv=cv, scoring='roc_auc')
+    # Train the model
+    logistic_model.train(X_train, y_train, scaler, features.columns.tolist())
     
-    print(f"CROSS-VALIDATION RESULTS (Training Set):")
-    print(f"Accuracy: {cross_val_score(model, X_train, y_train, cv=cv, scoring='accuracy').mean():.3f} (±{cross_val_score(model, X_train, y_train, cv=cv, scoring='accuracy').std():.3f})")
-    print(f"F1-Score: {cv_scores.mean():.3f} (±{cv_scores.std():.3f})")
-    print(f"ROC-AUC: {cv_roc_scores.mean():.3f} (±{cv_roc_scores.std():.3f})")
+    # Print coefficients for interpretability
+    logistic_model.print_coefficients()
     
-    # Train on full training set
-    model.fit(X_train, y_train)
+    # Evaluate on test set
+    logistic_model.print_evaluation(X_test, y_test)
     
-    # Test predictions with ADJUSTED THRESHOLD
-    y_pred_proba = model.predict_proba(X_test)[:, 1]
-    y_pred = (y_pred_proba > 0.15).astype(int)  # Lower threshold for medical screening sensitivity
+    # Print feature importance
+    logistic_model.print_feature_importance(top_n=10)
     
-    # Evaluate
-    accuracy = accuracy_score(y_test, y_pred)
-    f1 = f1_score(y_test, y_pred)
-    roc_auc = roc_auc_score(y_test, y_pred_proba)
+    # Save the model
+    logistic_model.save('data/logistic_model.pkl')
     
-    print(f"TEST SET PERFORMANCE:")
-    print(f"Accuracy: {accuracy:.3f}")
-    print(f"F1-Score: {f1:.3f}")
-    print(f"ROC-AUC: {roc_auc:.3f}")
-    
-    # BETTER METRICS FOR IMBALANCED DATA
-    from sklearn.metrics import precision_recall_curve, average_precision_score
-    ap_score = average_precision_score(y_test, y_pred_proba)
-    print(f"Average Precision Score: {ap_score:.3f}")
-    
-    # Confusion Matrix
-    cm = confusion_matrix(y_test, y_pred)
-    print(f"Confusion Matrix:")
-    print(f"TN: {cm[0,0]:3d} | FP: {cm[0,1]:3d}")
-    print(f"FN: {cm[1,0]:3d} | TP: {cm[1,1]:3d}")
-    
-    # Classification Report
-    print(classification_report(y_test, y_pred, target_names=['No MTC', 'MTC']))
-    
-    # Save model and scaler
-    model_data = {
-        'model': model,
-        'scaler': scaler,
-        'feature_columns': features.columns.tolist(),
-        'threshold': 0.15  # Save the adjusted threshold for medical screening
-    }
-    with open('data/model.pkl', 'wb') as f:
-        pickle.dump(model_data, f)
-    
-    print(f"\nmodel and scaler saved to data/model.pkl (with threshold: {model_data['threshold']})")
-    return model, scaler, X_train, X_test, y_train, y_test, features.columns.tolist()
+    print(f"\nLogistic regression model saved to data/logistic_model.pkl")
+    return logistic_model, scaler, X_train, X_test, y_train, y_test, features.columns.tolist()
 
 
 def print_model_summary():
@@ -188,5 +157,5 @@ def print_model_summary():
 
 
 if __name__ == "__main__":
-    model, scaler, X_train_scaled, X_test_scaled, y_train, y_test, feature_cols = train_evaluate_model()
+    logistic_model, scaler, X_train_scaled, X_test_scaled, y_train, y_test, feature_cols = train_evaluate_model()
     print_model_summary()
