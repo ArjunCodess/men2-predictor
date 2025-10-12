@@ -36,11 +36,11 @@ def main():
     
     # define pipeline steps
     pipeline_steps = [
-        ("create_datasets.py", "Dataset Creation - Extract and structure research data"),
-        ("data_analysis.py", "Data Analysis - Generate statistics and visualizations"),
-        ("data_expansion.py", "Data Expansion - Create synthetic controls and expand dataset"),
-        ("train_model.py", "Model Training - Train Logistic Regression with cross-validation"),
-        ("test_model.py", "Model Testing - Evaluate performance on test set")
+        ("src/create_datasets.py", "Dataset Creation - Extract and structure research data"),
+        ("src/data_analysis.py", "Data Analysis - Generate statistics and visualizations"),
+        ("src/data_expansion.py", "Data Expansion - Create synthetic controls and expand dataset"),
+        ("src/train_model.py", "Model Training - Train Logistic Regression with cross-validation"),
+        ("src/test_model.py", "Model Testing - Evaluate performance on test set")
     ]
     
     # execute each step
