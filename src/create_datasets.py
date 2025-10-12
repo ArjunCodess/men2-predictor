@@ -244,6 +244,11 @@ def create_paper_dataset():
     # create structured dataframe from combined patient data
     df = pd.DataFrame(all_patients)
     
+    # remove duplicates based on patient_id
+    print(f"Before deduplication: {len(df)} patients")
+    df = df.drop_duplicates(subset=['patient_id'], keep='first')
+    print(f"After deduplication: {len(df)} patients")
+    
     # feature engineering
     df['ret_k666n_positive'] = 1  # all patients have the mutation
     
@@ -393,6 +398,11 @@ def create_expanded_dataset(paper_df, paper_data):
     
     # combine all cases
     expanded_df = pd.concat([paper_df, pd.DataFrame(synthetic_cases), pd.DataFrame(control_cases)], ignore_index=True)
+    
+    # remove duplicates based on key features (age, gender, calcitonin_level_numeric)
+    print(f"Before expanded dataset deduplication: {len(expanded_df)} patients")
+    expanded_df = expanded_df.drop_duplicates(subset=['age', 'gender', 'calcitonin_level_numeric'], keep='first')
+    print(f"After expanded dataset deduplication: {len(expanded_df)} patients")
     
     return expanded_df
 
