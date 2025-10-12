@@ -176,13 +176,13 @@ def create_paper_dataset():
     df_final = df[final_columns].copy()
     
     # save paper-only dataset
-    df_final.to_csv('ret_k666n_training_data.csv', index=False)
+    df_final.to_csv('data/ret_k666n_training_data.csv', index=False)
     
     # create expanded dataset with literature cases
     expanded_df = create_expanded_dataset(df_final, paper_data)
     
     # save expanded dataset  
-    expanded_df.to_csv('ret_k666n_expanded_training_data.csv', index=False)
+    expanded_df.to_csv('data/ret_k666n_expanded_training_data.csv', index=False)
     
     return df_final, expanded_df
 

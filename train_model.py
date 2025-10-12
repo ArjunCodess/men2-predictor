@@ -11,7 +11,7 @@ warnings.filterwarnings('ignore')
 
 def load_expanded_dataset():
     """load the expanded dataset"""
-    return pd.read_csv('men2_case_control_dataset.csv')
+    return pd.read_csv('data/men2_case_control_dataset.csv')
 
 
 def prepare_features_target(df, target_column='mtc_diagnosis'):

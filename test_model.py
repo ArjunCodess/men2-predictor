@@ -15,7 +15,7 @@ def load_model_and_test_data():
     feature_columns = model_data['feature_columns']
     
     # load test data
-    df = pd.read_csv('men2_case_control_dataset.csv')
+    df = pd.read_csv('data/men2_case_control_dataset.csv')
     
     # prepare features and target
     feature_cols = [

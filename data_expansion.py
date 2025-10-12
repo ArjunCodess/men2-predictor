@@ -3,7 +3,7 @@ import numpy as np
 
 def load_paper_dataset():
     """read the paper-only dataset csv"""
-    return pd.read_csv('ret_k666n_training_data.csv')
+    return pd.read_csv('data/ret_k666n_training_data.csv')
 
 def create_matched_controls(original_df, n_controls_per_case=2):
     """implement wickramaratne 1995 matched controls method"""
@@ -211,7 +211,7 @@ def expand_dataset():
     })
     
     # save final expanded dataset
-    expanded_df.to_csv('men2_case_control_dataset.csv', index=False)
+    expanded_df.to_csv('data/men2_case_control_dataset.csv', index=False)
     
     return original_df, expanded_df
 
@@ -239,7 +239,7 @@ def print_expansion_summary(original_df, expanded_df):
     
     print("EXPANSION DETAILS:")
     print(f"- Original cases: {len(original_df)}")
-    print(f"- Synthetic variants: {len(expanded_df) - len(original_df) - len(pd.read_csv('men2_case_control_dataset.csv', nrows=0))}")
+    print(f"- Synthetic variants: {len(expanded_df) - len(original_df) - len(pd.read_csv('data/men2_case_control_dataset.csv', nrows=0))}")
     print(f"- Matched controls: {len(create_matched_controls(original_df, 3))}")
     print(f"- Population controls: {len(original_df) * 2}")
     print()

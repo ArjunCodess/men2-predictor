@@ -7,8 +7,8 @@ import os
 
 def load_datasets():
     """load both csv files"""
-    paper_df = pd.read_csv('ret_k666n_training_data.csv')
-    expanded_df = pd.read_csv('ret_k666n_expanded_training_data.csv')
+    paper_df = pd.read_csv('data/ret_k666n_training_data.csv')
+    expanded_df = pd.read_csv('data/ret_k666n_expanded_training_data.csv')
     return paper_df, expanded_df
 
 
