@@ -183,24 +183,6 @@ def create_paper_dataset():
                         "men2_syndrome": "No",
                         "family_history_mtc": "No",
                         "genetic_testing_reason": "Cascade testing"
-                    },
-                    {
-                        "patient_id": "New_Patient_5_Sisters_Son",
-                        "age": 24,
-                        "gender": "Male",
-                        "relationship": "Sister's son",
-                        "ret_variant": "K666N",
-                        "ret_status": "Positive",
-                        "calcitonin_level": "Not screened",
-                        "calcitonin_normal_range": "0-5.1 pg/mL",
-                        "calcitonin_elevated": "Unknown",
-                        "thyroid_ultrasound": "Not screened",
-                        "mtc_diagnosis": "Not screened",
-                        "pheochromocytoma": "Not screened",
-                        "hyperparathyroidism": "Not screened",
-                        "men2_syndrome": "Unknown",
-                        "family_history_mtc": "Unknown",
-                        "genetic_testing_reason": "Cascade testing (incomplete)"
                     }
                 ]
             }
