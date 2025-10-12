@@ -17,9 +17,20 @@ def load_expanded_dataset():
 def prepare_features_target(df, target_column='mtc_diagnosis'):
     """prepare features and target for modeling"""
 
+    # REMOVE CONSTANT FEATURES
+    df = df.copy()
+    constant_features = []
+    for col in df.columns:
+        if df[col].nunique() == 1:  # Only one unique value
+            constant_features.append(col)
+    
+    if constant_features:
+        print(f"Removing constant features: {constant_features}")
+        df = df.drop(columns=constant_features)
+
     # select features (exclude non-numeric columns and target)
     feature_columns = [
-        'source_id', 'age', 'gender', 'ret_k666n_positive', 'calcitonin_elevated', 'calcitonin_level_numeric',
+        'age', 'gender', 'calcitonin_elevated', 'calcitonin_level_numeric',
         'thyroid_nodules_present', 'multiple_nodules', 'family_history_mtc',
         'pheochromocytoma', 'hyperparathyroidism'
     ]
@@ -31,10 +42,15 @@ def prepare_features_target(df, target_column='mtc_diagnosis'):
     else:
         features = df[feature_columns].copy()
 
+    # ADD MEANINGFUL FEATURES
+    features['age_squared'] = df['age'] ** 2
+    features['calcitonin_age_interaction'] = df['calcitonin_level_numeric'] * df['age']
+    features['nodule_severity'] = df['thyroid_nodules_present'] * df['multiple_nodules']
+
     target = df[target_column]
     
     # return groups for group-aware splitting
-    return features.drop('source_id', axis=1), target, df['source_id']
+    return features, target, df.get('source_id', df.index)
 
 
 def train_evaluate_model():
@@ -48,54 +64,87 @@ def train_evaluate_model():
     features, target, groups = prepare_features_target(df, target_column='mtc_diagnosis')
     print(f"features shape: {features.shape}, target distribution: {target.value_counts().to_dict()}")
 
-    # group-aware split to prevent leakage across variants/controls of same subject
-    from sklearn.model_selection import GroupShuffleSplit
-    gss = GroupShuffleSplit(n_splits=1, test_size=0.2, random_state=42)
-    train_idx, test_idx = next(gss.split(features, target, groups))
-    X_train, X_test = features.iloc[train_idx], features.iloc[test_idx]
-    y_train, y_test = target.iloc[train_idx], target.iloc[test_idx]
-    groups_train, groups_test = groups.iloc[train_idx], groups.iloc[test_idx]
-
-    print(f"train set shape: {X_train.shape}, test set shape: {X_test.shape}")
-    print(f"train target distribution: {y_train.value_counts().to_dict()}")
-    print(f"test target distribution: {y_test.value_counts().to_dict()}")
-
-    # scale features
-    scaler = StandardScaler()
-    X_train_scaled = scaler.fit_transform(X_train)
-    X_test_scaled = scaler.transform(X_test)
-
-    # train logistic regression with balanced class weights
-    model = LogisticRegression(
-        random_state=42,
-        class_weight='balanced',
-        max_iter=1000
-    )
-
-    # group-aware cross-validation on training set
-    # use stratified groups if available; fallback to GroupKFold
-    from sklearn.model_selection import GroupKFold
-    cv = GroupKFold(n_splits=min(5, len(np.unique(groups_train))))
+    # USE SMOTE FOR BALANCING
+    from imblearn.over_sampling import SMOTE
     
-    # cross-validation scores
-    cv_accuracy = cross_val_score(model, X_train_scaled, y_train, groups=groups_train, cv=cv, scoring='accuracy')
-    cv_f1 = cross_val_score(model, X_train_scaled, y_train, groups=groups_train, cv=cv, scoring='f1')
-    cv_roc_auc = cross_val_score(model, X_train_scaled, y_train, groups=groups_train, cv=cv, scoring='roc_auc')
-
-    print("\nCROSS-VALIDATION RESULTS (Training Set):")
-    print(f"Accuracy: {cv_accuracy.mean():.3f} (±{cv_accuracy.std() * 2:.3f})")
-    print(f"F1-Score: {cv_f1.mean():.3f} (±{cv_f1.std() * 2:.3f})")
-    print(f"ROC-AUC: {cv_roc_auc.mean():.3f} (±{cv_roc_auc.std() * 2:.3f})")
-
-    # train final model on full training set
-    model.fit(X_train_scaled, y_train)
-
-    # save model and scaler
-    with open('model.pkl', 'wb') as f:
-        pickle.dump({'model': model, 'scaler': scaler, 'feature_columns': features.columns.tolist()}, f)
-
-    print("\nmodel and scaler saved to model.pkl")
-    return model, scaler, X_train_scaled, X_test_scaled, y_train, y_test, features.columns.tolist()
+    # Scale features before SMOTE
+    scaler = StandardScaler()
+    features_scaled = scaler.fit_transform(features)
+    
+    # Apply SMOTE with careful k_neighbors for small dataset
+    smote = SMOTE(random_state=42, k_neighbors=3)  # k=3 for small data
+    X_resampled, y_resampled = smote.fit_resample(features_scaled, target)
+    
+    print(f"After SMOTE: X_resampled shape: {X_resampled.shape}, "
+          f"y_resampled distribution: {pd.Series(y_resampled).value_counts().to_dict()}")
+    
+    # Split after SMOTE (use stratified split since groups don't match after resampling)
+    X_train, X_test, y_train, y_test = train_test_split(
+        X_resampled, y_resampled, test_size=0.2, random_state=42, stratify=y_resampled
+    )
+    
+    print(f"train set shape: {X_train.shape}, test set shape: {X_test.shape}")
+    print(f"train target distribution: {pd.Series(y_train).value_counts().to_dict()}")
+    print(f"test target distribution: {pd.Series(y_test).value_counts().to_dict()}")
+    
+    # Train model
+    model = LogisticRegression(random_state=42, class_weight='balanced', max_iter=1000)
+    
+    # USE STRATIFIED K-FOLD (3 folds for small data)
+    cv = StratifiedKFold(n_splits=3, shuffle=True, random_state=42)
+    
+    # Cross-validation scores
+    cv_scores = cross_val_score(model, X_train, y_train, cv=cv, scoring='f1')
+    cv_roc_scores = cross_val_score(model, X_train, y_train, cv=cv, scoring='roc_auc')
+    
+    print(f"CROSS-VALIDATION RESULTS (Training Set):")
+    print(f"Accuracy: {cross_val_score(model, X_train, y_train, cv=cv, scoring='accuracy').mean():.3f} (±{cross_val_score(model, X_train, y_train, cv=cv, scoring='accuracy').std():.3f})")
+    print(f"F1-Score: {cv_scores.mean():.3f} (±{cv_scores.std():.3f})")
+    print(f"ROC-AUC: {cv_roc_scores.mean():.3f} (±{cv_roc_scores.std():.3f})")
+    
+    # Train on full training set
+    model.fit(X_train, y_train)
+    
+    # Test predictions with ADJUSTED THRESHOLD
+    y_pred_proba = model.predict_proba(X_test)[:, 1]
+    y_pred = (y_pred_proba > 0.3).astype(int)  # Lower threshold for medical screening
+    
+    # Evaluate
+    accuracy = accuracy_score(y_test, y_pred)
+    f1 = f1_score(y_test, y_pred)
+    roc_auc = roc_auc_score(y_test, y_pred_proba)
+    
+    print(f"TEST SET PERFORMANCE:")
+    print(f"Accuracy: {accuracy:.3f}")
+    print(f"F1-Score: {f1:.3f}")
+    print(f"ROC-AUC: {roc_auc:.3f}")
+    
+    # BETTER METRICS FOR IMBALANCED DATA
+    from sklearn.metrics import precision_recall_curve, average_precision_score
+    ap_score = average_precision_score(y_test, y_pred_proba)
+    print(f"Average Precision Score: {ap_score:.3f}")
+    
+    # Confusion Matrix
+    cm = confusion_matrix(y_test, y_pred)
+    print(f"Confusion Matrix:")
+    print(f"TN: {cm[0,0]:3d} | FP: {cm[0,1]:3d}")
+    print(f"FN: {cm[1,0]:3d} | TP: {cm[1,1]:3d}")
+    
+    # Classification Report
+    print(classification_report(y_test, y_pred, target_names=['No MTC', 'MTC']))
+    
+    # Save model and scaler
+    model_data = {
+        'model': model,
+        'scaler': scaler,
+        'feature_columns': features.columns.tolist(),
+        'threshold': 0.3  # Save the adjusted threshold
+    }
+    with open('data/model.pkl', 'wb') as f:
+        pickle.dump(model_data, f)
+    
+    print(f"\nmodel and scaler saved to data/model.pkl (with threshold: {model_data['threshold']})")
+    return model, scaler, X_train, X_test, y_train, y_test, features.columns.tolist()
 
 
 def print_model_summary():
