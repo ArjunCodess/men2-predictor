@@ -1,0 +1,5 @@
+source_id,age,gender,ret_k666n_positive,calcitonin_elevated,calcitonin_level_numeric,thyroid_nodules_present,multiple_nodules,family_history_mtc,mtc_diagnosis,c_cell_disease,men2_syndrome,pheochromocytoma,hyperparathyroidism,age_group
+0,24,0,1,0,0.0,0,0,0,0,0,0,0,0,young
+1,21,0,1,0,0.0,0,0,0,0,0,0,0,0,young
+2,60,1,1,1,13.0,1,1,0,1,1,0,0,0,elderly
+3,84,0,1,1,37.0,1,0,0,0,1,0,0,0,very_elderly
