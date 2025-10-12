@@ -13,7 +13,7 @@ def load_model_and_test_data():
     model = model_data['model']
     scaler = model_data['scaler']
     feature_columns = model_data['feature_columns']
-    threshold = model_data.get('threshold', 0.5)  # Default to 0.5 if not saved
+    threshold = model_data.get('threshold', 0.15)  # Default to 0.15 for medical screening
     
     # load test data
     df = pd.read_csv('data/men2_case_control_dataset.csv')
@@ -53,23 +53,19 @@ def load_model_and_test_data():
     features['calcitonin_age_interaction'] = df['calcitonin_level_numeric'] * df['age']
     features['nodule_severity'] = df['thyroid_nodules_present'] * df['multiple_nodules']
     
-    # Use the SAME train/test split as training (stratified split)
-    from sklearn.model_selection import train_test_split
-    from sklearn.preprocessing import StandardScaler
-    
-    # Scale features the same way as training
-    scaler_temp = StandardScaler()
-    features_scaled = scaler_temp.fit_transform(features)
+    # Use the SAVED scaler directly (don't create new one)
+    features_scaled = scaler.transform(features)
     
     # Use the EXACT same split as training
-    X_train, X_test, y_train, y_test = train_test_split(
+    from sklearn.model_selection import train_test_split
+    _, X_test, _, y_test = train_test_split(
         features_scaled, df['mtc_diagnosis'], test_size=0.2, random_state=42, stratify=df['mtc_diagnosis']
     )
     
-    # Scale test features using the SAME scaler from training
-    X_test_scaled = scaler.transform(features.iloc[y_test.index])
+    # Get test patient indices
+    test_indices = y_test.index
     
-    return model, X_test_scaled, y_test, df.iloc[y_test.index], threshold
+    return model, X_test, y_test, df.iloc[test_indices], threshold
 
 def generate_predictions(model, X_test_scaled, y_test, threshold=0.5):
     """generate predictions and probabilities"""

@@ -113,7 +113,7 @@ def train_evaluate_model():
     
     # Test predictions with ADJUSTED THRESHOLD
     y_pred_proba = model.predict_proba(X_test)[:, 1]
-    y_pred = (y_pred_proba > 0.3).astype(int)  # Lower threshold for medical screening
+    y_pred = (y_pred_proba > 0.15).astype(int)  # Lower threshold for medical screening sensitivity
     
     # Evaluate
     accuracy = accuracy_score(y_test, y_pred)
@@ -144,7 +144,7 @@ def train_evaluate_model():
         'model': model,
         'scaler': scaler,
         'feature_columns': features.columns.tolist(),
-        'threshold': 0.3  # Save the adjusted threshold
+        'threshold': 0.15  # Save the adjusted threshold for medical screening
     }
     with open('data/model.pkl', 'wb') as f:
         pickle.dump(model_data, f)
