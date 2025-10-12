@@ -1,5 +1,10 @@
-source_id,age,gender,ret_k666n_positive,calcitonin_elevated,calcitonin_level_numeric,thyroid_nodules_present,multiple_nodules,family_history_mtc,mtc_diagnosis,c_cell_disease,men2_syndrome,pheochromocytoma,hyperparathyroidism,age_group
-0,24,0,1,0,0.0,0,0,0,0,0,0,0,0,young
-1,21,0,1,0,0.0,0,0,0,0,0,0,0,0,young
-2,60,1,1,1,13.0,1,1,0,1,1,0,0,0,elderly
-3,84,0,1,1,37.0,1,0,0,0,1,0,0,0,very_elderly
+source_id,study_id,age,gender,ret_k666n_positive,calcitonin_elevated,calcitonin_level_numeric,thyroid_nodules_present,multiple_nodules,family_history_mtc,mtc_diagnosis,c_cell_disease,men2_syndrome,pheochromocytoma,hyperparathyroidism,age_group
+0,study_1,24,0,1,0,0.0,0,0,0,0,0,0,0,0,young
+1,study_1,21,0,1,0,0.0,0,0,1,0,0,0,0,0,young
+2,study_1,60,1,1,1,13.0,1,1,1,1,1,0,0,0,elderly
+3,study_1,84,0,1,1,37.0,1,0,1,0,1,0,0,0,very_elderly
+4,study_2,40,0,1,1,12.3,1,0,0,1,1,0,1,1,middle
+5,study_2,42,0,1,1,5.2,1,0,1,0,0,0,0,0,middle
+6,study_2,46,1,1,1,17.3,1,0,0,0,0,0,0,0,middle
+7,study_2,22,0,1,0,0.0,0,0,1,0,0,0,0,0,young
+8,study_2,24,1,1,0,0.0,0,0,1,0,0,0,0,0,young
