@@ -7,4 +7,3 @@ source_id,study_id,age,gender,ret_k666n_positive,calcitonin_elevated,calcitonin_
 5,study_2,42,0,1,1,5.2,1,0,1,0,0,0,0,0,middle
 6,study_2,46,1,1,1,17.3,1,0,0,0,0,0,0,0,middle
 7,study_2,22,0,1,0,0.0,0,0,1,0,0,0,0,0,young
-8,study_2,24,1,1,0,0.0,0,0,1,0,0,0,0,0,young
