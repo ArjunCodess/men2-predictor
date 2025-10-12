@@ -6,20 +6,33 @@ from sklearn.metrics import accuracy_score, f1_score, roc_auc_score, classificat
 def load_model_and_test_data():
     """load trained model and test data"""
     
-    # load model and scaler
-    with open('model.pkl', 'rb') as f:
+    # load model and scaler (includes threshold now)
+    with open('data/model.pkl', 'rb') as f:
         model_data = pickle.load(f)
     
     model = model_data['model']
     scaler = model_data['scaler']
     feature_columns = model_data['feature_columns']
+    threshold = model_data.get('threshold', 0.5)  # Default to 0.5 if not saved
     
     # load test data
     df = pd.read_csv('data/men2_case_control_dataset.csv')
     
-    # prepare features and target
+    # prepare features and target - use same logic as training
+    # REMOVE CONSTANT FEATURES
+    df = df.copy()
+    constant_features = []
+    for col in df.columns:
+        if df[col].nunique() == 1:  # Only one unique value
+            constant_features.append(col)
+    
+    if constant_features:
+        print(f"Removing constant features: {constant_features}")
+        df = df.drop(columns=constant_features)
+    
+    # select features (exclude non-numeric columns and target)
     feature_cols = [
-        'source_id', 'age', 'gender', 'ret_k666n_positive', 'calcitonin_elevated', 'calcitonin_level_numeric',
+        'age', 'gender', 'calcitonin_elevated', 'calcitonin_level_numeric',
         'thyroid_nodules_present', 'multiple_nodules', 'family_history_mtc',
         'pheochromocytoma', 'hyperparathyroidism'
     ]
@@ -34,9 +47,11 @@ def load_model_and_test_data():
                 features[col] = 0
     else:
         features = df[feature_cols].copy()
-    # drop source_id; keep it for potential grouping if needed later
-    if 'source_id' in features.columns:
-        features = features.drop('source_id', axis=1)
+    
+    # ADD MEANINGFUL FEATURES (same as training)
+    features['age_squared'] = df['age'] ** 2
+    features['calcitonin_age_interaction'] = df['calcitonin_level_numeric'] * df['age']
+    features['nodule_severity'] = df['thyroid_nodules_present'] * df['multiple_nodules']
     
     # split the data the same way as training
     from sklearn.model_selection import train_test_split
@@ -51,14 +66,14 @@ def load_model_and_test_data():
     # scale test features
     X_test_scaled = scaler.transform(X_test)
     
-    return model, X_test_scaled, y_test, df.iloc[y_test.index]
+    return model, X_test_scaled, y_test, df.iloc[test_idx], threshold
 
-def generate_predictions(model, X_test_scaled, y_test):
+def generate_predictions(model, X_test_scaled, y_test, threshold=0.5):
     """generate predictions and probabilities"""
     
-    # predictions
-    y_pred = model.predict(X_test_scaled)
+    # predictions with ADJUSTED THRESHOLD
     y_pred_proba = model.predict_proba(X_test_scaled)[:, 1]  # probability of positive class
+    y_pred = (y_pred_proba > threshold).astype(int)  # Use custom threshold
     
     return y_pred, y_pred_proba
 
@@ -73,10 +88,15 @@ def print_test_metrics(y_test, y_pred, y_pred_proba):
     f1 = f1_score(y_test, y_pred)
     roc_auc = roc_auc_score(y_test, y_pred_proba)
     
+    # BETTER METRICS FOR IMBALANCED DATA
+    from sklearn.metrics import precision_recall_curve, average_precision_score
+    ap_score = average_precision_score(y_test, y_pred_proba)
+    
     print("TEST SET PERFORMANCE:")
     print(f"Accuracy: {accuracy:.3f}")
     print(f"F1-Score: {f1:.3f}")
     print(f"ROC-AUC: {roc_auc:.3f}")
+    print(f"Average Precision Score: {ap_score:.3f}")
     print()
     
     # confusion matrix
@@ -84,6 +104,13 @@ def print_test_metrics(y_test, y_pred, y_pred_proba):
     print("CONFUSION MATRIX:")
     print(f"TN: {cm[0,0]:3d} | FP: {cm[0,1]:3d}")
     print(f"FN: {cm[1,0]:3d} | TP: {cm[1,1]:3d}")
+    print()
+    
+    # Show precision-recall curve insights
+    precision, recall, thresholds = precision_recall_curve(y_test, y_pred_proba)
+    optimal_idx = np.argmax(precision * recall)  # F1-like optimization
+    optimal_threshold = thresholds[optimal_idx] if len(thresholds) > optimal_idx else 0.5
+    print(f"Optimal threshold (F1-like): {optimal_threshold:.3f}")
     print()
     
     # detailed classification report
@@ -120,8 +147,8 @@ def print_model_insights():
     print("=" * 60)
     
     # load test results to analyze
-    model, X_test_scaled, y_test, test_patients = load_model_and_test_data()
-    y_pred, y_pred_proba = generate_predictions(model, X_test_scaled, y_test)
+    model, X_test_scaled, y_test, test_patients, threshold = load_model_and_test_data()
+    y_pred, y_pred_proba = generate_predictions(model, X_test_scaled, y_test, threshold)
     
     # analyze prediction patterns
     test_df = test_patients.copy()
@@ -170,10 +197,10 @@ def print_model_insights():
 
 if __name__ == "__main__":
     # load model and test data
-    model, X_test_scaled, y_test, test_patients = load_model_and_test_data()
+    model, X_test_scaled, y_test, test_patients, threshold = load_model_and_test_data()
     
-    # generate predictions
-    y_pred, y_pred_proba = generate_predictions(model, X_test_scaled, y_test)
+    # generate predictions with threshold
+    y_pred, y_pred_proba = generate_predictions(model, X_test_scaled, y_test, threshold)
     
     # print results
     print_test_metrics(y_test, y_pred, y_pred_proba)
