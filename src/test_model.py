@@ -117,13 +117,24 @@ def print_test_metrics(y_test, y_pred, y_pred_proba):
     print(classification_report(y_test, y_pred, target_names=['No MTC', 'MTC']))
     print("=" * 60)
 
+def risk_stratification(probability):
+    """Convert binary predictions to risk tiers for clinical use"""
+    if probability < 0.10:
+        return "Low Risk (0.10)"
+    elif probability < 0.20:
+        return "Moderate Risk (0.20)"  
+    elif probability < 0.50:
+        return "High Risk (0.50)"
+    else:
+        return "Very High Risk (1.00)"
+
 def print_individual_predictions(test_patients, y_test, y_pred, y_pred_proba):
-    """show individual patient predictions with probabilities and actual labels"""
+    """show individual patient predictions with risk stratification"""
     print("=" * 80)
-    print("INDIVIDUAL PATIENT PREDICTIONS")
+    print("INDIVIDUAL PATIENT PREDICTIONS WITH RISK STRATIFICATION")
     print("=" * 80)
     
-    print(f"{'Patient':<20} {'Age':<5} {'Gender':<8} {'Actual':<8} {'Predicted':<10} {'Probability':<12} {'Correct?'}")
+    print(f"{'Patient':<20} {'Age':<6} {'Gender':<8} {'Actual':<10} {'Risk Tier':<25} {'Probability':<12}")
     print("-" * 80)
     
     for i, (_, patient) in enumerate(test_patients.iterrows()):
@@ -131,13 +142,26 @@ def print_individual_predictions(test_patients, y_test, y_pred, y_pred_proba):
         age = f"{patient['age']:.0f}"
         gender = "Male" if patient['gender'] == 1 else "Female"
         actual = "MTC" if y_test.iloc[i] == 1 else "No MTC"
-        predicted = "MTC" if y_pred[i] == 1 else "No MTC"
-        probability = f"{y_pred_proba[i]:.3f}"
-        correct = "Y" if y_test.iloc[i] == y_pred[i] else "N"
+        prob = y_pred_proba[i]
+        risk_tier = risk_stratification(prob)
         
-        print(f"{patient_id:<20} {age:<5} {gender:<8} {actual:<8} {predicted:<10} {probability:<12} {correct}")
+        print(f"{patient_id:<20} {age:<6} {gender:<8} {actual:<10} {risk_tier:<25} {prob:<12.3f}")
     
     print("=" * 80)
+    
+    print("\nRISK STRATIFICATION SUMMARY:")
+    print("-" * 50)
+    
+    risk_counts = {'Low Risk (0.10)': 0, 'Moderate Risk (0.20)': 0, 'High Risk (0.50)': 0, 'Very High Risk (1.00)': 0}
+    for prob in y_pred_proba:
+        risk_tier = risk_stratification(prob)
+        risk_counts[risk_tier] += 1
+    
+    for risk_tier, count in risk_counts.items():
+        if count > 0:
+            print(f"{risk_tier}: {count} patients")
+    
+    print("-" * 50)
 
 def print_model_insights():
     """print insights about model performance"""
