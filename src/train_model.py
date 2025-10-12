@@ -64,24 +64,30 @@ def train_evaluate_model():
     features, target, groups = prepare_features_target(df, target_column='mtc_diagnosis')
     print(f"features shape: {features.shape}, target distribution: {target.value_counts().to_dict()}")
 
-    # USE SMOTE FOR BALANCING
-    from imblearn.over_sampling import SMOTE
-    
-    # Scale features before SMOTE
+    # Scale features first
     scaler = StandardScaler()
     features_scaled = scaler.fit_transform(features)
     
-    # Apply SMOTE with careful k_neighbors for small dataset
-    smote = SMOTE(random_state=42, k_neighbors=3)  # k=3 for small data
-    X_resampled, y_resampled = smote.fit_resample(features_scaled, target)
-    
-    print(f"After SMOTE: X_resampled shape: {X_resampled.shape}, "
-          f"y_resampled distribution: {pd.Series(y_resampled).value_counts().to_dict()}")
-    
-    # Split after SMOTE (use stratified split since groups don't match after resampling)
+    # SPLIT FIRST (on real data only) - CRITICAL FIX
     X_train, X_test, y_train, y_test = train_test_split(
-        X_resampled, y_resampled, test_size=0.2, random_state=42, stratify=y_resampled
+        features_scaled, target, test_size=0.2, random_state=42, stratify=target
     )
+    
+    print(f"Original train: {X_train.shape}, test: {X_test.shape}")
+    print(f"Train distribution: {pd.Series(y_train).value_counts().to_dict()}")
+    print(f"Test distribution: {pd.Series(y_test).value_counts().to_dict()}")
+    
+    # THEN apply SMOTE only to training data
+    from imblearn.over_sampling import SMOTE
+    smote = SMOTE(random_state=42, k_neighbors=3)  # k=3 for small data
+    X_train_balanced, y_train_balanced = smote.fit_resample(X_train, y_train)
+    
+    print(f"After SMOTE train: {X_train_balanced.shape}, "
+          f"y_train_balanced distribution: {pd.Series(y_train_balanced).value_counts().to_dict()}")
+    print(f"Test set: {X_test.shape} (NO SMOTE - REAL DATA ONLY)")
+    
+    # Use balanced training data
+    X_train, y_train = X_train_balanced, y_train_balanced
     
     print(f"train set shape: {X_train.shape}, test set shape: {X_test.shape}")
     print(f"train target distribution: {pd.Series(y_train).value_counts().to_dict()}")

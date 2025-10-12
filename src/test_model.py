@@ -53,20 +53,23 @@ def load_model_and_test_data():
     features['calcitonin_age_interaction'] = df['calcitonin_level_numeric'] * df['age']
     features['nodule_severity'] = df['thyroid_nodules_present'] * df['multiple_nodules']
     
-    # split the data the same way as training
+    # Use the SAME train/test split as training (stratified split)
     from sklearn.model_selection import train_test_split
-    # perform the same group-aware split used in training for consistency
-    from sklearn.model_selection import GroupShuffleSplit
-    groups = df['source_id'] if 'source_id' in df.columns else df.index
-    gss = GroupShuffleSplit(n_splits=1, test_size=0.2, random_state=42)
-    train_idx, test_idx = next(gss.split(features, df['mtc_diagnosis'], groups=groups))
-    X_test = features.iloc[test_idx]
-    y_test = df['mtc_diagnosis'].iloc[test_idx]
+    from sklearn.preprocessing import StandardScaler
     
-    # scale test features
-    X_test_scaled = scaler.transform(X_test)
+    # Scale features the same way as training
+    scaler_temp = StandardScaler()
+    features_scaled = scaler_temp.fit_transform(features)
     
-    return model, X_test_scaled, y_test, df.iloc[test_idx], threshold
+    # Use the EXACT same split as training
+    X_train, X_test, y_train, y_test = train_test_split(
+        features_scaled, df['mtc_diagnosis'], test_size=0.2, random_state=42, stratify=df['mtc_diagnosis']
+    )
+    
+    # Scale test features using the SAME scaler from training
+    X_test_scaled = scaler.transform(features.iloc[y_test.index])
+    
+    return model, X_test_scaled, y_test, df.iloc[y_test.index], threshold
 
 def generate_predictions(model, X_test_scaled, y_test, threshold=0.5):
     """generate predictions and probabilities"""
@@ -164,7 +167,7 @@ def print_model_insights():
     
     print("FEATURE IMPORTANCE INSIGHTS:")
     # get feature importance from logistic regression coefficients
-    with open('model.pkl', 'rb') as f:
+    with open('data/model.pkl', 'rb') as f:
         model_data = pickle.load(f)
     
     feature_cols = model_data['feature_columns']
@@ -176,6 +179,9 @@ def print_model_insights():
         'importance': np.abs(coefficients),
         'coefficient': coefficients
     }).sort_values('importance', ascending=False)
+    
+    # Filter out constant features (should not appear due to removal, but just in case)
+    importance_df = importance_df[importance_df['importance'] > 0]
     
     print("TOP 5 MOST IMPORTANT FEATURES:")
     for i, row in importance_df.head(5).iterrows():
