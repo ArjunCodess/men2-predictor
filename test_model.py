@@ -7,7 +7,7 @@ def load_model_and_test_data():
     """load trained model and test data"""
     
     # load model and scaler
-    with open('men2_prediction_model.pkl', 'rb') as f:
+    with open('model.pkl', 'rb') as f:
         model_data = pickle.load(f)
     
     model = model_data['model']
@@ -137,7 +137,7 @@ def print_model_insights():
     
     print("FEATURE IMPORTANCE INSIGHTS:")
     # get feature importance from logistic regression coefficients
-    with open('men2_prediction_model.pkl', 'rb') as f:
+    with open('model.pkl', 'rb') as f:
         model_data = pickle.load(f)
     
     feature_cols = model_data['feature_columns']
