@@ -61,7 +61,7 @@ This repository provides a reproducible machine learning pipeline to predict MEN
 
 1. Clone the repo
    ```sh
-   git clone https://github.com/your-username/men2-predictor.git
+   git clone https://github.com/ArjunCodess/men2-predictor.git
    ```
 2. Go to the project folder
    ```sh
