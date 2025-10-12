@@ -76,9 +76,9 @@ def main(model_type='logistic'):
     print("- data/ret_k666n_expanded_training_data.csv") 
     print("- data/men2_case_control_dataset.csv")
     if model_type == 'random_forest':
-        print("- data/random_forest_model.pkl")
+        print("- random_forest_model.pkl")
     else:
-        print("- data/logistic_model.pkl")
+        print("- logistic_model.pkl")
     print()
     print("The trained model can now be used for RET K666N mutation")
     print("and MEN2 syndrome risk prediction in new patients.")

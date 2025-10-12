@@ -15,10 +15,10 @@ def load_model_and_test_data(model_type='logistic'):
     # Load the trained model based on type
     if model_type == 'random_forest' or model_type == 'r':
         model = RandomForestModel()
-        model_filename = 'data/random_forest_model.pkl'
+        model_filename = 'random_forest_model.pkl'
     else:  # default to logistic regression
         model = LogisticRegressionModel()
-        model_filename = 'data/logistic_model.pkl'
+        model_filename = 'logistic_model.pkl'
     
     model.load(model_filename)
     
