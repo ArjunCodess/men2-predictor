@@ -211,10 +211,10 @@ def create_paper_dataset():
             "ret_k666n_carriers_reported": 24,
             "mtc_cases_in_literature": 9,
             "c_cell_disease_cases": 2,
-            "mtc_diagnosis_ages": [22, 23, 33, 49, 51, 55, 59, 64, 70],
-            "penetrance": "Incomplete",
-            "expressivity": "Age-dependent",
-            "men2_features": "Rare in heterozygous carriers"
+            "mtc_diagnosis_ages": [22, 23, 33, 40, 42, 46, 49, 51, 55, 59, 60, 64, 70, 84],
+            "penetrance": "Low/Incomplete",
+            "expressivity": "Age-dependent, variable",
+            "men2_features": "Rare in heterozygous carriers, but PHEO+MTC+PHPT possible"
         },
 
         "mutation_characteristics": {
@@ -228,11 +228,21 @@ def create_paper_dataset():
         }
     }
 
-    # create structured dataframe from patient data
-    df = pd.DataFrame(paper_data["patient_data"])
+    # combine patient data from all studies
+    all_patients = []
+    source_id_counter = 0
     
-    # add stable source identifier per original subject
-    df['source_id'] = range(len(df))
+    for study in paper_data["studies"]:
+        study_id = study["study_id"]
+        for patient in study["patient_data"]:
+            patient_copy = patient.copy()
+            patient_copy['study_id'] = study_id
+            patient_copy['source_id'] = source_id_counter
+            all_patients.append(patient_copy)
+            source_id_counter += 1
+    
+    # create structured dataframe from combined patient data
+    df = pd.DataFrame(all_patients)
     
     # feature engineering
     df['ret_k666n_positive'] = 1  # all patients have the mutation
@@ -241,11 +251,28 @@ def create_paper_dataset():
     df['calcitonin_level_numeric'] = df['calcitonin_level'].str.extract(r'(\d+\.?\d*)').iloc[:, 0].astype(float)
     df['calcitonin_level_numeric'] = df['calcitonin_level_numeric'].fillna(0.0)
     
-    # calcitonin elevated flag
-    contains_units = df['calcitonin_level'].str.contains('pg/mL', na=False)
-    extracted_numeric = df['calcitonin_level'].str.extract(r'(\d+\.?\d*)').iloc[:, 0].astype(float)
-    is_elevated_numeric = (extracted_numeric > 7.5).fillna(False)
-    df['calcitonin_elevated'] = (contains_units & is_elevated_numeric).astype(int)
+    # calcitonin elevated flag - handle different normal ranges
+    def determine_calcitonin_elevated(row):
+        calcitonin_level = str(row['calcitonin_level']).lower()
+        calcitonin_numeric = row['calcitonin_level_numeric']
+        
+        # handle special cases
+        if 'undetectable' in calcitonin_level or 'normal' in calcitonin_level:
+            return 0
+        if 'not screened' in calcitonin_level or 'unknown' in calcitonin_level:
+            return 0
+        
+        # extract normal range from calcitonin_normal_range
+        normal_range = str(row['calcitonin_normal_range'])
+        if '0-5.1' in normal_range or '0.0-5.1' in normal_range:
+            return 1 if calcitonin_numeric > 5.1 else 0
+        elif '0-7.5' in normal_range or '0.0-7.5' in normal_range:
+            return 1 if calcitonin_numeric > 7.5 else 0
+        else:
+            # default to 7.5 if range unclear
+            return 1 if calcitonin_numeric > 7.5 else 0
+    
+    df['calcitonin_elevated'] = df.apply(determine_calcitonin_elevated, axis=1)
     
     # gender encoding (0=female, 1=male)
     df['gender'] = df['gender'].map({'Female': 0, 'Male': 1})
@@ -255,12 +282,21 @@ def create_paper_dataset():
     df['multiple_nodules'] = df['thyroid_nodule_count'].fillna(0) > 1
     df['multiple_nodules'] = df['multiple_nodules'].astype(int)
     
-    # family history of MTC (based on relationship and family screening)
-    df['family_history_mtc'] = df['relationship'].isin(['Sister', 'Father', 'Paternal grandmother']) | df['family_screening'].fillna('No').str.lower() == 'yes'
-    df['family_history_mtc'] = df['family_history_mtc'].astype(int)
+    # family history of MTC (based on relationship, family screening, and explicit family_history_mtc field)
+    relationship_family = df['relationship'].isin(['Sister', 'Father', 'Paternal grandmother', 'Proband\'s daughter', 'Sister\'s son'])
+    family_screening_yes = df['family_screening'].fillna('No').str.lower() == 'yes'
+    explicit_family_history = df['family_history_mtc'].fillna('No').str.lower() == 'yes'
+    
+    df['family_history_mtc'] = (relationship_family | family_screening_yes | explicit_family_history).astype(int)
     
     # MTC diagnosis (target variable)
-    df['mtc_diagnosis'] = df['mtc_diagnosis'].map({'No': 0, 'Yes': 1, 'Suspected (declined workup)': 0}).fillna(0).astype(int)
+    df['mtc_diagnosis'] = df['mtc_diagnosis'].map({
+        'No': 0, 
+        'Yes': 1, 
+        'Suspected (declined workup)': 0,
+        'Suspected (elevated calcitonin)': 0,
+        'Not screened': 0
+    }).fillna(0).astype(int)
     
     # C-cell disease (includes MTC and C-cell hyperplasia/suspected)
     df['c_cell_disease'] = ((df['mtc_diagnosis'] == 1) | 
@@ -271,8 +307,8 @@ def create_paper_dataset():
     df['men2_syndrome'] = df['men2_syndrome'].map({'No': 0, 'Yes': 1}).fillna(0).astype(int)
     
     # other clinical features
-    df['pheochromocytoma'] = df['pheochromocytoma'].map({'No': 0, 'Yes': 1}).fillna(0).astype(int)
-    df['hyperparathyroidism'] = df['hyperparathyroidism'].map({'No': 0, 'Yes': 1}).fillna(0).astype(int)
+    df['pheochromocytoma'] = df['pheochromocytoma'].map({'No': 0, 'Yes': 1, 'Not screened': 0}).fillna(0).astype(int)
+    df['hyperparathyroidism'] = df['hyperparathyroidism'].map({'No': 0, 'Yes': 1, 'Not screened': 0}).fillna(0).astype(int)
     
     # age groups for stratification
     df['age_group'] = pd.cut(df['age'], bins=[0, 30, 50, 70, 100], labels=['young', 'middle', 'elderly', 'very_elderly'])
@@ -281,7 +317,7 @@ def create_paper_dataset():
     
     # select final columns for ML
     final_columns = [
-        'source_id', 'age', 'gender', 'ret_k666n_positive', 'calcitonin_elevated', 'calcitonin_level_numeric',
+        'source_id', 'study_id', 'age', 'gender', 'ret_k666n_positive', 'calcitonin_elevated', 'calcitonin_level_numeric',
         'thyroid_nodules_present', 'multiple_nodules', 'family_history_mtc', 'mtc_diagnosis',
         'c_cell_disease', 'men2_syndrome', 'pheochromocytoma', 'hyperparathyroidism', 'age_group'
     ]
@@ -369,10 +405,20 @@ def print_dataset_info(df1, df2):
     print(f"expanded dataset shape: {df2.shape}")
     print()
     
+    # study breakdown
+    print("STUDY BREAKDOWN:")
+    study_counts = df1['study_id'].value_counts()
+    for study_id, count in study_counts.items():
+        study_name = "JCEM Case Reports (2025)" if study_id == "study_1" else "EDM Case Reports (2024)"
+        print(f"- {study_name}: {count} patients")
+    print()
+    
     print("PAPER-ONLY DATASET TARGET DISTRIBUTION:")
     print(f"MTC diagnosis cases: {df1['mtc_diagnosis'].sum()}/{len(df1)} ({df1['mtc_diagnosis'].mean():.1%})")
     print(f"C-cell disease cases: {df1['c_cell_disease'].sum()}/{len(df1)} ({df1['c_cell_disease'].mean():.1%})")
     print(f"MEN2 syndrome cases: {df1['men2_syndrome'].sum()}/{len(df1)} ({df1['men2_syndrome'].mean():.1%})")
+    print(f"Pheochromocytoma cases: {df1['pheochromocytoma'].sum()}/{len(df1)} ({df1['pheochromocytoma'].mean():.1%})")
+    print(f"Hyperparathyroidism cases: {df1['hyperparathyroidism'].sum()}/{len(df1)} ({df1['hyperparathyroidism'].mean():.1%})")
     print()
     
     print("EXPANDED DATASET TARGET DISTRIBUTION:")
