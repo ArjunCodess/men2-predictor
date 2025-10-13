@@ -94,6 +94,39 @@ python main.py
 
 For detailed usage or to run a pipeline step separately, see each script (`create_datasets.py`, `train_model.py`, etc.).
 
+### Model selection (--m)
+
+You can choose which model to train and test using the `--m` argument:
+
+- `l` or `logistic`: logistic regression (default)
+- `r` or `random_forest`: random forest
+
+Examples:
+
+```sh
+# run full pipeline with logistic regression (default)
+python main.py
+python main.py --m=l
+python main.py --m=logistic
+
+# run full pipeline with random forest
+python main.py --m=r
+python main.py --m=random_forest
+
+# train only
+python src/train_model.py --m=l
+python src/train_model.py --m=r
+
+# test only (expects corresponding saved model in data/)
+python src/test_model.py --m=l
+python src/test_model.py --m=r
+```
+
+Artifacts:
+
+- Logistic regression model saved to `data/logistic_model.pkl`
+- Random forest model saved to `data/random_forest_model.pkl`
+
 ## License
 
 This project is licensed under the MIT License.
