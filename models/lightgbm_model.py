@@ -32,17 +32,21 @@ class LightGBMModel(BaseModel):
         # default parameters optimized for small medical tabular data
         default_params = {
             'n_estimators': 200,
-            'max_depth': 4,
+            'num_leaves': 31,              # primary depth control in lightgbm
+            'max_depth': -1,               # let num_leaves control complexity
             'learning_rate': 0.05,
             'subsample': 0.8,
             'colsample_bytree': 0.8,
             'reg_alpha': 0.0,
             'reg_lambda': 1.0,
             'min_child_samples': 20,
+            'min_split_gain': 0.0,
+            'subsample_freq': 1,
             'objective': 'binary',
             'random_state': 42,
             'n_jobs': -1,
-            'device_type': 'gpu' if self.use_gpu else 'cpu'
+            'device_type': 'gpu' if self.use_gpu else 'cpu',
+            'verbose': -1                  # silence training warnings and info
         }
 
         # update with any provided parameters
