@@ -10,8 +10,9 @@ import argparse
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'models'))
 from logistic_regression_model import LogisticRegressionModel
-from random_forest import RandomForestModel
+from random_forest_model import RandomForestModel
 from xgboost_model import XGBoostModel
+from lightgbm_model import LightGBMModel
 
 warnings.filterwarnings('ignore')
 
@@ -109,6 +110,10 @@ def train_evaluate_model(model_type='logistic'):
         model = XGBoostModel(threshold=0.5)
         model_filename = 'xgboost_model.pkl'
         print(f"training xgboost model...")
+    elif model_type == 'lightgbm' or model_type == 'g':
+        model = LightGBMModel(threshold=0.5)
+        model_filename = 'lightgbm_model.pkl'
+        print(f"training lightgbm model...")
     else:  # default to logistic regression
         model = LogisticRegressionModel(threshold=0.15)  # medical screening threshold
         model_filename = 'logistic_regression_model.pkl'
@@ -177,8 +182,8 @@ if __name__ == "__main__":
     # parse command line arguments
     parser = argparse.ArgumentParser(description='train mtc prediction model')
     parser.add_argument('--m', '--model', type=str, default='l', 
-                       choices=['l', 'r', 'x', 'logistic', 'random_forest', 'xgboost'],
-                       help='model type: l/logistic (default), r/random_forest, x/xgboost')
+                       choices=['l', 'r', 'x', 'g', 'logistic', 'random_forest', 'xgboost', 'lightgbm'],
+                       help='model type: l/logistic (default), r/random_forest, x/xgboost, g/lightgbm')
     
     args = parser.parse_args()
     
@@ -187,6 +192,8 @@ if __name__ == "__main__":
         model_type = 'random_forest'
     elif args.m in ['x', 'xgboost']:
         model_type = 'xgboost'
+    elif args.m in ['g', 'lightgbm']:
+        model_type = 'lightgbm'
     else:
         model_type = 'logistic'
     

@@ -7,7 +7,8 @@ import argparse
 # Add models directory to path
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'models'))
 from logistic_regression_model import LogisticRegressionModel
-from random_forest import RandomForestModel
+from random_forest_model import RandomForestModel
+from lightgbm_model import LightGBMModel
 from xgboost_model import XGBoostModel
 
 def load_model_and_test_data(model_type='logistic'):
@@ -17,6 +18,9 @@ def load_model_and_test_data(model_type='logistic'):
     if model_type == 'random_forest' or model_type == 'r':
         model = RandomForestModel()
         model_filename = 'random_forest_model.pkl'
+    elif model_type == 'lightgbm' or model_type == 'g':
+        model = LightGBMModel()
+        model_filename = 'lightgbm_model.pkl'
     elif model_type == 'xgboost' or model_type == 'x':
         model = XGBoostModel()
         model_filename = 'xgboost_model.pkl'
@@ -226,8 +230,8 @@ if __name__ == "__main__":
     # parse command line arguments
     parser = argparse.ArgumentParser(description='test mtc prediction model')
     parser.add_argument('--m', '--model', type=str, default='l', 
-                       choices=['l', 'r', 'x', 'logistic', 'random_forest', 'xgboost'],
-                       help='model type: l/logistic (default), r/random_forest, x/xgboost')
+                       choices=['l', 'r', 'x', 'g', 'logistic', 'random_forest', 'xgboost', 'lightgbm'],
+                       help='model type: l/logistic (default), r/random_forest, x/xgboost, g/lightgbm')
     
     args = parser.parse_args()
     
@@ -236,6 +240,8 @@ if __name__ == "__main__":
         model_type = 'random_forest'
     elif args.m in ['x', 'xgboost']:
         model_type = 'xgboost'
+    elif args.m in ['g', 'lightgbm']:
+        model_type = 'lightgbm'
     else:
         model_type = 'logistic'
     
