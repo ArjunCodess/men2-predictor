@@ -45,6 +45,8 @@ def main(model_type='logistic'):
         model_desc = "Random Forest"
     elif model_type == 'xgboost':
         model_desc = "XGBoost"
+    elif model_type == 'lightgbm':
+        model_desc = "LightGBM"
     else:
         model_desc = "Logistic Regression"
     
@@ -81,6 +83,8 @@ def main(model_type='logistic'):
         print("- random_forest_model.pkl")
     elif model_type == 'xgboost':
         print("- xgboost_model.pkl")
+    elif model_type == 'lightgbm':
+        print("- lightgbm_model.pkl")
     else:
         print("- logistic_regression_model.pkl")
     print()
@@ -93,8 +97,8 @@ if __name__ == "__main__":
     # parse command line arguments
     parser = argparse.ArgumentParser(description='run complete mtc prediction pipeline')
     parser.add_argument('--m', '--model', type=str, default='l', 
-                       choices=['l', 'r', 'x', 'logistic', 'random_forest', 'xgboost'],
-                       help='model type: l/logistic (default), r/random_forest, x/xgboost')
+                       choices=['l', 'r', 'x', 'g', 'logistic', 'random_forest', 'xgboost', 'lightgbm'],
+                       help='model type: l/logistic (default), r/random_forest, x/xgboost, g/lightgbm')
     
     args = parser.parse_args()
     
@@ -103,6 +107,8 @@ if __name__ == "__main__":
         model_type = 'random_forest'
     elif args.m in ['x', 'xgboost']:
         model_type = 'xgboost'
+    elif args.m in ['g', 'lightgbm']:
+        model_type = 'lightgbm'
     else:
         model_type = 'logistic'
     
