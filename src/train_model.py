@@ -87,7 +87,7 @@ def train_evaluate_model(model_type='logistic'):
     
     # THEN apply SMOTE only to training data
     from imblearn.over_sampling import SMOTE
-    smote = SMOTE(random_state=42, k_neighbors=3)  # k=3 for small data
+    smote = SMOTE(random_state=42, k_neighbors=5)
     X_train_balanced, y_train_balanced = smote.fit_resample(X_train, y_train)
     
     print(f"After SMOTE train: {X_train_balanced.shape}, "
@@ -120,7 +120,7 @@ def train_evaluate_model(model_type='logistic'):
         print(f"training logistic regression model...")
     
     # Cross-validation using the model's built-in method
-    model.print_cv_results(X_train, y_train, cv_folds=3)
+    model.print_cv_results(X_train, y_train, cv_folds=5)
     
     # Train the model
     model.train(X_train, y_train, scaler, features.columns.tolist())

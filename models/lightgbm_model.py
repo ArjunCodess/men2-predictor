@@ -31,14 +31,14 @@ class LightGBMModel(BaseModel):
         """get lightgbm specific parameters."""
         # default parameters optimized for small medical tabular data
         default_params = {
-            'n_estimators': 200,
-            'num_leaves': 31,              # primary depth control in lightgbm
-            'max_depth': -1,               # let num_leaves control complexity
+            'n_estimators': 100,
+            'num_leaves': 20,              # allow slightly more complexity
+            'max_depth': 5,                # relax depth limit modestly
             'learning_rate': 0.05,
-            'subsample': 0.8,
-            'colsample_bytree': 0.8,
-            'reg_alpha': 0.0,
-            'reg_lambda': 1.0,
+            'subsample': 0.7,
+            'colsample_bytree': 0.7,
+            'reg_alpha': 0.5,
+            'reg_lambda': 1.5,
             'min_child_samples': 20,
             'min_split_gain': 0.0,
             'subsample_freq': 1,

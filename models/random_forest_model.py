@@ -29,10 +29,10 @@ class RandomForestModel(BaseModel):
         """get randomforest specific parameters."""
         # default parameters optimized for medical data
         default_params = {
-            'n_estimators': 100,
-            'max_depth': 10,
-            'min_samples_split': 5,
-            'min_samples_leaf': 2,
+            'n_estimators': 50,
+            'max_depth': 5,
+            'min_samples_split': 10,
+            'min_samples_leaf': 5,
             'max_features': 'sqrt',
             'random_state': 42,
             'class_weight': 'balanced',

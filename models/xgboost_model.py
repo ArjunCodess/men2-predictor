@@ -30,20 +30,20 @@ class XGBoostModel(BaseModel):
         """get xgboost specific parameters."""
         # default parameters optimized for small medical tabular data
         default_params = {
-            'n_estimators': 200,
-            'max_depth': 4,
+            'n_estimators': 100,
+            'max_depth': 3,
             'learning_rate': 0.05,
-            'subsample': 0.8,
-            'colsample_bytree': 0.8,
-            'reg_alpha': 0.0,
-            'reg_lambda': 1.0,
+            'subsample': 0.7,
+            'colsample_bytree': 0.7,
+            'reg_alpha': 0.5,
+            'reg_lambda': 2.0,
             'min_child_weight': 1,
             'objective': 'binary:logistic',
             'eval_metric': 'logloss',
             'random_state': 42,
             'n_jobs': -1,
             'tree_method': 'gpu_hist' if self.use_gpu else 'hist',
-            'scale_pos_weight': 1.0  # can be tuned as pos/neg ratio
+            'scale_pos_weight': 4.2  # approximate neg/pos ratio for imbalance
         }
 
         # update with any provided parameters
