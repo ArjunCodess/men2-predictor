@@ -100,6 +100,8 @@ You can choose which model to train and test using the `--m` argument:
 
 - `l` or `logistic`: logistic regression (default)
 - `r` or `random_forest`: random forest
+- `x` or `xgboost`: xgboost
+- `g` or `lightgbm`: lightgbm
 
 Examples:
 
@@ -113,19 +115,33 @@ python main.py --m=logistic
 python main.py --m=r
 python main.py --m=random_forest
 
+# run full pipeline with xgboost
+python main.py --m=x
+python main.py --m=xgboost
+
+# run full pipeline with lightgbm
+python main.py --m=g
+python main.py --m=lightgbm
+
 # train only
 python src/train_model.py --m=l
 python src/train_model.py --m=r
+python src/train_model.py --m=x
+python src/train_model.py --m=g
 
-# test only (expects corresponding saved model in data/)
+# test only (expects corresponding saved model in project root)
 python src/test_model.py --m=l
 python src/test_model.py --m=r
+python src/test_model.py --m=x
+python src/test_model.py --m=g
 ```
 
 Artifacts:
 
-- Logistic regression model saved to `data/logistic_model.pkl`
-- Random forest model saved to `data/random_forest_model.pkl`
+- Logistic regression model saved to `logistic_regression_model.pkl`
+- Random forest model saved to `random_forest_model.pkl`
+- XGBoost model saved to `xgboost_model.pkl`
+- LightGBM model saved to `lightgbm_model.pkl`
 
 ## License
 
