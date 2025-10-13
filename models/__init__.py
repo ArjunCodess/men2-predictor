@@ -6,5 +6,6 @@ Contains various machine learning models for predicting MTC diagnosis.
 from .base_model import BaseModel
 from .logistic_regression_model import LogisticRegressionModel
 from .random_forest import RandomForestModel
+from .xgboost_model import XGBoostModel
 
-__all__ = ['BaseModel', 'LogisticRegressionModel', 'RandomForestModel']
+__all__ = ['BaseModel', 'LogisticRegressionModel', 'RandomForestModel', 'XGBoostModel']
