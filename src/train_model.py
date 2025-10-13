@@ -11,6 +11,7 @@ import argparse
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'models'))
 from logistic_regression_model import LogisticRegressionModel
 from random_forest import RandomForestModel
+from xgboost_model import XGBoostModel
 
 warnings.filterwarnings('ignore')
 
@@ -99,11 +100,15 @@ def train_evaluate_model(model_type='logistic'):
     print(f"train target distribution: {pd.Series(y_train).value_counts().to_dict()}")
     print(f"test target distribution: {pd.Series(y_test).value_counts().to_dict()}")
     
-    # Create and train model based on selection
+    # create and train model based on selection
     if model_type == 'random_forest' or model_type == 'r':
         model = RandomForestModel(threshold=0.5)
         model_filename = 'random_forest_model.pkl'
         print(f"training random forest model...")
+    elif model_type == 'xgboost' or model_type == 'x':
+        model = XGBoostModel(threshold=0.5)
+        model_filename = 'xgboost_model.pkl'
+        print(f"training xgboost model...")
     else:  # default to logistic regression
         model = LogisticRegressionModel(threshold=0.15)  # medical screening threshold
         model_filename = 'logistic_regression_model.pkl'
@@ -172,14 +177,16 @@ if __name__ == "__main__":
     # parse command line arguments
     parser = argparse.ArgumentParser(description='train mtc prediction model')
     parser.add_argument('--m', '--model', type=str, default='l', 
-                       choices=['l', 'r', 'logistic', 'random_forest'],
-                       help='model type: l/logistic for logistic regression (default), r/random_forest for random forest')
+                       choices=['l', 'r', 'x', 'logistic', 'random_forest', 'xgboost'],
+                       help='model type: l/logistic (default), r/random_forest, x/xgboost')
     
     args = parser.parse_args()
     
     # determine model type
     if args.m in ['r', 'random_forest']:
         model_type = 'random_forest'
+    elif args.m in ['x', 'xgboost']:
+        model_type = 'xgboost'
     else:
         model_type = 'logistic'
     

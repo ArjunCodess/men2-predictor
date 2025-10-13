@@ -43,6 +43,8 @@ def main(model_type='logistic'):
     # determine model description
     if model_type == 'random_forest':
         model_desc = "Random Forest"
+    elif model_type == 'xgboost':
+        model_desc = "XGBoost"
     else:
         model_desc = "Logistic Regression"
     
@@ -77,6 +79,8 @@ def main(model_type='logistic'):
     print("- data/men2_case_control_dataset.csv")
     if model_type == 'random_forest':
         print("- random_forest_model.pkl")
+    elif model_type == 'xgboost':
+        print("- xgboost_model.pkl")
     else:
         print("- logistic_regression_model.pkl")
     print()
@@ -89,14 +93,16 @@ if __name__ == "__main__":
     # parse command line arguments
     parser = argparse.ArgumentParser(description='run complete mtc prediction pipeline')
     parser.add_argument('--m', '--model', type=str, default='l', 
-                       choices=['l', 'r', 'logistic', 'random_forest'],
-                       help='model type: l/logistic for logistic regression (default), r/random_forest for random forest')
+                       choices=['l', 'r', 'x', 'logistic', 'random_forest', 'xgboost'],
+                       help='model type: l/logistic (default), r/random_forest, x/xgboost')
     
     args = parser.parse_args()
     
     # determine model type
     if args.m in ['r', 'random_forest']:
         model_type = 'random_forest'
+    elif args.m in ['x', 'xgboost']:
+        model_type = 'xgboost'
     else:
         model_type = 'logistic'
     
