@@ -147,9 +147,21 @@ python src/test_model.py --m=g
 
 When using `--m=all`, the pipeline will:
 1. Run data preparation steps once (shared across all models)
-2. Train and test all four model types sequentially
-3. Save individual results to `results/{model_type}_test_results.txt`
-4. Display a comprehensive comparison table with all metrics
+2. Train and test all four model types sequentially (one at a time)
+3. Save detailed execution logs to `results/logs/` for each step
+4. Save individual test results to `results/{model_type}_test_results.txt`
+5. Display a comprehensive comparison table with all metrics
+
+**Log Files Generated:**
+- Data preparation: `results/logs/data_preparation_step{1,2,3}.log`
+- Model training: `results/logs/{model_type}_training.log`
+- Model testing: `results/logs/{model_type}_testing.log`
+
+This approach ensures:
+- All detailed output is preserved in log files for later review
+- Console output remains clean and focused on progress and metrics
+- You can debug issues by checking the specific log file for each step
+- Each model's training and testing output is kept separate for easy comparison
 
 This mode is ideal for:
 - **Model selection:** Identify which algorithm performs best on your data
@@ -158,11 +170,19 @@ This mode is ideal for:
 
 Artifacts:
 
+**Model Files:**
 - Logistic regression model saved to `logistic_regression_model.pkl`
 - Random forest model saved to `random_forest_model.pkl`
 - XGBoost model saved to `xgboost_model.pkl`
 - LightGBM model saved to `lightgbm_model.pkl`
+
+**Results & Metrics:**
 - Test results saved to `results/{model_type}_test_results.txt`
+
+**Execution Logs (when using --m=all):**
+- Data preparation logs in `results/logs/data_preparation_step*.log`
+- Training logs in `results/logs/{model_type}_training.log`
+- Testing logs in `results/logs/{model_type}_testing.log`
 
 ## License
 
