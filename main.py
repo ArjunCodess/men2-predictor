@@ -4,32 +4,50 @@ import os
 import argparse
 from pathlib import Path
 
-def run_module(module_name, description, args=None):
+def run_module(module_name, description, args=None, log_file=None):
     """run a python module and handle errors"""
     print(f"\n{'='*60}")
     print(f"EXECUTING: {description}")
     print(f"{'='*60}")
-    
+
     try:
         # build command with arguments
         cmd = [sys.executable, module_name]
         if args:
             cmd.extend(args)
-            
-        result = subprocess.run(cmd, 
+
+        result = subprocess.run(cmd,
                               capture_output=True, text=True, cwd=os.getcwd())
-        
-        if result.stdout:
-            print(result.stdout)
-        if result.stderr:
-            print(f"STDERR: {result.stderr}")
-            
+
+        # Save to log file if specified
+        if log_file:
+            log_path = Path(log_file)
+            log_path.parent.mkdir(parents=True, exist_ok=True)
+
+            with open(log_file, 'w', encoding='utf-8') as f:
+                f.write(f"{'='*60}\n")
+                f.write(f"EXECUTION LOG: {description}\n")
+                f.write(f"{'='*60}\n\n")
+                if result.stdout:
+                    f.write(result.stdout)
+                if result.stderr:
+                    f.write(f"\nSTDERR:\n{result.stderr}")
+                f.write(f"\n\nReturn Code: {result.returncode}\n")
+
+            print(f"Log saved to: {log_file}")
+        else:
+            # Print to console if no log file specified
+            if result.stdout:
+                print(result.stdout)
+            if result.stderr:
+                print(f"STDERR: {result.stderr}")
+
         if result.returncode != 0:
             print(f"ERROR: Module {module_name} failed with return code {result.returncode}")
             return False
-            
+
         return True
-        
+
     except Exception as e:
         print(f"ERROR: Failed to execute {module_name}: {str(e)}")
         return False
@@ -146,6 +164,9 @@ def run_all_models():
     model_types = ['logistic', 'random_forest', 'xgboost', 'lightgbm']
     results = {}
 
+    # Create results directory for logs
+    os.makedirs('results/logs', exist_ok=True)
+
     # Run data preparation steps once (common to all models)
     print("\n" + "=" * 80)
     print("STEP 1: DATA PREPARATION (Common for all models)")
@@ -157,11 +178,13 @@ def run_all_models():
         ("src/data_expansion.py", "Data Expansion - Create synthetic controls and expand dataset", None),
     ]
 
-    for module_name, description, args in prep_steps:
-        success = run_module(module_name, description, args)
+    for i, (module_name, description, args) in enumerate(prep_steps):
+        log_file = f"results/logs/data_preparation_step{i+1}.log"
+        success = run_module(module_name, description, args, log_file=log_file)
         if not success:
             print(f"\n{'!'*60}")
             print(f"DATA PREPARATION FAILED AT: {description}")
+            print(f"Check log file: {log_file}")
             print(f"{'!'*60}")
             return False
 
@@ -182,19 +205,29 @@ def run_all_models():
         print(f"Processing: {model_desc}")
         print(f"{'-'*80}")
 
-        # Train model
+        # Train model - save log to file
+        train_log = f"results/logs/{model_type}_training.log"
         train_success = run_module(
             "src/train_model.py",
             f"Model Training - Train {model_desc} with cross-validation",
-            [f"--m={model_type}"]
+            [f"--m={model_type}"],
+            log_file=train_log
         )
 
-        # Test model
+        if not train_success:
+            print(f"Training failed! Check log: {train_log}")
+
+        # Test model - save log to file
+        test_log = f"results/logs/{model_type}_testing.log"
         test_success = run_module(
             "src/test_model.py",
             f"Model Testing - Evaluate {model_desc} performance on test set",
-            [f"--m={model_type}"]
+            [f"--m={model_type}"],
+            log_file=test_log
         )
+
+        if not test_success:
+            print(f"Testing failed! Check log: {test_log}")
 
         # Extract metrics
         metrics = extract_model_metrics(model_type)
@@ -204,6 +237,15 @@ def run_all_models():
             'metrics': metrics
         }
 
+        # Print summary for this model
+        if train_success and test_success and metrics:
+            print(f"\n{model_desc} completed successfully!")
+            print(f"  - Training log: {train_log}")
+            print(f"  - Testing log: {test_log}")
+            print(f"  - Metrics: Accuracy={metrics['accuracy']:.4f}, F1={metrics['f1_score']:.4f}, ROC-AUC={metrics['roc_auc']:.4f}")
+        else:
+            print(f"\n{model_desc} encountered issues. Check logs for details.")
+
     # Print comparison table
     print_comparison_table(results)
 
@@ -211,7 +253,7 @@ def run_all_models():
     print("=" * 80)
     print("ALL MODELS PIPELINE COMPLETED!")
     print("=" * 80)
-    print("Model artifacts saved:")
+    print("\nModel artifacts saved:")
     print("- data/ret_k666n_training_data.csv")
     print("- data/ret_k666n_expanded_training_data.csv")
     print("- data/men2_case_control_dataset.csv")
@@ -219,6 +261,23 @@ def run_all_models():
     print("- random_forest_model.pkl")
     print("- xgboost_model.pkl")
     print("- lightgbm_model.pkl")
+    print("\nTest results:")
+    print("- results/logistic_test_results.txt")
+    print("- results/random_forest_test_results.txt")
+    print("- results/xgboost_test_results.txt")
+    print("- results/lightgbm_test_results.txt")
+    print("\nDetailed logs:")
+    print("- results/logs/data_preparation_step1.log")
+    print("- results/logs/data_preparation_step2.log")
+    print("- results/logs/data_preparation_step3.log")
+    print("- results/logs/logistic_training.log")
+    print("- results/logs/logistic_testing.log")
+    print("- results/logs/random_forest_training.log")
+    print("- results/logs/random_forest_testing.log")
+    print("- results/logs/xgboost_training.log")
+    print("- results/logs/xgboost_testing.log")
+    print("- results/logs/lightgbm_training.log")
+    print("- results/logs/lightgbm_testing.log")
     print()
 
     return True
