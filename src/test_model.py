@@ -100,28 +100,52 @@ def generate_predictions(model, X_test_scaled, y_test, threshold=None):
     
     return y_pred, y_pred_proba
 
-def print_test_metrics(model, X_test, y_test):
+def print_test_metrics(model, X_test, y_test, model_type='logistic'):
     """compute and print test metrics using model's built-in evaluation"""
-    
-    # Use model's built-in evaluation method
+
+    # Use model's built-in evaluation method to get metrics
+    metrics = model.evaluate(X_test, y_test)
+
+    # Print the evaluation
     model.print_evaluation(X_test, y_test)
-    
+
     # Additional detailed analysis
     y_pred, y_pred_proba = generate_predictions(model, X_test, y_test)
-    
+
+    # Calculate precision and recall from predictions
+    from sklearn.metrics import precision_score, recall_score, precision_recall_curve
+    precision = precision_score(y_test, y_pred)
+    recall = recall_score(y_test, y_pred)
+
     # Show precision-recall curve insights
-    from sklearn.metrics import precision_recall_curve
-    precision, recall, thresholds = precision_recall_curve(y_test, y_pred_proba)
-    optimal_idx = np.argmax(precision * recall)  # F1-like optimization
+    precision_curve, recall_curve, thresholds = precision_recall_curve(y_test, y_pred_proba)
+    optimal_idx = np.argmax(precision_curve * recall_curve)  # F1-like optimization
     optimal_threshold = thresholds[optimal_idx] if len(thresholds) > optimal_idx else 0.5
     print(f"Optimal threshold (F1-like): {optimal_threshold:.3f}")
     print()
-    
+
     # Detailed classification report
     from sklearn.metrics import classification_report
     print("CLASSIFICATION REPORT:")
     print(classification_report(y_test, y_pred, target_names=['No MTC', 'MTC']))
     print("=" * 60)
+
+    # Save results to file
+    os.makedirs('results', exist_ok=True)
+    results_file = f'results/{model_type}_test_results.txt'
+
+    with open(results_file, 'w') as f:
+        f.write(f"{model.model_name.upper()} TEST RESULTS\n")
+        f.write("=" * 50 + "\n")
+        f.write(f"Accuracy: {metrics['accuracy']:.4f}\n")
+        f.write(f"Precision: {precision:.4f}\n")
+        f.write(f"Recall: {recall:.4f}\n")
+        f.write(f"F1 Score: {metrics['f1']:.4f}\n")
+        f.write(f"ROC AUC: {metrics['roc_auc']:.4f}\n")
+        f.write(f"Average Precision: {metrics['average_precision']:.4f}\n")
+        f.write("=" * 50 + "\n")
+
+    print(f"\nResults saved to {results_file}")
 
 def risk_stratification(probability):
     """Convert binary predictions to risk tiers for clinical use"""
@@ -260,8 +284,8 @@ if __name__ == "__main__":
     
     # load model and test data
     model, X_test_scaled, y_test, test_patients = load_model_and_test_data(model_type)
-    
+
     # print results using new model structure
-    print_test_metrics(model, X_test_scaled, y_test)
+    print_test_metrics(model, X_test_scaled, y_test, model_type)
     print_individual_predictions(model, test_patients, y_test)
     print_model_insights(model, X_test_scaled, y_test, test_patients)
