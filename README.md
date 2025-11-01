@@ -30,7 +30,7 @@ This repository provides a reproducible machine learning pipeline to predict MEN
 - **Artifacts generated:** Processed datasets and trained model files, usable for risk scoring new patients with relevant clinical/genetic data.
 
 **Pipeline steps (as run by `main.py`):**
-1. **create_datasets.py:** Extracts and formats case/control and RET K666N mutation data into CSVs (8 patients from 2 studies).
+1. **create_datasets.py:** Extracts and formats case/control and RET K666N mutation data into CSVs (32 patients from 3 studies).
 2. **data_analysis.py:** Computes descriptive statistics and generates visualizations to aid in understanding cohort differences.
 3. **data_expansion.py:** Produces synthetic control samples to improve model balance.
 4. **train_model.py:** Trains a logistic regression model with cross-validation, SMOTE balancing, and threshold optimization.
@@ -196,4 +196,4 @@ This project is licensed under the MIT License.
 
 Thanks to open source communities and packages including scikit-learn, pandas, numpy, matplotlib, seaborn, joblib, and imbalanced-learn for making data science and reproducibility accessible.
 
-Additional credit to researchers whose data informed the synthetic controls and simulations in this tool. Special thanks to the authors of the JCEM Case Reports (2025) and EDM Case Reports (2024) studies for providing clinical data on RET K666N carriers.
+Additional credit to researchers whose data informed the synthetic controls and simulations in this tool. Special thanks to the authors of the JCEM Case Reports (2025), EDM Case Reports (2024), and Xu et al. Thyroid (2016) studies for providing clinical data on RET K666N carriers.
