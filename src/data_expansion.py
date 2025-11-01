@@ -92,7 +92,7 @@ def create_synthetic_variability(original_df):
             
             # slight chance of gender change for synthetic data
             if np.random.random() < 0.1:
-                variant['gender'] = 1 - variant['gender']
+                variant['gender'] = "Male" if variant['gender'] == "Female" else "Female"
             
             if 'source_id' in variant:
                 variant['source_id'] = f"{variant['source_id']}_variant_{variant_idx}"
@@ -156,7 +156,7 @@ def expand_dataset():
         subj = {
             'source_id': f"mtc_s{idx}",
             'age': float(age),
-            'gender': np.random.choice([0, 1]),
+            'gender': np.random.choice(["Female", "Male"]),
             'ret_k666n_positive': 1,
             'calcitonin_elevated': mtc_calc_elev,
             'calcitonin_level_numeric': mtc_calc,
@@ -196,7 +196,6 @@ def expand_dataset():
     expanded_df = expanded_df.astype({
         'source_id': 'object',
         'age': 'float64',
-        'gender': 'int64',
         'ret_k666n_positive': 'int64',
         'calcitonin_elevated': 'int64',
         'calcitonin_level_numeric': 'float64',

@@ -44,7 +44,12 @@ def load_model_and_test_data(model_type='logistic'):
     if constant_features:
         print(f"Removing constant features: {constant_features}")
         df = df.drop(columns=constant_features)
-    
+
+    # encode gender to numeric if it's string
+    if 'gender' in df.columns:
+        if df['gender'].dtype == 'object':
+            df['gender'] = df['gender'].map({'Female': 0, 'Male': 1}).fillna(0)
+
     # Select features (exclude non-numeric columns and target)
     feature_cols = [
         'age', 'gender', 'calcitonin_elevated', 'calcitonin_level_numeric',
@@ -131,6 +136,12 @@ def risk_stratification(probability):
 
 def print_individual_predictions(model, test_patients, y_test):
     """show individual patient predictions with risk stratification using model's built-in methods"""
+    
+    # encode gender to numeric if it's string (safety check)
+    test_patients = test_patients.copy()
+    if 'gender' in test_patients.columns:
+        if test_patients['gender'].dtype == 'object':
+            test_patients['gender'] = test_patients['gender'].map({'Female': 0, 'Male': 1}).fillna(0)
     
     # Prepare features for the test patients (same logic as training)
     features = test_patients[['age', 'gender', 'calcitonin_elevated', 'calcitonin_level_numeric',

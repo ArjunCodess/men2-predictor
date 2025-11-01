@@ -36,6 +36,11 @@ def prepare_features_target(df, target_column='mtc_diagnosis'):
         print(f"Removing constant features: {constant_features}")
         df = df.drop(columns=constant_features)
 
+    # encode gender to numeric if it's string
+    if 'gender' in df.columns:
+        if df['gender'].dtype == 'object':
+            df['gender'] = df['gender'].map({'Female': 0, 'Male': 1}).fillna(0)
+    
     # select features (exclude non-numeric columns and target)
     feature_columns = [
         'age', 'gender', 'calcitonin_elevated', 'calcitonin_level_numeric',
