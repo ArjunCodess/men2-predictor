@@ -21,11 +21,13 @@ This repository provides a reproducible machine learning pipeline to predict MEN
 
 **Key features:**
 - **End-to-end pipeline** managed by `main.py`, coordinating all major steps automatically.
+- **Multiple ML algorithms:** Support for Logistic Regression, Random Forest, XGBoost, and LightGBM models.
+- **Model comparison mode:** Run all models simultaneously and compare performance metrics in a formatted table.
 - **Automated data creation and expansion:** Scripts extract and structure relevant research data, and generate synthetic control samples to augment the dataset for robust modeling.
 - **Comprehensive statistical analysis:** Automatic generation of descriptive statistics and visualization of the dataset for informed modeling.
-- **Advanced model development:** Logistic regression with cross-validation and SMOTE balancing to handle class imbalance.
+- **Advanced model development:** Cross-validation and SMOTE balancing to handle class imbalance across all model types.
 - **Clinical risk stratification:** 4-tier risk assessment (Low/Moderate/High/Very High) for actionable clinical decision-making.
-- **Artifacts generated:** Processed datasets and a trained `model.pkl`, usable for risk scoring new patients with relevant clinical/genetic data.
+- **Artifacts generated:** Processed datasets and trained model files, usable for risk scoring new patients with relevant clinical/genetic data.
 
 **Pipeline steps (as run by `main.py`):**
 1. **create_datasets.py:** Extracts and formats case/control and RET K666N mutation data into CSVs (8 patients from 2 studies).
@@ -102,6 +104,7 @@ You can choose which model to train and test using the `--m` argument:
 - `r` or `random_forest`: random forest
 - `x` or `xgboost`: xgboost
 - `g` or `lightgbm`: lightgbm
+- `a` or `all`: **run all models and compare results**
 
 Examples:
 
@@ -123,6 +126,10 @@ python main.py --m=xgboost
 python main.py --m=g
 python main.py --m=lightgbm
 
+# run ALL models and compare performance in a table
+python main.py --m=all
+python main.py --m=a
+
 # train only
 python src/train_model.py --m=l
 python src/train_model.py --m=r
@@ -136,12 +143,26 @@ python src/test_model.py --m=x
 python src/test_model.py --m=g
 ```
 
+### Model Comparison Mode
+
+When using `--m=all`, the pipeline will:
+1. Run data preparation steps once (shared across all models)
+2. Train and test all four model types sequentially
+3. Save individual results to `results/{model_type}_test_results.txt`
+4. Display a comprehensive comparison table with all metrics
+
+This mode is ideal for:
+- **Model selection:** Identify which algorithm performs best on your data
+- **Performance benchmarking:** Compare metrics across different approaches
+- **Research and reporting:** Generate comprehensive comparison data
+
 Artifacts:
 
 - Logistic regression model saved to `logistic_regression_model.pkl`
 - Random forest model saved to `random_forest_model.pkl`
 - XGBoost model saved to `xgboost_model.pkl`
 - LightGBM model saved to `lightgbm_model.pkl`
+- Test results saved to `results/{model_type}_test_results.txt`
 
 ## License
 
