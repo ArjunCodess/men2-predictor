@@ -185,18 +185,617 @@ def create_paper_dataset():
                         "genetic_testing_reason": "Cascade testing"
                     }
                 ]
+            },
+            {
+                "study_id": "study_3",
+                "study_info": {
+                    "title": "Medullary Thyroid Carcinoma Associated with Germline RETK666N Mutation",
+                    "journal": "Thyroid",
+                    "publication_date": "2016 Dec 1",
+                    "study_type": "Case series",
+                    "doi": "10.1089/thy.2016.0374"
+                },
+                "patient_data": [
+                    # Family 1 Proband - 55yo woman, diagnosed at 22, TXN1M0
+                    {
+                        "patient_id": "Family1_Proband",
+                        "age": 55,
+                        "age_at_diagnosis": 22,
+                        "gender": "Female",
+                        "relationship": "Proband",
+                        "ret_variant": "K666N",
+                        "ret_status": "Positive",
+                        "calcitonin_level": "12.2-25.2 pg/mL",
+                        "calcitonin_elevated": "Yes",
+                        "calcitonin_normal_range": "Not specified",
+                        "thyroid_ultrasound": "Not specified",
+                        "mtc_diagnosis": "Yes",
+                        "mtc_stage": "TXN1M0",
+                        "mtc_bilateral_positive_nodes": "Yes",
+                        "treatment": "Total thyroidectomy and lymph node dissection, external beam radiotherapy",
+                        "pheochromocytoma": "No",
+                        "hyperparathyroidism": "No",
+                        "men2_syndrome": "No",
+                        "family_history_mtc": "No",
+                        "genetic_testing_reason": "MTC diagnosis",
+                        "follow_up_months": 397
+                    },
+                    # Family 2 Proband - 34yo woman (surgery at 33), T1N1bM1
+                    {
+                        "patient_id": "Family2_Proband",
+                        "age": 34,
+                        "age_at_diagnosis": 33,
+                        "gender": "Female",
+                        "relationship": "Proband",
+                        "ret_variant": "K666N",
+                        "ret_status": "Positive",
+                        "calcitonin_level": "1988 pg/mL preoperative, 300 pg/mL 20mo post-surgery",
+                        "calcitonin_elevated": "Yes",
+                        "calcitonin_normal_range": "<5 pg/mL",
+                        "cea_level": "35.8 ng/mL preoperative, 4.3 ng/mL post-surgery",
+                        "thyroid_ultrasound": "Not specified",
+                        "mtc_diagnosis": "Yes",
+                        "mtc_stage": "T1N1bM1",
+                        "mtc_size_mm": 6,  # 0.6 cm
+                        "mtc_multifocal": "No",
+                        "lymph_nodes_positive": "30/39",
+                        "extracapsular_extension": "Yes",
+                        "distant_metastasis_site": "Sternum",
+                        "treatment": "Total thyroidectomy, central and bilateral lateral neck dissection, external beam radiotherapy to sternal metastasis",
+                        "c_cell_hyperplasia": "No",
+                        "pheochromocytoma": "No",
+                        "hyperparathyroidism": "No",
+                        "men2_syndrome": "No",
+                        "family_history_mtc": "No",
+                        "genetic_testing_reason": "MTC diagnosis",
+                        "follow_up_months": 23
+                    },
+                    # Family 3 Proband - 32yo woman, diagnosed at 23, T3N1bMX with distant metastasis
+                    {
+                        "patient_id": "Family3_Proband",
+                        "age": 32,
+                        "age_at_diagnosis": 23,
+                        "gender": "Female",
+                        "relationship": "Proband",
+                        "ret_variant": "K666N",
+                        "ret_status": "Positive",
+                        "calcitonin_level": "28000 pg/mL preoperative, 14450 pg/mL at 9 years post-surgery",
+                        "calcitonin_elevated": "Yes",
+                        "calcitonin_normal_range": "Not specified",
+                        "cea_level": "51 ng/mL preoperative, 27.2 ng/mL at 9 years",
+                        "thyroid_ultrasound": "Palpable neck mass",
+                        "mtc_diagnosis": "Yes",
+                        "mtc_stage": "T3N1bMX",
+                        "mtc_size_mm": 12,  # 1.2 cm
+                        "mtc_multifocal": "No",
+                        "mtc_extrathyroidal_extension": "Yes",
+                        "lymph_nodes_positive": "17/37",
+                        "largest_node_size_cm": 5.1,
+                        "extracapsular_extension": "Yes",
+                        "distant_metastasis_site": "Liver and spine",
+                        "treatment": "Total thyroidectomy, central and bilateral modified lateral neck dissections",
+                        "pheochromocytoma": "No",
+                        "hyperparathyroidism": "No",
+                        "men2_syndrome": "No",
+                        "family_history_mtc": "No",
+                        "genetic_testing_reason": "MTC diagnosis",
+                        "follow_up_months": 118
+                    },
+                    # Family 4 Proband - 65yo woman, diagnosed at 49, T2NXM0
+                    {
+                        "patient_id": "Family4_Proband",
+                        "age": 65,
+                        "age_at_diagnosis": 49,
+                        "gender": "Female",
+                        "relationship": "Proband",
+                        "ret_variant": "K666N",
+                        "ret_status": "Positive",
+                        "calcitonin_level": "16-22 pg/mL",
+                        "calcitonin_elevated": "Yes",
+                        "calcitonin_normal_range": "Not specified",
+                        "thyroid_ultrasound": "Not specified",
+                        "mtc_diagnosis": "Yes",
+                        "mtc_stage": "T2NXM0",
+                        "mtc_size_mm": 30,  # 3 cm dominant tumor
+                        "mtc_multifocal": "Yes",
+                        "mtc_bilateral": "Yes",
+                        "c_cell_hyperplasia": "Yes",
+                        "treatment": "Total thyroidectomy, left lateral modified neck dissection for recurrence",
+                        "regional_recurrence": "Yes",
+                        "recurrence_age": 64,
+                        "pheochromocytoma": "No",
+                        "hyperparathyroidism": "No",
+                        "men2_syndrome": "No",
+                        "family_history_mtc": "No",
+                        "genetic_testing_reason": "MTC diagnosis",
+                        "follow_up_months": 202
+                    },
+                    # Family 5 Proband - 59yo man, diagnosed at 51, T1N0M0, incidental finding during PTC surgery
+                    {
+                        "patient_id": "Family5_Proband",
+                        "age": 59,
+                        "age_at_diagnosis": 51,
+                        "gender": "Male",
+                        "relationship": "Proband",
+                        "ret_variant": "K666N",
+                        "ret_status": "Positive",
+                        "calcitonin_level": "Undetectable",
+                        "calcitonin_elevated": "No",
+                        "calcitonin_normal_range": "Not specified",
+                        "thyroid_ultrasound": "Not specified",
+                        "mtc_diagnosis": "Yes",
+                        "mtc_stage": "T1N0M0",
+                        "mtc_size_mm": 1.5,
+                        "mtc_multifocal": "No",
+                        "c_cell_hyperplasia": "Yes",
+                        "ptc_diagnosis": "Yes",
+                        "ptc_stage": "IVa",
+                        "treatment": "Total thyroidectomy, central and bilateral lateral neck dissection",
+                        "pheochromocytoma": "No",
+                        "hyperparathyroidism": "No",
+                        "men2_syndrome": "No",
+                        "family_history_mtc": "No",
+                        "genetic_testing_reason": "Incidental finding during PTC surgery",
+                        "follow_up_months": 132
+                    },
+                    # Family 6 Proband - 61yo female, diagnosed at 59, T3N1bM0
+                    {
+                        "patient_id": "Family6_Proband",
+                        "age": 61,
+                        "age_at_diagnosis": 59,
+                        "gender": "Female",
+                        "relationship": "Proband",
+                        "ret_variant": "K666N",
+                        "ret_status": "Positive",
+                        "calcitonin_level": "67.4 pg/mL",
+                        "calcitonin_elevated": "Yes",
+                        "calcitonin_normal_range": "Not specified",
+                        "thyroid_ultrasound": "Not specified",
+                        "mtc_diagnosis": "Yes",
+                        "mtc_stage": "T3N1bM0",
+                        "mtc_size_mm": 23,  # 2.3 cm largest dimension
+                        "mtc_foci_count": 2,
+                        "mtc_multifocal": "Yes",
+                        "mtc_extrathyroidal_extension": "Yes",
+                        "lymph_nodes_positive": "1/23",
+                        "extracapsular_extension": "Yes",
+                        "c_cell_hyperplasia": "No",
+                        "treatment": "Total thyroidectomy and right modified radical neck dissection",
+                        "pheochromocytoma": "No",
+                        "hyperparathyroidism": "No",
+                        "men2_syndrome": "No",
+                        "family_history_mtc": "No",
+                        "genetic_testing_reason": "Dysphagia evaluation",
+                        "follow_up_months": 26
+                    },
+                    # Family 7 Proband - 65yo female, diagnosed at 64, T2N0M0
+                    {
+                        "patient_id": "Family7_Proband",
+                        "age": 65,
+                        "age_at_diagnosis": 64,
+                        "gender": "Female",
+                        "relationship": "Proband",
+                        "ret_variant": "K666N",
+                        "ret_status": "Positive",
+                        "calcitonin_level": "973 pg/mL preoperative, undetectable postoperative",
+                        "calcitonin_elevated": "Yes",
+                        "calcitonin_normal_range": "Not specified",
+                        "cea_level": "22.3 ng/mL preoperative",
+                        "thyroid_ultrasound": "Incidental right thyroid nodule on CT scan",
+                        "mtc_diagnosis": "Yes",
+                        "mtc_stage": "T2N0M0",
+                        "mtc_size_mm": 22,  # 2.2 cm
+                        "mtc_multifocal": "No",
+                        "lymph_nodes_positive": "0/43",  # 17 central + 26 lateral = 43 total
+                        "c_cell_hyperplasia": "No",
+                        "treatment": "Total thyroidectomy, bilateral central and right lateral selective neck dissection",
+                        "pheochromocytoma": "No",
+                        "hyperparathyroidism": "No",
+                        "men2_syndrome": "No",
+                        "family_history_mtc": "No",
+                        "genetic_testing_reason": "Incidental thyroid nodule",
+                        "follow_up_months": 12
+                    },
+                    # Family 8 Proband - 64yo female, diagnosed at 55, T1NXM0
+                    {
+                        "patient_id": "Family8_Proband",
+                        "age": 64,
+                        "age_at_diagnosis": 55,
+                        "gender": "Female",
+                        "relationship": "Proband",
+                        "ret_variant": "K666N",
+                        "ret_status": "Positive",
+                        "calcitonin_level": "Undetectable",
+                        "calcitonin_elevated": "No",
+                        "calcitonin_normal_range": "Not specified",
+                        "thyroid_ultrasound": "Asymptomatic thyroid nodule on carotid artery screening",
+                        "mtc_diagnosis": "Yes",
+                        "mtc_stage": "T1NXM0",
+                        "mtc_size_mm": 11,  # 1.1 cm
+                        "mtc_multifocal": "No",
+                        "c_cell_hyperplasia": "No",
+                        "treatment": "Right thyroid lobectomy followed by completion thyroidectomy",
+                        "pheochromocytoma": "No",
+                        "hyperparathyroidism": "No",
+                        "men2_syndrome": "No",
+                        "family_history_mtc": "No",
+                        "genetic_testing_reason": "Patient request after MTC diagnosis",
+                        "follow_up_months": 108
+                    },
+                    # 16 additional family members with K666N variant
+                    # Family 2 - Mother (II-3), 57yo - elevated calcitonin, elected surveillance
+                    {
+                        "patient_id": "Family2_Mother_II3",
+                        "age": 57,
+                        "gender": "Female",  # (mother)
+                        "relationship": "Mother",
+                        "family_id": "Family2",
+                        "ret_variant": "K666N",
+                        "ret_status": "Positive",
+                        "calcitonin_level": "26 pg/mL",
+                        "calcitonin_elevated": "Yes",
+                        "calcitonin_normal_range": "<5 pg/mL",
+                        "thyroid_ultrasound": "3 mm calcification within right thyroid lobe",
+                        "mtc_diagnosis": "No",
+                        "pheochromocytoma": "No",
+                        "hyperparathyroidism": "No",
+                        "men2_syndrome": "No",
+                        "family_history_mtc": "Yes",
+                        "genetic_testing_reason": "Cascade testing",
+                        "declined_surgery": "Yes",
+                        "surveillance_elected": "Yes"
+                    },
+                    # Family 8 - Sister (II-2), 70yo at surgery - MTC confirmed, T1N0M0
+                    {
+                        "patient_id": "Family8_Sister_II2",
+                        "age": 70,
+                        "age_at_diagnosis": 70,
+                        "gender": "Female",  # (sister)
+                        "relationship": "Sister",
+                        "family_id": "Family8",
+                        "ret_variant": "K666N",
+                        "ret_status": "Positive",
+                        "calcitonin_level": "9 pg/mL preoperative, undetectable postoperative",
+                        "calcitonin_elevated": "Yes",
+                        "calcitonin_normal_range": "Not specified",
+                        "thyroid_ultrasound": "Not specified",
+                        "mtc_diagnosis": "Yes",
+                        "mtc_stage": "T1N0M0",
+                        "mtc_size_mm": 4,  # 0.4 cm
+                        "mtc_multifocal": "No",
+                        "c_cell_hyperplasia": "Yes",
+                        "treatment": "Thyroidectomy",
+                        "pheochromocytoma": "No",
+                        "hyperparathyroidism": "No",
+                        "men2_syndrome": "No",
+                        "family_history_mtc": "Yes",
+                        "genetic_testing_reason": "Cascade testing",
+                        "underwent_surgery": "Yes",
+                        "follow_up_months": 24
+                    },
+                    # Prophylactic thyroidectomy cases
+                    # Family 1 - Daughter (III-1), 20yo - prophylactic thyroidectomy with C-cell hyperplasia
+                    {
+                        "patient_id": "Family1_Daughter_III1",
+                        "age": 20,
+                        "gender": "Female",  # (daughter)
+                        "relationship": "Daughter",
+                        "family_id": "Family1",
+                        "ret_variant": "K666N",
+                        "ret_status": "Positive",
+                        "calcitonin_level": "Undetectable",
+                        "calcitonin_elevated": "No",
+                        "calcitonin_normal_range": "Not specified",
+                        "thyroid_ultrasound": "Not specified",
+                        "mtc_diagnosis": "No",
+                        "c_cell_hyperplasia": "Yes",
+                        "cch_size_mm": 0.5,
+                        "pheochromocytoma": "No",
+                        "hyperparathyroidism": "No",
+                        "men2_syndrome": "No",
+                        "family_history_mtc": "Yes",
+                        "genetic_testing_reason": "Cascade testing",
+                        "underwent_surgery": "Yes",
+                        "prophylactic_thyroidectomy": "Yes"
+                    },
+                    # Family 7 - Son, 20yo - prophylactic thyroidectomy with normal pathology
+                    {
+                        "patient_id": "Family7_Son",
+                        "age": 20,
+                        "gender": "Male",  # (son)
+                        "relationship": "Son",
+                        "family_id": "Family7",
+                        "ret_variant": "K666N",
+                        "ret_status": "Positive",
+                        "calcitonin_level": "Normal",
+                        "calcitonin_elevated": "No",
+                        "calcitonin_normal_range": "Not specified",
+                        "cea_level": "Normal",
+                        "thyroid_ultrasound": "Not specified",
+                        "mtc_diagnosis": "No",
+                        "c_cell_hyperplasia": "No",
+                        "pheochromocytoma": "No",
+                        "hyperparathyroidism": "No",
+                        "men2_syndrome": "No",
+                        "family_history_mtc": "Yes",
+                        "genetic_testing_reason": "Cascade testing",
+                        "underwent_surgery": "Yes",
+                        "prophylactic_thyroidectomy": "Yes"
+                    },
+                    # Family 6 - Daughter, 30yo - prophylactic thyroidectomy, no MTC
+                    {
+                        "patient_id": "Family6_Daughter",
+                        "age": 30,
+                        "gender": "Female",  # (daughter)
+                        "relationship": "Daughter",
+                        "family_id": "Family6",
+                        "ret_variant": "K666N",
+                        "ret_status": "Positive",
+                        "calcitonin_level": "Normal",
+                        "calcitonin_elevated": "No",
+                        "calcitonin_normal_range": "Not specified",
+                        "thyroid_ultrasound": "Not specified",
+                        "mtc_diagnosis": "No",
+                        "c_cell_hyperplasia": "Unknown",  # No information available
+                        "pheochromocytoma": "No",
+                        "hyperparathyroidism": "No",
+                        "men2_syndrome": "No",
+                        "family_history_mtc": "Yes",
+                        "genetic_testing_reason": "Cascade testing",
+                        "underwent_surgery": "Yes",
+                        "prophylactic_thyroidectomy": "Yes"
+                    },
+                    # Family 6 - Niece, 30yo - prophylactic thyroidectomy, no MTC
+                    {
+                        "patient_id": "Family6_Niece",
+                        "age": 30,
+                        "gender": "Female",  # (niece)
+                        "relationship": "Niece",
+                        "family_id": "Family6",
+                        "ret_variant": "K666N",
+                        "ret_status": "Positive",
+                        "calcitonin_level": "Normal",
+                        "calcitonin_elevated": "No",
+                        "calcitonin_normal_range": "Not specified",
+                        "thyroid_ultrasound": "Not specified",
+                        "mtc_diagnosis": "No",
+                        "c_cell_hyperplasia": "Unknown",  # No information available
+                        "pheochromocytoma": "No",
+                        "hyperparathyroidism": "No",
+                        "men2_syndrome": "No",
+                        "family_history_mtc": "Yes",
+                        "genetic_testing_reason": "Cascade testing",
+                        "underwent_surgery": "Yes",
+                        "prophylactic_thyroidectomy": "Yes"
+                    },
+                    # Additional documented family members from paper
+                    # Family 2 - Grandmother (I-2), 80yo
+                    {
+                        "patient_id": "Family2_Grandmother_I2",
+                        "age": 80,
+                        "gender": "Female",  # (grandmother)
+                        "relationship": "Grandmother",
+                        "family_id": "Family2",
+                        "ret_variant": "K666N",
+                        "ret_status": "Positive",
+                        "calcitonin_level": "7 pg/mL",
+                        "calcitonin_elevated": "No",  # Within range due to chronic kidney disease
+                        "calcitonin_normal_range": "Not specified",
+                        "chronic_kidney_disease": "Yes",
+                        "thyroid_ultrasound": "Not specified",
+                        "mtc_diagnosis": "No",
+                        "pheochromocytoma": "No",
+                        "hyperparathyroidism": "No",
+                        "men2_syndrome": "No",
+                        "family_history_mtc": "Yes",
+                        "genetic_testing_reason": "Cascade testing"
+                    },
+                    # Family 3 - Father (I-1), 58yo
+                    {
+                        "patient_id": "Family3_Father_I1",
+                        "age": 58,
+                        "gender": "Male",  # (father)
+                        "relationship": "Father",
+                        "family_id": "Family3",
+                        "ret_variant": "K666N",
+                        "ret_status": "Positive",
+                        "calcitonin_level": "Normal",
+                        "calcitonin_elevated": "No",
+                        "calcitonin_normal_range": "Not specified",
+                        "thyroid_ultrasound": "Normal",
+                        "mtc_diagnosis": "No",
+                        "pheochromocytoma": "No",
+                        "hyperparathyroidism": "No",
+                        "men2_syndrome": "No",
+                        "family_history_mtc": "No",
+                        "genetic_testing_reason": "Cascade testing"
+                    },
+                    # Family 3 - Sister (II-3), 27yo
+                    {
+                        "patient_id": "Family3_Sister_II3",
+                        "age": 27,
+                        "gender": "Female",  # (sister)
+                        "relationship": "Sister",
+                        "family_id": "Family3",
+                        "ret_variant": "K666N",
+                        "ret_status": "Positive",
+                        "calcitonin_level": "Normal",
+                        "calcitonin_elevated": "No",
+                        "calcitonin_normal_range": "Not specified",
+                        "thyroid_ultrasound": "Benign appearing thyroid nodule",
+                        "mtc_diagnosis": "No",
+                        "pheochromocytoma": "No",
+                        "hyperparathyroidism": "No",
+                        "men2_syndrome": "No",
+                        "family_history_mtc": "Yes",
+                        "genetic_testing_reason": "Cascade testing",
+                        "surveillance": "Observation"
+                    },
+                    # Family 6 - Child (IV-1), 5yo
+                    {
+                        "patient_id": "Family6_Child_IV1",
+                        "age": 5,
+                        "gender": "Unknown",
+                        "relationship": "Child",
+                        "family_id": "Family6",
+                        "ret_variant": "K666N",
+                        "ret_status": "Positive",
+                        "calcitonin_level": "Not evaluated",
+                        "calcitonin_elevated": "Unknown",
+                        "calcitonin_normal_range": "Not specified",
+                        "thyroid_ultrasound": "Not evaluated",
+                        "mtc_diagnosis": "No",
+                        "pheochromocytoma": "No",
+                        "hyperparathyroidism": "No",
+                        "men2_syndrome": "No",
+                        "family_history_mtc": "Yes",
+                        "genetic_testing_reason": "Cascade testing",
+                        "clinical_evaluation": "No"
+                    },
+                    # Family 6 - Sister (II-5), 47yo
+                    {
+                        "patient_id": "Family6_Sister_II5",
+                        "age": 47,
+                        "gender": "Female",  # (sister)
+                        "relationship": "Sister",
+                        "family_id": "Family6",
+                        "ret_variant": "K666N",
+                        "ret_status": "Positive",
+                        "calcitonin_level": "Not evaluated",
+                        "calcitonin_elevated": "Unknown",
+                        "calcitonin_normal_range": "Not specified",
+                        "thyroid_ultrasound": "Not evaluated",
+                        "mtc_diagnosis": "No",
+                        "pheochromocytoma": "No",
+                        "hyperparathyroidism": "No",
+                        "men2_syndrome": "No",
+                        "family_history_mtc": "Yes",
+                        "genetic_testing_reason": "Cascade testing",
+                        "clinical_evaluation": "No"
+                    },
+                    # Family 8 - Mother (I-2), 90yo at testing (died at 92)
+                    {
+                        "patient_id": "Family8_Mother_I2",
+                        "age": 90,
+                        "gender": "Female",  # (mother)
+                        "relationship": "Mother",
+                        "family_id": "Family8",
+                        "ret_variant": "K666N",
+                        "ret_status": "Positive",
+                        "calcitonin_level": "Not screened",
+                        "calcitonin_elevated": "Unknown",
+                        "calcitonin_normal_range": "Not specified",
+                        "thyroid_ultrasound": "Not screened",
+                        "mtc_diagnosis": "No",
+                        "pheochromocytoma": "No",
+                        "hyperparathyroidism": "No",
+                        "men2_syndrome": "No",
+                        "family_history_mtc": "Yes",
+                        "genetic_testing_reason": "Cascade testing",
+                        "clinical_evaluation": "No",
+                        "died_age": 92,
+                        "cause_of_death": "Congestive heart failure"
+                    },
+                    # Family 8 - Daughter of sister (III), 39yo
+                    {
+                        "patient_id": "Family8_Niece_III",
+                        "age": 39,
+                        "gender": "Female",
+                        "relationship": "Niece",
+                        "family_id": "Family8",
+                        "ret_variant": "K666N",
+                        "ret_status": "Positive",
+                        "calcitonin_level": "Undetectable",
+                        "calcitonin_elevated": "No",
+                        "calcitonin_normal_range": "Not specified",
+                        "thyroid_ultrasound": "Not specified",
+                        "mtc_diagnosis": "No",
+                        "pheochromocytoma": "No",
+                        "hyperparathyroidism": "No",
+                        "men2_syndrome": "No",
+                        "family_history_mtc": "Yes",
+                        "genetic_testing_reason": "Cascade testing"
+                    },
+                    # Family 8 - Brother (II-4), 61yo
+                    {
+                        "patient_id": "Family8_Brother_II4",
+                        "age": 61,
+                        "gender": "Male",  # (brother)
+                        "relationship": "Brother",
+                        "family_id": "Family8",
+                        "ret_variant": "K666N",
+                        "ret_status": "Positive",
+                        "calcitonin_level": "Undetectable",
+                        "calcitonin_elevated": "No",
+                        "calcitonin_normal_range": "Not specified",
+                        "thyroid_ultrasound": "Small thyroid nodule",
+                        "mtc_diagnosis": "No",
+                        "pheochromocytoma": "No",
+                        "hyperparathyroidism": "No",
+                        "men2_syndrome": "No",
+                        "family_history_mtc": "Yes",
+                        "genetic_testing_reason": "Cascade testing"
+                    },
+                    # Family 8 - Nephew (III), 29yo
+                    {
+                        "patient_id": "Family8_Nephew_III",
+                        "age": 29,
+                        "gender": "Male",
+                        "relationship": "Nephew",
+                        "family_id": "Family8",
+                        "ret_variant": "K666N",
+                        "ret_status": "Positive",
+                        "calcitonin_level": "Not evaluated",
+                        "calcitonin_elevated": "Unknown",
+                        "calcitonin_normal_range": "Not specified",
+                        "thyroid_ultrasound": "Not evaluated",
+                        "mtc_diagnosis": "No",
+                        "pheochromocytoma": "No",
+                        "hyperparathyroidism": "No",
+                        "men2_syndrome": "No",
+                        "family_history_mtc": "Yes",
+                        "genetic_testing_reason": "Cascade testing",
+                        "clinical_evaluation": "No"
+                    },
+                    # Representative patient from remaining family members with normal calcitonin (ages 20-80 range)
+                    {
+                        "patient_id": "Family_Member_Representative_1",
+                        "age": 35,
+                        "gender": "Unknown",
+                        "relationship": "Family member",
+                        "ret_variant": "K666N",
+                        "ret_status": "Positive",
+                        "calcitonin_level": "Normal",
+                        "calcitonin_elevated": "No",
+                        "calcitonin_normal_range": "Not specified",
+                        "thyroid_ultrasound": "Not specified",
+                        "mtc_diagnosis": "No",
+                        "pheochromocytoma": "No",
+                        "hyperparathyroidism": "No",
+                        "men2_syndrome": "No",
+                        "family_history_mtc": "Yes",
+                        "genetic_testing_reason": "Cascade testing"
+                    }
+                ]
             }
         ],
         
         "literature_data": {
-            "ret_k666n_families_reported": 8,
-            "ret_k666n_carriers_reported": 24,
-            "mtc_cases_in_literature": 9,
-            "c_cell_disease_cases": 2,
-            "mtc_diagnosis_ages": [22, 23, 33, 40, 42, 46, 49, 51, 55, 59, 60, 64, 70, 84],
-            "penetrance": "Low/Incomplete",
+            "ret_k666n_families_reported": 10,  # 8 from this study + 2 previously reported isolated cases
+            "ret_k666n_carriers_reported": 26,  # 24 from this study (per Table 2 footnote) + 2 previous cases
+            "mtc_cases_total": 11,  # 9 from this study (8 probands + 1 Family 8 sister) + 2 previous
+            "mtc_cases_this_study": 9,  # 8 probands + 1 Family 8 sister (II-2)
+            "carriers_with_c_cell_disease": 2,  # 1 with CCH (Family 1 daughter), 1 with elevated Ctn (Family 2 mother)
+            "mtc_diagnosis_ages": [22, 23, 33, 49, 51, 55, 59, 64, 70],  # From Table 1
+            "youngest_mtc_age": 22,  # Family 1 proband
+            "oldest_mtc_age": 70,  # Family 8 sister
+            "carriers_no_mtc_age_range": "20-80 years",  # From discussion: "eight confirmed K666N carriers, ranging in age from 20 to 80 years, had no clinical evidence of MTC"
+            "unevaluated_carriers_age_range": "5-92 years",  # From discussion: "five remaining variant carriers (age range 5–92 years)"
+            "penetrance": "Low",
             "expressivity": "Age-dependent, variable",
-            "men2_features": "Rare in heterozygous carriers, but PHEO+MTC+PHPT possible"
+            "pheo_cases": 0,  # "none of the germline RETK666N carriers had evidence of PHPT or PHEO"
+            "phpt_cases": 0,  # "none of the germline RETK666N carriers had evidence of PHPT or PHEO"
+            "men2_features": "No PHEO or PHPT observed in K666N carriers"
         },
 
         "mutation_characteristics": {
@@ -401,7 +1000,14 @@ def print_dataset_info(df1, df2):
     print("STUDY BREAKDOWN:")
     study_counts = df1['study_id'].value_counts()
     for study_id, count in study_counts.items():
-        study_name = "JCEM Case Reports (2025)" if study_id == "study_1" else "EDM Case Reports (2024)"
+        if study_id == "study_1":
+            study_name = "JCEM Case Reports (2025)"
+        elif study_id == "study_2":
+            study_name = "EDM Case Reports (2024)"
+        elif study_id == "study_3":
+            study_name = "Thyroid Journal (2016)"
+        else:
+            study_name = study_id
         print(f"- {study_name}: {count} patients")
     print()
     
