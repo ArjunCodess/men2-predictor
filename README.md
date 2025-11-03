@@ -208,10 +208,10 @@ This helps you understand:
 ### Artifacts
 
 **Model Files:**
-- Logistic regression model saved to `logistic_regression_{dataset_type}_model.pkl`
-- Random forest model saved to `random_forest_{dataset_type}_model.pkl`
-- XGBoost model saved to `xgboost_{dataset_type}_model.pkl`
-- LightGBM model saved to `lightgbm_{dataset_type}_model.pkl`
+- Logistic regression model saved to `saved_models/logistic_regression_{dataset_type}_model.pkl`
+- Random forest model saved to `saved_models/random_forest_{dataset_type}_model.pkl`
+- XGBoost model saved to `saved_models/xgboost_{dataset_type}_model.pkl`
+- LightGBM model saved to `saved_models/lightgbm_{dataset_type}_model.pkl`
 
 Where `{dataset_type}` is either `expanded` or `original`
 
