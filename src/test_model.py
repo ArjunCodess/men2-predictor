@@ -11,27 +11,30 @@ from random_forest_model import RandomForestModel
 from lightgbm_model import LightGBMModel
 from xgboost_model import XGBoostModel
 
-def load_model_and_test_data(model_type='logistic'):
+def load_model_and_test_data(model_type='logistic', dataset_type='expanded'):
     """load trained model and test data using new model structure"""
-    
+
     # load the trained model based on type
     if model_type == 'random_forest' or model_type == 'r':
         model = RandomForestModel()
-        model_filename = 'random_forest_model.pkl'
+        model_filename = f'random_forest_{dataset_type}_model.pkl'
     elif model_type == 'lightgbm' or model_type == 'g':
         model = LightGBMModel()
-        model_filename = 'lightgbm_model.pkl'
+        model_filename = f'lightgbm_{dataset_type}_model.pkl'
     elif model_type == 'xgboost' or model_type == 'x':
         model = XGBoostModel()
-        model_filename = 'xgboost_model.pkl'
+        model_filename = f'xgboost_{dataset_type}_model.pkl'
     else:  # default to logistic regression
         model = LogisticRegressionModel()
-        model_filename = 'logistic_regression_model.pkl'
-    
+        model_filename = f'logistic_regression_{dataset_type}_model.pkl'
+
     model.load(model_filename)
-    
-    # Load test data
-    df = pd.read_csv('data/men2_case_control_dataset.csv')
+
+    # Load test data based on dataset type
+    if dataset_type == 'original':
+        df = pd.read_csv('data/ret_k666n_training_data.csv')
+    else:
+        df = pd.read_csv('data/men2_case_control_dataset.csv')
     
     # Prepare features and target - use same logic as training
     # REMOVE CONSTANT FEATURES
@@ -72,7 +75,12 @@ def load_model_and_test_data(model_type='logistic'):
     features['age_squared'] = df['age'] ** 2
     features['calcitonin_age_interaction'] = df['calcitonin_level_numeric'] * df['age']
     features['nodule_severity'] = df['thyroid_nodules_present'] * df['multiple_nodules']
-    
+
+    # Handle NaN values (fill with median for numeric columns) - same as training
+    if features.isnull().any().any():
+        print(f"WARNING: Found NaN values in features. Filling with column medians.")
+        features = features.fillna(features.median())
+
     # Use the SAVED scaler directly (don't create new one)
     features_scaled = model.scaler.transform(features)
     
@@ -100,7 +108,7 @@ def generate_predictions(model, X_test_scaled, y_test, threshold=None):
     
     return y_pred, y_pred_proba
 
-def print_test_metrics(model, X_test, y_test, model_type='logistic'):
+def print_test_metrics(model, X_test, y_test, model_type='logistic', dataset_type='expanded'):
     """compute and print test metrics using model's built-in evaluation"""
 
     # Use model's built-in evaluation method to get metrics
@@ -132,10 +140,11 @@ def print_test_metrics(model, X_test, y_test, model_type='logistic'):
 
     # Save results to file
     os.makedirs('results', exist_ok=True)
-    results_file = f'results/{model_type}_test_results.txt'
+    results_file = f'results/{model_type}_{dataset_type}_test_results.txt'
 
+    dataset_label = "EXPANDED" if dataset_type == 'expanded' else "ORIGINAL"
     with open(results_file, 'w') as f:
-        f.write(f"{model.model_name.upper()} TEST RESULTS\n")
+        f.write(f"{model.model_name.upper()} TEST RESULTS ({dataset_label})\n")
         f.write("=" * 50 + "\n")
         f.write(f"Accuracy: {metrics['accuracy']:.4f}\n")
         f.write(f"Precision: {precision:.4f}\n")
@@ -186,10 +195,14 @@ def print_individual_predictions(model, test_patients, y_test):
     for col in model.feature_columns:
         if col not in features.columns:
             features[col] = 0
-    
+
     # Reorder columns to match training order
     features = features[model.feature_columns]
-    
+
+    # Handle NaN values (fill with median for numeric columns) - same as training
+    if features.isnull().any().any():
+        features = features.fillna(features.median())
+
     # Get predictions using model's built-in methods
     y_pred, y_pred_proba = generate_predictions(model, model.scaler.transform(features), y_test)
     
@@ -264,12 +277,15 @@ def print_model_insights(model, X_test, y_test, test_patients):
 if __name__ == "__main__":
     # parse command line arguments
     parser = argparse.ArgumentParser(description='test mtc prediction model')
-    parser.add_argument('--m', '--model', type=str, default='l', 
+    parser.add_argument('--m', '--model', type=str, default='l',
                        choices=['l', 'r', 'x', 'g', 'logistic', 'random_forest', 'xgboost', 'lightgbm'],
                        help='model type: l/logistic (default), r/random_forest, x/xgboost, g/lightgbm')
-    
+    parser.add_argument('--d', '--data', type=str, default='e',
+                       choices=['e', 'o', 'expanded', 'original'],
+                       help='dataset type: e/expanded (with controls + SMOTE - default), o/original (paper data only)')
+
     args = parser.parse_args()
-    
+
     # determine model type
     if args.m in ['r', 'random_forest']:
         model_type = 'random_forest'
@@ -279,13 +295,20 @@ if __name__ == "__main__":
         model_type = 'lightgbm'
     else:
         model_type = 'logistic'
-    
+
+    # determine dataset type
+    if args.d in ['o', 'original']:
+        dataset_type = 'original'
+    else:
+        dataset_type = 'expanded'
+
     print(f"testing model type: {model_type}")
-    
+    print(f"testing dataset type: {dataset_type}")
+
     # load model and test data
-    model, X_test_scaled, y_test, test_patients = load_model_and_test_data(model_type)
+    model, X_test_scaled, y_test, test_patients = load_model_and_test_data(model_type, dataset_type)
 
     # print results using new model structure
-    print_test_metrics(model, X_test_scaled, y_test, model_type)
+    print_test_metrics(model, X_test_scaled, y_test, model_type, dataset_type)
     print_individual_predictions(model, test_patients, y_test)
     print_model_insights(model, X_test_scaled, y_test, test_patients)
