@@ -19,6 +19,87 @@ MEN2 is a rare hereditary cancer syndrome associated with RET gene mutations.
 
 This repository provides a reproducible machine learning pipeline to predict MEN2 risk, primarily leveraging Python's scientific stack.
 
+## Data Sources and Structure
+
+### Research Data Sources
+
+This project uses clinical data extracted from three peer-reviewed research studies on RET K666N germline mutation carriers:
+
+1. **Study 1 - JCEM Case Reports (March 2025)**
+   - Title: "Medullary Thyroid Carcinoma and Clinical Outcomes in Heterozygous Carriers of the RET K666N Germline Pathogenic Variant"
+   - 4 patients (family cluster with index case)
+
+2. **Study 2 - EDM Case Reports (September 2024)**
+   - Title: "MEN2 phenotype in a family with germline heterozygous rare RET K666N variant"
+   - DOI: 10.1530/EDM-24-0009
+   - 4 patients (family cluster with MEN2 features)
+
+3. **Study 3 - Thyroid Journal (2016)**
+   - Title: "Medullary Thyroid Carcinoma Associated with Germline RETK666N Mutation"
+   - DOI: 10.1089/thy.2016.0374
+   - 24 patients across 8 families (including probands and cascade-tested relatives)
+
+### Dataset Characteristics
+
+**Original Paper Dataset:** 32 confirmed RET K666N carriers
+- Age range: 5-90 years
+- Gender distribution: Mixed (Male/Female)
+- All patients carry the heterozygous RET K666N (c.1998G>T, p.Lys666Asn) pathogenic variant
+- MTC diagnosis cases: 11/32 (34.4%)
+- C-cell disease (MTC + C-cell hyperplasia): 13/32 (40.6%)
+
+**Expanded Dataset:** Original 32 patients + synthetic controls
+- Includes literature-based synthetic cases for improved model balance
+- Synthetic controls generated using clinical distributions from research data
+- Enhanced with SMOTE (Synthetic Minority Over-sampling Technique) during training
+
+### Clinical Features
+
+The dataset includes the following structured clinical and genetic features:
+
+**Demographic Features:**
+- `age`: Age at clinical evaluation (years)
+- `gender`: Biological sex (0=Female, 1=Male)
+- `age_group`: Categorized age ranges (young/middle/elderly/very_elderly)
+
+**Genetic Features:**
+- `ret_k666n_positive`: RET K666N mutation status (all patients = 1)
+
+**Biomarker Features:**
+- `calcitonin_elevated`: Binary indicator of elevated calcitonin levels
+- `calcitonin_level_numeric`: Numeric calcitonin measurement (pg/mL)
+
+**Clinical Presentation Features:**
+- `thyroid_nodules_present`: Presence of thyroid nodules on ultrasound
+- `multiple_nodules`: Presence of multiple thyroid nodules
+- `family_history_mtc`: Family history of medullary thyroid carcinoma
+
+**Target Variables:**
+- `mtc_diagnosis`: Primary target - confirmed MTC diagnosis (0=No, 1=Yes)
+- `c_cell_disease`: Broader target including C-cell hyperplasia
+- `men2_syndrome`: Full MEN2 syndrome features (rare in K666N carriers)
+- `pheochromocytoma`: Presence of pheochromocytoma
+- `hyperparathyroidism`: Presence of hyperparathyroidism
+
+### Data Processing Pipeline
+
+The [create_datasets.py](src/create_datasets.py) script:
+1. Extracts patient data from nested research paper structures
+2. Converts qualitative measurements to structured numeric features
+3. Handles multiple reference ranges for calcitonin levels across studies
+4. Engineers derived features (age groups, nodule presence)
+5. Generates two datasets:
+   - `data/ret_k666n_training_data.csv`: Original 32 patients from literature
+   - `data/men2_case_control_dataset.csv`: Expanded with synthetic controls
+
+### Important Notes on Data Quality
+
+- **Small Sample Size:** Reflects the rarity of K666N variant (one of the least common RET mutations)
+- **Incomplete Penetrance:** Not all K666N carriers develop MTC, consistent with literature
+- **Variable Follow-up:** Some carriers elected surveillance over prophylactic surgery
+- **Age-Dependent Risk:** Penetrance increases with age, reflected in age-stratified features
+- **No PHEO/PHPT:** Unlike high-risk RET mutations, K666N rarely presents with pheochromocytoma or hyperparathyroidism
+
 **Key features:**
 - **End-to-end pipeline** managed by `main.py`, coordinating all major steps automatically.
 - **Multiple ML algorithms:** Support for Logistic Regression, Random Forest, XGBoost, and LightGBM models.
