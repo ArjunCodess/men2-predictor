@@ -17,9 +17,14 @@ from lightgbm_model import LightGBMModel
 warnings.filterwarnings('ignore')
 
 
-def load_expanded_dataset():
-    """load the expanded dataset"""
-    return pd.read_csv('data/men2_case_control_dataset.csv')
+def load_expanded_dataset(dataset_type='expanded'):
+    """load the dataset based on type"""
+    if dataset_type == 'original':
+        # Load original paper dataset without controls
+        return pd.read_csv('data/ret_k666n_training_data.csv')
+    else:
+        # Load expanded dataset with controls (default)
+        return pd.read_csv('data/men2_case_control_dataset.csv')
 
 
 def prepare_features_target(df, target_column='mtc_diagnosis'):
@@ -66,16 +71,22 @@ def prepare_features_target(df, target_column='mtc_diagnosis'):
     return features, target, df.get('source_id', df.index)
 
 
-def train_evaluate_model(model_type='logistic'):
+def train_evaluate_model(model_type='logistic', dataset_type='expanded'):
     """main function to train and evaluate the model using new model structure"""
 
     # load data
-    df = load_expanded_dataset()
-    print(f"loaded dataset with shape: {df.shape}")
+    df = load_expanded_dataset(dataset_type)
+    dataset_label = "EXPANDED" if dataset_type == 'expanded' else "ORIGINAL"
+    print(f"loaded dataset ({dataset_label}) with shape: {df.shape}")
 
     # prepare features, target, and groups
     features, target, groups = prepare_features_target(df, target_column='mtc_diagnosis')
     print(f"features shape: {features.shape}, target distribution: {target.value_counts().to_dict()}")
+
+    # Handle NaN values (fill with median for numeric columns)
+    if features.isnull().any().any():
+        print(f"WARNING: Found NaN values in features. Filling with column medians.")
+        features = features.fillna(features.median())
 
     # Scale features first
     scaler = StandardScaler()
@@ -92,7 +103,15 @@ def train_evaluate_model(model_type='logistic'):
     
     # THEN apply SMOTE only to training data
     from imblearn.over_sampling import SMOTE
-    smote = SMOTE(random_state=42, k_neighbors=5)
+    from collections import Counter
+
+    # Determine k_neighbors based on minority class size
+    minority_class_count = min(Counter(y_train).values())
+    k_neighbors = min(5, minority_class_count - 1) if minority_class_count > 1 else 1
+
+    print(f"Minority class count in training: {minority_class_count}, using k_neighbors={k_neighbors} for SMOTE")
+
+    smote = SMOTE(random_state=42, k_neighbors=k_neighbors)
     X_train_balanced, y_train_balanced = smote.fit_resample(X_train, y_train)
     
     print(f"After SMOTE train: {X_train_balanced.shape}, "
@@ -109,20 +128,20 @@ def train_evaluate_model(model_type='logistic'):
     # create and train model based on selection
     if model_type == 'random_forest' or model_type == 'r':
         model = RandomForestModel(threshold=0.5)
-        model_filename = 'random_forest_model.pkl'
-        print(f"training random forest model...")
+        model_filename = f'random_forest_{dataset_type}_model.pkl'
+        print(f"training random forest model on {dataset_label}...")
     elif model_type == 'xgboost' or model_type == 'x':
         model = XGBoostModel(threshold=0.5)
-        model_filename = 'xgboost_model.pkl'
-        print(f"training xgboost model...")
+        model_filename = f'xgboost_{dataset_type}_model.pkl'
+        print(f"training xgboost model on {dataset_label}...")
     elif model_type == 'lightgbm' or model_type == 'g':
         model = LightGBMModel(threshold=0.5)
-        model_filename = 'lightgbm_model.pkl'
-        print(f"training lightgbm model...")
+        model_filename = f'lightgbm_{dataset_type}_model.pkl'
+        print(f"training lightgbm model on {dataset_label}...")
     else:  # default to logistic regression
         model = LogisticRegressionModel(threshold=0.15)  # medical screening threshold
-        model_filename = 'logistic_regression_model.pkl'
-        print(f"training logistic regression model...")
+        model_filename = f'logistic_regression_{dataset_type}_model.pkl'
+        print(f"training logistic regression model on {dataset_label}...")
     
     # Cross-validation using the model's built-in method
     model.print_cv_results(X_train, y_train, cv_folds=5)
@@ -186,12 +205,15 @@ def print_model_summary():
 if __name__ == "__main__":
     # parse command line arguments
     parser = argparse.ArgumentParser(description='train mtc prediction model')
-    parser.add_argument('--m', '--model', type=str, default='l', 
+    parser.add_argument('--m', '--model', type=str, default='l',
                        choices=['l', 'r', 'x', 'g', 'logistic', 'random_forest', 'xgboost', 'lightgbm'],
                        help='model type: l/logistic (default), r/random_forest, x/xgboost, g/lightgbm')
-    
+    parser.add_argument('--d', '--data', type=str, default='e',
+                       choices=['e', 'o', 'expanded', 'original'],
+                       help='dataset type: e/expanded (with controls + SMOTE - default), o/original (paper data only)')
+
     args = parser.parse_args()
-    
+
     # determine model type
     if args.m in ['r', 'random_forest']:
         model_type = 'random_forest'
@@ -201,8 +223,15 @@ if __name__ == "__main__":
         model_type = 'lightgbm'
     else:
         model_type = 'logistic'
-    
+
+    # determine dataset type
+    if args.d in ['o', 'original']:
+        dataset_type = 'original'
+    else:
+        dataset_type = 'expanded'
+
     print(f"selected model type: {model_type}")
-    
-    model, scaler, X_train_scaled, X_test_scaled, y_train, y_test, feature_cols = train_evaluate_model(model_type)
+    print(f"selected dataset type: {dataset_type}")
+
+    model, scaler, X_train_scaled, X_test_scaled, y_train, y_test, feature_cols = train_evaluate_model(model_type, dataset_type)
     print_model_summary()
