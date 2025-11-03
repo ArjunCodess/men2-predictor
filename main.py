@@ -4,7 +4,7 @@ import os
 import argparse
 from pathlib import Path
 
-def run_module(module_name, description, args=None, log_file=None):
+def run_module(module_name, description, args=None, log_file=None, dataset_type=None):
     """run a python module and handle errors"""
     print(f"\n{'='*60}")
     print(f"EXECUTING: {description}")
@@ -15,6 +15,9 @@ def run_module(module_name, description, args=None, log_file=None):
         cmd = [sys.executable, module_name]
         if args:
             cmd.extend(args)
+        # Add dataset type if specified
+        if dataset_type:
+            cmd.extend([f"--d={dataset_type}"])
 
         result = subprocess.run(cmd,
                               capture_output=True, text=True, cwd=os.getcwd())
@@ -52,9 +55,9 @@ def run_module(module_name, description, args=None, log_file=None):
         print(f"ERROR: Failed to execute {module_name}: {str(e)}")
         return False
 
-def extract_model_metrics(model_type):
+def extract_model_metrics(model_type, dataset_type='expanded'):
     """Extract metrics from test results file"""
-    results_file = Path('results') / f'{model_type}_test_results.txt'
+    results_file = Path('results') / f'{model_type}_{dataset_type}_test_results.txt'
 
     if not results_file.exists():
         return None
@@ -90,21 +93,32 @@ def extract_model_metrics(model_type):
 
 def print_comparison_table(results):
     """Print a formatted comparison table of all model results"""
-    print("\n" + "=" * 100)
+    print("\n" + "=" * 120)
     print("MODEL COMPARISON RESULTS")
-    print("=" * 100)
+    print("=" * 120)
 
     # Define table headers
-    headers = ["Model", "Accuracy", "Precision", "Recall", "F1 Score", "ROC AUC", "Status"]
-    col_widths = [20, 12, 12, 12, 12, 12, 15]
+    headers = ["Model", "Dataset", "Accuracy", "Precision", "Recall", "F1 Score", "ROC AUC", "Status"]
+    col_widths = [20, 15, 12, 12, 12, 12, 12, 15]
 
     # Print header
     header_row = "".join(f"{h:<{w}}" for h, w in zip(headers, col_widths))
     print(header_row)
-    print("-" * 100)
+    print("-" * 120)
 
     # Print each model's results
-    for model_type, data in results.items():
+    for key, data in results.items():
+        # Parse key (format: "model_type_dataset_type")
+        if key.endswith('_expanded'):
+            model_type = key.replace('_expanded', '')
+            dataset_label = "Expanded"
+        elif key.endswith('_original'):
+            model_type = key.replace('_original', '')
+            dataset_label = "Original"
+        else:
+            model_type = key
+            dataset_label = "Expanded"
+
         model_names = {
             'logistic': 'Logistic Regression',
             'random_forest': 'Random Forest',
@@ -118,6 +132,7 @@ def print_comparison_table(results):
         if data['metrics']:
             row = [
                 model_name,
+                dataset_label,
                 f"{data['metrics'].get('accuracy', 0):.4f}",
                 f"{data['metrics'].get('precision', 0):.4f}",
                 f"{data['metrics'].get('recall', 0):.4f}",
@@ -126,39 +141,58 @@ def print_comparison_table(results):
                 status
             ]
         else:
-            row = [model_name, "N/A", "N/A", "N/A", "N/A", "N/A", status]
+            row = [model_name, dataset_label, "N/A", "N/A", "N/A", "N/A", "N/A", status]
 
         row_str = "".join(f"{str(val):<{w}}" for val, w in zip(row, col_widths))
         print(row_str)
 
-    print("=" * 100)
+    print("=" * 120)
 
     # Find best performing model
     best_model = None
     best_f1 = -1
-    for model_type, data in results.items():
+    for key, data in results.items():
         if data['metrics'] and data['success']:
             f1 = data['metrics'].get('f1_score', 0)
             if f1 > best_f1:
                 best_f1 = f1
-                best_model = model_type
+                best_model = key
 
     if best_model:
+        # Parse key for display
+        if best_model.endswith('_expanded'):
+            model_type = best_model.replace('_expanded', '')
+            dataset_label = "Expanded"
+        elif best_model.endswith('_original'):
+            model_type = best_model.replace('_original', '')
+            dataset_label = "Original"
+        else:
+            model_type = best_model
+            dataset_label = "Expanded"
+
         model_names = {
             'logistic': 'Logistic Regression',
             'random_forest': 'Random Forest',
             'xgboost': 'XGBoost',
             'lightgbm': 'LightGBM'
         }
-        print(f"\nBest performing model: {model_names[best_model]} (F1 Score: {best_f1:.4f})")
+        print(f"\nBest performing model: {model_names[model_type]} on {dataset_label} (F1 Score: {best_f1:.4f})")
     print()
 
-def run_all_models():
+def run_all_models(dataset_type='expanded'):
     """Run all model types and compare results"""
     print("=" * 80)
     print("RET K666N MUTATION - MEN2 SYNDROME PREDICTION PIPELINE")
     print("=" * 80)
-    print("Running ALL MODELS for comprehensive comparison...")
+
+    # Determine what datasets to run
+    if dataset_type == 'both':
+        dataset_types = ['expanded', 'original']
+        print("Running ALL MODELS on BOTH DATASETS for comprehensive comparison...")
+    else:
+        dataset_types = [dataset_type]
+        dataset_label = "EXPANDED" if dataset_type == 'expanded' else "ORIGINAL"
+        print(f"Running ALL MODELS on {dataset_label} for comprehensive comparison...")
     print()
 
     model_types = ['logistic', 'random_forest', 'xgboost', 'lightgbm']
@@ -188,63 +222,74 @@ def run_all_models():
             print(f"{'!'*60}")
             return False
 
-    # Run each model type
+    # Run each model type on each dataset type
     print("\n" + "=" * 80)
     print("STEP 2: TRAINING AND TESTING ALL MODELS")
     print("=" * 80)
 
-    for model_type in model_types:
-        model_desc = {
-            'logistic': 'Logistic Regression',
-            'random_forest': 'Random Forest',
-            'xgboost': 'XGBoost',
-            'lightgbm': 'LightGBM'
-        }[model_type]
+    for dt in dataset_types:
+        dataset_label = "EXPANDED" if dt == 'expanded' else "ORIGINAL"
 
-        print(f"\n{'-'*80}")
-        print(f"Processing: {model_desc}")
-        print(f"{'-'*80}")
+        print(f"\n{'='*80}")
+        print(f"DATASET TYPE: {dataset_label}")
+        print(f"{'='*80}")
 
-        # Train model - save log to file
-        train_log = f"results/logs/{model_type}_training.log"
-        train_success = run_module(
-            "src/train_model.py",
-            f"Model Training - Train {model_desc} with cross-validation",
-            [f"--m={model_type}"],
-            log_file=train_log
-        )
+        for model_type in model_types:
+            model_desc = {
+                'logistic': 'Logistic Regression',
+                'random_forest': 'Random Forest',
+                'xgboost': 'XGBoost',
+                'lightgbm': 'LightGBM'
+            }[model_type]
 
-        if not train_success:
-            print(f"Training failed! Check log: {train_log}")
+            print(f"\n{'-'*80}")
+            print(f"Processing: {model_desc} on {dataset_label}")
+            print(f"{'-'*80}")
 
-        # Test model - save log to file
-        test_log = f"results/logs/{model_type}_testing.log"
-        test_success = run_module(
-            "src/test_model.py",
-            f"Model Testing - Evaluate {model_desc} performance on test set",
-            [f"--m={model_type}"],
-            log_file=test_log
-        )
+            # Train model - save log to file
+            train_log = f"results/logs/{model_type}_{dt}_training.log"
+            train_success = run_module(
+                "src/train_model.py",
+                f"Model Training - Train {model_desc} with cross-validation on {dataset_label}",
+                [f"--m={model_type}"],
+                log_file=train_log,
+                dataset_type=dt
+            )
 
-        if not test_success:
-            print(f"Testing failed! Check log: {test_log}")
+            if not train_success:
+                print(f"Training failed! Check log: {train_log}")
 
-        # Extract metrics
-        metrics = extract_model_metrics(model_type)
+            # Test model - save log to file
+            test_log = f"results/logs/{model_type}_{dt}_testing.log"
+            test_success = run_module(
+                "src/test_model.py",
+                f"Model Testing - Evaluate {model_desc} performance on test set ({dataset_label})",
+                [f"--m={model_type}"],
+                log_file=test_log,
+                dataset_type=dt
+            )
 
-        results[model_type] = {
-            'success': train_success and test_success,
-            'metrics': metrics
-        }
+            if not test_success:
+                print(f"Testing failed! Check log: {test_log}")
 
-        # Print summary for this model
-        if train_success and test_success and metrics:
-            print(f"\n{model_desc} completed successfully!")
-            print(f"  - Training log: {train_log}")
-            print(f"  - Testing log: {test_log}")
-            print(f"  - Metrics: Accuracy={metrics['accuracy']:.4f}, F1={metrics['f1_score']:.4f}, ROC-AUC={metrics['roc_auc']:.4f}")
-        else:
-            print(f"\n{model_desc} encountered issues. Check logs for details.")
+            # Extract metrics
+            metrics = extract_model_metrics(model_type, dt)
+
+            # Store with combined key
+            results_key = f"{model_type}_{dt}"
+            results[results_key] = {
+                'success': train_success and test_success,
+                'metrics': metrics
+            }
+
+            # Print summary for this model
+            if train_success and test_success and metrics:
+                print(f"\n{model_desc} on {dataset_label} completed successfully!")
+                print(f"  - Training log: {train_log}")
+                print(f"  - Testing log: {test_log}")
+                print(f"  - Metrics: Accuracy={metrics['accuracy']:.4f}, F1={metrics['f1_score']:.4f}, ROC-AUC={metrics['roc_auc']:.4f}")
+            else:
+                print(f"\n{model_desc} on {dataset_label} encountered issues. Check logs for details.")
 
     # Print comparison table
     print_comparison_table(results)
@@ -282,7 +327,7 @@ def run_all_models():
 
     return True
 
-def main(model_type='logistic'):
+def main(model_type='logistic', dataset_type='expanded'):
     """main orchestration function"""
     print("=" * 80)
     print("RET K666N MUTATION - MEN2 SYNDROME PREDICTION PIPELINE")
@@ -299,7 +344,10 @@ def main(model_type='logistic'):
     else:
         model_desc = "Logistic Regression"
 
+    dataset_label = "EXPANDED" if dataset_type == 'expanded' else "ORIGINAL"
+
     print(f"Selected model: {model_desc}")
+    print(f"Dataset type: {dataset_label}")
 
     # define pipeline steps
     pipeline_steps = [
@@ -312,7 +360,7 @@ def main(model_type='logistic'):
 
     # execute each step
     for module_name, description, args in pipeline_steps:
-        success = run_module(module_name, description, args)
+        success = run_module(module_name, description, args, dataset_type=dataset_type)
         if not success:
             print(f"\n{'!'*60}")
             print(f"PIPELINE FAILED AT: {description}")
@@ -348,12 +396,23 @@ if __name__ == "__main__":
     parser.add_argument('--m', '--model', type=str, default='l',
                        choices=['l', 'r', 'x', 'g', 'a', 'logistic', 'random_forest', 'xgboost', 'lightgbm', 'all'],
                        help='model type: l/logistic (default), r/random_forest, x/xgboost, g/lightgbm, a/all (compare all models)')
+    parser.add_argument('--d', '--data', type=str, default='e',
+                       choices=['e', 'o', 'b', 'expanded', 'original', 'both'],
+                       help='dataset type: e/expanded (with controls + SMOTE - default), o/original (paper data only), b/both (run on both datasets)')
 
     args = parser.parse_args()
 
+    # Determine dataset type
+    if args.d in ['o', 'original']:
+        dataset_type = 'original'
+    elif args.d in ['b', 'both']:
+        dataset_type = 'both'
+    else:
+        dataset_type = 'expanded'
+
     # Check if user wants to run all models
     if args.m in ['a', 'all']:
-        success = run_all_models()
+        success = run_all_models(dataset_type)
     else:
         # determine model type
         if args.m in ['r', 'random_forest']:
@@ -365,6 +424,6 @@ if __name__ == "__main__":
         else:
             model_type = 'logistic'
 
-        success = main(model_type)
+        success = main(model_type, dataset_type)
 
     sys.exit(0 if success else 1)
