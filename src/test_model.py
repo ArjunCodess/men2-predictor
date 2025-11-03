@@ -17,16 +17,16 @@ def load_model_and_test_data(model_type='logistic', dataset_type='expanded'):
     # load the trained model based on type
     if model_type == 'random_forest' or model_type == 'r':
         model = RandomForestModel()
-        model_filename = f'random_forest_{dataset_type}_model.pkl'
+        model_filename = f'saved_models/random_forest_{dataset_type}_model.pkl'
     elif model_type == 'lightgbm' or model_type == 'g':
         model = LightGBMModel()
-        model_filename = f'lightgbm_{dataset_type}_model.pkl'
+        model_filename = f'saved_models/lightgbm_{dataset_type}_model.pkl'
     elif model_type == 'xgboost' or model_type == 'x':
         model = XGBoostModel()
-        model_filename = f'xgboost_{dataset_type}_model.pkl'
+        model_filename = f'saved_models/xgboost_{dataset_type}_model.pkl'
     else:  # default to logistic regression
         model = LogisticRegressionModel()
-        model_filename = f'logistic_regression_{dataset_type}_model.pkl'
+        model_filename = f'saved_models/logistic_regression_{dataset_type}_model.pkl'
 
     model.load(model_filename)
 

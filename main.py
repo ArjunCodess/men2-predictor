@@ -302,10 +302,10 @@ def run_all_models(dataset_type='expanded'):
     print("- data/ret_k666n_training_data.csv")
     print("- data/ret_k666n_expanded_training_data.csv")
     print("- data/men2_case_control_dataset.csv")
-    print("- logistic_regression_model.pkl")
-    print("- random_forest_model.pkl")
-    print("- xgboost_model.pkl")
-    print("- lightgbm_model.pkl")
+    print("- saved_models/logistic_regression_{expanded|original}_model.pkl")
+    print("- saved_models/random_forest_{expanded|original}_model.pkl")
+    print("- saved_models/xgboost_{expanded|original}_model.pkl")
+    print("- saved_models/lightgbm_{expanded|original}_model.pkl")
     print("\nTest results:")
     print("- results/logistic_test_results.txt")
     print("- results/random_forest_test_results.txt")
@@ -377,13 +377,13 @@ def main(model_type='logistic', dataset_type='expanded'):
     print("- data/ret_k666n_expanded_training_data.csv")
     print("- data/men2_case_control_dataset.csv")
     if model_type == 'random_forest':
-        print("- random_forest_model.pkl")
+        print(f"- saved_models/random_forest_{dataset_type}_model.pkl")
     elif model_type == 'xgboost':
-        print("- xgboost_model.pkl")
+        print(f"- saved_models/xgboost_{dataset_type}_model.pkl")
     elif model_type == 'lightgbm':
-        print("- lightgbm_model.pkl")
+        print(f"- saved_models/lightgbm_{dataset_type}_model.pkl")
     else:
-        print("- logistic_regression_model.pkl")
+        print(f"- saved_models/logistic_regression_{dataset_type}_model.pkl")
     print()
     print("The trained model can now be used for RET K666N mutation")
     print("and MEN2 syndrome risk prediction in new patients.")

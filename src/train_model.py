@@ -125,22 +125,25 @@ def train_evaluate_model(model_type='logistic', dataset_type='expanded'):
     print(f"train target distribution: {pd.Series(y_train).value_counts().to_dict()}")
     print(f"test target distribution: {pd.Series(y_test).value_counts().to_dict()}")
     
+    # create saved_models directory if it doesn't exist
+    os.makedirs('saved_models', exist_ok=True)
+
     # create and train model based on selection
     if model_type == 'random_forest' or model_type == 'r':
         model = RandomForestModel(threshold=0.5)
-        model_filename = f'random_forest_{dataset_type}_model.pkl'
+        model_filename = f'saved_models/random_forest_{dataset_type}_model.pkl'
         print(f"training random forest model on {dataset_label}...")
     elif model_type == 'xgboost' or model_type == 'x':
         model = XGBoostModel(threshold=0.5)
-        model_filename = f'xgboost_{dataset_type}_model.pkl'
+        model_filename = f'saved_models/xgboost_{dataset_type}_model.pkl'
         print(f"training xgboost model on {dataset_label}...")
     elif model_type == 'lightgbm' or model_type == 'g':
         model = LightGBMModel(threshold=0.5)
-        model_filename = f'lightgbm_{dataset_type}_model.pkl'
+        model_filename = f'saved_models/lightgbm_{dataset_type}_model.pkl'
         print(f"training lightgbm model on {dataset_label}...")
     else:  # default to logistic regression
         model = LogisticRegressionModel(threshold=0.15)  # medical screening threshold
-        model_filename = f'logistic_regression_{dataset_type}_model.pkl'
+        model_filename = f'saved_models/logistic_regression_{dataset_type}_model.pkl'
         print(f"training logistic regression model on {dataset_label}...")
     
     # Cross-validation using the model's built-in method
