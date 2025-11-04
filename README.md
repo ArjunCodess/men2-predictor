@@ -81,14 +81,31 @@ The dataset includes the following structured clinical and genetic features:
 - `pheochromocytoma`: Presence of pheochromocytoma
 - `hyperparathyroidism`: Presence of hyperparathyroidism
 
+### Dataset Organization
+
+The raw clinical data is stored in the [dataset/](dataset/) folder as structured JSON files:
+
+- **[study_1.json](dataset/study_1.json)**: JCEM Case Reports (2025) - 4 patients
+- **[study_2.json](dataset/study_2.json)**: EDM Case Reports (2024) - 4 patients
+- **[study_3.json](dataset/study_3.json)**: Thyroid Journal (2016) - 24 patients across 8 families
+- **[literature_data.json](dataset/literature_data.json)**: Aggregated statistics and meta-data
+- **[mutation_characteristics.json](dataset/mutation_characteristics.json)**: RET K666N mutation details
+
+This modular structure allows for:
+- Easy data maintenance and updates
+- Clear separation of concerns between raw data and processing logic
+- Version control of individual study datasets
+- Simple addition of new studies as they become available
+
 ### Data Processing Pipeline
 
 The [create_datasets.py](src/create_datasets.py) script:
-1. Extracts patient data from nested research paper structures
-2. Converts qualitative measurements to structured numeric features
-3. Handles multiple reference ranges for calcitonin levels across studies
-4. Engineers derived features (age groups, nodule presence)
-5. Generates two datasets:
+1. Loads patient data from JSON files in the [dataset/](dataset/) folder
+2. Extracts and combines data from multiple research studies
+3. Converts qualitative measurements to structured numeric features
+4. Handles multiple reference ranges for calcitonin levels across studies
+5. Engineers derived features (age groups, nodule presence)
+6. Generates two datasets:
    - `data/ret_k666n_training_data.csv`: Original 32 patients from literature
    - `data/men2_case_control_dataset.csv`: Expanded with synthetic controls
 
@@ -112,7 +129,7 @@ The [create_datasets.py](src/create_datasets.py) script:
 - **Artifacts generated:** Processed datasets and trained model files, usable for risk scoring new patients with relevant clinical/genetic data.
 
 **Pipeline steps (as run by `main.py`):**
-1. **create_datasets.py:** Extracts and formats case/control and RET K666N mutation data into CSVs (32 patients from 3 studies).
+1. **create_datasets.py:** Loads patient data from JSON files in [dataset/](dataset/) folder and formats into CSVs (32 patients from 3 studies).
 2. **data_analysis.py:** Computes descriptive statistics and generates visualizations to aid in understanding cohort differences.
 3. **data_expansion.py:** Produces synthetic control samples to improve model balance.
 4. **train_model.py:** Trains a logistic regression model with cross-validation, SMOTE balancing, and threshold optimization.
@@ -140,6 +157,57 @@ The [create_datasets.py](src/create_datasets.py) script:
 - **Research Tool:** Validated on small datasets typical of rare genetic conditions
 
 ## Getting Started
+
+### Project Structure
+
+```
+men2-predictor/
+├── charts
+│   ├── age_histograms.png
+│   ├── calcitonin_boxplots.png
+│   └── feature_distributions.png
+├── data
+│   ├── men2_case_control_dataset.csv
+│   ├── ret_k666n_expanded_training_data.csv
+│   └── ret_k666n_training_data.csv
+├── dataset
+│   ├── literature_data.json
+│   ├── mutation_characteristics.json
+│   ├── study_1.json
+│   ├── study_2.json
+│   └── study_3.json
+├── models
+│   ├── __init__.py
+│   ├── base_model.py
+│   ├── lightgbm_model.py
+│   ├── logistic_regression_model.py
+│   ├── random_forest_model.py
+│   └── xgboost_model.py
+├── results
+│   ├── lightgbm_expanded_test_results.txt
+│   ├── lightgbm_original_test_results.txt
+│   ├── lightgbm_test_results.txt
+│   ├── logistic_expanded_test_results.txt
+│   ├── logistic_original_test_results.txt
+│   ├── logistic_test_results.txt
+│   ├── random_forest_expanded_test_results.txt
+│   ├── random_forest_original_test_results.txt
+│   ├── random_forest_test_results.txt
+│   ├── xgboost_expanded_test_results.txt
+│   ├── xgboost_original_test_results.txt
+│   └── xgboost_test_results.txt
+├── src
+│   ├── create_datasets.py
+│   ├── data_analysis.py
+│   ├── data_expansion.py
+│   ├── test_model.py
+│   └── train_model.py
+├── .gitignore
+├── LICENSE
+├── main.py
+├── README.md
+└── requirements.txt
+```
 
 ### Installation
 
