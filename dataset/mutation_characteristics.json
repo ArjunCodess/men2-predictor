@@ -1,0 +1,10 @@
+{
+  "mutation_type": "Missense",
+  "nucleotide_change": "c.1998G>T",
+  "protein_change": "p.Lys666Asn",
+  "exon": "11/14",
+  "exon_note": "conflicting info between studies",
+  "domain": "Intracellular domain",
+  "mechanism": "Increased kinase activity",
+  "ata_risk_level": "Not yet assigned"
+}
