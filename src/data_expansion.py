@@ -263,7 +263,7 @@ def print_expansion_summary(original_df, expanded_df):
     
     print("EXPANSION DETAILS:")
     print(f"- Original cases: {len(original_df)}")
-    print(f"- Synthetic variants: {len(expanded_df) - len(original_df) - len(pd.read_csv('data/men2_case_control_dataset.csv', nrows=0))}")
+    print(f"- Total expansion: {len(expanded_df) - len(original_df)} additional records")
     print(f"- Matched controls: {len(create_matched_controls(original_df, 3))}")
     print(f"- Population controls: {len(original_df) * 2}")
     print()
