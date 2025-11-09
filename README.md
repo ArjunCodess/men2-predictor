@@ -194,17 +194,21 @@ men2-predictor/
 ├── charts
 │   ├── age_histograms.png
 │   ├── calcitonin_boxplots.png
-│   └── feature_distributions.png
+│   ├── calcitonin_by_variant.png
+│   ├── feature_distributions.png
+│   ├── risk_level_analysis.png
+│   └── variant_distribution.png
 ├── data
-│   ├── men2_case_control_dataset.csv
-│   ├── ret_k666n_expanded_training_data.csv
-│   └── ret_k666n_training_data.csv
+│   ├── ret_multivariant_case_control_dataset.csv
+│   ├── ret_multivariant_expanded_training_data.csv
+│   └── ret_multivariant_training_data.csv
 ├── dataset
 │   ├── literature_data.json
 │   ├── mutation_characteristics.json
 │   ├── study_1.json
 │   ├── study_2.json
-│   └── study_3.json
+│   ├── study_3.json
+│   └── study_4.json
 ├── models
 │   ├── __init__.py
 │   ├── base_model.py

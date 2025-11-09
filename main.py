@@ -182,7 +182,7 @@ def print_comparison_table(results):
 def run_all_models(dataset_type='expanded'):
     """Run all model types and compare results"""
     print("=" * 80)
-    print("RET K666N MUTATION - MEN2 SYNDROME PREDICTION PIPELINE")
+    print("MULTI-VARIANT RET MUTATION - MEN2 SYNDROME PREDICTION PIPELINE")
     print("=" * 80)
 
     # Determine what datasets to run
@@ -299,9 +299,9 @@ def run_all_models(dataset_type='expanded'):
     print("ALL MODELS PIPELINE COMPLETED!")
     print("=" * 80)
     print("\nModel artifacts saved:")
-    print("- data/ret_k666n_training_data.csv")
-    print("- data/ret_k666n_expanded_training_data.csv")
-    print("- data/men2_case_control_dataset.csv")
+    print("- data/ret_multivariant_training_data.csv")
+    print("- data/ret_multivariant_expanded_training_data.csv")
+    print("- data/ret_multivariant_case_control_dataset.csv")
     print("- saved_models/logistic_regression_{expanded|original}_model.pkl")
     print("- saved_models/random_forest_{expanded|original}_model.pkl")
     print("- saved_models/xgboost_{expanded|original}_model.pkl")
@@ -330,7 +330,7 @@ def run_all_models(dataset_type='expanded'):
 def main(model_type='logistic', dataset_type='expanded'):
     """main orchestration function"""
     print("=" * 80)
-    print("RET K666N MUTATION - MEN2 SYNDROME PREDICTION PIPELINE")
+    print("MULTI-VARIANT RET MUTATION - MEN2 SYNDROME PREDICTION PIPELINE")
     print("=" * 80)
     print("Starting comprehensive ML pipeline for genetic disease prediction...")
 
@@ -373,9 +373,9 @@ def main(model_type='logistic', dataset_type='expanded'):
     print("=" * 80)
     print("All modules executed successfully.")
     print("Model artifacts saved:")
-    print("- data/ret_k666n_training_data.csv")
-    print("- data/ret_k666n_expanded_training_data.csv")
-    print("- data/men2_case_control_dataset.csv")
+    print("- data/ret_multivariant_training_data.csv")
+    print("- data/ret_multivariant_expanded_training_data.csv")
+    print("- data/ret_multivariant_case_control_dataset.csv")
     if model_type == 'random_forest':
         print(f"- saved_models/random_forest_{dataset_type}_model.pkl")
     elif model_type == 'xgboost':
@@ -385,7 +385,7 @@ def main(model_type='logistic', dataset_type='expanded'):
     else:
         print(f"- saved_models/logistic_regression_{dataset_type}_model.pkl")
     print()
-    print("The trained model can now be used for RET K666N mutation")
+    print("The trained model can now be used for multi-variant RET mutation")
     print("and MEN2 syndrome risk prediction in new patients.")
 
     return True

@@ -54,7 +54,9 @@ def create_paper_dataset():
     # feature engineering
 
     # Extract RET variant from ret_variant field
-    df['ret_variant'] = df['ret_variant'].fillna('K666N')  # default to K666N for studies 1-3
+    # Studies 1-3 patients are all K666N carriers (variant not explicitly stored in JSON)
+    # Study 4 has explicit variant field for each patient
+    df['ret_variant'] = df['ret_variant'].fillna('K666N')
 
     # Create RET risk level mapping based on ATA guidelines
     # Level 1 (Moderate): L790F, Y791F, V804M, S891A, K666N
