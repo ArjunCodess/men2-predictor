@@ -219,16 +219,12 @@ men2-predictor/
 ├── results
 │   ├── lightgbm_expanded_test_results.txt
 │   ├── lightgbm_original_test_results.txt
-│   ├── lightgbm_test_results.txt
 │   ├── logistic_expanded_test_results.txt
 │   ├── logistic_original_test_results.txt
-│   ├── logistic_test_results.txt
 │   ├── random_forest_expanded_test_results.txt
 │   ├── random_forest_original_test_results.txt
-│   ├── random_forest_test_results.txt
 │   ├── xgboost_expanded_test_results.txt
 │   ├── xgboost_original_test_results.txt
-│   └── xgboost_test_results.txt
 ├── src
 │   ├── create_datasets.py
 │   ├── data_analysis.py
@@ -283,6 +279,12 @@ For detailed usage or to run a pipeline step separately, see each script (`creat
 
 You can choose which model to train and test using the `--m` argument:
 
+- `l` or `logistic`: logistic regression (default)
+- `r` or `random_forest`: random forest
+- `x` or `xgboost`: xgboost
+- `g` or `lightgbm`: lightgbm
+- `a` or `all`: **run all models and compare results**
+
 ### Dataset selection (--d)
 
 You can choose which dataset to use for training and testing using the `--d` argument:
@@ -290,12 +292,6 @@ You can choose which dataset to use for training and testing using the `--d` arg
 - `e` or `expanded`: expanded dataset with synthetic controls + SMOTE balancing (default)
 - `o` or `original`: original paper dataset only (32 patients, no synthetic controls)
 - `b` or `both`: run on both datasets for comparison
-
-- `l` or `logistic`: logistic regression (default)
-- `r` or `random_forest`: random forest
-- `x` or `xgboost`: xgboost
-- `g` or `lightgbm`: lightgbm
-- `a` or `all`: **run all models and compare results**
 
 Examples:
 
