@@ -1,8 +1,8 @@
 # MEN2 Predictor ML Model
 
-A machine learning pipeline for predicting Multiple Endocrine Neoplasia type 2 (MEN2) syndrome, with a focus on the RET K666N gene mutation, using clinical and genetic features.
+A machine learning pipeline for predicting Multiple Endocrine Neoplasia type 2 (MEN2) syndrome across multiple RET gene variants, using clinical and genetic features.
 
-This project automates data preparation, exploratory analysis, dataset expansion, model training, evaluation, and artifact generation to streamline MEN2 risk prediction based on available research and synthetic datasets.
+This project automates data preparation, exploratory analysis, dataset expansion, model training, evaluation, and artifact generation to streamline MEN2 risk prediction based on available research and synthetic datasets. The model supports **11 different RET variants** including K666N, C634R, C634Y, C634W, and others, with ATA risk level stratification.
 
 ## Table of Contents
 
@@ -23,34 +23,54 @@ This repository provides a reproducible machine learning pipeline to predict MEN
 
 ### Research Data Sources
 
-This project uses clinical data extracted from three peer-reviewed research studies on RET K666N germline mutation carriers:
+This project uses clinical data extracted from four peer-reviewed research studies covering multiple RET germline mutation carriers:
 
 1. **Study 1 - JCEM Case Reports (March 2025)**
    - Title: "Medullary Thyroid Carcinoma and Clinical Outcomes in Heterozygous Carriers of the RET K666N Germline Pathogenic Variant"
    - 4 patients (family cluster with index case)
+   - Variant: K666N (ATA Risk Level 1 - Moderate)
 
 2. **Study 2 - EDM Case Reports (September 2024)**
    - Title: "MEN2 phenotype in a family with germline heterozygous rare RET K666N variant"
    - DOI: 10.1530/EDM-24-0009
    - 4 patients (family cluster with MEN2 features)
+   - Variant: K666N (ATA Risk Level 1 - Moderate)
 
 3. **Study 3 - Thyroid Journal (2016)**
    - Title: "Medullary Thyroid Carcinoma Associated with Germline RETK666N Mutation"
    - DOI: 10.1089/thy.2016.0374
    - 24 patients across 8 families (including probands and cascade-tested relatives)
+   - Variant: K666N (ATA Risk Level 1 - Moderate)
+
+4. **Study 4 - European Journal of Endocrinology (2006)**
+   - Title: "Long-term outcome in 46 gene carriers of hereditary medullary thyroid carcinoma after prophylactic thyroidectomy: impact of individual RET genotype"
+   - DOI: 10.1530/eje.1.02216
+   - 46 patients with various RET variants
+   - Variants: L790F, Y791F, V804M, S891A, C634R, C634Y, C634W, C618S, C630R, C620Y
+   - Risk Levels: Level 1 (Moderate), Level 2 (High), Level 3 (Highest)
 
 ### Dataset Characteristics
 
-**Original Paper Dataset:** 32 confirmed RET K666N carriers
-- Age range: 5-90 years
-- Gender distribution: Mixed (Male/Female)
-- All patients carry the heterozygous RET K666N (c.1998G>T, p.Lys666Asn) pathogenic variant
-- MTC diagnosis cases: 11/32 (34.4%)
-- C-cell disease (MTC + C-cell hyperplasia): 13/32 (40.6%)
+**Multi-Variant Dataset:** 74 confirmed RET germline mutation carriers across 11 variants
+- **Studies 1-3 (K666N cohort):** 28 patients (after deduplication)
+- **Study 4 (Multi-variant cohort):** 46 patients
+- **Age range:** 5-90 years
+- **Gender distribution:** Mixed (Male/Female)
+- **RET Variants Included:** K666N, L790F, Y791F, V804M, S891A, C634R, C634Y, C634W, C618S, C630R, C620Y
 
-**Expanded Dataset:** Original 32 patients + synthetic controls
+**ATA Risk Level Distribution:**
+- **Level 1 (Moderate):** K666N, L790F, Y791F, V804M, S891A
+- **Level 2 (High):** C618S, C630R, C620Y
+- **Level 3 (Highest):** C634R, C634Y, C634W
+
+**Clinical Outcomes:**
+- MTC diagnosis rate varies by variant (higher penetrance in Level 3 variants)
+- C-cell disease (MTC + C-cell hyperplasia) observed across all risk levels
+- Model learns variant-specific risk patterns
+
+**Expanded Dataset:** Original 74 patients + synthetic variant-matched controls
 - Includes literature-based synthetic cases for improved model balance
-- Synthetic controls generated using clinical distributions from research data
+- Synthetic controls generated with variant-specific distributions
 - Enhanced with SMOTE (Synthetic Minority Over-sampling Technique) during training
 
 ### Clinical Features
@@ -63,7 +83,8 @@ The dataset includes the following structured clinical and genetic features:
 - `age_group`: Categorized age ranges (young/middle/elderly/very_elderly)
 
 **Genetic Features:**
-- `ret_k666n_positive`: RET K666N mutation status (all patients = 1)
+- `ret_variant`: Specific RET variant (K666N, C634R, C634Y, L790F, etc.)
+- `ret_risk_level`: ATA risk stratification (1=Moderate, 2=High, 3=Highest)
 
 **Biomarker Features:**
 - `calcitonin_elevated`: Binary indicator of elevated calcitonin levels
@@ -85,11 +106,12 @@ The dataset includes the following structured clinical and genetic features:
 
 The raw clinical data is stored in the [dataset/](dataset/) folder as structured JSON files:
 
-- **[study_1.json](dataset/study_1.json)**: JCEM Case Reports (2025) - 4 patients
-- **[study_2.json](dataset/study_2.json)**: EDM Case Reports (2024) - 4 patients
-- **[study_3.json](dataset/study_3.json)**: Thyroid Journal (2016) - 24 patients across 8 families
+- **[study_1.json](dataset/study_1.json)**: JCEM Case Reports (2025) - 4 patients (K666N)
+- **[study_2.json](dataset/study_2.json)**: EDM Case Reports (2024) - 4 patients (K666N)
+- **[study_3.json](dataset/study_3.json)**: Thyroid Journal (2016) - 24 patients across 8 families (K666N)
+- **[study_4.json](dataset/study_4.json)**: European Journal of Endocrinology (2006) - 46 patients (10 variants)
 - **[literature_data.json](dataset/literature_data.json)**: Aggregated statistics and meta-data
-- **[mutation_characteristics.json](dataset/mutation_characteristics.json)**: RET K666N mutation details
+- **[mutation_characteristics.json](dataset/mutation_characteristics.json)**: RET variant characteristics
 
 This modular structure allows for:
 - Easy data maintenance and updates
@@ -100,22 +122,26 @@ This modular structure allows for:
 ### Data Processing Pipeline
 
 The [create_datasets.py](src/create_datasets.py) script:
-1. Loads patient data from JSON files in the [dataset/](dataset/) folder
-2. Extracts and combines data from multiple research studies
-3. Converts qualitative measurements to structured numeric features
-4. Handles multiple reference ranges for calcitonin levels across studies
-5. Engineers derived features (age groups, nodule presence)
-6. Generates two datasets:
-   - `data/ret_k666n_training_data.csv`: Original 32 patients from literature
-   - `data/men2_case_control_dataset.csv`: Expanded with synthetic controls
+1. Loads patient data from JSON files in the [dataset/](dataset/) folder (4 studies)
+2. Extracts and combines data from multiple research studies (74 patients, 11 variants)
+3. Maps each variant to ATA risk level (1=Moderate, 2=High, 3=Highest)
+4. Converts qualitative measurements to structured numeric features
+5. Handles multiple reference ranges for calcitonin levels across studies
+6. Engineers derived features (age groups, nodule presence, variant-specific interactions)
+7. Generates two datasets:
+   - `data/ret_multivariant_training_data.csv`: Original 74 patients from literature
+   - `data/ret_multivariant_expanded_training_data.csv`: Expanded with synthetic controls
+   - `data/ret_multivariant_case_control_dataset.csv`: Further expanded with variant-matched controls
 
 ### Important Notes on Data Quality
 
-- **Small Sample Size:** Reflects the rarity of K666N variant (one of the least common RET mutations)
-- **Incomplete Penetrance:** Not all K666N carriers develop MTC, consistent with literature
+- **Multi-Variant Dataset:** Includes 11 different RET variants with varying penetrance and risk profiles
+- **Risk Stratification:** Variants classified by ATA guidelines (Level 1/2/3)
+- **Incomplete Penetrance:** Not all carriers develop MTC; penetrance varies by variant
 - **Variable Follow-up:** Some carriers elected surveillance over prophylactic surgery
 - **Age-Dependent Risk:** Penetrance increases with age, reflected in age-stratified features
-- **No PHEO/PHPT:** Unlike high-risk RET mutations, K666N rarely presents with pheochromocytoma or hyperparathyroidism
+- **Variant-Specific Patterns:** High-risk variants (C634*) show different clinical patterns than moderate-risk (K666N, L790F)
+- **Study Heterogeneity:** Different studies used different calcitonin reference ranges and screening protocols
 
 **Key features:**
 - **End-to-end pipeline** managed by `main.py`, coordinating all major steps automatically.
@@ -129,27 +155,30 @@ The [create_datasets.py](src/create_datasets.py) script:
 - **Artifacts generated:** Processed datasets and trained model files, usable for risk scoring new patients with relevant clinical/genetic data.
 
 **Pipeline steps (as run by `main.py`):**
-1. **create_datasets.py:** Loads patient data from JSON files in [dataset/](dataset/) folder and formats into CSVs (32 patients from 3 studies).
-2. **data_analysis.py:** Computes descriptive statistics and generates visualizations to aid in understanding cohort differences.
-3. **data_expansion.py:** Produces synthetic control samples to improve model balance.
-4. **train_model.py:** Trains a logistic regression model with cross-validation, SMOTE balancing, and threshold optimization.
-5. **test_model.py:** Evaluates the model on test data with risk stratification and comprehensive metrics.
-6. **Artifact summary:** Includes `ret_k666n_training_data.csv`, `ret_k666n_expanded_training_data.csv`, `men2_case_control_dataset.csv`, `model.pkl`.
+1. **create_datasets.py:** Loads patient data from JSON files in [dataset/](dataset/) folder and formats into CSVs (74 patients from 4 studies, 11 variants).
+2. **data_analysis.py:** Computes descriptive statistics, generates variant-specific visualizations and risk-stratified analyses.
+3. **data_expansion.py:** Produces variant-matched synthetic control samples to improve model balance.
+4. **train_model.py:** Trains models with variant features, cross-validation, SMOTE balancing, and threshold optimization.
+5. **test_model.py:** Evaluates the model on test data with variant-specific risk stratification and comprehensive metrics.
+6. **Artifact summary:** Includes `ret_multivariant_training_data.csv`, `ret_multivariant_expanded_training_data.csv`, `ret_multivariant_case_control_dataset.csv`, `model.pkl`.
 
 **Advanced features:**
 - **Data Leakage Prevention:** SMOTE applied after train/test split to ensure realistic evaluation
-- **Feature Engineering:** Polynomial features (age²) and interactions (calcitonin×age, nodule_severity)
+- **Feature Engineering:** Polynomial features (age²) and interactions (calcitonin×age, risk×age, nodule_severity)
+- **Variant-Aware Modeling:** One-hot encoding of 11 RET variants + risk level stratification
 - **Constant Feature Removal:** Automatic detection and removal of non-informative features
 - **Risk Stratification:** 4-tier system for clinical decision support instead of binary classification
 - **Comprehensive Metrics:** ROC-AUC, F1-Score, Average Precision Score, and confidence intervals
 
 **Typical features used:**
 - Age at diagnosis/intervention and derived features
-- Calcitonin levels and elevation status  
+- **RET variant type** (K666N, C634R, C634Y, L790F, etc.) - one-hot encoded
+- **ATA risk level** (1=Moderate, 2=High, 3=Highest) - ordinal feature
+- Calcitonin levels and elevation status
 - Thyroid nodule characteristics
 - Family history of MTC
-- RET mutation status (with special focus on K666N variant)
 - Clinical markers (pheochromocytoma, hyperparathyroidism)
+- **Variant-specific interactions** (risk×calcitonin, risk×age)
 
 **Clinical Use Case:**
 - **Screening Tool:** Optimized for high sensitivity (catches all MTC cases)
@@ -373,8 +402,9 @@ Where `{dataset_type}` is either `expanded` or `original`
 - Testing logs in `results/logs/{model_type}_{dataset_type}_testing.log`
 
 **Data Files:**
-- Original paper dataset: `data/ret_k666n_training_data.csv` (32 patients)
-- Expanded dataset: `data/men2_case_control_dataset.csv` (with synthetic controls)
+- Original multi-variant dataset: `data/ret_multivariant_training_data.csv` (74 patients, 11 variants)
+- Expanded dataset: `data/ret_multivariant_expanded_training_data.csv` (with synthetic variant-matched controls)
+- Case-control dataset: `data/ret_multivariant_case_control_dataset.csv` (further expanded with SMOTE-ready controls)
 
 ## License
 
