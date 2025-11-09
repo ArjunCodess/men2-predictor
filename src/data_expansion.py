@@ -3,7 +3,7 @@ import numpy as np
 
 def load_paper_dataset():
     """read the paper-only dataset csv"""
-    return pd.read_csv('data/ret_k666n_training_data.csv')
+    return pd.read_csv('data/ret_multivariant_training_data.csv')
 
 def create_matched_controls(original_df, n_controls_per_case=2):
     """implement wickramaratne 1995 matched controls method"""
@@ -56,7 +56,8 @@ def create_population_control(case):
         'source_id': f"{case['source_id']}_control",
         'age': max(18, np.random.normal(case['age'], 10)),  # similar age distribution
         'gender': case['gender'],  # same gender for better matching
-        'ret_k666n_positive': 0,  # no RET mutation
+        'ret_variant': case['ret_variant'],  # same variant for variant-matched controls
+        'ret_risk_level': case['ret_risk_level'],  # same risk level
         'calcitonin_elevated': ctl_calc_elev,
         'calcitonin_level_numeric': ctl_calc,
         'thyroid_nodules_present': thyroid_nodules_present,
@@ -141,9 +142,19 @@ def expand_dataset():
     # create additional independent mtc subject groups to ensure enough positives
     additional_mtc_subjects = []
     np.random.seed(42)
+
+    # Get variant distribution from original data
+    variant_distribution = original_df['ret_variant'].value_counts(normalize=True).to_dict()
+    variant_list = list(variant_distribution.keys())
+    variant_probs = list(variant_distribution.values())
+
     # target 6 extra mtc subjects with unique source_ids based on literature-like ages
     extra_mtc_ages = [22, 33, 49, 55, 64, 70]
     for idx, age in enumerate(extra_mtc_ages):
+        # Sample variant based on distribution
+        ret_variant = np.random.choice(variant_list, p=variant_probs)
+        ret_risk_level = original_df[original_df['ret_variant'] == ret_variant]['ret_risk_level'].iloc[0]
+
         # some mtc will have normal calcitonin (overlap), most elevated
         if np.random.random() < 0.25:
             mtc_calc = float(np.random.uniform(0.0, 7.3))
@@ -156,8 +167,9 @@ def expand_dataset():
         subj = {
             'source_id': f"mtc_s{idx}",
             'age': float(age),
-            'gender': np.random.choice(["Female", "Male"]),
-            'ret_k666n_positive': 1,
+            'gender': np.random.choice([0, 1]),  # 0=Female, 1=Male (numeric for consistency)
+            'ret_variant': ret_variant,
+            'ret_risk_level': ret_risk_level,
             'calcitonin_elevated': mtc_calc_elev,
             'calcitonin_level_numeric': mtc_calc,
             'thyroid_nodules_present': thyroid_nodules_present,
@@ -196,7 +208,8 @@ def expand_dataset():
     expanded_df = expanded_df.astype({
         'source_id': 'object',
         'age': 'float64',
-        'ret_k666n_positive': 'int64',
+        'ret_variant': 'object',
+        'ret_risk_level': 'int64',
         'calcitonin_elevated': 'int64',
         'calcitonin_level_numeric': 'float64',
         'thyroid_nodules_present': 'int64',
@@ -208,9 +221,9 @@ def expand_dataset():
         'pheochromocytoma': 'int64',
         'hyperparathyroidism': 'int64'
     })
-    
+
     # save final expanded dataset
-    expanded_df.to_csv('data/men2_case_control_dataset.csv', index=False)
+    expanded_df.to_csv('data/ret_multivariant_case_control_dataset.csv', index=False)
     
     return original_df, expanded_df
 
@@ -227,13 +240,25 @@ def print_expansion_summary(original_df, expanded_df):
     print(f"MEN2 syndrome cases: {original_df['men2_syndrome'].sum()}/{len(original_df)} ({original_df['men2_syndrome'].mean():.1%})")
     print(f"Average age: {original_df['age'].mean():.1f} years")
     print()
-    
+
+    print("RET VARIANT DISTRIBUTION (BEFORE):")
+    variant_counts = original_df['ret_variant'].value_counts()
+    for variant, count in variant_counts.items():
+        print(f"- {variant}: {count} ({count/len(original_df):.1%})")
+    print()
+
     print("AFTER EXPANSION:")
     print(f"Dataset shape: {expanded_df.shape}")
     print(f"MTC cases: {expanded_df['mtc_diagnosis'].sum()}/{len(expanded_df)} ({expanded_df['mtc_diagnosis'].mean():.1%})")
     print(f"C-cell disease cases: {expanded_df['c_cell_disease'].sum()}/{len(expanded_df)} ({expanded_df['c_cell_disease'].mean():.1%})")
     print(f"MEN2 syndrome cases: {expanded_df['men2_syndrome'].sum()}/{len(expanded_df)} ({expanded_df['men2_syndrome'].mean():.1%})")
     print(f"Average age: {expanded_df['age'].mean():.1f} years")
+    print()
+
+    print("RET VARIANT DISTRIBUTION (AFTER):")
+    variant_counts_after = expanded_df['ret_variant'].value_counts()
+    for variant, count in variant_counts_after.items():
+        print(f"- {variant}: {count} ({count/len(expanded_df):.1%})")
     print()
     
     print("EXPANSION DETAILS:")
