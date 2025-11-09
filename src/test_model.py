@@ -32,9 +32,9 @@ def load_model_and_test_data(model_type='logistic', dataset_type='expanded'):
 
     # Load test data based on dataset type
     if dataset_type == 'original':
-        df = pd.read_csv('data/ret_k666n_training_data.csv')
+        df = pd.read_csv('data/ret_multivariant_training_data.csv')
     else:
-        df = pd.read_csv('data/men2_case_control_dataset.csv')
+        df = pd.read_csv('data/ret_multivariant_case_control_dataset.csv')
     
     # Prepare features and target - use same logic as training
     # REMOVE CONSTANT FEATURES
@@ -53,28 +53,41 @@ def load_model_and_test_data(model_type='logistic', dataset_type='expanded'):
         if df['gender'].dtype == 'object':
             df['gender'] = df['gender'].map({'Female': 0, 'Male': 1}).fillna(0)
 
-    # Select features (exclude non-numeric columns and target)
+    # Select base features (exclude non-numeric columns and target)
     feature_cols = [
-        'age', 'gender', 'calcitonin_elevated', 'calcitonin_level_numeric',
+        'age', 'gender', 'ret_risk_level',
+        'calcitonin_elevated', 'calcitonin_level_numeric',
         'thyroid_nodules_present', 'multiple_nodules', 'family_history_mtc',
         'pheochromocytoma', 'hyperparathyroidism'
     ]
-    
+
+    # Start with base features
+    features = df[feature_cols].copy()
+
+    # one-hot encode ret_variant
+    if 'ret_variant' in df.columns:
+        variant_dummies = pd.get_dummies(df['ret_variant'], prefix='variant')
+        features = pd.concat([features, variant_dummies], axis=1)
+
     # Add age group dummies if they were used in training
     if any('age_group_' in col for col in model.feature_columns):
         age_dummies = pd.get_dummies(df['age_group'], prefix='age_group')
-        features = pd.concat([df[feature_cols], age_dummies], axis=1)
-        # Ensure all expected columns are present
-        for col in model.feature_columns:
-            if col not in features.columns:
-                features[col] = 0
-    else:
-        features = df[feature_cols].copy()
-    
+        features = pd.concat([features, age_dummies], axis=1)
+
     # ADD MEANINGFUL FEATURES (same as training)
     features['age_squared'] = df['age'] ** 2
     features['calcitonin_age_interaction'] = df['calcitonin_level_numeric'] * df['age']
     features['nodule_severity'] = df['thyroid_nodules_present'] * df['multiple_nodules']
+
+    # Add variant-specific interaction features (same as training)
+    if 'ret_risk_level' in features.columns:
+        features['risk_calcitonin_interaction'] = features['ret_risk_level'] * df['calcitonin_level_numeric']
+        features['risk_age_interaction'] = features['ret_risk_level'] * df['age']
+
+    # Ensure all expected columns are present
+    for col in model.feature_columns:
+        if col not in features.columns:
+            features[col] = 0
 
     # Handle NaN values (fill with median for numeric columns) - same as training
     if features.isnull().any().any():
@@ -177,20 +190,32 @@ def print_individual_predictions(model, test_patients, y_test):
             test_patients['gender'] = test_patients['gender'].map({'Female': 0, 'Male': 1}).fillna(0)
     
     # Prepare features for the test patients (same logic as training)
-    features = test_patients[['age', 'gender', 'calcitonin_elevated', 'calcitonin_level_numeric',
-                             'thyroid_nodules_present', 'multiple_nodules', 'family_history_mtc',
-                             'pheochromocytoma', 'hyperparathyroidism']].copy()
-    
+    feature_cols = ['age', 'gender', 'ret_risk_level',
+                    'calcitonin_elevated', 'calcitonin_level_numeric',
+                    'thyroid_nodules_present', 'multiple_nodules', 'family_history_mtc',
+                    'pheochromocytoma', 'hyperparathyroidism']
+    features = test_patients[feature_cols].copy()
+
+    # one-hot encode ret_variant
+    if 'ret_variant' in test_patients.columns:
+        variant_dummies = pd.get_dummies(test_patients['ret_variant'], prefix='variant')
+        features = pd.concat([features, variant_dummies], axis=1)
+
     # Add age group dummies if they were used in training
     if any('age_group_' in col for col in model.feature_columns):
         age_dummies = pd.get_dummies(test_patients['age_group'], prefix='age_group')
         features = pd.concat([features, age_dummies], axis=1)
-    
+
     # Add meaningful features (same as training)
     features['age_squared'] = test_patients['age'] ** 2
     features['calcitonin_age_interaction'] = test_patients['calcitonin_level_numeric'] * test_patients['age']
     features['nodule_severity'] = test_patients['thyroid_nodules_present'] * test_patients['multiple_nodules']
-    
+
+    # Add variant-specific interaction features (same as training)
+    if 'ret_risk_level' in features.columns:
+        features['risk_calcitonin_interaction'] = features['ret_risk_level'] * test_patients['calcitonin_level_numeric']
+        features['risk_age_interaction'] = features['ret_risk_level'] * test_patients['age']
+
     # Ensure all expected columns are present and in the correct order
     for col in model.feature_columns:
         if col not in features.columns:
