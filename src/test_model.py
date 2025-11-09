@@ -3,6 +3,8 @@ import numpy as np
 import sys
 import os
 import argparse
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 # Add models directory to path
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'models'))
@@ -299,6 +301,115 @@ def print_model_insights(model, X_test, y_test, test_patients):
     print("- Synthetic data introduces some uncertainty")
     print("=" * 60)
 
+def generate_correlation_matrix(model, test_patients, model_type='logistic', dataset_type='expanded'):
+    """Generate and save correlation matrix for model features"""
+    print("=" * 60)
+    print("GENERATING CORRELATION MATRIX")
+    print("=" * 60)
+
+    # Create correlation_matrices directory if it doesn't exist
+    os.makedirs('charts/correlation_matrices', exist_ok=True)
+
+    # encode gender to numeric if it's string (safety check)
+    test_patients = test_patients.copy()
+    if 'gender' in test_patients.columns:
+        if test_patients['gender'].dtype == 'object':
+            test_patients['gender'] = test_patients['gender'].map({'Female': 0, 'Male': 1}).fillna(0)
+
+    # Prepare features for the test patients (same logic as training)
+    feature_cols = ['age', 'gender', 'ret_risk_level',
+                    'calcitonin_elevated', 'calcitonin_level_numeric',
+                    'thyroid_nodules_present', 'multiple_nodules', 'family_history_mtc',
+                    'pheochromocytoma', 'hyperparathyroidism']
+    features = test_patients[feature_cols].copy()
+
+    # one-hot encode ret_variant
+    if 'ret_variant' in test_patients.columns:
+        variant_dummies = pd.get_dummies(test_patients['ret_variant'], prefix='variant')
+        features = pd.concat([features, variant_dummies], axis=1)
+
+    # Add age group dummies if they were used in training
+    if any('age_group_' in col for col in model.feature_columns):
+        age_dummies = pd.get_dummies(test_patients['age_group'], prefix='age_group')
+        features = pd.concat([features, age_dummies], axis=1)
+
+    # Add meaningful features (same as training)
+    features['age_squared'] = test_patients['age'] ** 2
+    features['calcitonin_age_interaction'] = test_patients['calcitonin_level_numeric'] * test_patients['age']
+    features['nodule_severity'] = test_patients['thyroid_nodules_present'] * test_patients['multiple_nodules']
+
+    # Add variant-specific interaction features (same as training)
+    if 'ret_risk_level' in features.columns:
+        features['risk_calcitonin_interaction'] = features['ret_risk_level'] * test_patients['calcitonin_level_numeric']
+        features['risk_age_interaction'] = features['ret_risk_level'] * test_patients['age']
+
+    # Add target variable for correlation analysis
+    features['mtc_diagnosis'] = test_patients['mtc_diagnosis']
+
+    # Handle NaN values
+    if features.isnull().any().any():
+        features = features.fillna(features.median())
+
+    # Calculate correlation matrix
+    correlation_matrix = features.corr()
+
+    # Create figure with appropriate size
+    fig, ax = plt.subplots(figsize=(20, 16))
+
+    # Generate heatmap
+    sns.heatmap(correlation_matrix,
+                annot=False,  # Don't show values for clarity with many features
+                cmap='coolwarm',
+                center=0,
+                vmin=-1, vmax=1,
+                square=True,
+                linewidths=0.5,
+                cbar_kws={"shrink": 0.8},
+                ax=ax)
+
+    # Set title
+    model_names = {
+        'logistic': 'Logistic Regression',
+        'random_forest': 'Random Forest',
+        'xgboost': 'XGBoost',
+        'lightgbm': 'LightGBM'
+    }
+    dataset_label = "Expanded Dataset" if dataset_type == 'expanded' else "Original Dataset"
+    title = f'Feature Correlation Matrix\n{model_names.get(model_type, model_type)} - {dataset_label}'
+    ax.set_title(title, fontsize=16, fontweight='bold', pad=20)
+
+    # Rotate labels for better readability
+    plt.xticks(rotation=45, ha='right', fontsize=8)
+    plt.yticks(rotation=0, fontsize=8)
+
+    plt.tight_layout()
+
+    # Save figure with simplified naming
+    # Map model_type to full model name for consistency
+    model_name_mapping = {
+        'logistic': 'logistic_regression',
+        'random_forest': 'random_forest',
+        'xgboost': 'xgboost',
+        'lightgbm': 'lightgbm'
+    }
+    full_model_name = model_name_mapping.get(model_type, model_type)
+    output_filename = f'charts/correlation_matrices/{full_model_name}_{dataset_type}.png'
+    fig.savefig(output_filename, dpi=300, bbox_inches='tight')
+    plt.close(fig)
+
+    print(f"Correlation matrix saved to: {output_filename}")
+
+    # Print top correlations with target variable
+    print("\nTop 10 features correlated with MTC diagnosis:")
+    target_corr = correlation_matrix['mtc_diagnosis'].abs().sort_values(ascending=False)
+    for i, (feature, corr) in enumerate(target_corr[1:11].items(), 1):  # Skip mtc_diagnosis itself
+        actual_corr = correlation_matrix.loc[feature, 'mtc_diagnosis']
+        print(f"{i:2d}. {feature:<40} {actual_corr:>7.3f}")
+
+    print("=" * 60)
+
+    return correlation_matrix
+
 if __name__ == "__main__":
     # parse command line arguments
     parser = argparse.ArgumentParser(description='test mtc prediction model')
@@ -337,3 +448,6 @@ if __name__ == "__main__":
     print_test_metrics(model, X_test_scaled, y_test, model_type, dataset_type)
     print_individual_predictions(model, test_patients, y_test)
     print_model_insights(model, X_test_scaled, y_test, test_patients)
+
+    # generate correlation matrix
+    generate_correlation_matrix(model, test_patients, model_type, dataset_type)
