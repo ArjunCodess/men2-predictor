@@ -21,10 +21,10 @@ def load_expanded_dataset(dataset_type='expanded'):
     """load the dataset based on type"""
     if dataset_type == 'original':
         # Load original paper dataset without controls
-        return pd.read_csv('data/ret_k666n_training_data.csv')
+        return pd.read_csv('data/ret_multivariant_training_data.csv')
     else:
         # Load expanded dataset with controls (default)
-        return pd.read_csv('data/men2_case_control_dataset.csv')
+        return pd.read_csv('data/ret_multivariant_case_control_dataset.csv')
 
 
 def prepare_features_target(df, target_column='mtc_diagnosis'):
@@ -45,25 +45,37 @@ def prepare_features_target(df, target_column='mtc_diagnosis'):
     if 'gender' in df.columns:
         if df['gender'].dtype == 'object':
             df['gender'] = df['gender'].map({'Female': 0, 'Male': 1}).fillna(0)
-    
-    # select features (exclude non-numeric columns and target)
+
+    # select base features (exclude non-numeric columns and target)
     feature_columns = [
-        'age', 'gender', 'calcitonin_elevated', 'calcitonin_level_numeric',
+        'age', 'gender', 'ret_risk_level',
+        'calcitonin_elevated', 'calcitonin_level_numeric',
         'thyroid_nodules_present', 'multiple_nodules', 'family_history_mtc',
         'pheochromocytoma', 'hyperparathyroidism'
     ]
 
+    # Start with base features
+    features = df[feature_columns].copy()
+
+    # one-hot encode ret_variant
+    if 'ret_variant' in df.columns:
+        variant_dummies = pd.get_dummies(df['ret_variant'], prefix='variant')
+        features = pd.concat([features, variant_dummies], axis=1)
+
     # one-hot encode age_group if needed
     if 'age_group' in df.columns:
         age_dummies = pd.get_dummies(df['age_group'], prefix='age_group')
-        features = pd.concat([df[feature_columns], age_dummies], axis=1)
-    else:
-        features = df[feature_columns].copy()
+        features = pd.concat([features, age_dummies], axis=1)
 
     # ADD MEANINGFUL FEATURES
     features['age_squared'] = df['age'] ** 2
     features['calcitonin_age_interaction'] = df['calcitonin_level_numeric'] * df['age']
     features['nodule_severity'] = df['thyroid_nodules_present'] * df['multiple_nodules']
+
+    # Add variant-specific interaction features
+    if 'ret_risk_level' in features.columns:
+        features['risk_calcitonin_interaction'] = features['ret_risk_level'] * df['calcitonin_level_numeric']
+        features['risk_age_interaction'] = features['ret_risk_level'] * df['age']
 
     target = df[target_column]
     
