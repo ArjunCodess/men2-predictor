@@ -328,29 +328,29 @@ The [create_datasets.py](src/create_datasets.py) script:
 
 ```
 men2-predictor/
-├── data/                    # Processed datasets
-│   ├── ret_multivariant_training_data.csv          # Original 78 patients
-│   ├── ret_multivariant_expanded_training_data.csv # Expanded with synthetic controls
-│   └── ret_multivariant_case_control_dataset.csv   # Further expanded dataset
-├── dataset/                 # Raw study data (JSON)
+├── data/                                             # Processed datasets
+│   ├── ret_multivariant_training_data.csv            # Original 78 patients
+│   ├── ret_multivariant_expanded_training_data.csv   # Expanded with synthetic controls
+│   └── ret_multivariant_case_control_dataset.csv     # Further expanded dataset
+├── dataset/                                          # Raw study data (JSON)
 │   ├── study_1.json
 │   ├── study_2.json
 │   ├── study_3.json
 │   └── study_4.json
-├── models/                  # ML model implementations
+├── models/                                           # ML model implementations
 │   ├── base_model.py
 │   ├── random_forest_model.py
 │   ├── lightgbm_model.py
 │   ├── xgboost_model.py
 │   └── logistic_regression_model.py
-├── results/                 # Test results and logs
-├── src/                     # Pipeline scripts
+├── results/                                          # Test results and logs
+├── src/                                              # Pipeline scripts
 │   ├── create_datasets.py
 │   ├── data_analysis.py
 │   ├── data_expansion.py
 │   ├── train_model.py
 │   └── test_model.py
-├── main.py                  # Main pipeline entry point
+├── main.py                                           # Main pipeline entry point
 └── requirements.txt
 ```
 
