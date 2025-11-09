@@ -1,9 +1,9 @@
 LOGISTIC_REGRESSION TEST RESULTS (EXPANDED)
 ==================================================
-Accuracy: 0.8085
-Precision: 0.5263
-Recall: 1.0000
-F1 Score: 0.6897
-ROC AUC: 1.0000
-Average Precision: 1.0000
+Accuracy: 0.8785
+Precision: 0.6250
+Recall: 0.9524
+F1 Score: 0.7547
+ROC AUC: 0.9673
+Average Precision: 0.8495
 ==================================================

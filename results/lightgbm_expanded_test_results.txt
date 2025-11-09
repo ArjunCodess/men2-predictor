@@ -1,9 +1,9 @@
 LIGHTGBM TEST RESULTS (EXPANDED)
 ==================================================
-Accuracy: 0.9787
-Precision: 1.0000
-Recall: 0.9000
-F1 Score: 0.9474
-ROC AUC: 0.9811
-Average Precision: 0.9588
+Accuracy: 0.9346
+Precision: 0.9375
+Recall: 0.7143
+F1 Score: 0.8108
+ROC AUC: 0.9867
+Average Precision: 0.9576
 ==================================================
