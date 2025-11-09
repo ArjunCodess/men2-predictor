@@ -1,9 +1,0 @@
-RANDOM_FOREST TEST RESULTS
-==================================================
-Accuracy: 0.8936
-Precision: 1.0000
-Recall: 0.5000
-F1 Score: 0.6667
-ROC AUC: 0.9730
-Average Precision: 0.9338
-==================================================
