@@ -11,7 +11,7 @@ def create_paper_dataset():
 
     # load study data
     studies = []
-    for study_file in ['study_1.json', 'study_2.json', 'study_3.json']:
+    for study_file in ['study_1.json', 'study_2.json', 'study_3.json', 'study_4.json']:
         with open(os.path.join(dataset_dir, study_file), 'r') as f:
             studies.append(json.load(f))
 
@@ -50,35 +50,83 @@ def create_paper_dataset():
     print(f"Before deduplication: {len(df)} patients")
     df = df.drop_duplicates(subset=['patient_id'], keep='first')
     print(f"After deduplication: {len(df)} patients")
-    
+
     # feature engineering
-    df['ret_k666n_positive'] = 1  # all patients have the mutation
+
+    # Extract RET variant from ret_variant field
+    df['ret_variant'] = df['ret_variant'].fillna('K666N')  # default to K666N for studies 1-3
+
+    # Create RET risk level mapping based on ATA guidelines
+    # Level 1 (Moderate): L790F, Y791F, V804M, S891A, K666N
+    # Level 2 (High): C618S, C630R, C620Y
+    # Level 3 (Highest): C634R, C634Y, C634W
+    ret_risk_mapping = {
+        'K666N': 1,
+        'L790F': 1,
+        'Y791F': 1,
+        'V804M': 1,
+        'S891A': 1,
+        'C618S': 2,
+        'C630R': 2,
+        'C620Y': 2,
+        'C634R': 3,
+        'C634Y': 3,
+        'C634W': 3
+    }
+    df['ret_risk_level'] = df['ret_variant'].map(ret_risk_mapping).fillna(1).astype(int)
     
     # convert calcitonin levels to numeric
-    df['calcitonin_level_numeric'] = df['calcitonin_level'].str.extract(r'(\d+\.?\d*)').iloc[:, 0].astype(float)
-    df['calcitonin_level_numeric'] = df['calcitonin_level_numeric'].fillna(0.0)
+    # Handle Study 4's numeric format (calcitonin_preoperative_basal) and Studies 1-3's string format
+    def extract_calcitonin_numeric(row):
+        # First, check if calcitonin_preoperative_basal exists (Study 4)
+        if 'calcitonin_preoperative_basal' in row and pd.notna(row.get('calcitonin_preoperative_basal')):
+            return float(row['calcitonin_preoperative_basal'])
+
+        # Otherwise, extract from calcitonin_level string (Studies 1-3)
+        calcitonin_str = str(row.get('calcitonin_level', ''))
+
+        # Handle special cases
+        if 'undetectable' in calcitonin_str.lower() or 'k/k' in calcitonin_str.lower():
+            return 0.2  # use minimal detectable value
+
+        # Extract first numeric value from string (handles "23/100" format by taking basal value)
+        import re
+        match = re.search(r'(\d+\.?\d*)', calcitonin_str)
+        if match:
+            return float(match.group(1))
+
+        return 0.0
+
+    df['calcitonin_level_numeric'] = df.apply(extract_calcitonin_numeric, axis=1)
     
     # calcitonin elevated flag - handle different normal ranges
     def determine_calcitonin_elevated(row):
-        calcitonin_level = str(row['calcitonin_level']).lower()
+        calcitonin_level = str(row.get('calcitonin_level', '')).lower()
         calcitonin_numeric = row['calcitonin_level_numeric']
-        
+        gender = row.get('gender', 0)  # 0=Female, 1=Male
+
         # handle special cases
         if 'undetectable' in calcitonin_level or 'normal' in calcitonin_level:
             return 0
-        if 'not screened' in calcitonin_level or 'unknown' in calcitonin_level:
+        if 'not screened' in calcitonin_level or 'unknown' in calcitonin_level or 'not evaluated' in calcitonin_level:
             return 0
-        
+
         # extract normal range from calcitonin_normal_range
-        normal_range = str(row['calcitonin_normal_range'])
-        if '0-5.1' in normal_range or '0.0-5.1' in normal_range:
+        normal_range = str(row.get('calcitonin_normal_range', ''))
+
+        # Study 4 uses gender-specific ranges: Males <10.3, Females <4.3
+        if 'Males <10.3' in normal_range or 'Females <4.3' in normal_range:
+            threshold = 10.3 if gender == 1 else 4.3
+            return 1 if calcitonin_numeric > threshold else 0
+        # Studies 1-3 ranges
+        elif '0-5.1' in normal_range or '0.0-5.1' in normal_range:
             return 1 if calcitonin_numeric > 5.1 else 0
         elif '0-7.5' in normal_range or '0.0-7.5' in normal_range:
             return 1 if calcitonin_numeric > 7.5 else 0
         else:
             # default to 7.5 if range unclear
             return 1 if calcitonin_numeric > 7.5 else 0
-    
+
     df['calcitonin_elevated'] = df.apply(determine_calcitonin_elevated, axis=1)
     
     # gender encoding (0=female, 1=male)
@@ -124,40 +172,51 @@ def create_paper_dataset():
     
     # select final columns for ML
     final_columns = [
-        'source_id', 'study_id', 'age', 'gender', 'ret_k666n_positive', 'calcitonin_elevated', 'calcitonin_level_numeric',
+        'source_id', 'study_id', 'age', 'gender', 'ret_variant', 'ret_risk_level',
+        'calcitonin_elevated', 'calcitonin_level_numeric',
         'thyroid_nodules_present', 'multiple_nodules', 'family_history_mtc', 'mtc_diagnosis',
         'c_cell_disease', 'men2_syndrome', 'pheochromocytoma', 'hyperparathyroidism', 'age_group'
     ]
     
     df_final = df[final_columns].copy()
-    
+
     # save paper-only dataset
-    df_final.to_csv('data/ret_k666n_training_data.csv', index=False)
-    
+    df_final.to_csv('data/ret_multivariant_training_data.csv', index=False)
+
     # create expanded dataset with literature cases
     expanded_df = create_expanded_dataset(df_final, paper_data)
-    
-    # save expanded dataset  
-    expanded_df.to_csv('data/ret_k666n_expanded_training_data.csv', index=False)
+
+    # save expanded dataset
+    expanded_df.to_csv('data/ret_multivariant_expanded_training_data.csv', index=False)
     
     return df_final, expanded_df
 
 def create_expanded_dataset(paper_df, paper_data):
     """create expanded dataset with literature cases"""
-    
+
     # literature MTC diagnosis ages
     lit_ages = paper_data['literature_data']['mtc_diagnosis_ages']
-    
+
     # create synthetic cases based on literature
     np.random.seed(42)  # for reproducibility
-    
+
+    # Get variant distribution from paper_df to create realistic synthetic cases
+    variant_distribution = paper_df['ret_variant'].value_counts(normalize=True).to_dict()
+    risk_level_distribution = paper_df['ret_risk_level'].value_counts(normalize=True).to_dict()
+
     synthetic_cases = []
     for age in lit_ages:
+        # Sample variant based on distribution in real data
+        ret_variant = np.random.choice(list(variant_distribution.keys()),
+                                       p=list(variant_distribution.values()))
+        ret_risk_level = paper_df[paper_df['ret_variant'] == ret_variant]['ret_risk_level'].iloc[0]
+
         # create case with MTC
         case = {
             'age': age,
             'gender': np.random.choice([0, 1]),  # random gender
-            'ret_k666n_positive': 1,
+            'ret_variant': ret_variant,
+            'ret_risk_level': ret_risk_level,
             'calcitonin_elevated': 1,
             'calcitonin_level_numeric': np.random.uniform(15, 60),  # elevated calcitonin
             'thyroid_nodules_present': 1,
@@ -173,15 +232,22 @@ def create_expanded_dataset(paper_df, paper_data):
             'underwent_surgery': 1
         }
         synthetic_cases.append(case)
-    
+
     # create additional control cases (non-MTC carriers)
     control_cases = []
     for i in range(len(lit_ages) * 2):  # 2:1 control to case ratio
         age = np.random.choice(paper_df['age'].tolist() + lit_ages)
+
+        # Sample variant based on distribution
+        ret_variant = np.random.choice(list(variant_distribution.keys()),
+                                       p=list(variant_distribution.values()))
+        ret_risk_level = paper_df[paper_df['ret_variant'] == ret_variant]['ret_risk_level'].iloc[0]
+
         control = {
             'age': age,
             'gender': np.random.choice([0, 1]),
-            'ret_k666n_positive': 1,
+            'ret_variant': ret_variant,
+            'ret_risk_level': ret_risk_level,
             'calcitonin_elevated': 0,
             'calcitonin_level_numeric': np.random.uniform(0, 7.5),  # normal calcitonin
             'thyroid_nodules_present': np.random.choice([0, 1], p=[0.7, 0.3]),  # lower nodule rate
@@ -200,12 +266,12 @@ def create_expanded_dataset(paper_df, paper_data):
     
     # combine all cases
     expanded_df = pd.concat([paper_df, pd.DataFrame(synthetic_cases), pd.DataFrame(control_cases)], ignore_index=True)
-    
-    # remove duplicates based on key features (age, gender, calcitonin_level_numeric)
+
+    # remove duplicates based on key features (age, gender, calcitonin_level_numeric, ret_variant)
     print(f"Before expanded dataset deduplication: {len(expanded_df)} patients")
-    expanded_df = expanded_df.drop_duplicates(subset=['age', 'gender', 'calcitonin_level_numeric'], keep='first')
+    expanded_df = expanded_df.drop_duplicates(subset=['age', 'gender', 'calcitonin_level_numeric', 'ret_variant'], keep='first')
     print(f"After expanded dataset deduplication: {len(expanded_df)} patients")
-    
+
     return expanded_df
 
 def print_dataset_info(df1, df2):
@@ -227,9 +293,20 @@ def print_dataset_info(df1, df2):
             study_name = "EDM Case Reports (2024)"
         elif study_id == "study_3":
             study_name = "Thyroid Journal (2016)"
+        elif study_id == "study_4":
+            study_name = "European Journal of Endocrinology (2006)"
         else:
             study_name = study_id
         print(f"- {study_name}: {count} patients")
+    print()
+
+    # variant breakdown
+    print("RET VARIANT BREAKDOWN:")
+    variant_counts = df1['ret_variant'].value_counts()
+    for variant, count in variant_counts.items():
+        risk_level = df1[df1['ret_variant'] == variant]['ret_risk_level'].iloc[0]
+        risk_label = {1: 'Moderate', 2: 'High', 3: 'Highest'}[risk_level]
+        print(f"- {variant} (Risk Level {risk_level} - {risk_label}): {count} patients")
     print()
     
     print("PAPER-ONLY DATASET TARGET DISTRIBUTION:")
