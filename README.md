@@ -1,5 +1,11 @@
 # MEN2 Predictor: Rare Disease ML with Critical Discovery
 
+![Accuracy](https://img.shields.io/badge/Accuracy-93.75%25-brightgreen)
+![Recall](https://img.shields.io/badge/Recall%20(Original)-100%25-success)
+![Recall Drop](https://img.shields.io/badge/Recall%20(Expanded)-71--81%25-critical)
+![Models](https://img.shields.io/badge/Models-4-blue)
+![Variants](https://img.shields.io/badge/RET%20Variants-11-blue)
+
 > **🎯 Key Finding:** This project discovered that synthetic data augmentation **reduces cancer detection rates from 100% to 71%** in rare disease prediction. Models trained on original real patient data achieve perfect recall (100%), catching all medullary thyroid carcinoma cases. When synthetic augmentation is applied, recall drops to 71-81%, meaning **2-3 out of 10 cancer cases would be missed** in clinical deployment.
 
 ## Table of Contents
