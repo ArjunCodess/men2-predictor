@@ -22,10 +22,10 @@ def load_expanded_dataset(dataset_type='expanded'):
     """load the dataset based on type"""
     if dataset_type == 'original':
         # Load original paper dataset without controls
-        return pd.read_csv('data/ret_multivariant_training_data.csv')
+        return pd.read_csv('data/processed/ret_multivariant_training_data.csv')
     else:
         # Load expanded dataset with controls (default)
-        return pd.read_csv('data/ret_multivariant_case_control_dataset.csv')
+        return pd.read_csv('data/processed/ret_multivariant_case_control_dataset.csv')
 
 
 def prepare_features_target(df, target_column='mtc_diagnosis'):

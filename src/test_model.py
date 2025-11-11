@@ -38,9 +38,9 @@ def load_model_and_test_data(model_type='logistic', dataset_type='expanded'):
 
     # Load test data based on dataset type
     if dataset_type == 'original':
-        df = pd.read_csv('data/ret_multivariant_training_data.csv')
+        df = pd.read_csv('data/processed/ret_multivariant_training_data.csv')
     else:
-        df = pd.read_csv('data/ret_multivariant_case_control_dataset.csv')
+        df = pd.read_csv('data/processed/ret_multivariant_case_control_dataset.csv')
     
     # Prepare features and target - use same logic as training
     # REMOVE CONSTANT FEATURES

@@ -3,7 +3,7 @@ import numpy as np
 
 def load_paper_dataset():
     """read the paper-only dataset csv"""
-    return pd.read_csv('data/ret_multivariant_training_data.csv')
+    return pd.read_csv('data/processed/ret_multivariant_training_data.csv')
 
 def create_matched_controls(original_df, n_controls_per_case=2):
     """implement wickramaratne 1995 matched controls method"""
@@ -223,7 +223,7 @@ def expand_dataset():
     })
 
     # save final expanded dataset
-    expanded_df.to_csv('data/ret_multivariant_case_control_dataset.csv', index=False)
+    expanded_df.to_csv('data/processed/ret_multivariant_case_control_dataset.csv', index=False)
     
     return original_df, expanded_df
 

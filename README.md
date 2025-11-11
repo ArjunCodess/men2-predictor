@@ -272,14 +272,14 @@ The dataset includes the following structured clinical and genetic features:
 
 ### Dataset Organization
 
-The raw clinical data is stored in the [dataset/](dataset/) folder as structured JSON files:
+the raw clinical data is stored in the [`data/raw`](data/raw) folder as structured json files:
 
-- **[study_1.json](dataset/study_1.json)**: JCEM Case Reports (2025) - 4 patients (K666N)
-- **[study_2.json](dataset/study_2.json)**: EDM Case Reports (2024) - 4 patients (K666N)
-- **[study_3.json](dataset/study_3.json)**: Thyroid Journal (2016) - 24 patients across 8 families (K666N)
-- **[study_4.json](dataset/study_4.json)**: European Journal of Endocrinology (2006) - 46 patients (10 variants)
-- **[literature_data.json](dataset/literature_data.json)**: Aggregated statistics and meta-data
-- **[mutation_characteristics.json](dataset/mutation_characteristics.json)**: RET variant characteristics
+- **[study_1.json](data/raw/study_1.json)**: JCEM Case Reports (2025) - 4 patients (K666N)
+- **[study_2.json](data/raw/study_2.json)**: EDM Case Reports (2024) - 4 patients (K666N)
+- **[study_3.json](data/raw/study_3.json)**: Thyroid Journal (2016) - 24 patients across 8 families (K666N)
+- **[study_4.json](data/raw/study_4.json)**: European Journal of Endocrinology (2006) - 46 patients (10 variants)
+- **[literature_data.json](data/raw/literature_data.json)**: Aggregated statistics and meta-data
+- **[mutation_characteristics.json](data/raw/mutation_characteristics.json)**: RET variant characteristics
 
 This modular structure allows for:
 
@@ -292,16 +292,16 @@ This modular structure allows for:
 
 The [create_datasets.py](src/create_datasets.py) script:
 
-1. Loads patient data from JSON files in the [dataset/](dataset/) folder (4 studies)
+1. Loads patient data from JSON files in the [`data/raw`](data/raw) folder (4 studies)
 2. Extracts and combines data from multiple research studies (78 patients, 11 variants)
 3. Maps each variant to ATA risk level (1=Moderate, 2=High, 3=Highest)
 4. Converts qualitative measurements to structured numeric features
 5. Handles multiple reference ranges for calcitonin levels across studies
 6. Engineers derived features (age groups, nodule presence, variant-specific interactions)
 7. Generates two datasets:
-   - `data/ret_multivariant_training_data.csv`: Original 78 patients from literature
-   - `data/ret_multivariant_expanded_training_data.csv`: Expanded with synthetic controls
-   - `data/ret_multivariant_case_control_dataset.csv`: Further expanded with variant-matched controls
+   - `data/processed/ret_multivariant_training_data.csv`: Original 78 patients from literature
+   - `data/processed/ret_multivariant_expanded_training_data.csv`: Expanded with synthetic controls
+   - `data/processed/ret_multivariant_case_control_dataset.csv`: Further expanded with variant-matched controls
 
 ### Important Notes on Data Quality
 
@@ -327,7 +327,7 @@ The [create_datasets.py](src/create_datasets.py) script:
 
 **Pipeline steps (as run by `main.py`):**
 
-1. **create_datasets.py:** Loads patient data from JSON files in [dataset/](dataset/) folder and formats into CSVs (78 patients from 4 studies, 11 variants).
+1. **create_datasets.py:** loads patient data from json files in [`data/raw`](data/raw) and formats into CSVs (78 patients from 4 studies, 11 variants).
 2. **data_analysis.py:** Computes descriptive statistics, generates variant-specific visualizations and risk-stratified analyses.
 3. **data_expansion.py:** Produces variant-matched synthetic control samples to improve model balance.
 4. **train_model.py:** Trains models with variant features, cross-validation, SMOTE balancing, and threshold optimization.
@@ -389,11 +389,12 @@ The [create_datasets.py](src/create_datasets.py) script:
 
 ```
 men2-predictor/
-├── data/                                             # Processed datasets
-│   ├── ret_multivariant_training_data.csv            # Original 78 patients
-│   ├── ret_multivariant_expanded_training_data.csv   # Expanded with synthetic controls
-│   └── ret_multivariant_case_control_dataset.csv     # Further expanded dataset
-├── dataset/                                          # Raw study data (JSON)
+├── data/
+│   ├── processed/                                    # Processed datasets
+│   │   ├── ret_multivariant_training_data.csv            # Original 78 patients
+│   │   ├── ret_multivariant_expanded_training_data.csv   # Expanded with synthetic controls
+│   │   └── ret_multivariant_case_control_dataset.csv     # Further expanded dataset
+│   └── raw/                                          # Raw study data (JSON)
 │   ├── study_1.json
 │   ├── study_2.json
 │   ├── study_3.json

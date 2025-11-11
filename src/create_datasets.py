@@ -6,8 +6,8 @@ import json
 def create_paper_dataset():
     """extract key data points from research paper and convert to structured dataframe"""
 
-    # load data from JSON files in dataset folder
-    dataset_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'dataset')
+    # load data from json files in raw data folder
+    dataset_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data', 'raw')
 
     # load study data
     studies = []
@@ -183,13 +183,13 @@ def create_paper_dataset():
     df_final = df[final_columns].copy()
 
     # save paper-only dataset
-    df_final.to_csv('data/ret_multivariant_training_data.csv', index=False)
+    df_final.to_csv('data/processed/ret_multivariant_training_data.csv', index=False)
 
     # create expanded dataset with literature cases
     expanded_df = create_expanded_dataset(df_final, paper_data)
 
     # save expanded dataset
-    expanded_df.to_csv('data/ret_multivariant_expanded_training_data.csv', index=False)
+    expanded_df.to_csv('data/processed/ret_multivariant_expanded_training_data.csv', index=False)
     
     return df_final, expanded_df
 
