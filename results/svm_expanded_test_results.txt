@@ -1,0 +1,9 @@
+SUPPORT_VECTOR_MACHINE TEST RESULTS (EXPANDED)
+==================================================
+Accuracy: 0.8224
+Precision: 0.5333
+Recall: 0.7619
+F1 Score: 0.6275
+ROC AUC: 0.8234
+Average Precision: 0.6183
+==================================================
