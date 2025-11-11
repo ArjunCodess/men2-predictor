@@ -123,7 +123,8 @@ def print_comparison_table(results):
             'logistic': 'Logistic Regression',
             'random_forest': 'Random Forest',
             'xgboost': 'XGBoost',
-            'lightgbm': 'LightGBM'
+            'lightgbm': 'LightGBM',
+            'svm': 'Support Vector Machine'
         }
 
         model_name = model_names.get(model_type, model_type)
@@ -174,7 +175,8 @@ def print_comparison_table(results):
             'logistic': 'Logistic Regression',
             'random_forest': 'Random Forest',
             'xgboost': 'XGBoost',
-            'lightgbm': 'LightGBM'
+            'lightgbm': 'LightGBM',
+            'svm': 'Support Vector Machine'
         }
         print(f"\nBest performing model: {model_names[model_type]} on {dataset_label} (F1 Score: {best_f1:.4f})")
     print()
@@ -195,7 +197,7 @@ def run_all_models(dataset_type='expanded'):
         print(f"Running ALL MODELS on {dataset_label} for comprehensive comparison...")
     print()
 
-    model_types = ['logistic', 'random_forest', 'xgboost', 'lightgbm']
+    model_types = ['logistic', 'random_forest', 'xgboost', 'lightgbm', 'svm']
     results = {}
 
     # Create results directory for logs
@@ -239,7 +241,8 @@ def run_all_models(dataset_type='expanded'):
                 'logistic': 'Logistic Regression',
                 'random_forest': 'Random Forest',
                 'xgboost': 'XGBoost',
-                'lightgbm': 'LightGBM'
+                'lightgbm': 'LightGBM',
+                'svm': 'Support Vector Machine'
             }[model_type]
 
             print(f"\n{'-'*80}")
@@ -306,11 +309,13 @@ def run_all_models(dataset_type='expanded'):
     print("- saved_models/random_forest_{expanded|original}_model.pkl")
     print("- saved_models/xgboost_{expanded|original}_model.pkl")
     print("- saved_models/lightgbm_{expanded|original}_model.pkl")
+    print("- saved_models/svm_{expanded|original}_model.pkl")
     print("\nTest results:")
     print("- results/logistic_test_results.txt")
     print("- results/random_forest_test_results.txt")
     print("- results/xgboost_test_results.txt")
     print("- results/lightgbm_test_results.txt")
+    print("- results/svm_test_results.txt")
     print("\nDetailed logs:")
     print("- results/logs/data_preparation_step1.log")
     print("- results/logs/data_preparation_step2.log")
@@ -323,6 +328,8 @@ def run_all_models(dataset_type='expanded'):
     print("- results/logs/xgboost_testing.log")
     print("- results/logs/lightgbm_training.log")
     print("- results/logs/lightgbm_testing.log")
+    print("- results/logs/svm_training.log")
+    print("- results/logs/svm_testing.log")
     print()
 
     return True
@@ -341,6 +348,8 @@ def main(model_type='logistic', dataset_type='expanded'):
         model_desc = "XGBoost"
     elif model_type == 'lightgbm':
         model_desc = "LightGBM"
+    elif model_type == 'svm':
+        model_desc = "Support Vector Machine"
     else:
         model_desc = "Logistic Regression"
 
@@ -382,6 +391,8 @@ def main(model_type='logistic', dataset_type='expanded'):
         print(f"- saved_models/xgboost_{dataset_type}_model.pkl")
     elif model_type == 'lightgbm':
         print(f"- saved_models/lightgbm_{dataset_type}_model.pkl")
+    elif model_type == 'svm':
+        print(f"- saved_models/svm_{dataset_type}_model.pkl")
     else:
         print(f"- saved_models/logistic_regression_{dataset_type}_model.pkl")
     print()
@@ -394,8 +405,8 @@ if __name__ == "__main__":
     # parse command line arguments
     parser = argparse.ArgumentParser(description='run complete mtc prediction pipeline')
     parser.add_argument('--m', '--model', type=str, default='l',
-                       choices=['l', 'r', 'x', 'g', 'a', 'logistic', 'random_forest', 'xgboost', 'lightgbm', 'all'],
-                       help='model type: l/logistic (default), r/random_forest, x/xgboost, g/lightgbm, a/all (compare all models)')
+                       choices=['l', 'r', 'x', 'g', 's', 'a', 'logistic', 'random_forest', 'xgboost', 'lightgbm', 'svm', 'all'],
+                       help='model type: l/logistic (default), r/random_forest, x/xgboost, g/lightgbm, s/svm, a/all (compare all models)')
     parser.add_argument('--d', '--data', type=str, default='e',
                        choices=['e', 'o', 'b', 'expanded', 'original', 'both'],
                        help='dataset type: e/expanded (with controls + SMOTE - default), o/original (paper data only), b/both (run on both datasets)')
@@ -421,6 +432,8 @@ if __name__ == "__main__":
             model_type = 'xgboost'
         elif args.m in ['g', 'lightgbm']:
             model_type = 'lightgbm'
+        elif args.m in ['s', 'svm']:
+            model_type = 'svm'
         else:
             model_type = 'logistic'
 
