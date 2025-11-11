@@ -3,7 +3,7 @@
 ![Accuracy](https://img.shields.io/badge/Accuracy-93.75%25-brightgreen)
 ![Recall](https://img.shields.io/badge/Recall%20(Original)-100%25-success)
 ![Recall Drop](https://img.shields.io/badge/Recall%20(Expanded)-71--81%25-critical)
-![Models](https://img.shields.io/badge/Models-4-blue)
+![Models](https://img.shields.io/badge/Models-5-blue)
 ![Variants](https://img.shields.io/badge/RET%20Variants-11-blue)
 
 > **🎯 Key Finding:** This project discovered that synthetic data augmentation **reduces cancer detection rates from 100% to 71%** in rare disease prediction. Models trained on original real patient data achieve perfect recall (100%), catching all medullary thyroid carcinoma cases. When synthetic augmentation is applied, recall drops to 71-81%, meaning **2-3 out of 10 cancer cases would be missed** in clinical deployment.
@@ -38,6 +38,7 @@ When synthetic data augmentation (SMOTE + synthetic controls) is applied, recall
 | **Random Forest** ⭐     | 93.75% acc, **100% recall** | 94.39% acc, **81% recall** | **-19%** ⚠️  | ✅ SAFE    |
 | **LightGBM** ⭐          | 93.75% acc, **100% recall** | 93.46% acc, **71% recall** | **-29%** 🚨 | ✅ SAFE    |
 | **XGBoost**             | 87.50% acc, **100% recall** | 89.72% acc, **90% recall** | **-10%** ⚠️  | ✅ SAFE    |
+| **SVM (Linear)**        | 87.50% acc, **100% recall** | 82.24% acc, **76% recall** | **-24%** 🚨 | ✅ SAFE    |
 | **Logistic Regression** | 81.25% acc, **100% recall** | 87.85% acc, **95% recall** | **-5%** ⚠️   | ✅ SAFE    |
 
 ### Clinical Interpretation
@@ -51,6 +52,23 @@ When synthetic data augmentation (SMOTE + synthetic controls) is applied, recall
 ### Why This Matters
 
 This finding challenges the common ML practice of using synthetic data augmentation for rare diseases. While expanded datasets show higher accuracy (94% vs 94%), they **mask critical failures** in recall—the metric that matters most for cancer detection. Perfect metrics on synthetic test sets do not guarantee real-world performance.
+
+### Learning Paradigm Coverage
+
+This project implements **five complementary machine learning approaches** across three learning paradigms:
+
+**Linear Models:**
+- **Logistic Regression**: Baseline interpretability with coefficient-based feature importance
+
+**Tree-Based Ensembles:**
+- **Random Forest**: Bagging with uncertainty quantification via tree voting
+- **XGBoost**: Gradient boosting with L1/L2 regularization
+- **LightGBM**: Efficient gradient boosting with leaf-wise growth
+
+**Kernel-Based Learning:**
+- **Support Vector Machine (SVM)**: Maximum-margin classification with linear kernel optimized for small datasets
+
+This comprehensive coverage ensures findings generalize across fundamentally different algorithmic approaches, strengthening the evidence that synthetic data degrades recall regardless of learning paradigm.
 
 ## About The Project
 
@@ -105,7 +123,7 @@ This project makes three critical contributions to medical machine learning:
 
 ### 2. Methodological Framework for Rare Disease ML
 
-- Systematic comparison: 4 models × 2 datasets = 8 configurations
+- Systematic comparison: 5 models × 2 datasets = 10 configurations
 - Emphasis on recall over accuracy for screening applications
 - Validation on real held-out data, not synthetic test sets
 
@@ -298,7 +316,7 @@ The [create_datasets.py](src/create_datasets.py) script:
 **Key features:**
 
 - **End-to-end pipeline** managed by `main.py`, coordinating all major steps automatically.
-- **Multiple ML algorithms:** Support for Logistic Regression, Random Forest, XGBoost, and LightGBM models.
+- **Multiple ML algorithms:** Support for Logistic Regression, Random Forest, XGBoost, LightGBM, and SVM models.
 - **Model comparison mode:** Run all models simultaneously and compare performance metrics in a formatted table.
 - **Dataset comparison mode:** Compare model performance on expanded dataset (with SMOTE and control cases) vs original paper data.
 - **Automated data creation and expansion:** Scripts extract and structure relevant research data, and generate synthetic control samples to augment the dataset for robust modeling.
@@ -417,6 +435,7 @@ Choose which model to train:
 - `r` or `random_forest`: Random Forest ⭐ **Recommended**
 - `x` or `xgboost`: XGBoost
 - `g` or `lightgbm`: LightGBM ⭐ **Recommended**
+- `s` or `svm`: Support Vector Machine (linear kernel)
 - `a` or `all`: Run all models and compare
 
 ### Dataset Selection (`--d`)
@@ -433,8 +452,11 @@ Choose which dataset to use:
 # ⭐ RECOMMENDED FOR CLINICAL USE: Random Forest on original data
 python main.py --m=random_forest --d=original
 
-# ⭐ ALTERNATIVE RECOMMENDED: LightGBM on original data  
+# ⭐ ALTERNATIVE RECOMMENDED: LightGBM on original data
 python main.py --m=lightgbm --d=original
+
+# Test SVM (kernel-based learning) on original data
+python main.py --m=svm --d=original
 
 # Compare all models on original dataset (identify best performer)
 python main.py --m=all --d=original
@@ -451,7 +473,7 @@ python main.py --m=random_forest --d=expanded  # Only for research comparison
 When using `--m=all`, the pipeline:
 
 1. Runs data preparation once (shared across models)
-2. Trains and tests all four model types sequentially
+2. Trains and tests all five model types sequentially
 3. Saves detailed logs to `results/logs/`
 4. Displays comprehensive comparison table
 
@@ -534,10 +556,11 @@ This mode clearly demonstrates the recall degradation from synthetic augmentatio
 
 **Supported Models:**
 
-- Logistic Regression (baseline)
+- Logistic Regression (baseline, linear)
 - Random Forest (ensemble, recommended)
 - XGBoost (gradient boosting)
 - LightGBM (gradient boosting, recommended)
+- Support Vector Machine (linear)
 
 **Training Configuration:**
 
