@@ -8,5 +8,6 @@ from .logistic_regression_model import LogisticRegressionModel
 from .random_forest import RandomForestModel
 from .xgboost_model import XGBoostModel
 from .lightgbm_model import LightGBMModel
+from .svm_model import SVMModel
 
-__all__ = ['BaseModel', 'LogisticRegressionModel', 'RandomForestModel', 'XGBoostModel', 'LightGBMModel']
+__all__ = ['BaseModel', 'LogisticRegressionModel', 'RandomForestModel', 'XGBoostModel', 'LightGBMModel', 'SVMModel']
