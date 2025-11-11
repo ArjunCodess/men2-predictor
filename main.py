@@ -124,7 +124,7 @@ def print_comparison_table(results):
             'random_forest': 'Random Forest',
             'xgboost': 'XGBoost',
             'lightgbm': 'LightGBM',
-            'svm': 'Support Vector Machine'
+            'svm': 'SVM'
         }
 
         model_name = model_names.get(model_type, model_type)
@@ -176,7 +176,7 @@ def print_comparison_table(results):
             'random_forest': 'Random Forest',
             'xgboost': 'XGBoost',
             'lightgbm': 'LightGBM',
-            'svm': 'Support Vector Machine'
+            'svm': 'SVM'
         }
         print(f"\nBest performing model: {model_names[model_type]} on {dataset_label} (F1 Score: {best_f1:.4f})")
     print()
@@ -242,7 +242,7 @@ def run_all_models(dataset_type='expanded'):
                 'random_forest': 'Random Forest',
                 'xgboost': 'XGBoost',
                 'lightgbm': 'LightGBM',
-                'svm': 'Support Vector Machine'
+                'svm': 'SVM'
             }[model_type]
 
             print(f"\n{'-'*80}")
@@ -349,7 +349,7 @@ def main(model_type='logistic', dataset_type='expanded'):
     elif model_type == 'lightgbm':
         model_desc = "LightGBM"
     elif model_type == 'svm':
-        model_desc = "Support Vector Machine"
+        model_desc = "SVM"
     else:
         model_desc = "Logistic Regression"
 
