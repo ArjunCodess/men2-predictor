@@ -155,9 +155,9 @@ def train_evaluate_model(model_type='logistic', dataset_type='expanded'):
         model_filename = f'saved_models/lightgbm_{dataset_type}_model.pkl'
         print(f"training lightgbm model on {dataset_label}...")
     elif model_type == 'svm' or model_type == 's':
-        model = SVMModel(threshold=0.15, kernel='rbf')  # medical screening threshold, RBF kernel
+        model = SVMModel(threshold=0.15, kernel='linear')  # medical screening threshold, linear kernel
         model_filename = f'saved_models/svm_{dataset_type}_model.pkl'
-        print(f"training svm model (rbf kernel) on {dataset_label}...")
+        print(f"training svm model (linear kernel) on {dataset_label}...")
     else:  # default to logistic regression
         model = LogisticRegressionModel(threshold=0.15)  # medical screening threshold
         model_filename = f'saved_models/logistic_regression_{dataset_type}_model.pkl'

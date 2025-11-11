@@ -12,13 +12,13 @@ from base_model import BaseModel
 class SVMModel(BaseModel):
     """support vector machine implementation for mtc prediction."""
 
-    def __init__(self, threshold=0.15, kernel='rbf', probability=True):
+    def __init__(self, threshold=0.15, kernel='linear', probability=True):
         """
         initialize svm model.
 
         args:
             threshold: classification threshold (default 0.15 for medical screening)
-            kernel: kernel type ('linear' or 'rbf', default 'rbf')
+            kernel: kernel type ('linear' or 'rbf', default 'linear')
             probability: enable probability estimates (default True, uses calibration)
         """
         super().__init__("support_vector_machine", threshold)
@@ -42,15 +42,14 @@ class SVMModel(BaseModel):
         # default parameters optimized for medical data with small sample size
         default_params = {
             'kernel': self.kernel,
-            'C': 1.0,  # regularization parameter (tune via CV)
-            'gamma': 'scale',  # kernel coefficient (auto-scaled by n_features)
+            'C': 10.0,  # higher C for linear kernel with small dataset (less regularization)
             'class_weight': 'balanced',  # handle class imbalance
             'random_state': 42,
             'max_iter': 5000,  # increase for convergence
             'cache_size': 500  # MB of cache for kernel computation
         }
 
-        # For RBF kernel, gamma is important
+        # For RBF kernel, add gamma parameter
         if self.kernel == 'rbf':
             default_params['gamma'] = kwargs.get('gamma', 'scale')
 
