@@ -1,0 +1,123 @@
+MODEL COMPARISON - TEST SET PREDICTIONS
+Dataset: EXPANDED
+====================================================================================================
+
+Patient         Actual     | LR         | RF         | LGB        | XGB        | SVM       
+----------------------------------------------------------------------------------------------------
+study_4         MTC        | CORRECT    | CORRECT    | INCORRECT  | CORRECT    | CORRECT   
+nan             No MTC     | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+nan             No MTC     | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+study_3         No MTC     | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+study_4         No MTC     | CORRECT    | CORRECT    | CORRECT    | CORRECT    | INCORRECT 
+study_4         MTC        | CORRECT    | CORRECT    | INCORRECT  | CORRECT    | CORRECT   
+study_4         No MTC     | INCORRECT  | CORRECT    | CORRECT    | INCORRECT  | INCORRECT 
+study_3         No MTC     | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+study_4         MTC        | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+study_4         No MTC     | CORRECT    | CORRECT    | CORRECT    | CORRECT    | INCORRECT 
+study_4         No MTC     | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+nan             No MTC     | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+study_4         MTC        | INCORRECT  | INCORRECT  | INCORRECT  | INCORRECT  | INCORRECT 
+study_4         No MTC     | INCORRECT  | CORRECT    | CORRECT    | INCORRECT  | INCORRECT 
+study_1         No MTC     | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+study_2         No MTC     | INCORRECT  | INCORRECT  | CORRECT    | INCORRECT  | CORRECT   
+study_1         No MTC     | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+study_1         MTC        | CORRECT    | INCORRECT  | INCORRECT  | INCORRECT  | INCORRECT 
+nan             No MTC     | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+nan             No MTC     | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+nan             No MTC     | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+study_3         MTC        | CORRECT    | CORRECT    | CORRECT    | CORRECT    | INCORRECT 
+study_4         No MTC     | INCORRECT  | CORRECT    | CORRECT    | CORRECT    | INCORRECT 
+study_4         No MTC     | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+nan             No MTC     | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+nan             No MTC     | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+nan             No MTC     | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+study_4         MTC        | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+study_1         No MTC     | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+study_3         No MTC     | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+nan             No MTC     | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+study_1         MTC        | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+study_1         No MTC     | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+study_3         No MTC     | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+nan             No MTC     | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+study_4         No MTC     | CORRECT    | CORRECT    | CORRECT    | CORRECT    | INCORRECT 
+study_4         No MTC     | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+study_3         No MTC     | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+nan             No MTC     | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+study_4         No MTC     | CORRECT    | CORRECT    | CORRECT    | CORRECT    | INCORRECT 
+study_4         No MTC     | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+study_2         No MTC     | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+study_4         MTC        | CORRECT    | INCORRECT  | INCORRECT  | CORRECT    | CORRECT   
+nan             No MTC     | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+study_4         MTC        | CORRECT    | INCORRECT  | INCORRECT  | CORRECT    | CORRECT   
+study_4         No MTC     | CORRECT    | CORRECT    | CORRECT    | CORRECT    | INCORRECT 
+study_4         MTC        | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+nan             MTC        | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+study_3         No MTC     | INCORRECT  | CORRECT    | CORRECT    | INCORRECT  | CORRECT   
+study_4         No MTC     | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+study_4         MTC        | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+nan             No MTC     | INCORRECT  | CORRECT    | CORRECT    | CORRECT    | INCORRECT 
+nan             No MTC     | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+nan             No MTC     | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+study_4         No MTC     | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+nan             No MTC     | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+nan             No MTC     | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+nan             No MTC     | INCORRECT  | CORRECT    | CORRECT    | INCORRECT  | INCORRECT 
+study_4         No MTC     | INCORRECT  | INCORRECT  | INCORRECT  | INCORRECT  | INCORRECT 
+study_4         MTC        | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+nan             No MTC     | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+study_1         No MTC     | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+study_4         No MTC     | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+nan             No MTC     | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+study_4         MTC        | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+nan             No MTC     | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+nan             No MTC     | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+nan             No MTC     | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+study_3         No MTC     | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+study_1         No MTC     | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+study_3         No MTC     | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+study_4         No MTC     | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+nan             No MTC     | INCORRECT  | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+nan             No MTC     | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+study_3         No MTC     | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+study_3         MTC        | CORRECT    | CORRECT    | CORRECT    | CORRECT    | INCORRECT 
+study_4         No MTC     | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+nan             No MTC     | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+nan             MTC        | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+study_4         No MTC     | CORRECT    | CORRECT    | CORRECT    | CORRECT    | INCORRECT 
+study_3         MTC        | CORRECT    | CORRECT    | CORRECT    | CORRECT    | INCORRECT 
+nan             No MTC     | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+study_3         No MTC     | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+study_4         MTC        | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+study_4         MTC        | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+study_4         No MTC     | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+study_4         No MTC     | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+nan             No MTC     | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+nan             No MTC     | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+study_4         No MTC     | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+study_4         No MTC     | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+nan             No MTC     | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+study_4         No MTC     | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+nan             No MTC     | INCORRECT  | CORRECT    | CORRECT    | INCORRECT  | CORRECT   
+study_3         No MTC     | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+study_3         No MTC     | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+nan             No MTC     | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+nan             No MTC     | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+study_3         No MTC     | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+nan             No MTC     | INCORRECT  | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+nan             No MTC     | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+nan             No MTC     | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+study_4         MTC        | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+nan             No MTC     | CORRECT    | CORRECT    | CORRECT    | INCORRECT  | INCORRECT 
+study_4         No MTC     | CORRECT    | CORRECT    | CORRECT    | CORRECT    | INCORRECT 
+nan             No MTC     | INCORRECT  | CORRECT    | CORRECT    | INCORRECT  | CORRECT   
+nan             No MTC     | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+====================================================================================================
+
+MODEL ACCURACY SUMMARY:
+--------------------------------------------------
+LR         | 94/107 correct (87.9%)
+RF         | 101/107 correct (94.4%)
+LGB        | 100/107 correct (93.5%)
+XGB        | 96/107 correct (89.7%)
+SVM        | 88/107 correct (82.2%)
+====================================================================================================

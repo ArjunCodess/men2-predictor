@@ -1,0 +1,32 @@
+MODEL COMPARISON - TEST SET PREDICTIONS
+Dataset: ORIGINAL
+====================================================================================================
+
+Patient         Actual     | LR         | RF         | LGB        | XGB        | SVM       
+----------------------------------------------------------------------------------------------------
+study_4         MTC        | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+study_3         MTC        | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+study_4         MTC        | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+study_4         No MTC     | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+study_3         No MTC     | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+study_4         No MTC     | INCORRECT  | CORRECT    | CORRECT    | INCORRECT  | INCORRECT 
+study_3         No MTC     | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+study_2         MTC        | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+study_4         No MTC     | INCORRECT  | CORRECT    | CORRECT    | CORRECT    | INCORRECT 
+study_4         MTC        | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+study_4         No MTC     | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+study_4         No MTC     | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+study_3         No MTC     | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+study_3         No MTC     | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+study_3         No MTC     | INCORRECT  | INCORRECT  | INCORRECT  | INCORRECT  | CORRECT   
+study_4         MTC        | CORRECT    | CORRECT    | CORRECT    | CORRECT    | CORRECT   
+====================================================================================================
+
+MODEL ACCURACY SUMMARY:
+--------------------------------------------------
+LR         | 13/16 correct (81.2%)
+RF         | 15/16 correct (93.8%)
+LGB        | 15/16 correct (93.8%)
+XGB        | 14/16 correct (87.5%)
+SVM        | 14/16 correct (87.5%)
+====================================================================================================
