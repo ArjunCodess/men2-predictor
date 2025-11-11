@@ -13,6 +13,7 @@ from logistic_regression_model import LogisticRegressionModel
 from random_forest_model import RandomForestModel
 from xgboost_model import XGBoostModel
 from lightgbm_model import LightGBMModel
+from svm_model import SVMModel
 
 warnings.filterwarnings('ignore')
 
@@ -153,6 +154,10 @@ def train_evaluate_model(model_type='logistic', dataset_type='expanded'):
         model = LightGBMModel(threshold=0.5)
         model_filename = f'saved_models/lightgbm_{dataset_type}_model.pkl'
         print(f"training lightgbm model on {dataset_label}...")
+    elif model_type == 'svm' or model_type == 's':
+        model = SVMModel(threshold=0.15, kernel='rbf')  # medical screening threshold, RBF kernel
+        model_filename = f'saved_models/svm_{dataset_type}_model.pkl'
+        print(f"training svm model (rbf kernel) on {dataset_label}...")
     else:  # default to logistic regression
         model = LogisticRegressionModel(threshold=0.15)  # medical screening threshold
         model_filename = f'saved_models/logistic_regression_{dataset_type}_model.pkl'
@@ -169,6 +174,10 @@ def train_evaluate_model(model_type='logistic', dataset_type='expanded'):
         model.print_coefficients()
     if hasattr(model, 'print_tree_stats'):
         model.print_tree_stats()
+    if hasattr(model, 'print_model_info'):
+        model.print_model_info()
+    if hasattr(model, 'print_support_vector_stats'):
+        model.print_support_vector_stats()
     
     # Evaluate on test set
     model.print_evaluation(X_test, y_test)
@@ -221,8 +230,8 @@ if __name__ == "__main__":
     # parse command line arguments
     parser = argparse.ArgumentParser(description='train mtc prediction model')
     parser.add_argument('--m', '--model', type=str, default='l',
-                       choices=['l', 'r', 'x', 'g', 'logistic', 'random_forest', 'xgboost', 'lightgbm'],
-                       help='model type: l/logistic (default), r/random_forest, x/xgboost, g/lightgbm')
+                       choices=['l', 'r', 'x', 'g', 's', 'logistic', 'random_forest', 'xgboost', 'lightgbm', 'svm'],
+                       help='model type: l/logistic (default), r/random_forest, x/xgboost, g/lightgbm, s/svm')
     parser.add_argument('--d', '--data', type=str, default='e',
                        choices=['e', 'o', 'expanded', 'original'],
                        help='dataset type: e/expanded (with controls + SMOTE - default), o/original (paper data only)')
@@ -236,6 +245,8 @@ if __name__ == "__main__":
         model_type = 'xgboost'
     elif args.m in ['g', 'lightgbm']:
         model_type = 'lightgbm'
+    elif args.m in ['s', 'svm']:
+        model_type = 'svm'
     else:
         model_type = 'logistic'
 

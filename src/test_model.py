@@ -12,6 +12,7 @@ from logistic_regression_model import LogisticRegressionModel
 from random_forest_model import RandomForestModel
 from lightgbm_model import LightGBMModel
 from xgboost_model import XGBoostModel
+from svm_model import SVMModel
 
 def load_model_and_test_data(model_type='logistic', dataset_type='expanded'):
     """load trained model and test data using new model structure"""
@@ -26,6 +27,9 @@ def load_model_and_test_data(model_type='logistic', dataset_type='expanded'):
     elif model_type == 'xgboost' or model_type == 'x':
         model = XGBoostModel()
         model_filename = f'saved_models/xgboost_{dataset_type}_model.pkl'
+    elif model_type == 'svm' or model_type == 's':
+        model = SVMModel()
+        model_filename = f'saved_models/svm_{dataset_type}_model.pkl'
     else:  # default to logistic regression
         model = LogisticRegressionModel()
         model_filename = f'saved_models/logistic_regression_{dataset_type}_model.pkl'
@@ -372,7 +376,8 @@ def generate_correlation_matrix(model, test_patients, model_type='logistic', dat
         'logistic': 'Logistic Regression',
         'random_forest': 'Random Forest',
         'xgboost': 'XGBoost',
-        'lightgbm': 'LightGBM'
+        'lightgbm': 'LightGBM',
+        'svm': 'Support Vector Machine'
     }
     dataset_label = "Expanded Dataset" if dataset_type == 'expanded' else "Original Dataset"
     title = f'Feature Correlation Matrix\n{model_names.get(model_type, model_type)} - {dataset_label}'
@@ -390,7 +395,8 @@ def generate_correlation_matrix(model, test_patients, model_type='logistic', dat
         'logistic': 'logistic_regression',
         'random_forest': 'random_forest',
         'xgboost': 'xgboost',
-        'lightgbm': 'lightgbm'
+        'lightgbm': 'lightgbm',
+        'svm': 'svm'
     }
     full_model_name = model_name_mapping.get(model_type, model_type)
     output_filename = f'charts/correlation_matrices/{full_model_name}_{dataset_type}.png'
@@ -414,8 +420,8 @@ if __name__ == "__main__":
     # parse command line arguments
     parser = argparse.ArgumentParser(description='test mtc prediction model')
     parser.add_argument('--m', '--model', type=str, default='l',
-                       choices=['l', 'r', 'x', 'g', 'logistic', 'random_forest', 'xgboost', 'lightgbm'],
-                       help='model type: l/logistic (default), r/random_forest, x/xgboost, g/lightgbm')
+                       choices=['l', 'r', 'x', 'g', 's', 'logistic', 'random_forest', 'xgboost', 'lightgbm', 'svm'],
+                       help='model type: l/logistic (default), r/random_forest, x/xgboost, g/lightgbm, s/svm')
     parser.add_argument('--d', '--data', type=str, default='e',
                        choices=['e', 'o', 'expanded', 'original'],
                        help='dataset type: e/expanded (with controls + SMOTE - default), o/original (paper data only)')
@@ -429,6 +435,8 @@ if __name__ == "__main__":
         model_type = 'xgboost'
     elif args.m in ['g', 'lightgbm']:
         model_type = 'lightgbm'
+    elif args.m in ['s', 'svm']:
+        model_type = 'svm'
     else:
         model_type = 'logistic'
 
