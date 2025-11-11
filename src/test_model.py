@@ -36,11 +36,13 @@ def load_model_and_test_data(model_type='logistic', dataset_type='expanded'):
 
     model.load(model_filename)
 
-    # Load test data based on dataset type
+    # load test data based on dataset type and keep original dataframe for patient info
     if dataset_type == 'original':
-        df = pd.read_csv('data/processed/ret_multivariant_training_data.csv')
+        df_original = pd.read_csv('data/processed/ret_multivariant_training_data.csv')
     else:
-        df = pd.read_csv('data/processed/ret_multivariant_case_control_dataset.csv')
+        df_original = pd.read_csv('data/processed/ret_multivariant_case_control_dataset.csv')
+
+    df = df_original.copy()
     
     # Prepare features and target - use same logic as training
     # REMOVE CONSTANT FEATURES
@@ -103,16 +105,16 @@ def load_model_and_test_data(model_type='logistic', dataset_type='expanded'):
     # Use the SAVED scaler directly (don't create new one)
     features_scaled = model.scaler.transform(features)
     
-    # Use the EXACT same split as training
+    # use the EXACT same split as training
     from sklearn.model_selection import train_test_split
     _, X_test, _, y_test = train_test_split(
         features_scaled, df['mtc_diagnosis'], test_size=0.2, random_state=42, stratify=df['mtc_diagnosis']
     )
-    
-    # Get test patient indices
+
+    # get test patient indices and return original patient data (not processed)
     test_indices = y_test.index
-    
-    return model, X_test, y_test, df.iloc[test_indices]
+
+    return model, X_test, y_test, df_original.iloc[test_indices]
 
 def generate_predictions(model, X_test_scaled, y_test, threshold=None):
     """generate predictions and probabilities using new model structure"""
@@ -186,15 +188,211 @@ def risk_stratification(probability):
     else:
         return "Very High Risk (1.00)"
 
+def compare_all_models_with_patient_data(dataset_type='expanded'):
+    """compare predictions across all models with full patient data"""
+
+    # define all model types
+    model_types = ['logistic', 'random_forest', 'lightgbm', 'xgboost', 'svm']
+    model_names = {
+        'logistic': 'LR',
+        'random_forest': 'RF',
+        'lightgbm': 'LGB',
+        'xgboost': 'XGB',
+        'svm': 'SVM'
+    }
+
+    # load test data once (using logistic model to get consistent test split)
+    _, X_test_scaled, y_test, test_patients = load_model_and_test_data('logistic', dataset_type)
+
+    # store predictions for each model
+    all_predictions = {}
+    loaded_models = {}
+
+    # try to load each model and get predictions
+    for model_type in model_types:
+        try:
+            model, X_test, y_test_check, test_patients_check = load_model_and_test_data(model_type, dataset_type)
+            y_pred, _ = generate_predictions(model, X_test, y_test_check)
+            all_predictions[model_type] = y_pred
+            loaded_models[model_type] = model
+        except Exception as e:
+            print(f"warning: could not load {model_type} model: {e}")
+            continue
+
+    if not all_predictions:
+        print("error: no models could be loaded for comparison")
+        return
+
+    # create detailed comparison table
+    print("\n" + "=" * 160)
+    print("MODEL COMPARISON - COMPLETE PATIENT DATA WITH PREDICTIONS")
+    print("=" * 160)
+
+    # build header with all patient attributes and model predictions
+    header = f"{'Patient_ID':<15} {'Age':<5} {'Sex':<3} {'RET_Var':<8} {'Risk':<4} {'Calc_Elev':<4} {'Calc_Lvl':<8} {'Nod':<3} {'MN':<3} {'FH':<3} {'Pheo':<4} {'HPT':<4} | {'Actual':<8}"
+    for model_type in model_types:
+        if model_type in all_predictions:
+            header += f" | {model_names[model_type]:<4}"
+    print(header)
+    print("-" * 160)
+
+    # store results for saving to file
+    comparison_results = []
+
+    # print each test patient with full data
+    for i in range(len(y_test)):
+        patient = test_patients.iloc[i]
+
+        # use source_id if study_id is nan
+        if pd.notna(patient.get('study_id')):
+            patient_id = str(patient['study_id'])
+        else:
+            patient_id = str(patient.get('source_id', f'P_{i+1}'))
+
+        # extract all patient attributes
+        age = f"{patient['age']:.0f}"
+        gender = 'M' if patient['gender'] == 1 else 'F'
+        ret_variant = str(patient.get('ret_variant', 'N/A'))[:8]
+        risk_level = f"{patient.get('ret_risk_level', 0):.0f}"
+        calc_elevated = 'Y' if patient.get('calcitonin_elevated', 0) == 1 else 'N'
+        calc_level = f"{patient.get('calcitonin_level_numeric', 0):.1f}"[:8]
+        nodules = 'Y' if patient.get('thyroid_nodules_present', 0) == 1 else 'N'
+        mult_nodules = 'Y' if patient.get('multiple_nodules', 0) == 1 else 'N'
+        family_hist = 'Y' if patient.get('family_history_mtc', 0) == 1 else 'N'
+        pheo = 'Y' if patient.get('pheochromocytoma', 0) == 1 else 'N'
+        hpt = 'Y' if patient.get('hyperparathyroidism', 0) == 1 else 'N'
+
+        actual = "MTC" if y_test.iloc[i] == 1 else "No_MTC"
+
+        row = f"{patient_id:<15} {age:<5} {gender:<3} {ret_variant:<8} {risk_level:<4} {calc_elevated:<4} {calc_level:<8} {nodules:<3} {mult_nodules:<3} {family_hist:<3} {pheo:<4} {hpt:<4} | {actual:<8}"
+
+        # store for file output
+        row_data = {
+            'patient_id': patient_id,
+            'age': age,
+            'gender': gender,
+            'ret_variant': ret_variant,
+            'risk_level': risk_level,
+            'calcitonin_elevated': calc_elevated,
+            'calcitonin_level': calc_level,
+            'nodules': nodules,
+            'multiple_nodules': mult_nodules,
+            'family_history': family_hist,
+            'pheochromocytoma': pheo,
+            'hyperparathyroidism': hpt,
+            'actual': actual
+        }
+
+        # add prediction for each model
+        for model_type in model_types:
+            if model_type in all_predictions:
+                y_pred = all_predictions[model_type]
+                predicted = y_pred[i]
+                is_correct = (predicted == y_test.iloc[i])
+                result = "OK" if is_correct else "XX"
+
+                # color code in terminal (green for correct, red for incorrect)
+                if is_correct:
+                    row += f" | \033[92m{result:<4}\033[0m"
+                else:
+                    row += f" | \033[91m{result:<4}\033[0m"
+
+                row_data[model_names[model_type]] = result
+
+        print(row)
+        comparison_results.append(row_data)
+
+    print("=" * 160)
+
+    # calculate and display accuracy for each model
+    print("\nMODEL ACCURACY SUMMARY:")
+    print("-" * 50)
+    accuracy_summary = []
+    for model_type in model_types:
+        if model_type in all_predictions:
+            y_pred = all_predictions[model_type]
+            correct = (y_pred == y_test).sum()
+            total = len(y_test)
+            accuracy = correct / total * 100
+            print(f"{model_names[model_type]:<10} | {correct}/{total} correct ({accuracy:.1f}%)")
+            accuracy_summary.append({
+                'model': model_names[model_type],
+                'correct': correct,
+                'total': total,
+                'accuracy': accuracy
+            })
+    print("=" * 160)
+
+    # save detailed comparison to file
+    os.makedirs('results', exist_ok=True)
+    dataset_label = "expanded" if dataset_type == 'expanded' else "original"
+    results_file = f'results/model_comparison_{dataset_label}_detailed_results.txt'
+
+    with open(results_file, 'w') as f:
+        f.write("MODEL COMPARISON - COMPLETE PATIENT DATA WITH PREDICTIONS\n")
+        f.write(f"Dataset: {dataset_label.upper()}\n")
+        f.write(f"Data Split: 80/20 train/test, random_state=42, stratified by target\n")
+        f.write(f"SMOTE applied: Only to training data (test data is 100% real)\n")
+        f.write(f"Test set size: {len(y_test)} patients\n")
+        f.write("=" * 200 + "\n\n")
+
+        # write legend
+        f.write("LEGEND:\n")
+        f.write("  Patient_ID: patient identifier (study_id for original data, source_id for synthetic controls)\n")
+        f.write("  Age: patient age in years\n")
+        f.write("  Sex: M=Male, F=Female\n")
+        f.write("  RET_Var: RET genetic variant\n")
+        f.write("  Risk: RET risk level (1=highest risk)\n")
+        f.write("  Calc_Elev: calcitonin elevated (Y/N)\n")
+        f.write("  Calc_Lvl: calcitonin level (numeric)\n")
+        f.write("  Nod: thyroid nodules present (Y/N)\n")
+        f.write("  MN: multiple nodules (Y/N)\n")
+        f.write("  FH: family history of MTC (Y/N)\n")
+        f.write("  Pheo: pheochromocytoma (Y/N)\n")
+        f.write("  HPT: hyperparathyroidism (Y/N)\n")
+        f.write("  OK: correct prediction\n")
+        f.write("  XX: incorrect prediction\n")
+        f.write("=" * 200 + "\n\n")
+
+        # write header
+        header_line = f"{'Patient_ID':<15} {'Age':<5} {'Sex':<3} {'RET_Var':<8} {'Risk':<4} {'Calc_Elev':<10} {'Calc_Lvl':<8} {'Nod':<3} {'MN':<3} {'FH':<3} {'Pheo':<4} {'HPT':<4} | {'Actual':<8}"
+        for model_type in model_types:
+            if model_type in all_predictions:
+                header_line += f" | {model_names[model_type]:<4}"
+        f.write(header_line + "\n")
+        f.write("-" * 200 + "\n")
+
+        # write each patient result
+        for row_data in comparison_results:
+            line = f"{row_data['patient_id']:<15} {row_data['age']:<5} {row_data['gender']:<3} {row_data['ret_variant']:<8} {row_data['risk_level']:<4} {row_data['calcitonin_elevated']:<10} {row_data['calcitonin_level']:<8} {row_data['nodules']:<3} {row_data['multiple_nodules']:<3} {row_data['family_history']:<3} {row_data['pheochromocytoma']:<4} {row_data['hyperparathyroidism']:<4} | {row_data['actual']:<8}"
+            for model_type in model_types:
+                if model_type in all_predictions:
+                    result = row_data.get(model_names[model_type], 'N/A')
+                    line += f" | {result:<4}"
+            f.write(line + "\n")
+
+        f.write("=" * 200 + "\n\n")
+
+        # write accuracy summary
+        f.write("MODEL ACCURACY SUMMARY:\n")
+        f.write("-" * 50 + "\n")
+        for summary in accuracy_summary:
+            f.write(f"{summary['model']:<10} | {summary['correct']}/{summary['total']} correct ({summary['accuracy']:.1f}%)\n")
+        f.write("=" * 200 + "\n")
+
+    print(f"\ndetailed comparison results saved to: {results_file}")
+
+    return all_predictions, loaded_models, comparison_results
+
 def print_individual_predictions(model, test_patients, y_test):
     """show individual patient predictions with risk stratification using model's built-in methods"""
-    
+
     # encode gender to numeric if it's string (safety check)
     test_patients = test_patients.copy()
     if 'gender' in test_patients.columns:
         if test_patients['gender'].dtype == 'object':
             test_patients['gender'] = test_patients['gender'].map({'Female': 0, 'Male': 1}).fillna(0)
-    
+
     # Prepare features for the test patients (same logic as training)
     feature_cols = ['age', 'gender', 'ret_risk_level',
                     'calcitonin_elevated', 'calcitonin_level_numeric',
@@ -236,14 +434,14 @@ def print_individual_predictions(model, test_patients, y_test):
 
     # Get predictions using model's built-in methods
     y_pred, y_pred_proba = generate_predictions(model, model.scaler.transform(features), y_test)
-    
+
     print("=" * 80)
     print("INDIVIDUAL PATIENT PREDICTIONS WITH RISK STRATIFICATION")
     print("=" * 80)
-    
+
     print(f"{'Patient':<20} {'Age':<6} {'Gender':<8} {'Actual':<10} {'Risk Tier':<25} {'Probability':<12}")
     print("-" * 80)
-    
+
     for i, (_, patient) in enumerate(test_patients.iterrows()):
         patient_id = f"Patient_{i+1}"
         age = f"{patient['age']:.0f}"
@@ -251,27 +449,27 @@ def print_individual_predictions(model, test_patients, y_test):
         actual = "MTC" if y_test.iloc[i] == 1 else "No MTC"
         prob = y_pred_proba[i]
         risk_tier = model.risk_stratification([prob])[0]  # Use model's risk stratification
-        
+
         print(f"{patient_id:<20} {age:<6} {gender:<8} {actual:<10} {risk_tier:<25} {prob:<12.3f}")
-    
+
     print("=" * 80)
-    
+
     print("\nRISK STRATIFICATION SUMMARY:")
     print("-" * 50)
-    
+
     risk_tiers = model.risk_stratification(y_pred_proba)
-    
+
     # create dynamic risk counts based on actual risk tiers
     risk_counts = {}
     for risk_tier in risk_tiers:
         if risk_tier not in risk_counts:
             risk_counts[risk_tier] = 0
         risk_counts[risk_tier] += 1
-    
+
     for risk_tier, count in risk_counts.items():
         if count > 0:
             print(f"{risk_tier}: {count} patients")
-    
+
     print("-" * 50)
 
 def print_model_insights(model, X_test, y_test, test_patients):
@@ -428,6 +626,12 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
+    # determine dataset type
+    if args.d in ['o', 'original']:
+        dataset_type = 'original'
+    else:
+        dataset_type = 'expanded'
+
     # determine model type
     if args.m in ['r', 'random_forest']:
         model_type = 'random_forest'
@@ -440,12 +644,6 @@ if __name__ == "__main__":
     else:
         model_type = 'logistic'
 
-    # determine dataset type
-    if args.d in ['o', 'original']:
-        dataset_type = 'original'
-    else:
-        dataset_type = 'expanded'
-
     print(f"testing model type: {model_type}")
     print(f"testing dataset type: {dataset_type}")
 
@@ -454,6 +652,11 @@ if __name__ == "__main__":
 
     # print results using new model structure
     print_test_metrics(model, X_test_scaled, y_test, model_type, dataset_type)
+
+    # run model comparison with full patient data (integrated into normal pipeline)
+    print("\n")
+    compare_all_models_with_patient_data(dataset_type)
+
     print_individual_predictions(model, test_patients, y_test)
     print_model_insights(model, X_test_scaled, y_test, test_patients)
 
