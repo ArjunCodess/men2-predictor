@@ -317,6 +317,7 @@ The [create_datasets.py](src/create_datasets.py) script:
 
 - **End-to-end pipeline** managed by `main.py`, coordinating all major steps automatically.
 - **Multiple ML algorithms:** Support for Logistic Regression, Random Forest, XGBoost, LightGBM, and SVM models.
+- **Comprehensive model comparison:** Automatically generates detailed comparison of all 5 models on the same test set with complete patient data, showing which patients each model got right/wrong.
 - **Model comparison mode:** Run all models simultaneously and compare performance metrics in a formatted table.
 - **Dataset comparison mode:** Compare model performance on expanded dataset (with SMOTE and control cases) vs original paper data.
 - **Automated data creation and expansion:** Scripts extract and structure relevant research data, and generate synthetic control samples to augment the dataset for robust modeling.
@@ -331,17 +332,19 @@ The [create_datasets.py](src/create_datasets.py) script:
 2. **data_analysis.py:** Computes descriptive statistics, generates variant-specific visualizations and risk-stratified analyses.
 3. **data_expansion.py:** Produces variant-matched synthetic control samples to improve model balance.
 4. **train_model.py:** Trains models with variant features, cross-validation, SMOTE balancing, and threshold optimization.
-5. **test_model.py:** Evaluates the model on test data with variant-specific risk stratification and comprehensive metrics.
-6. **Artifact summary:** Includes `ret_multivariant_training_data.csv`, `ret_multivariant_expanded_training_data.csv`, `ret_multivariant_case_control_dataset.csv`, `model.pkl`.
+5. **test_model.py:** Evaluates the model on test data with variant-specific risk stratification, comprehensive metrics, and automatic comparison of all 5 models with complete patient data.
+6. **Artifact summary:** Includes `ret_multivariant_training_data.csv`, `ret_multivariant_expanded_training_data.csv`, `ret_multivariant_case_control_dataset.csv`, `model.pkl`, and `model_comparison_detailed_results.txt`.
 
 **Advanced features:**
 
+- **Automated Model Comparison:** Every test run generates comprehensive comparison of all 5 models with complete patient data, enabling pattern identification and clinical validation
 - **Data Leakage Prevention:** SMOTE applied after train/test split to ensure realistic evaluation
 - **Feature Engineering:** Polynomial features (age²) and interactions (calcitonin×age, risk×age, nodule_severity)
 - **Variant-Aware Modeling:** One-hot encoding of 11 RET variants + risk level stratification
 - **Constant Feature Removal:** Automatic detection and removal of non-informative features
 - **Risk Stratification:** 4-tier system for clinical decision support instead of binary classification
 - **Comprehensive Metrics:** ROC-AUC, F1-Score, Average Precision Score, and confidence intervals
+- **Patient-Level Transparency:** See exactly which patients each model predicted correctly/incorrectly with full clinical context
 
 **Typical features used:**
 
@@ -482,12 +485,54 @@ When using `--m=all`, the pipeline:
 
 When using `--d=both`, the pipeline:
 
-1. Runs the model on expanded dataset (synthetic + SMOTE)
-2. Runs the same model on original dataset
+1. Runs the model on the expanded dataset (synthetic + SMOTE)
+2. Runs the same model on the original dataset
 3. Generates separate results files
-4. Displays comparison table showing performance differences
+4. Displays a comparison table showing performance differences
 
 This mode clearly demonstrates the recall degradation from synthetic augmentation.
+
+### Model comparison with patient data
+
+**New feature:** Every test run now automatically generates a comprehensive comparison of all 5 models on the same test set, showing complete patient data alongside each model's predictions.
+
+**What you get:**
+
+The comparison table includes for each test patient:
+- **Patient identification**: study_id for original data, source_id for synthetic controls
+- **Complete clinical data**: age, sex, RET variant, risk level, calcitonin levels, nodules, family history, etc.
+- **Actual diagnosis**: MTC or No_MTC
+- **All model predictions**: LR, RF, LGB, XGB, SVM (marked OK for correct, XX for incorrect)
+- **Color-coded terminal output**: green for correct predictions, red for incorrect
+- **Accuracy summary**: total correct/incorrect for each model
+
+**Saved file:** `results/model_comparison_{dataset_type}_detailed_results.txt`
+
+This file includes:
+- Complete legend explaining all abbreviations
+- Data split methodology (80/20, stratified, random_state=42)
+- SMOTE application details (only on training data)
+- All 107 test patients with full clinical data
+- Model predictions for easy comparison
+
+**Why this matters:**
+
+1. **Transparency**: See exactly which patients each model got right or wrong
+2. **Pattern identification**: Identify difficult cases that multiple models miss
+3. **Clinical validation**: Verify models make sense given patient characteristics
+4. **Research utility**: Comprehensive data for publication and analysis
+5. **Debugging**: Quickly spot if synthetic controls are causing issues
+
+**Data split explained:**
+
+- **Method**: 80/20 train/test split with random_state=42 (reproducible)
+- **Stratification**: Maintains MTC vs No MTC ratio in both sets
+- **SMOTE**: Applied only to training data after split
+- **Test set**: 100% real data (original patients + synthetic controls, no SMOTE)
+
+**Note on "synthetic controls":**
+
+Patients with source_id (e.g., "33_control", "mtc_s0_control") are synthetic controls added to expand the dataset. These are not from SMOTE—they were generated before the train/test split and are treated as real data. SMOTE is only applied to the training set after splitting.
 
 ### Output Files
 
@@ -497,7 +542,8 @@ This mode clearly demonstrates the recall degradation from synthetic augmentatio
 
 **Results:**
 
-- `results/{model_type}_{dataset_type}_test_results.txt`
+- `results/{model_type}_{dataset_type}_test_results.txt` - individual model performance metrics
+- `results/model_comparison_{dataset_type}_detailed_results.txt` - comprehensive comparison of all models with complete patient data
 
 **Logs (when using --m=all or --d=both):**
 
@@ -548,7 +594,7 @@ This mode clearly demonstrates the recall degradation from synthetic augmentatio
 2. **data_analysis.py:** Computes descriptive statistics, generates visualizations
 3. **data_expansion.py:** Produces variant-matched synthetic control samples (optional)
 4. **train_model.py:** Trains models with cross-validation, SMOTE balancing, threshold optimization
-5. **test_model.py:** Evaluates models with comprehensive metrics and risk stratification
+5. **test_model.py:** Evaluates models with comprehensive metrics, risk stratification, and automatic comparison of all 5 models with complete patient data
 
 </details>
 
