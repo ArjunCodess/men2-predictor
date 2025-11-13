@@ -182,7 +182,7 @@ def print_comparison_table(results):
         print(f"\nBest performing model: {model_names[model_type]} on {dataset_label} (F1 Score: {best_f1:.4f})")
     print()
 
-def run_all_models(dataset_type='expanded'):
+def run_all_models(dataset_type='expanded', men2b_mode=False, skip_men2b=False):
     """Run all model types and compare results"""
     print("=" * 80)
     print("MULTI-VARIANT RET MUTATION - MEN2 SYNDROME PREDICTION PIPELINE")
@@ -252,10 +252,14 @@ def run_all_models(dataset_type='expanded'):
 
             # Train model - save log to file
             train_log = f"results/logs/{model_type}_{dt}_training.log"
+            train_args = [f"--m={model_type}"]
+            if skip_men2b:
+                train_args.append("--skip-men2b")
+
             train_success = run_module(
                 "src/train_model.py",
                 f"Model Training - Train {model_desc} with cross-validation on {dataset_label}",
-                [f"--m={model_type}"],
+                train_args,
                 log_file=train_log,
                 dataset_type=dt
             )
@@ -294,6 +298,19 @@ def run_all_models(dataset_type='expanded'):
                 print(f"  - Metrics: Accuracy={metrics['accuracy']:.4f}, F1={metrics['f1_score']:.4f}, ROC-AUC={metrics['roc_auc']:.4f}")
             else:
                 print(f"\n{model_desc} on {dataset_label} encountered issues. Check logs for details.")
+
+    # Optional MEN2B evaluation (after all standard runs)
+    if men2b_mode:
+        print("\n" + "=" * 80)
+        print("MEN2B PATIENT-LEVEL EVALUATION")
+        print("=" * 80)
+        men2b_success = run_module(
+            "src/test_model.py",
+            "MEN2B Evaluation - Patient-level inference using shared encoder",
+            ["--men2b"]
+        )
+        if not men2b_success:
+            print("MEN2B evaluation failed. Review console output above for details.")
 
     # Print comparison table
     print_comparison_table(results)
@@ -335,7 +352,7 @@ def run_all_models(dataset_type='expanded'):
 
     return True
 
-def main(model_type='logistic', dataset_type='expanded'):
+def main(model_type='logistic', dataset_type='expanded', men2b_mode=False, skip_men2b=False):
     """main orchestration function"""
     print("=" * 80)
     print("MULTI-VARIANT RET MUTATION - MEN2 SYNDROME PREDICTION PIPELINE")
@@ -360,12 +377,18 @@ def main(model_type='logistic', dataset_type='expanded'):
     print(f"Dataset type: {dataset_label}")
 
     # define pipeline steps
+    train_args = [f"--m={model_type}"]
+    if skip_men2b:
+        train_args.append("--skip-men2b")
+
+    test_args = [f"--m={model_type}"]
+
     pipeline_steps = [
         ("src/create_datasets.py", "Dataset Creation - Extract and structure research data", None),
         ("src/data_analysis.py", "Data Analysis - Generate statistics and visualizations", None),
         ("src/data_expansion.py", "Data Expansion - Create synthetic controls and expand dataset", None),
-        ("src/train_model.py", f"Model Training - Train {model_desc} with cross-validation", [f"--m={model_type}"]),
-        ("src/test_model.py", f"Model Testing - Evaluate {model_desc} performance on test set", [f"--m={model_type}"])
+        ("src/train_model.py", f"Model Training - Train {model_desc} with cross-validation", train_args),
+        ("src/test_model.py", f"Model Testing - Evaluate {model_desc} performance on test set", test_args)
     ]
 
     # execute each step
@@ -375,6 +398,17 @@ def main(model_type='logistic', dataset_type='expanded'):
             print(f"\n{'!'*60}")
             print(f"PIPELINE FAILED AT: {description}")
             print(f"{'!'*60}")
+            return False
+
+    # run optional MEN2B evaluation if requested
+    if men2b_mode:
+        men2b_success = run_module(
+            "src/test_model.py",
+            "MEN2B Evaluation - Patient-level inference using shared encoder",
+            ["--men2b"]
+        )
+        if not men2b_success:
+            print("\nMEN2B evaluation step failed.")
             return False
 
     # pipeline completed successfully
@@ -411,8 +445,15 @@ if __name__ == "__main__":
     parser.add_argument('--d', '--data', type=str, default='e',
                        choices=['e', 'o', 'b', 'expanded', 'original', 'both'],
                        help='dataset type: e/expanded (with controls + SMOTE - default), o/original (paper data only), b/both (run on both datasets)')
+    parser.add_argument('--men2b', action='store_true',
+                       help='run MEN2B patient-level inference after the standard pipeline')
+    parser.add_argument('--skip-men2b', dest='skip_men2b', action='store_true',
+                       help='skip MEN2B LOPOCV training step inside train_model.py')
 
     args = parser.parse_args()
+
+    if args.men2b and args.skip_men2b:
+        print("WARNING: --men2b requested while --skip-men2b is enabled. MEN2B inference may fail without trained artifacts.")
 
     # Determine dataset type
     if args.d in ['o', 'original']:
@@ -424,7 +465,7 @@ if __name__ == "__main__":
 
     # Check if user wants to run all models
     if args.m in ['a', 'all']:
-        success = run_all_models(dataset_type)
+        success = run_all_models(dataset_type, men2b_mode=args.men2b, skip_men2b=args.skip_men2b)
     else:
         # determine model type
         if args.m in ['r', 'random_forest']:
@@ -438,6 +479,6 @@ if __name__ == "__main__":
         else:
             model_type = 'logistic'
 
-        success = main(model_type, dataset_type)
+        success = main(model_type, dataset_type, men2b_mode=args.men2b, skip_men2b=args.skip_men2b)
 
     sys.exit(0 if success else 1)
