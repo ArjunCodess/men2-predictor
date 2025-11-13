@@ -1,10 +1,14 @@
-import pandas as pd
-import numpy as np
-import sys
-import os
 import argparse
+import os
+import sys
+
+import joblib
 import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
 import seaborn as sns
+from sklearn.metrics import (accuracy_score, classification_report, f1_score,
+                             precision_score, recall_score, roc_auc_score)
 
 # Add models directory to path
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'models'))
@@ -13,6 +17,8 @@ from random_forest_model import RandomForestModel
 from lightgbm_model import LightGBMModel
 from xgboost_model import XGBoostModel
 from svm_model import SVMModel
+
+from utils.feature_pipeline import get_pipeline_ready_frame
 
 def calculate_bootstrap_ci(model, X, y, n_iterations=1000, confidence=0.95):
     """Calculate bootstrap confidence intervals for model performance"""
@@ -59,6 +65,98 @@ def calculate_bootstrap_ci(model, X, y, n_iterations=1000, confidence=0.95):
         }
     
     return ci_results
+
+
+def evaluate_men2b_model(threshold_override=None):
+    """Evaluate the MEN2B patient-level model using the shared encoder."""
+    print("=" * 60)
+    print("MEN2B PATIENT-LEVEL INFERENCE")
+    print("=" * 60)
+
+    dataset_path = os.path.join('data', 'processed', 'ret_multivariant_training_data.csv')
+    pipeline_path = os.path.join('models', 'men2_shared_feature_pipeline.joblib')
+    men2b_model_path = os.path.join('saved_models', 'men2b_logistic_regression.pkl')
+
+    missing_assets = [
+        path for path in [dataset_path, pipeline_path, men2b_model_path]
+        if not os.path.exists(path)
+    ]
+    if missing_assets:
+        print(f"Missing required MEN2B assets: {missing_assets}")
+        return
+
+    pipeline = joblib.load(pipeline_path)
+    men2b_payload = joblib.load(men2b_model_path)
+    men2b_model = men2b_payload['model']
+    threshold = threshold_override if threshold_override is not None else men2b_payload.get('threshold', 0.2)
+
+    paper_df = pd.read_csv(dataset_path)
+    men2b_df = paper_df[paper_df['study_id'] == 'study_5'].copy()
+    if men2b_df.empty:
+        print("No MEN2B patients detected inside processed dataset.")
+        return
+
+    print("[MEN2B] Transforming cohort with shared encoder...")
+    men2b_ready = get_pipeline_ready_frame(men2b_df)
+    X_men2b = pipeline.transform(men2b_ready)
+    y_true = men2b_df['mtc_diagnosis'].astype(int).values
+
+    print("[MEN2B] Generating predictions...")
+    probabilities = men2b_model.predict_proba(X_men2b)[:, 1]
+    predictions = (probabilities >= threshold).astype(int)
+
+    metrics = {
+        'accuracy': float(accuracy_score(y_true, predictions)),
+        'precision': float(precision_score(y_true, predictions, zero_division=0)),
+        'recall': float(recall_score(y_true, predictions, zero_division=0)),
+        'f1': float(f1_score(y_true, predictions, zero_division=0))
+    }
+    try:
+        metrics['roc_auc'] = float(roc_auc_score(y_true, probabilities))
+    except ValueError:
+        metrics['roc_auc'] = None
+
+    report = classification_report(
+        y_true,
+        predictions,
+        target_names=['No MTC', 'MTC'],
+        zero_division=0
+    )
+
+    print("\nMEN2B EVALUATION METRICS")
+    print("-" * 60)
+    for key, value in metrics.items():
+        if value is None:
+            print(f"{key:>10}: n/a")
+        else:
+            print(f"{key:>10}: {value:.3f}")
+    print("-" * 60)
+
+    os.makedirs('results', exist_ok=True)
+    summary_path = os.path.join('results', 'men2b_inference_report.txt')
+    with open(summary_path, 'w') as f:
+        f.write("MEN2B Patient-Level Inference Summary\n")
+        f.write("=" * 60 + "\n")
+        for key, value in metrics.items():
+            value_str = "n/a" if value is None else f"{value:.4f}"
+            f.write(f"{key}: {value_str}\n")
+        f.write("\n")
+        f.write(report)
+
+    predictions_path = os.path.join('results', 'men2b_inference_predictions.csv')
+    inference_rows = []
+    id_column = 'patient_id' if 'patient_id' in men2b_df.columns else 'source_id'
+    for patient_id, true_label, prob, pred in zip(men2b_df[id_column], y_true, probabilities, predictions):
+        inference_rows.append({
+            'patient_id': patient_id,
+            'true_label': int(true_label),
+            'probability': round(prob, 4),
+            'prediction': int(pred)
+        })
+    pd.DataFrame(inference_rows).to_csv(predictions_path, index=False)
+
+    print(f"MEN2B inference summary saved to {summary_path}")
+    print(f"MEN2B patient predictions saved to {predictions_path}")
 
 def load_model_and_test_data(model_type='logistic', dataset_type='expanded'):
     """load trained model and test data using new model structure"""
@@ -142,6 +240,10 @@ def load_model_and_test_data(model_type='logistic', dataset_type='expanded'):
     for col in model.feature_columns:
         if col not in features.columns:
             features[col] = 0
+
+    # Reorder and restrict to the columns seen during training
+    if model.feature_columns is not None:
+        features = features[model.feature_columns]
 
     # Handle NaN values (fill with median for numeric columns) - same as training
     if features.isnull().any().any():
@@ -844,8 +946,14 @@ if __name__ == "__main__":
     parser.add_argument('--d', '--data', type=str, default='e',
                        choices=['e', 'o', 'expanded', 'original'],
                        help='dataset type: e/expanded (with controls + SMOTE - default), o/original (paper data only)')
+    parser.add_argument('--men2b', action='store_true',
+                        help='evaluate MEN2B patient-level model and exit')
 
     args = parser.parse_args()
+
+    if args.men2b:
+        evaluate_men2b_model()
+        sys.exit(0)
 
     # determine dataset type
     if args.d in ['o', 'original']:
