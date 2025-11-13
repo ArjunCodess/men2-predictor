@@ -11,7 +11,7 @@ def create_paper_dataset():
 
     # load study data
     studies = []
-    for study_file in ['study_1.json', 'study_2.json', 'study_3.json', 'study_4.json']:
+    for study_file in ['study_1.json', 'study_2.json', 'study_3.json', 'study_4.json', 'study_5.json']:
         with open(os.path.join(dataset_dir, study_file), 'r') as f:
             studies.append(json.load(f))
 
@@ -45,6 +45,32 @@ def create_paper_dataset():
     
     # create structured dataframe from combined patient data
     df = pd.DataFrame(all_patients)
+
+    optional_columns = {
+        'thyroid_ultrasound': 'Unknown',
+        'thyroid_nodule_count': 0,
+        'family_screening': 'No',
+        'diagnosis_trigger': '',
+        'family_history_mtc': 'No',
+        'relationship': 'Unknown',
+        'calcitonin_level': '',
+        'calcitonin_normal_range': '',
+        'patient_id': None
+    }
+    for col, default_value in optional_columns.items():
+        if col not in df.columns:
+            df[col] = default_value
+    df['thyroid_ultrasound'] = df['thyroid_ultrasound'].fillna('Unknown').astype(str)
+    df['thyroid_nodule_count'] = pd.to_numeric(df['thyroid_nodule_count'], errors='coerce').fillna(0)
+    df['family_screening'] = df['family_screening'].fillna('No').astype(str)
+    df['diagnosis_trigger'] = df['diagnosis_trigger'].fillna('').astype(str)
+    df['family_history_mtc'] = df['family_history_mtc'].fillna('No').astype(str)
+    df['relationship'] = df['relationship'].fillna('Unknown').astype(str)
+    df['calcitonin_level'] = df['calcitonin_level'].fillna('').astype(str)
+    df['calcitonin_normal_range'] = df['calcitonin_normal_range'].fillna('').astype(str)
+    if df['patient_id'].isna().any():
+        df['patient_id'] = df['patient_id'].fillna(df['source_id'].apply(lambda sid: f"patient_{sid}"))
+    df['patient_id'] = df['patient_id'].astype(str)
     
     # remove duplicates based on patient_id
     print(f"Before deduplication: {len(df)} patients")
@@ -73,7 +99,8 @@ def create_paper_dataset():
         'C620Y': 2,
         'C634R': 3,
         'C634Y': 3,
-        'C634W': 3
+        'C634W': 3,
+        'M918T': 3
     }
     df['ret_risk_level'] = df['ret_variant'].map(ret_risk_mapping).fillna(1).astype(int)
     
@@ -132,7 +159,9 @@ def create_paper_dataset():
     df['calcitonin_elevated'] = df.apply(determine_calcitonin_elevated, axis=1)
     
     # gender encoding (0=female, 1=male)
-    df['gender'] = df['gender'].map({'Female': 0, 'Male': 1})
+    gender_map = {'Female': 0, 'Male': 1, 'F': 0, 'M': 1}
+    df['gender'] = df['gender'].map(gender_map).fillna(df['gender'])
+    df['gender'] = pd.to_numeric(df['gender'], errors='coerce').fillna(0).astype(int)
     
     # thyroid nodules
     df['thyroid_nodules_present'] = df['thyroid_ultrasound'].str.contains('nodules', case=False, na=False).astype(int)
@@ -140,11 +169,18 @@ def create_paper_dataset():
     df['multiple_nodules'] = df['multiple_nodules'].astype(int)
     
     # family history of MTC (based on relationship, family screening, and explicit family_history_mtc field)
-    relationship_family = df['relationship'].isin(['Sister', 'Father', 'Paternal grandmother', 'Proband\'s daughter', 'Sister\'s son'])
-    family_screening_yes = df['family_screening'].fillna('No').str.lower() == 'yes'
-    explicit_family_history = df['family_history_mtc'].fillna('No').str.lower() == 'yes'
+    family_relationships = {
+        'sister', 'father', 'paternal grandmother', "proband's daughter",
+        "sister's son", 'family member', 'mother', 'brother'
+    }
+    relationship_family = df['relationship'].str.lower().isin(family_relationships)
+    family_screening_series = df['family_screening'].fillna('No').str.lower()
+    family_screening_yes = family_screening_series.isin(['yes', 'positive'])
+    diagnosis_trigger_series = df['diagnosis_trigger'].fillna('').str.lower()
+    diagnosis_family = diagnosis_trigger_series.str.contains('family')
+    explicit_family_history = df['family_history_mtc'].fillna('No').str.lower().isin(['yes', 'positive'])
     
-    df['family_history_mtc'] = (relationship_family | family_screening_yes | explicit_family_history).astype(int)
+    df['family_history_mtc'] = (relationship_family | family_screening_yes | diagnosis_family | explicit_family_history).astype(int)
     
     # MTC diagnosis (target variable)
     df['mtc_diagnosis'] = df['mtc_diagnosis'].map({
@@ -174,7 +210,7 @@ def create_paper_dataset():
     
     # select final columns for ML
     final_columns = [
-        'source_id', 'study_id', 'age', 'gender', 'ret_variant', 'ret_risk_level',
+        'source_id', 'patient_id', 'study_id', 'age', 'gender', 'ret_variant', 'ret_risk_level',
         'calcitonin_elevated', 'calcitonin_level_numeric',
         'thyroid_nodules_present', 'multiple_nodules', 'family_history_mtc', 'mtc_diagnosis',
         'c_cell_disease', 'men2_syndrome', 'pheochromocytoma', 'hyperparathyroidism', 'age_group'
@@ -297,6 +333,8 @@ def print_dataset_info(df1, df2):
             study_name = "Thyroid Journal (2016)"
         elif study_id == "study_4":
             study_name = "European Journal of Endocrinology (2006)"
+        elif study_id == "study_5":
+            study_name = "Annals of Surgery (2014) - MEN2B cohort"
         else:
             study_name = study_id
         print(f"- {study_name}: {count} patients")
