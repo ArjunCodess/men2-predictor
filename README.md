@@ -70,6 +70,13 @@ This project implements **five complementary machine learning approaches** acros
 
 This comprehensive coverage ensures findings generalize across fundamentally different algorithmic approaches, strengthening the evidence that synthetic data degrades recall regardless of learning paradigm.
 
+### Calcitonin vs CEA Biomarker Coupling (Study 5)
+
+- Added the newly published **study_5** cohort, extracting all calcitonin and carcinoembryonic antigen (CEA) measurements. Four paired observations (Proband serial labs + Sister baseline) provided a **Pearson correlation of -0.10**, showing an almost flat relationship between the biomarkers within this family.
+- `create_datasets.py` now enriches every record with `cea_level_numeric`, `cea_elevated`, and a `cea_imputed_flag` sourced from those observations. Study 5 contributions remain marked as observed, while the other four studies receive imputed values.
+- Missing CEA values (**75 entries**) are completed through a dedicated **MICE (IterativeImputer) fit on the Study 5 correlation grid**, followed by **predictive mean matching** so every synthetic value maps back to a real observed donor distribution. All gaps are filled (0 remaining) and the process is summarized in `results/biomarker_ceaimputation_summary.txt`.
+- The biomarker fit is visualized as a scatter/overlay at `charts/calcitonin_cea_relationship.png`, giving quick validation that imputed values follow the same envelope as the observed Study 5 trajectories.
+
 ## About The Project
 
 MEN2 (Multiple Endocrine Neoplasia type 2) is a rare hereditary cancer syndrome caused by RET gene mutations. This project developed machine learning models to predict MTC (medullary thyroid carcinoma) risk across **11 different RET variants** using clinical and genetic features from **78 confirmed carriers** across 4 research studies.
@@ -328,7 +335,7 @@ The [create_datasets.py](src/create_datasets.py) script:
 
 **Pipeline steps (as run by `main.py`):**
 
-1. **create_datasets.py:** loads patient data from json files in [`data/raw`](data/raw) and formats into CSVs (78 patients from 4 studies, 11 variants).
+1. **create_datasets.py:** loads all study JSON files (now including Study 5 biomarker panels), computes the calcitonin vs CEA correlation, runs MICE + predictive mean matching to populate `cea_*` features, and emits the processed CSVs.
 2. **data_analysis.py:** Computes descriptive statistics, generates variant-specific visualizations and risk-stratified analyses.
 3. **data_expansion.py:** Produces variant-matched synthetic control samples to improve model balance.
 4. **train_model.py:** Trains models with variant features, cross-validation, SMOTE balancing, and threshold optimization.
@@ -574,6 +581,9 @@ Patients with source_id (e.g., "33_control", "mtc_s0_control") are synthetic con
 
 - Calcitonin elevation status (binary)
 - Calcitonin level (numeric, pg/mL)
+- CEA level (numeric, ng/mL)
+- CEA elevation flag (>5 ng/mL baseline)
+- CEA imputed provenance flag (0 = observed, 1 = MICE+PMM)
 
 **Clinical Features:**
 
@@ -594,7 +604,7 @@ Patients with source_id (e.g., "33_control", "mtc_s0_control") are synthetic con
 <details>
 <summary><b>Pipeline Steps</b></summary>
 
-1. **create_datasets.py:** Loads patient data from JSON files, formats into CSV (78 patients, 11 variants)
+1. **create_datasets.py:** Loads patient data from JSON (all 5 studies), performs calcitonin<->CEA correlation plus MICE+PMM imputation, and writes enriched CSVs
 2. **data_analysis.py:** Computes descriptive statistics, generates visualizations
 3. **data_expansion.py:** Produces variant-matched synthetic control samples (optional)
 4. **train_model.py:** Trains models with cross-validation, SMOTE balancing, threshold optimization
