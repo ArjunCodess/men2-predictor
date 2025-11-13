@@ -324,7 +324,7 @@ The [create_datasets.py](src/create_datasets.py) script:
 - **Comprehensive statistical analysis:** Automatic generation of descriptive statistics and visualization of the dataset for informed modeling.
 - **Advanced model development:** Cross-validation and adaptive SMOTE balancing to handle class imbalance across all model types.
 - **Clinical risk stratification:** 4-tier risk assessment (Low/Moderate/High/Very High) for actionable clinical decision-making.
-- **Artifacts generated:** Processed datasets and trained model files, usable for risk scoring new patients with relevant clinical/genetic data.
+- **Artifacts generated:** Processed datasets, trained model files, ROC curves, confusion matrices, and confidence interval summaries for clinically transparent scoring.
 
 **Pipeline steps (as run by `main.py`):**
 
@@ -343,7 +343,7 @@ The [create_datasets.py](src/create_datasets.py) script:
 - **Variant-Aware Modeling:** One-hot encoding of 11 RET variants + risk level stratification
 - **Constant Feature Removal:** Automatic detection and removal of non-informative features
 - **Risk Stratification:** 4-tier system for clinical decision support instead of binary classification
-- **Comprehensive Metrics:** ROC-AUC, F1-Score, Average Precision Score, and confidence intervals
+- **Comprehensive Metrics:** ROC-AUC, F1-Score, Average Precision Score, ROC curves, confusion matrices, and bootstrap confidence intervals
 - **Patient-Level Transparency:** See exactly which patients each model predicted correctly/incorrectly with full clinical context
 
 **Typical features used:**
@@ -542,8 +542,12 @@ Patients with source_id (e.g., "33_control", "mtc_s0_control") are synthetic con
 
 **Results:**
 
-- `results/{model_type}_{dataset_type}_test_results.txt` - individual model performance metrics
+- `results/{model_type}_{dataset_type}_test_results.txt` - individual model performance summaries with embedded 95% confidence intervals
 - `results/model_comparison_{dataset_type}_detailed_results.txt` - comprehensive comparison of all models with complete patient data
+- `results/{model_type}_{dataset_type}_confidence_intervals.txt` - standalone bootstrap statistics exported during training (e.g., `results/logistic_original_confidence_intervals.txt`)
+- `charts/roc_curves/{model_type}_{dataset_type}.png` - ROC curves with area under the curve and optimal-threshold marker
+- `charts/confusion_matrices/{model_type}_{dataset_type}.png` - paired raw-count and normalized confusion matrices
+- `charts/correlation_matrices/{model_type}_{dataset_type}.png` - feature correlation matrix for LightGBM (expanded dataset)
 
 **Logs (when using --m=all or --d=both):**
 
@@ -619,8 +623,9 @@ Patients with source_id (e.g., "33_control", "mtc_s0_control") are synthetic con
 **Evaluation Metrics:**
 
 - Accuracy, Precision, Recall, F1-Score
-- ROC-AUC, Average Precision Score
-- Confidence intervals
+- ROC-AUC, Average Precision Score, ROC curve visualizations
+- Confusion matrices (raw and normalized)
+- Bootstrap 95% confidence intervals on key metrics
 - Risk-stratified performance
 
 </details>
