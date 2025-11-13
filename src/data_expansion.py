@@ -14,6 +14,11 @@ def create_matched_controls(original_df, n_controls_per_case=2):
     
     matched_controls = []
     np.random.seed(42)  # for reproducibility
+
+    if 'study_id' in cases.columns:
+        men2b_cases = cases[cases['study_id'] == 'study_5']
+        if not men2b_cases.empty:
+            print(f"[MEN2B] generating matched controls for {len(men2b_cases)} study_5 patients")
     
     for _, case in cases.iterrows():
         # find age-matched controls (±5 years)
@@ -52,9 +57,12 @@ def create_population_control(case):
     thyroid_nodules_present = int(np.random.random() < 0.30)
     multiple_nodules = int(thyroid_nodules_present and (np.random.random() < 0.10))
 
+    age_floor = 1 if float(case['age']) < 18 else 18
+    simulated_age = max(age_floor, np.random.normal(case['age'], 10))
+
     control = {
         'source_id': f"{case['source_id']}_control",
-        'age': max(18, np.random.normal(case['age'], 10)),  # similar age distribution
+        'age': simulated_age,  # similar age distribution with MEN2B compatibility
         'gender': case['gender'],  # same gender for better matching
         'ret_variant': case['ret_variant'],  # same variant for variant-matched controls
         'ret_risk_level': case['ret_risk_level'],  # same risk level

@@ -211,18 +211,80 @@ def generate_plots(paper_df, expanded_df):
 def print_insights(paper_df, expanded_df):
     """print insights regarding data distributions and class imbalance"""
     print("=" * 60)
+
+
+def summarize_men2b_cohort(paper_df):
+    """highlight MEN2B-specific patient statistics."""
+    men2b_df = paper_df[paper_df['study_id'] == 'study_5'].copy()
+    if men2b_df.empty:
+        print("No MEN2B patients detected for summary.")
+        return
+
+    print("=" * 60)
+    print("MEN2B (STUDY 5) SNAPSHOT")
+    print("=" * 60)
+    print(f"- Patients analyzed: {len(men2b_df)}")
+    print(f"- Confirmed MTC cases: {men2b_df['mtc_diagnosis'].sum()}/{len(men2b_df)} ({men2b_df['mtc_diagnosis'].mean():.1%})")
+    print(f"- Median age at diagnosis: {men2b_df['age'].median():.1f} years")
+    print(f"- Median basal calcitonin: {men2b_df['calcitonin_level_numeric'].median():.1f} pg/mL")
+    print(f"- Family history present: {men2b_df['family_history_mtc'].sum()}/{len(men2b_df)}")
+    ret_counts = men2b_df['ret_variant'].value_counts().to_dict()
+    print(f"- RET variants represented: {ret_counts}")
+    print()
+
+
+def generate_men2b_plots(men2b_df):
+    """create MEN2B-focused visualizations for calcitonin and age trends."""
+    if men2b_df.empty:
+        return
+
+    men2b_df = men2b_df.copy()
+    men2b_df['calcitonin_level_numeric'] = men2b_df['calcitonin_level_numeric'].fillna(0)
+
+    os.makedirs('charts', exist_ok=True)
+
+    sorted_df = men2b_df.copy()
+    sorted_df['calcitonin_level_numeric'] = sorted_df['calcitonin_level_numeric'].fillna(0)
+    sorted_df = sorted_df.sort_values(by='calcitonin_level_numeric', ascending=False)
+    plt.figure(figsize=(10, 6))
+    plt.barh(sorted_df['patient_id'], sorted_df['calcitonin_level_numeric'], color='#d95f02')
+    plt.xlabel('Calcitonin Level (pg/mL)')
+    plt.ylabel('Patient')
+    plt.title('MEN2B Basal Calcitonin Levels by Patient')
+    plt.gca().invert_yaxis()
+    plt.tight_layout()
+    plt.savefig(os.path.join('charts', 'men2b_calcitonin_levels.png'), dpi=200)
+    plt.close()
+
+    plt.figure(figsize=(8, 6))
+    scatter = plt.scatter(
+        men2b_df['age'],
+        men2b_df['calcitonin_level_numeric'],
+        c=men2b_df['mtc_diagnosis'],
+        cmap='coolwarm',
+        s=80,
+        edgecolor='k'
+    )
+    plt.xlabel('Age (years)')
+    plt.ylabel('Calcitonin Level (pg/mL)')
+    plt.title('MEN2B Age vs Calcitonin (colored by MTC diagnosis)')
+    handles, labels = scatter.legend_elements()
+    plt.legend(handles, labels, title='MTC', loc='upper left')
+    plt.tight_layout()
+    plt.savefig(os.path.join('charts', 'men2b_age_calcitonin.png'), dpi=200)
+    plt.close()
     print("DATA ANALYSIS INSIGHTS")
     print("=" * 60)
 
     print("PAPER DATASET INSIGHTS:")
     print(f"- Total patients: {len(paper_df)}")
-    print(f"- MTC cases: {paper_df['mtc_diagnosis'].sum()}/4 ({paper_df['mtc_diagnosis'].mean():.1%})")
-    print(f"- C-cell disease cases: {paper_df['c_cell_disease'].sum()}/4 ({paper_df['c_cell_disease'].mean():.1%})")
-    print(f"- MEN2 syndrome cases: {paper_df['men2_syndrome'].sum()}/4 ({paper_df['men2_syndrome'].mean():.1%})")
+    print(f"- MTC cases: {paper_df['mtc_diagnosis'].sum()}/{len(paper_df)} ({paper_df['mtc_diagnosis'].mean():.1%})")
+    print(f"- C-cell disease cases: {paper_df['c_cell_disease'].sum()}/{len(paper_df)} ({paper_df['c_cell_disease'].mean():.1%})")
+    print(f"- MEN2 syndrome cases: {paper_df['men2_syndrome'].sum()}/{len(paper_df)} ({paper_df['men2_syndrome'].mean():.1%})")
     print(f"- Average age: {paper_df['age'].mean():.1f} years")
     print(f"- Gender distribution: {paper_df['gender'].value_counts().to_dict()}")
-    print(f"- Calcitonin elevated: {paper_df['calcitonin_elevated'].sum()}/4 ({paper_df['calcitonin_elevated'].mean():.1%})")
-    print(f"- Thyroid nodules present: {paper_df['thyroid_nodules_present'].sum()}/4 ({paper_df['thyroid_nodules_present'].mean():.1%})")
+    print(f"- Calcitonin elevated: {paper_df['calcitonin_elevated'].sum()}/{len(paper_df)} ({paper_df['calcitonin_elevated'].mean():.1%})")
+    print(f"- Thyroid nodules present: {paper_df['thyroid_nodules_present'].sum()}/{len(paper_df)} ({paper_df['thyroid_nodules_present'].mean():.1%})")
     print()
 
     print("EXPANDED DATASET INSIGHTS:")
@@ -281,3 +343,6 @@ if __name__ == "__main__":
     print_descriptive_statistics(paper_df, expanded_df)
     generate_plots(paper_df, expanded_df)
     print_insights(paper_df, expanded_df)
+    summarize_men2b_cohort(paper_df)
+    men2b_data = paper_df[paper_df['study_id'] == 'study_5'].copy()
+    generate_men2b_plots(men2b_data)
