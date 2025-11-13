@@ -1,12 +1,17 @@
-import pandas as pd
-import numpy as np
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import StandardScaler
-from sklearn.metrics import classification_report
-import warnings
-import sys
-import os
 import argparse
+import json
+import os
+import sys
+import warnings
+
+import joblib
+import numpy as np
+import pandas as pd
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import (accuracy_score, classification_report, f1_score,
+                             precision_score, recall_score, roc_auc_score)
+from sklearn.model_selection import LeaveOneOut, train_test_split
+from sklearn.preprocessing import StandardScaler
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'models'))
 from logistic_regression_model import LogisticRegressionModel
@@ -14,6 +19,11 @@ from random_forest_model import RandomForestModel
 from xgboost_model import XGBoostModel
 from lightgbm_model import LightGBMModel
 from svm_model import SVMModel
+
+from utils.feature_pipeline import (
+    build_patient_feature_pipeline,
+    get_pipeline_ready_frame,
+)
 
 warnings.filterwarnings('ignore')
 
@@ -304,6 +314,160 @@ def print_model_summary():
     print("=" * 60)
 
 
+def run_men2b_patient_pipeline(threshold=0.2):
+    """fit shared encoder on studies 1-4 and evaluate MEN2B patients with LOPOCV."""
+    print("\n" + "=" * 60)
+    print("MEN2B PATIENT-LEVEL PIPELINE (LOPOCV)")
+    print("=" * 60)
+
+    dataset_path = os.path.join('data', 'processed', 'ret_multivariant_training_data.csv')
+    if not os.path.exists(dataset_path):
+        print(f"Processed dataset not found at {dataset_path}. Skipping MEN2B pipeline.")
+        return None
+
+    paper_df = pd.read_csv(dataset_path)
+    men2b_df = paper_df[paper_df['study_id'] == 'study_5'].copy()
+    if men2b_df.empty:
+        print("No MEN2B (study_5) patients detected. Skipping MEN2B pipeline.")
+        return None
+
+    reference_df = paper_df[paper_df['study_id'] != 'study_5'].copy()
+    print(f"[STEP 1] Loaded {len(paper_df)} total patients ({len(men2b_df)} MEN2B).")
+
+    shared_pipeline = build_patient_feature_pipeline()
+    print("[STEP 2] Fitting shared encoder on studies 1-4 only...")
+    reference_ready = get_pipeline_ready_frame(reference_df)
+    shared_pipeline.fit(reference_ready)
+
+    os.makedirs('models', exist_ok=True)
+    pipeline_path = os.path.join('models', 'men2_shared_feature_pipeline.joblib')
+    joblib.dump(shared_pipeline, pipeline_path)
+    print(f"Shared encoder persisted to {pipeline_path}")
+
+    men2b_ready = get_pipeline_ready_frame(men2b_df)
+    X_men2b = shared_pipeline.transform(men2b_ready)
+    y_men2b = men2b_df['mtc_diagnosis'].astype(int).values
+    id_column = 'patient_id' if 'patient_id' in men2b_df.columns else 'source_id'
+    patient_labels = men2b_df[id_column].astype(str).tolist()
+
+    loo = LeaveOneOut()
+    n_patients = len(y_men2b)
+    probs = np.zeros(n_patients)
+    preds = np.zeros(n_patients, dtype=int)
+    fold_rows = []
+
+    print("[STEP 3] Running Leave-One-Patient-Out evaluation on MEN2B cohort...")
+    for fold_idx, (train_idx, test_idx) in enumerate(loo.split(X_men2b), 1):
+        clf = LogisticRegression(
+            penalty='l2',
+            C=0.05,
+            solver='liblinear',
+            class_weight='balanced',
+            max_iter=2000,
+            random_state=42
+        )
+        clf.fit(X_men2b[train_idx], y_men2b[train_idx])
+        prob = clf.predict_proba(X_men2b[test_idx])[:, 1][0]
+        pred = int(prob >= threshold)
+        idx = test_idx[0]
+        probs[idx] = prob
+        preds[idx] = pred
+
+        patient_name = patient_labels[idx]
+        fold_rows.append({
+            'fold': fold_idx,
+            'patient_id': patient_name,
+            'true_label': int(y_men2b[idx]),
+            'probability': round(prob, 4),
+            'prediction': pred
+        })
+        print(f"  Fold {fold_idx:02d}/{n_patients} | patient {patient_name} | prob={prob:.3f} | pred={pred} | true={int(y_men2b[idx])}")
+
+    metrics = {
+        'threshold': threshold,
+        'accuracy': float(accuracy_score(y_men2b, preds)),
+        'precision': float(precision_score(y_men2b, preds, zero_division=0)),
+        'recall': float(recall_score(y_men2b, preds, zero_division=0)),
+        'f1': float(f1_score(y_men2b, preds, zero_division=0))
+    }
+    try:
+        metrics['roc_auc'] = float(roc_auc_score(y_men2b, probs))
+    except ValueError:
+        metrics['roc_auc'] = None
+
+    report = classification_report(
+        y_men2b,
+        preds,
+        target_names=['No MTC', 'MTC'],
+        zero_division=0
+    )
+
+    print("\nMEN2B LOPOCV METRICS")
+    print("-" * 60)
+    for key, value in metrics.items():
+        if key == 'threshold':
+            continue
+        if value is None:
+            print(f"{key:>10}: n/a")
+        else:
+            print(f"{key:>10}: {value:.3f}")
+    print("-" * 60)
+
+    os.makedirs('results', exist_ok=True)
+    metrics_path = os.path.join('results', 'men2b_lopo_metrics.json')
+    with open(metrics_path, 'w') as f:
+        json.dump({
+            'metrics': metrics,
+            'n_patients': n_patients,
+            'folds': len(fold_rows)
+        }, f, indent=2)
+
+    predictions_path = os.path.join('results', 'men2b_lopo_predictions.csv')
+    pd.DataFrame(fold_rows).to_csv(predictions_path, index=False)
+
+    report_path = os.path.join('results', 'men2b_lopo_report.txt')
+    with open(report_path, 'w') as f:
+        f.write("MEN2B Leave-One-Patient-Out Classification Report\n")
+        f.write("=" * 60 + "\n")
+        f.write(report)
+
+    print(f"Metrics saved to {metrics_path}")
+    print(f"Fold-level predictions saved to {predictions_path}")
+    print(f"Classification report saved to {report_path}")
+
+    print("[STEP 4] Training final MEN2B classifier on full cohort...")
+    final_clf = LogisticRegression(
+        penalty='l2',
+        C=0.05,
+        solver='liblinear',
+        class_weight='balanced',
+        max_iter=2000,
+        random_state=42
+    )
+    final_clf.fit(X_men2b, y_men2b)
+
+    os.makedirs('saved_models', exist_ok=True)
+    men2b_model_path = os.path.join('saved_models', 'men2b_logistic_regression.pkl')
+    joblib.dump(
+        {
+            'model': final_clf,
+            'threshold': threshold,
+            'patient_labels': patient_labels
+        },
+        men2b_model_path
+    )
+    print(f"Final MEN2B classifier saved to {men2b_model_path}")
+
+    return {
+        'metrics': metrics,
+        'metrics_path': metrics_path,
+        'predictions_path': predictions_path,
+        'report_path': report_path,
+        'pipeline_path': pipeline_path,
+        'model_path': men2b_model_path
+    }
+
+
 if __name__ == "__main__":
     # parse command line arguments
     parser = argparse.ArgumentParser(description='train mtc prediction model')
@@ -313,6 +477,8 @@ if __name__ == "__main__":
     parser.add_argument('--d', '--data', type=str, default='e',
                        choices=['e', 'o', 'expanded', 'original'],
                        help='dataset type: e/expanded (with controls + SMOTE - default), o/original (paper data only)')
+    parser.add_argument('--skip-men2b', action='store_true',
+                        help='skip MEN2B patient-level training pipeline')
 
     args = parser.parse_args()
 
@@ -339,3 +505,8 @@ if __name__ == "__main__":
 
     model, scaler, X_train_scaled, X_test_scaled, y_train, y_test, feature_cols = train_evaluate_model(model_type, dataset_type)
     print_model_summary()
+
+    if not args.skip_men2b:
+        run_men2b_patient_pipeline()
+    else:
+        print("MEN2B pipeline skipped via command-line flag.")
