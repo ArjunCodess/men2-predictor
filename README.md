@@ -27,7 +27,7 @@
 
 ### Perfect Performance on Real Data
 
-All models achieve **93.75% accuracy with 100% recall** when trained on original real patient data (78 patients, 11 RET variants). This means **zero false negatives**—every cancer case is detected.
+All models achieve **93.75% accuracy with 100% recall** when trained on the MEN2A cohort (78 patients, 11 RET variants). The MEN2B micro-cohort (9 M918T patients) is evaluated separately via LOPOCV to ensure true patient-level generalization, but the combined pipeline still reports **zero false negatives** for the primary cohort.
 
 ### Synthetic Augmentation Degrades Performance
 
@@ -72,7 +72,7 @@ This comprehensive coverage ensures findings generalize across fundamentally dif
 
 ## About The Project
 
-MEN2 (Multiple Endocrine Neoplasia type 2) is a rare hereditary cancer syndrome caused by RET gene mutations. This project developed machine learning models to predict MTC (medullary thyroid carcinoma) risk across **11 different RET variants** using clinical and genetic features from **78 confirmed carriers** across 4 research studies.
+MEN2 (Multiple Endocrine Neoplasia type 2) is a rare hereditary cancer syndrome caused by RET gene mutations. This project developed machine learning models to predict MTC (medullary thyroid carcinoma) risk across **12 different RET variants** using clinical and genetic features from **87 confirmed carriers** (78 MEN2A + 9 MEN2B) across 5 research studies.
 
 **Scientific Contribution:** This work provides the first demonstration that synthetic data augmentation can degrade model performance for rare disease prediction, despite improving overall accuracy. The finding has critical implications for clinical ML deployment where false negatives are unacceptable.
 
@@ -106,7 +106,7 @@ MEN2 (Multiple Endocrine Neoplasia type 2) is a rare hereditary cancer syndrome 
 
 | Dataset                          | Accuracy | Recall   | Clinical Risk                    |
 | -------------------------------- | -------- | -------- | -------------------------------- |
-| **Original (78 patients)**       | 93.75%   | **100%** | ✅ Safe—catches all cases        |
+| **Original (MEN2A, 78 patients)** | 93.75%   | **100%** | ✅ Safe—catches all cases        |
 | **Expanded (synthetic + SMOTE)** | 94.39%   | **81%**  | ⚠️ Dangerous—misses 2-3/10 cases |
 
 **Recommendation:** Use original dataset models for clinical deployment. The slight accuracy gain (0.64%) from synthetic augmentation is not worth the 19% recall loss.
@@ -165,16 +165,17 @@ This project makes three critical contributions to medical machine learning:
 
 ## Data Sources
 
-Clinical data extracted from four peer-reviewed research studies:
+Clinical data extracted from five peer-reviewed research studies:
 
 1. **JCEM Case Reports (2025)** - 4 patients, K666N variant (ATA Level 1)
 2. **EDM Case Reports (2024)** - 4 patients, K666N variant (ATA Level 1)
 3. **Thyroid Journal (2016)** - 24 patients across 8 families, K666N variant (ATA Level 1)
 4. **European Journal of Endocrinology (2006)** - 46 patients, 10 variants (ATA Levels 1-3)
+5. **Annals of Surgery (2014)** - 9 MEN2B patients with the M918T variant (ATA Level 3, MEN2B phenotype)
 
-**Multi-Variant Dataset:** 78 confirmed RET germline mutation carriers across 11 variants (K666N, L790F, Y791F, V804M, S891A, C634R, C634Y, C634W, C618S, C630R, C620Y) with ATA risk stratification (Level 1: Moderate, Level 2: High, Level 3: Highest).
+**Multi-Variant Dataset:** 87 confirmed RET germline mutation carriers across 12 variants (K666N, L790F, Y791F, V804M, S891A, C634R, C634Y, C634W, C618S, C630R, C620Y, **M918T**) with ATA risk stratification (Level 1: Moderate, Level 2: High, Level 3: Highest).
 
-**Total: 78 unique patients** (32 from Studies 1-3, 46 from Study 4)
+**Total: 87 unique patients** (32 from Studies 1-3, 46 from Study 4, 9 MEN2B patients from Study 5)
 
 **Key Feature:** Multi-variant dataset enables learning across risk levels, capturing variant-specific patterns while maintaining generalizability.
 
@@ -208,21 +209,29 @@ Clinical data extracted from four peer-reviewed research studies:
    - Variants: L790F, Y791F, V804M, S891A, C634R, C634Y, C634W, C618S, C630R, C620Y
    - Risk Levels: Level 1 (Moderate), Level 2 (High), Level 3 (Highest)
 
+5. **Study 5 - Annals of Surgery (2014)**
+
+   - Title: "Surgical Curability of Medullary Thyroid Cancer in Multiple Endocrine Neoplasia 2B: A Changing Perspective"
+   - DOI: 10.1097/SLA.0b013e3182a6f43a
+   - 9 MEN2B patients (M918T variant, ATA Level 3) with longitudinal surgical follow-up
+   - Focus: patient-level outcomes for the aggressive MEN2B phenotype, enabling LOPO evaluation
+
 ### Dataset Characteristics
 
-**Multi-Variant Dataset:** 78 confirmed RET germline mutation carriers across 11 variants
+**Multi-Variant Dataset:** 87 confirmed RET germline mutation carriers across 12 variants
 
 - **Studies 1-3 (K666N cohort):** 32 patients
 - **Study 4 (Multi-variant cohort):** 46 patients
+- **Study 5 (MEN2B cohort):** 9 patients
 - **Age range:** 5-90 years
 - **Gender distribution:** Mixed (Male/Female)
-- **RET Variants Included:** K666N, L790F, Y791F, V804M, S891A, C634R, C634Y, C634W, C618S, C630R, C620Y
+- **RET Variants Included:** K666N, L790F, Y791F, V804M, S891A, C634R, C634Y, C634W, C618S, C630R, C620Y, **M918T**
 
 **ATA Risk Level Distribution:**
 
 - **Level 1 (Moderate):** K666N, L790F, Y791F, V804M, S891A
 - **Level 2 (High):** C618S, C630R, C620Y
-- **Level 3 (Highest):** C634R, C634Y, C634W
+- **Level 3 (Highest):** C634R, C634Y, C634W, M918T
 
 **Clinical Outcomes:**
 
@@ -230,7 +239,7 @@ Clinical data extracted from four peer-reviewed research studies:
 - C-cell disease (MTC + C-cell hyperplasia) observed across all risk levels
 - Model learns variant-specific risk patterns
 
-**Expanded Dataset:** Original 78 patients + synthetic variant-matched controls
+**Expanded Dataset:** Original 87 patients + synthetic variant-matched controls
 
 - Includes literature-based synthetic cases for improved model balance
 - Synthetic controls generated with variant-specific distributions
@@ -293,13 +302,13 @@ This modular structure allows for:
 The [create_datasets.py](src/create_datasets.py) script:
 
 1. Loads patient data from JSON files in the [`data/raw`](data/raw) folder (4 studies)
-2. Extracts and combines data from multiple research studies (78 patients, 11 variants)
+2. Extracts and combines data from multiple research studies (87 patients, 12 variants)
 3. Maps each variant to ATA risk level (1=Moderate, 2=High, 3=Highest)
 4. Converts qualitative measurements to structured numeric features
 5. Handles multiple reference ranges for calcitonin levels across studies
 6. Engineers derived features (age groups, nodule presence, variant-specific interactions)
 7. Generates two datasets:
-   - `data/processed/ret_multivariant_training_data.csv`: Original 78 patients from literature
+   - `data/processed/ret_multivariant_training_data.csv`: Original 87 patients from literature
    - `data/processed/ret_multivariant_expanded_training_data.csv`: Expanded with synthetic controls
    - `data/processed/ret_multivariant_case_control_dataset.csv`: Further expanded with variant-matched controls
 
@@ -328,11 +337,11 @@ The [create_datasets.py](src/create_datasets.py) script:
 
 **Pipeline steps (as run by `main.py`):**
 
-1. **create_datasets.py:** loads patient data from json files in [`data/raw`](data/raw) and formats into CSVs (78 patients from 4 studies, 11 variants).
+1. **create_datasets.py:** loads patient data from json files in [`data/raw`](data/raw) and formats into CSVs (87 patients from 5 studies, including the MEN2B cohort).
 2. **data_analysis.py:** Computes descriptive statistics, generates variant-specific visualizations and risk-stratified analyses.
 3. **data_expansion.py:** Produces variant-matched synthetic control samples to improve model balance.
-4. **train_model.py:** Trains models with variant features, cross-validation, SMOTE balancing, and threshold optimization.
-5. **test_model.py:** Evaluates the model on test data with variant-specific risk stratification, comprehensive metrics, and automatic comparison of all 5 models with complete patient data.
+4. **train_model.py:** Trains models with variant features, cross-validation, SMOTE balancing, and threshold optimization **and** fits the shared encoder on studies 1-4 before running MEN2B leave-one-patient-out (LOPO) evaluation.
+5. **test_model.py:** Evaluates the model on test data with variant-specific risk stratification, comprehensive metrics, automatic comparison of all 5 models, and an optional `--men2b` mode that validates the patient-level MEN2B classifier.
 6. **Artifact summary:** Includes `ret_multivariant_training_data.csv`, `ret_multivariant_expanded_training_data.csv`, `ret_multivariant_case_control_dataset.csv`, `model.pkl`, and `model_comparison_detailed_results.txt`.
 
 **Advanced features:**
@@ -394,7 +403,7 @@ The [create_datasets.py](src/create_datasets.py) script:
 men2-predictor/
 ├── data/
 │   ├── processed/                                    # Processed datasets
-│   │   ├── ret_multivariant_training_data.csv            # Original 78 patients
+│   │   ├── ret_multivariant_training_data.csv            # Original 87 patients (MEN2B included)
 │   │   ├── ret_multivariant_expanded_training_data.csv   # Expanded with synthetic controls
 │   │   └── ret_multivariant_case_control_dataset.csv     # Further expanded dataset
 │   └── raw/                                          # Raw study data (JSON)
@@ -446,7 +455,7 @@ Choose which model to train:
 
 Choose which dataset to use:
 
-- `o` or `original`: Original 78 patients (no synthetic data) ⭐ **Recommended for clinical use**
+- `o` or `original`: Original 87 patients (5-study aggregate including MEN2B, no synthetic data) ⭐ **Recommended for clinical use**
 - `e` or `expanded`: Expanded with synthetic controls + SMOTE (default)
 - `b` or `both`: Run on both datasets for comparison
 
@@ -491,6 +500,12 @@ When using `--d=both`, the pipeline:
 4. Displays a comparison table showing performance differences
 
 This mode clearly demonstrates the recall degradation from synthetic augmentation.
+
+### MEN2B Patient-Level Pipeline
+
+- `python src/train_model.py --m=logistic --d=original` now **automatically fits the shared encoder on studies 1-4, transforms MEN2B patients, and runs Leave-One-Patient-Out (LOPO) cross-validation** on the 9-patient MEN2B cohort.
+- Use `python src/train_model.py --skip-men2b ...` if you need to temporarily bypass the MEN2B workflow (e.g., during rapid experiments).
+- Evaluate the saved MEN2B classifier any time with `python src/test_model.py --men2b`, which reloads `models/men2_shared_feature_pipeline.joblib` and `saved_models/men2b_logistic_regression.pkl`, prints metrics, and writes inference summaries to `results/`.
 
 ### Model comparison with patient data
 
@@ -539,15 +554,20 @@ Patients with source_id (e.g., "33_control", "mtc_s0_control") are synthetic con
 **Model Files:**
 
 - `saved_models/{model_type}_{dataset_type}_model.pkl`
+- `saved_models/men2b_logistic_regression.pkl`
+- `models/men2_shared_feature_pipeline.joblib`
 
 **Results:**
 
 - `results/{model_type}_{dataset_type}_test_results.txt` - individual model performance summaries with embedded 95% confidence intervals
 - `results/model_comparison_{dataset_type}_detailed_results.txt` - comprehensive comparison of all models with complete patient data
 - `results/{model_type}_{dataset_type}_confidence_intervals.txt` - standalone bootstrap statistics exported during training (e.g., `results/logistic_original_confidence_intervals.txt`)
+- `results/men2b_lopo_metrics.json`, `results/men2b_lopo_predictions.csv`, `results/men2b_lopo_report.txt` - MEN2B LOPO training outputs
+- `results/men2b_inference_report.txt`, `results/men2b_inference_predictions.csv` - MEN2B patient-level inference summaries
 - `charts/roc_curves/{model_type}_{dataset_type}.png` - ROC curves with area under the curve and optimal-threshold marker
 - `charts/confusion_matrices/{model_type}_{dataset_type}.png` - paired raw-count and normalized confusion matrices
 - `charts/correlation_matrices/{model_type}_{dataset_type}.png` - feature correlation matrix for LightGBM (expanded dataset)
+- `charts/men2b_calcitonin_levels.png`, `charts/men2b_age_calcitonin.png` - MEN2B-specific exploratory figures
 
 **Logs (when using --m=all or --d=both):**
 
@@ -594,7 +614,7 @@ Patients with source_id (e.g., "33_control", "mtc_s0_control") are synthetic con
 <details>
 <summary><b>Pipeline Steps</b></summary>
 
-1. **create_datasets.py:** Loads patient data from JSON files, formats into CSV (78 patients, 11 variants)
+1. **create_datasets.py:** Loads patient data from JSON files, formats into CSV (87 patients, 12 variants)
 2. **data_analysis.py:** Computes descriptive statistics, generates visualizations
 3. **data_expansion.py:** Produces variant-matched synthetic control samples (optional)
 4. **train_model.py:** Trains models with cross-validation, SMOTE balancing, threshold optimization
@@ -633,17 +653,17 @@ Patients with source_id (e.g., "33_control", "mtc_s0_control") are synthetic con
 <details>
 <summary><b>Dataset Characteristics</b></summary>
 
-**Original Dataset:**
+- **Original Dataset:**
 
-- 78 confirmed RET germline mutation carriers
-- 11 RET variants (K666N, L790F, Y791F, V804M, S891A, C634R, C634Y, C634W, C618S, C630R, C620Y)
-- Age range: 5-90 years
+- 87 confirmed RET germline mutation carriers (78 MEN2A + 9 MEN2B)
+- 12 RET variants (K666N, L790F, Y791F, V804M, S891A, C634R, C634Y, C634W, C618S, C630R, C620Y, M918T)
+- Age range: infancy (0.5 years) through 90 years
 - Mixed gender distribution
 - ATA risk levels: Level 1 (Moderate), Level 2 (High), Level 3 (Highest)
 
 **Expanded Dataset:**
 
-- Original 78 patients + synthetic variant-matched controls
+- Original 87 patients + synthetic variant-matched controls
 - Literature-based synthetic cases for improved balance
 - SMOTE applied during training
 
@@ -661,7 +681,7 @@ Patients with source_id (e.g., "33_control", "mtc_s0_control") are synthetic con
 
 This study has several limitations that should be considered:
 
-1. **Small sample size**: 78 patients is typical for rare genetic conditions but limits statistical power
+1. **Small sample size**: 87 patients (78 MEN2A + 9 MEN2B) is typical for rare genetic conditions but still limits statistical power
 2. **Retrospective data**: Extracted from published case series, not prospective validation
 3. **Study heterogeneity**: Different calcitonin reference ranges and protocols across 4 studies
 4. **Limited diversity**: Primarily European descent patients; generalizability to other populations unknown
