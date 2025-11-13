@@ -1,0 +1,10 @@
+fold,patient_id,true_label,probability,prediction
+1,Study5_Inherited_1,0,0.486,1
+2,Study5_Inherited_2,1,0.5087,1
+3,Study5_DeNovo_1,1,0.4807,1
+4,Study5_DeNovo_2,1,0.5393,1
+5,Study5_DeNovo_3,1,0.5983,1
+6,Study5_DeNovo_4,0,0.5193,1
+7,Study5_DeNovo_5,1,0.5376,1
+8,Study5_DeNovo_6,1,0.4819,1
+9,Study5_DeNovo_7,1,0.5391,1

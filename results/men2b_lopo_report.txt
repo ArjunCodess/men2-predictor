@@ -1,0 +1,10 @@
+MEN2B Leave-One-Patient-Out Classification Report
+============================================================
+              precision    recall  f1-score   support
+
+      No MTC       0.00      0.00      0.00         2
+         MTC       0.78      1.00      0.88         7
+
+    accuracy                           0.78         9
+   macro avg       0.39      0.50      0.44         9
+weighted avg       0.60      0.78      0.68         9

@@ -1,0 +1,16 @@
+MEN2B Patient-Level Inference Summary
+============================================================
+accuracy: 0.7778
+precision: 0.7778
+recall: 1.0000
+f1: 0.8750
+roc_auc: 0.9286
+
+              precision    recall  f1-score   support
+
+      No MTC       0.00      0.00      0.00         2
+         MTC       0.78      1.00      0.88         7
+
+    accuracy                           0.78         9
+   macro avg       0.39      0.50      0.44         9
+weighted avg       0.60      0.78      0.68         9

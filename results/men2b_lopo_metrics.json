@@ -1,0 +1,12 @@
+{
+  "metrics": {
+    "threshold": 0.2,
+    "accuracy": 0.7777777777777778,
+    "precision": 0.7777777777777778,
+    "recall": 1.0,
+    "f1": 0.875,
+    "roc_auc": 0.6428571428571428
+  },
+  "n_patients": 9,
+  "folds": 9
+}
