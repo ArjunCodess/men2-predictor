@@ -1,0 +1,14 @@
+BIOMARKER INTEGRATION SUMMARY
+============================================================
+Study 5 correlation sample size: 4 pairs
+Pearson correlation (calcitonin vs CEA): -0.0989
+Regression slope: -0.0016
+Regression intercept: 1.5005
+Residual std: 0.1472
+
+MICE + PMM Imputation
+Observed CEA values before: 7
+Missing CEA values before: 75
+Strategy: mice_pmm
+MICE iterations: 20
+Missing after imputation: 0
