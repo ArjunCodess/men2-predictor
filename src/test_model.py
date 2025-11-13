@@ -675,6 +675,166 @@ def generate_correlation_matrix(model, test_patients, model_type='logistic', dat
 
     return correlation_matrix
 
+def generate_roc_curve(model, X_test, y_test, model_type='logistic', dataset_type='expanded'):
+    """Generate and save ROC curve"""
+    from sklearn.metrics import roc_curve, auc
+    
+    print("=" * 60)
+    print("GENERATING ROC CURVE")
+    print("=" * 60)
+    
+    # Create roc_curves directory if it doesn't exist
+    os.makedirs('charts/roc_curves', exist_ok=True)
+    
+    # Get predictions
+    y_pred_proba = model.predict_proba(X_test)[:, 1]
+    
+    # Calculate ROC curve
+    fpr, tpr, thresholds = roc_curve(y_test, y_pred_proba)
+    roc_auc = auc(fpr, tpr)
+    
+    # Create figure
+    plt.figure(figsize=(10, 8))
+    
+    # Plot ROC curve
+    plt.plot(fpr, tpr, color='darkorange', lw=2, 
+             label=f'ROC curve (AUC = {roc_auc:.4f})')
+    plt.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--', 
+             label='Random Classifier')
+    
+    # Add optimal threshold point
+    optimal_idx = np.argmax(tpr - fpr)
+    optimal_threshold = thresholds[optimal_idx]
+    plt.plot(fpr[optimal_idx], tpr[optimal_idx], 'ro', markersize=10,
+             label=f'Optimal Threshold = {optimal_threshold:.3f}')
+    
+    # Formatting
+    plt.xlim([0.0, 1.0])
+    plt.ylim([0.0, 1.05])
+    plt.xlabel('False Positive Rate', fontsize=12, fontweight='bold')
+    plt.ylabel('True Positive Rate', fontsize=12, fontweight='bold')
+    
+    model_names = {
+        'logistic': 'Logistic Regression',
+        'random_forest': 'Random Forest',
+        'xgboost': 'XGBoost',
+        'lightgbm': 'LightGBM',
+        'svm': 'Support Vector Machine'
+    }
+    dataset_label = "Expanded Dataset" if dataset_type == 'expanded' else "Original Dataset"
+    title = f'ROC Curve - {model_names.get(model_type, model_type)}\n{dataset_label}'
+    plt.title(title, fontsize=14, fontweight='bold', pad=20)
+    
+    plt.legend(loc="lower right", fontsize=10)
+    plt.grid(True, alpha=0.3)
+    plt.tight_layout()
+    
+    # Save figure
+    model_name_mapping = {
+        'logistic': 'logistic_regression',
+        'random_forest': 'random_forest',
+        'xgboost': 'xgboost',
+        'lightgbm': 'lightgbm',
+        'svm': 'svm'
+    }
+    full_model_name = model_name_mapping.get(model_type, model_type)
+    output_filename = f'charts/roc_curves/{full_model_name}_{dataset_type}.png'
+    plt.savefig(output_filename, dpi=300, bbox_inches='tight')
+    plt.close()
+    
+    print(f"ROC curve saved to: {output_filename}")
+    print(f"AUC: {roc_auc:.4f}")
+    print(f"Optimal threshold: {optimal_threshold:.3f}")
+    print("=" * 60)
+    
+    return roc_auc, optimal_threshold
+
+def generate_confusion_matrix(model, X_test, y_test, model_type='logistic', dataset_type='expanded'):
+    """Generate and save confusion matrix"""
+    from sklearn.metrics import confusion_matrix
+    
+    print("\n" + "=" * 60)
+    print("GENERATING CONFUSION MATRIX")
+    print("=" * 60)
+    
+    # Create confusion_matrices directory if it doesn't exist
+    os.makedirs('charts/confusion_matrices', exist_ok=True)
+    
+    # Get predictions
+    y_pred = model.predict(X_test)
+    
+    # Calculate confusion matrix
+    cm = confusion_matrix(y_test, y_pred)
+    
+    # Create figure with two subplots
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(16, 6))
+    
+    # Plot 1: Raw counts
+    sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', 
+                xticklabels=['No MTC', 'MTC'], 
+                yticklabels=['No MTC', 'MTC'],
+                cbar_kws={'label': 'Count'},
+                ax=ax1)
+    ax1.set_ylabel('True Label', fontsize=12, fontweight='bold')
+    ax1.set_xlabel('Predicted Label', fontsize=12, fontweight='bold')
+    ax1.set_title('Confusion Matrix (Counts)', fontsize=12, fontweight='bold')
+    
+    # Plot 2: Normalized (percentages)
+    cm_normalized = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
+    sns.heatmap(cm_normalized, annot=True, fmt='.2%', cmap='Blues',
+                xticklabels=['No MTC', 'MTC'],
+                yticklabels=['No MTC', 'MTC'],
+                cbar_kws={'label': 'Percentage'},
+                ax=ax2)
+    ax2.set_ylabel('True Label', fontsize=12, fontweight='bold')
+    ax2.set_xlabel('Predicted Label', fontsize=12, fontweight='bold')
+    ax2.set_title('Confusion Matrix (Normalized)', fontsize=12, fontweight='bold')
+    
+    # Overall title
+    model_names = {
+        'logistic': 'Logistic Regression',
+        'random_forest': 'Random Forest',
+        'xgboost': 'XGBoost',
+        'lightgbm': 'LightGBM',
+        'svm': 'Support Vector Machine'
+    }
+    dataset_label = "Expanded Dataset" if dataset_type == 'expanded' else "Original Dataset"
+    fig.suptitle(f'{model_names.get(model_type, model_type)} - {dataset_label}', 
+                 fontsize=14, fontweight='bold', y=1.02)
+    
+    plt.tight_layout()
+    
+    # Save figure
+    model_name_mapping = {
+        'logistic': 'logistic_regression',
+        'random_forest': 'random_forest',
+        'xgboost': 'xgboost',
+        'lightgbm': 'lightgbm',
+        'svm': 'svm'
+    }
+    full_model_name = model_name_mapping.get(model_type, model_type)
+    output_filename = f'charts/confusion_matrices/{full_model_name}_{dataset_type}.png'
+    plt.savefig(output_filename, dpi=300, bbox_inches='tight')
+    plt.close()
+    
+    print(f"Confusion matrix saved to: {output_filename}")
+    
+    # Print detailed metrics
+    tn, fp, fn, tp = cm.ravel()
+    print(f"\nConfusion Matrix Breakdown:")
+    print(f"  True Negatives (TN):  {tn:3d} - Correctly predicted No MTC")
+    print(f"  False Positives (FP): {fp:3d} - Incorrectly predicted MTC")
+    print(f"  False Negatives (FN): {fn:3d} - Missed MTC cases")
+    print(f"  True Positives (TP):  {tp:3d} - Correctly predicted MTC")
+    print(f"\nKey Metrics:")
+    print(f"  Sensitivity (Recall): {tp/(tp+fn):.2%} - % of actual MTC cases caught")
+    print(f"  Specificity:          {tn/(tn+fp):.2%} - % of actual No MTC correctly identified")
+    print(f"  Precision (PPV):      {tp/(tp+fp):.2%} - % of predicted MTC that are correct")
+    print(f"  NPV:                  {tn/(tn+fn):.2%} - % of predicted No MTC that are correct")
+    print("=" * 60)
+    
+    return cm
+
 if __name__ == "__main__":
     # parse command line arguments
     parser = argparse.ArgumentParser(description='test mtc prediction model')
@@ -721,5 +881,7 @@ if __name__ == "__main__":
     print_individual_predictions(model, test_patients, y_test)
     print_model_insights(model, X_test_scaled, y_test, test_patients)
 
-    # generate correlation matrix
+    # generate visualizations
     generate_correlation_matrix(model, test_patients, model_type, dataset_type)
+    generate_roc_curve(model, X_test_scaled, y_test, model_type, dataset_type)
+    generate_confusion_matrix(model, X_test_scaled, y_test, model_type, dataset_type)
