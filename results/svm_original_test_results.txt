@@ -1,9 +1,11 @@
 SUPPORT_VECTOR_MACHINE TEST RESULTS (ORIGINAL)
 ==================================================
-Accuracy: 0.8750
-Precision: 0.7500
-Recall: 1.0000
-F1 Score: 0.8571
-ROC AUC: 0.8667
+Accuracy: 0.8750 (95% CI: [0.8125, 1.0000])
+Precision: 0.7500 (95% CI: [1.0000, 1.0000])
+Recall: 1.0000 (95% CI: [0.5000, 1.0000])
+F1 Score: 0.8571 (95% CI: [0.6667, 1.0000])
+ROC AUC: 0.8667 (95% CI: [1.0000, 1.0000])
 Average Precision: 0.7579
 ==================================================
+
+Bootstrap method: 1000 iterations, 95% confidence level

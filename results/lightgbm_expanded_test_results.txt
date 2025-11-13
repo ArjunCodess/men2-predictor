@@ -1,9 +1,11 @@
 LIGHTGBM TEST RESULTS (EXPANDED)
 ==================================================
-Accuracy: 0.9346
-Precision: 0.9375
-Recall: 0.7143
-F1 Score: 0.8108
-ROC AUC: 0.9867
+Accuracy: 0.9346 (95% CI: [0.8879, 0.9720])
+Precision: 0.9375 (95% CI: [0.8000, 1.0000])
+Recall: 0.7143 (95% CI: [0.5217, 0.8949])
+F1 Score: 0.8108 (95% CI: [0.6667, 0.9286])
+ROC AUC: 0.9867 (95% CI: [0.9650, 1.0000])
 Average Precision: 0.9576
 ==================================================
+
+Bootstrap method: 1000 iterations, 95% confidence level
