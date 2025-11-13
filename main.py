@@ -69,16 +69,17 @@ def extract_model_metrics(model_type, dataset_type='expanded'):
 
             # Extract key metrics using simple parsing
             for line in content.split('\n'):
+                # Split on colon first, then remove CI portion if present
                 if 'Accuracy:' in line:
-                    metrics['accuracy'] = float(line.split(':')[1].strip())
+                    metrics['accuracy'] = float(line.split(':')[1].split('(')[0].strip())
                 elif 'Precision:' in line:
-                    metrics['precision'] = float(line.split(':')[1].strip())
+                    metrics['precision'] = float(line.split(':')[1].split('(')[0].strip())
                 elif 'Recall:' in line:
-                    metrics['recall'] = float(line.split(':')[1].strip())
+                    metrics['recall'] = float(line.split(':')[1].split('(')[0].strip())
                 elif 'F1 Score:' in line:
-                    metrics['f1_score'] = float(line.split(':')[1].strip())
+                    metrics['f1_score'] = float(line.split(':')[1].split('(')[0].strip())
                 elif 'ROC AUC:' in line:
-                    metrics['roc_auc'] = float(line.split(':')[1].strip())
+                    metrics['roc_auc'] = float(line.split(':')[1].split('(')[0].strip())
     except Exception as e:
         print(f"Warning: Could not extract metrics for {model_type}: {e}")
         return None
