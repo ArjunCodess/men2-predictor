@@ -1,0 +1,151 @@
+{
+  "study_id": "study_8",
+  "study_info": {
+    "title": "A Rare Case of Negative Serum Calcitonin in Metastatic Medullary Thyroid Carcinoma: Diagnosis, Treatment, and Follow-Up Strategy",
+    "journal": "American Journal of Case Reports",
+    "authors": "Lorena Licata, Cristina A. Di Fidio, Marco Vacante, Francesco Basile, Antonio Biondi, Pierina Richiusa, Alessandra Gurrera, Roberto Ciuni",
+    "publication_year": 2022,
+    "doi": "10.12659/AJCR.935207",
+    "country": "Italy",
+    "study_type": "Case report",
+    "keywords": [
+      "Calcitonin",
+      "procalcitonin",
+      "Thyroid Cancer",
+      "Medullary",
+      "RET Protein",
+      "Human",
+      "Carcinoma",
+      "Neuroendocrine",
+      "Follow-Up Studies",
+      "Humans",
+      "Male",
+      "Thyroid Neoplasms"
+    ]
+  },
+  "variant_info": {
+    "ret_variant": {
+      "cDNA": "c.2410G>A",
+      "protein": "p.Val804Met",
+      "exon": 14,
+      "zygosity": "heterozygous",
+      "confirmation_method": "sequencing on 2 independent samples"
+    }
+  },
+  "patient_data": {
+    "patient_id": "Proband",
+    "sex": "Male",
+    "age": 39,
+    "clinical_presentation": "Slightly painful 2.5-cm left laterocervical mass at level III, normal thyroid function, normal Ab TPO and Ab Tg. Ultrasound: hypoechoic nodule 0.7×0.38 cm left middle lobe. Initial diagnosis compatible with schwannoma.",
+    "comorbidities": ["bilateral congenital neurosensory deafness"],
+    "biochemical_results": [
+      {
+        "test": "calcitonin",
+        "value": 4,
+        "unit": "pg/L",
+        "reference_range": "<8 pg/L"
+      },
+      {
+        "test": "CEA",
+        "value": 3.7,
+        "unit": "ng/mL",
+        "reference_range": "0-5"
+      },
+      {
+        "test": "Pro-CT",
+        "value": "normal",
+        "unit": null,
+        "reference_range": "Unknown"
+      },
+      {
+        "test": "Chromogranin A",
+        "value": "Unknown",
+        "unit": "ng/mL",
+        "reference_range": "Unknown"
+      },
+      {
+        "test": "NSE",
+        "value": "slightly above normal",
+        "unit": "mcg/L",
+        "reference_range": "Unknown"
+      },
+      {
+        "test": "Parathyroid hormone",
+        "value": 44.6,
+        "unit": "pg/mL",
+        "reference_range": "Unknown"
+      }
+    ],
+    "imaging": [
+      {
+        "modality": "Ultrasound",
+        "finding": "hypoechoic nodule 0.7 × 0.38 cm left middle lobe. Preoperative: 0.4 cm right lobe nodule; 0.7 × 0.38 cm left lobe nodule."
+      },
+      {
+        "modality": "CT/MRI",
+        "finding": "lateral cervical mass compatible with schwannoma"
+      },
+      { "modality": "18F-DOPA PET", "finding": "no distant metastases" }
+    ],
+    "biopsy": {
+      "site": "lateral cervical mass",
+      "diagnosis": "metastatic medullary thyroid carcinoma",
+      "ihc": {
+        "calcitonin": "positive",
+        "CEA": "positive",
+        "Chromogranin A": "positive",
+        "Synaptophysin": "positive",
+        "CK7": "positive",
+        "Vimentin": "positive",
+        "Thyroglobulin": "negative"
+      }
+    },
+    "surgery": {
+      "procedure": "total thyroidectomy + bilateral central neck dissection + left lateral dissection",
+      "indication": "metastatic MTC",
+      "date_relative": null
+    },
+    "pathology": {
+      "diagnosis": "bilateral medullary thyroid carcinoma",
+      "tumor_sizes_cm": [0.3, 0.3],
+      "features": {
+        "amyloid_stroma": true,
+        "c_cell_hyperplasia": true,
+        "venous_vascular_invasion": true,
+        "extrathyroidal_extension": false
+      },
+      "lymph_nodes": {
+        "central_nodes_positive": 2,
+        "lateral_nodes_positive": 1
+      },
+      "staging_final": "pT1a(m) N1b stage IVa"
+    },
+    "postoperative_labs": [
+      { "timepoint": "1.5 months", "calcitonin": 1.8, "unit": "pg/mL" },
+      { "timepoint": "3 months", "chromogranin_A": 96.2, "nse": 9.4 }
+    ],
+    "family_genetics": [
+      { "relation": "mother", "ret_status": "heterozygous p.Val804Met" },
+      { "relation": "son", "ret_status": "heterozygous p.Val804Met" }
+    ],
+    "follow_up": {
+      "duration_years": 3,
+      "recurrence": "none",
+      "imaging_followup": "neck US, liver US, chest X-ray all negative"
+    },
+    "notes": "Diagnosis difficult due to CT-negative and imaging initially compatible with schwannoma. Multiple hypotheses for CT-negativity discussed (dedifferentiation, protein-misfolding, hook effect). To prevent hook effect error, 1:10 and 1:100 dilutions of serum performed; findings were normal. Patient classified as double-negative (serum CT and markers negative), challenging diagnosis. Relapse follow-up relied on imaging and 18F-DOPA PET; all negative for metastases."
+  },
+  "figures": {
+    "Figure1_caption": "Intense immunohistochemical staining of tumor cells for calcitonin. IHC of a histologic section of Ct-negative medullary thyroid carcinoma stained with anti-calcitonin antibody.",
+    "Figure2_caption": "Transection of MTC. Histologic section of medullary thyroid carcinoma characterized by dense bands of fibrous tissue (black arrow) and trabecular or sheetlike growth pattern (red arrow). Cells appear round, polygonal, or spindle-shaped. The cytoplasm is eosinophilic and finely granular (blue circle)."
+  },
+  "tables": {
+    "Table1": "Cases of CT- negative MTC reported in the literature, with their time of diagnosis and surgical specimen characteristics.",
+    "Table2": "CT-negative patients' outcome in relation to preoperative and postoperative tumor marker concentrations.",
+    "Table3": "Histologic characteristics and RET mutation in CT-negative and CT-positive patients."
+  },
+  "validation_checks": {
+    "all_values_from_text": true,
+    "no_hallucinations": true
+  }
+}
