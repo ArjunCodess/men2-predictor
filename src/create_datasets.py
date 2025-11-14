@@ -10,6 +10,21 @@ from sklearn.experimental import enable_iterative_imputer  # noqa: F401
 from sklearn.impute import IterativeImputer
 from sklearn.linear_model import LinearRegression
 
+STUDY_NAME_MAP = {
+    "study_1": "JCEM Case Reports (2025)",
+    "study_2": "EDM Case Reports (2024)",
+    "study_3": "Thyroid Journal (2016)",
+    "study_4": "European Journal of Endocrinology (2006)",
+    "study_5": "Laryngoscope (2021) MEN2A Penetrance",
+    "ret_k666n_homozygous_2018": "JCEM (2018) Homozygous RET K666N",
+    "ret_s891a_fmtc_ca_2015": "Oncotarget (2015) RET S891A FMTC"
+}
+
+
+def get_study_display_name(study_id):
+    """map internal identifiers to human-readable names"""
+    return STUDY_NAME_MAP.get(study_id, study_id)
+
 
 def normalize_patient_record(patient):
     """harmonize field names across studies before dataframe creation"""
@@ -24,10 +39,21 @@ def normalize_patient_record(patient):
     if 'relationship' not in record and record.get('relationship_in_family'):
         record['relationship'] = record['relationship_in_family']
 
-    if not record.get('ret_variant') and record.get('genotype'):
-        match = re.search(r'([A-Z]\d+[A-Z])', record['genotype'])
-        if match:
-            record['ret_variant'] = match.group(1)
+    if 'gender' not in record and record.get('sex'):
+        sex_value = str(record['sex']).strip().lower()
+        if sex_value in {'female', 'f'}:
+            record['gender'] = 'Female'
+        elif sex_value in {'male', 'm'}:
+            record['gender'] = 'Male'
+
+    genotype_field = record.get('genotype')
+    if not record.get('ret_variant') and genotype_field:
+        genotype_values = genotype_field if isinstance(genotype_field, list) else [genotype_field]
+        for genotype in genotype_values:
+            match = re.search(r'([A-Z]\d+[A-Z])', str(genotype))
+            if match:
+                record['ret_variant'] = match.group(1)
+                break
 
     if 'mtc_diagnosis' not in record and record.get('medullary_thyroid_carcinoma_present'):
         record['mtc_diagnosis'] = record['medullary_thyroid_carcinoma_present']
@@ -38,6 +64,42 @@ def normalize_patient_record(patient):
     if 'hyperparathyroidism' not in record and record.get('primary_hyperparathyroidism_present'):
         record['hyperparathyroidism'] = record['primary_hyperparathyroidism_present']
 
+    if not record.get('biochemical_values') and isinstance(record.get('biochemical_data'), list):
+        bio_values = {}
+
+        def append_measurement(key, raw_value, normal_value=None):
+            values = parse_numeric_measurements(raw_value, normal_value=normal_value)
+            if not values:
+                return
+            if key not in bio_values:
+                bio_values[key] = values if len(values) > 1 else values[0]
+            else:
+                existing = bio_values[key]
+                if not isinstance(existing, list):
+                    existing = [existing]
+                existing.extend(values)
+                bio_values[key] = existing
+
+        for entry in record['biochemical_data']:
+            test_name = str(entry.get('test') or '').lower()
+            raw_value = entry.get('value')
+            if not test_name or raw_value is None:
+                continue
+            if isinstance(raw_value, str):
+                stripped = raw_value.strip()
+                if not stripped or stripped.lower() in {'unknown', 'nid'}:
+                    continue
+                raw_value = stripped
+            elif isinstance(raw_value, list) and not raw_value:
+                continue
+            if 'calcitonin' in test_name:
+                append_measurement('calcitonin_pg_per_ml', raw_value, normal_value=0.2)
+            elif 'cea' in test_name:
+                append_measurement('CEA_ng_per_ml', raw_value)
+
+        if bio_values:
+            record['biochemical_values'] = bio_values
+
     return record
 
 
@@ -46,6 +108,11 @@ def parse_numeric_measurements(value, normal_value=None):
     results = []
     if value is None or (isinstance(value, float) and np.isnan(value)):
         return results
+
+    if isinstance(value, dict):
+        for entry in value.values():
+            results.extend(parse_numeric_measurements(entry, normal_value))
+        return [float(v) for v in results if v is not None]
 
     if isinstance(value, list):
         for entry in value:
@@ -60,6 +127,9 @@ def parse_numeric_measurements(value, normal_value=None):
         if not cleaned:
             return results
         lowered = cleaned.lower()
+        missing_tokens = ['unknown', 'na', 'n/a', 'not available']
+        if any(token in lowered for token in missing_tokens):
+            return results
         normal_tokens = ['undetectable', 'normal', 'not detected', 'not specified', 'nid']
         if any(token in lowered for token in normal_tokens):
             if normal_value is not None:
@@ -79,27 +149,16 @@ def summarize_measurements(values):
     return float(np.median(cleaned))
 
 
-def build_study5_biomarker_pairs(study_entry):
-    """flatten study 5 biomarker arrays into paired dataframe"""
-    if not study_entry:
-        return pd.DataFrame(columns=['calcitonin_level_numeric', 'cea_level_numeric'])
+def build_biomarker_pairs(df):
+    """collect all observed calcitonin and CEA pairs"""
+    required_cols = ['patient_id', 'study_id', 'calcitonin_level_numeric', 'cea_level_numeric']
+    if not set(required_cols).issubset(df.columns):
+        return pd.DataFrame(columns=required_cols)
 
-    rows = []
-    for patient in study_entry.get('patient_data', []):
-        bio = patient.get('biochemical_values', {}) or {}
-        calc_values = parse_numeric_measurements(bio.get('calcitonin_pg_per_ml'), normal_value=None)
-        cea_values = parse_numeric_measurements(bio.get('CEA_ng_per_ml'), normal_value=None)
-        if not calc_values or not cea_values:
-            continue
-        pair_count = min(len(calc_values), len(cea_values))
-        for idx in range(pair_count):
-            rows.append({
-                'patient_id': patient.get('patient_id'),
-                'calcitonin_level_numeric': float(calc_values[idx]),
-                'cea_level_numeric': float(cea_values[idx])
-            })
-
-    return pd.DataFrame(rows)
+    observed = df.dropna(subset=['calcitonin_level_numeric', 'cea_level_numeric']).copy()
+    if observed.empty:
+        return pd.DataFrame(columns=required_cols)
+    return observed[required_cols]
 
 
 def fit_biomarker_regression(pairs_df):
@@ -166,17 +225,17 @@ def predictive_mean_matching(observed_series, predicted_series, n_neighbors=5):
     return adjusted
 
 
-def run_mice_pmm_imputation(df, study5_pairs):
+def run_mice_pmm_imputation(df, observed_pairs):
     """execute MICE (IterativeImputer) followed by PMM adjustment"""
     info = {
         'observed_before': int(df['cea_level_numeric'].notna().sum()),
         'missing_before': int(df['cea_level_numeric'].isna().sum())
     }
 
-    if info['missing_before'] == 0 or study5_pairs.empty:
+    if info['missing_before'] == 0 or observed_pairs.empty:
         df['cea_imputed_flag'] = df['cea_level_numeric'].isna().astype(int)
         info['missing_after'] = info['missing_before']
-        info['strategy'] = 'skipped' if study5_pairs.empty else 'not_required'
+        info['strategy'] = 'skipped' if observed_pairs.empty else 'not_required'
         info['mice_iterations'] = 0
         return df, info
 
@@ -187,7 +246,7 @@ def run_mice_pmm_imputation(df, study5_pairs):
         min_value=0.0,
         imputation_order='ascending'
     )
-    imputer.fit(study5_pairs[['calcitonin_level_numeric', 'cea_level_numeric']])
+    imputer.fit(observed_pairs[['calcitonin_level_numeric', 'cea_level_numeric']])
 
     transformed = imputer.transform(df[['calcitonin_level_numeric', 'cea_level_numeric']])
     predicted_cea = pd.Series(transformed[:, 1], index=df.index)
@@ -203,13 +262,14 @@ def run_mice_pmm_imputation(df, study5_pairs):
     return df, info
 
 
-def save_biomarker_summary(summary_path, correlation_value, study5_pairs, imputation_info, regression_params):
+def save_biomarker_summary(summary_path, correlation_value, observed_pairs, imputation_info, regression_params):
     """persist textual summary of biomarker processing"""
     summary_path.parent.mkdir(parents=True, exist_ok=True)
     with open(summary_path, 'w', encoding='utf-8') as f:
         f.write("BIOMARKER INTEGRATION SUMMARY\n")
         f.write("=" * 60 + "\n")
-        f.write(f"Study 5 correlation sample size: {len(study5_pairs)} pairs\n")
+        study_count = observed_pairs['study_id'].nunique() if not observed_pairs.empty else 0
+        f.write(f"Observed correlation sample size: {len(observed_pairs)} pairs across {study_count} studies\n")
         if np.isnan(correlation_value):
             f.write("Pearson correlation: insufficient data\n")
         else:
@@ -217,6 +277,10 @@ def save_biomarker_summary(summary_path, correlation_value, study5_pairs, imputa
         f.write(f"Regression slope: {regression_params.get('slope'):.4f}\n")
         f.write(f"Regression intercept: {regression_params.get('intercept'):.4f}\n")
         f.write(f"Residual std: {regression_params.get('residual_std'):.4f}\n")
+        if not observed_pairs.empty:
+            f.write("Pair contributions by study:\n")
+            for study_id, count in observed_pairs['study_id'].value_counts().items():
+                f.write(f"- {get_study_display_name(study_id)}: {count} pairs\n")
         f.write("\nMICE + PMM Imputation\n")
         f.write(f"Observed CEA values before: {imputation_info['observed_before']}\n")
         f.write(f"Missing CEA values before: {imputation_info['missing_before']}\n")
@@ -225,35 +289,28 @@ def save_biomarker_summary(summary_path, correlation_value, study5_pairs, imputa
         f.write(f"Missing after imputation: {imputation_info['missing_after']}\n")
 
 
-def save_biomarker_plot(study5_pairs_df, df):
+def save_biomarker_plot(observed_pairs_df, df):
     """plot correlation and imputed distributions"""
-    if study5_pairs_df.empty:
+    if observed_pairs_df.empty:
         return
 
     os.makedirs('charts', exist_ok=True)
     plt.style.use('seaborn-v0_8')
     fig, ax = plt.subplots(figsize=(8, 6))
 
-    ax.scatter(
-        study5_pairs_df['calcitonin_level_numeric'],
-        study5_pairs_df['cea_level_numeric'],
-        label='Study 5 Observed',
-        color='tab:blue',
-        s=60
-    )
-
-    observed_df = df[df['cea_imputed_flag'] == 0]
-    imputed_df = df[df['cea_imputed_flag'] == 1]
-
-    if not observed_df.empty:
+    unique_studies = observed_pairs_df['study_id'].unique()
+    cmap = plt.get_cmap('tab20', max(len(unique_studies), 1))
+    for idx, study_id in enumerate(unique_studies):
+        subset = observed_pairs_df[observed_pairs_df['study_id'] == study_id]
         ax.scatter(
-            observed_df['calcitonin_level_numeric'],
-            observed_df['cea_level_numeric'],
-            label='Observed (All Studies)',
-            color='tab:orange',
-            marker='x',
-            s=70
+            subset['calcitonin_level_numeric'],
+            subset['cea_level_numeric'],
+            label=get_study_display_name(study_id),
+            color=cmap(idx),
+            s=60
         )
+
+    imputed_df = df[df['cea_imputed_flag'] == 1]
 
     if not imputed_df.empty:
         ax.scatter(
@@ -282,16 +339,25 @@ def create_paper_dataset():
 
     # load study data
     studies = []
-    for study_file in ['study_1.json', 'study_2.json', 'study_3.json', 'study_4.json', 'study_5.json']:
-        with open(os.path.join(dataset_dir, study_file), 'r') as f:
+    study_files = [
+        'study_1.json',
+        'study_2.json',
+        'study_3.json',
+        'study_4.json',
+        'study_5.json',
+        'study_6.json',
+        'study_7.json'
+    ]
+    for study_file in study_files:
+        with open(os.path.join(dataset_dir, study_file), 'r', encoding='utf-8') as f:
             studies.append(json.load(f))
 
     # load literature data
-    with open(os.path.join(dataset_dir, 'literature_data.json'), 'r') as f:
+    with open(os.path.join(dataset_dir, 'literature_data.json'), 'r', encoding='utf-8') as f:
         literature_data = json.load(f)
 
     # load mutation characteristics
-    with open(os.path.join(dataset_dir, 'mutation_characteristics.json'), 'r') as f:
+    with open(os.path.join(dataset_dir, 'mutation_characteristics.json'), 'r', encoding='utf-8') as f:
         mutation_characteristics = json.load(f)
 
     # combine into paper_data structure
@@ -300,8 +366,6 @@ def create_paper_dataset():
         "literature_data": literature_data,
         "mutation_characteristics": mutation_characteristics
     }
-    study5_entry = next((study for study in paper_data["studies"] if study.get("study_id") == "study_5"), None)
-
     # combine patient data from all studies
     all_patients = []
     source_id_counter = 0
@@ -389,24 +453,27 @@ def create_paper_dataset():
 
     df['cea_level_numeric'] = df.apply(extract_cea_numeric, axis=1)
 
-    study5_pairs_df = build_study5_biomarker_pairs(study5_entry)
+    biomarker_pairs_df = build_biomarker_pairs(df)
     correlation_value = np.nan
-    if not study5_pairs_df.empty and study5_pairs_df['cea_level_numeric'].nunique() > 1:
-        correlation_value = study5_pairs_df['calcitonin_level_numeric'].corr(study5_pairs_df['cea_level_numeric'])
+    if not biomarker_pairs_df.empty and biomarker_pairs_df['cea_level_numeric'].nunique() > 1:
+        correlation_value = biomarker_pairs_df['calcitonin_level_numeric'].corr(biomarker_pairs_df['cea_level_numeric'])
 
-    regression_params = fit_biomarker_regression(study5_pairs_df)
-    biomarker_pairs = study5_pairs_df[['calcitonin_level_numeric', 'cea_level_numeric']] if not study5_pairs_df.empty else study5_pairs_df
-    df, imputation_info = run_mice_pmm_imputation(df, biomarker_pairs)
+    regression_input = biomarker_pairs_df[['calcitonin_level_numeric', 'cea_level_numeric']] \
+        if not biomarker_pairs_df.empty else biomarker_pairs_df
+    regression_params = fit_biomarker_regression(regression_input)
+    df, imputation_info = run_mice_pmm_imputation(df, biomarker_pairs_df)
     df['cea_elevated'] = (df['cea_level_numeric'].fillna(0) > 5).astype(int)
 
     summary_path = Path('results') / 'biomarker_ceaimputation_summary.txt'
-    save_biomarker_summary(summary_path, correlation_value, study5_pairs_df, imputation_info, regression_params)
-    save_biomarker_plot(study5_pairs_df, df)
+    save_biomarker_summary(summary_path, correlation_value, biomarker_pairs_df, imputation_info, regression_params)
+    save_biomarker_plot(biomarker_pairs_df, df)
 
     if np.isnan(correlation_value):
-        print("Study 5 calcitonin<->CEA correlation: insufficient paired data for Pearson computation.")
+        print("Calcitonin<->CEA correlation: insufficient paired data across studies.")
     else:
-        print(f"Study 5 calcitonin<->CEA correlation (n={len(study5_pairs_df)} pairs): {correlation_value:.3f}")
+        pair_count = len(biomarker_pairs_df)
+        study_count = biomarker_pairs_df['study_id'].nunique()
+        print(f"Calcitonin<->CEA correlation (n={pair_count} pairs across {study_count} studies): {correlation_value:.3f}")
     print(f"CEA imputation strategy: {imputation_info['strategy']} "
           f"(missing {imputation_info['missing_before']} -> {imputation_info['missing_after']})")
     
@@ -619,17 +686,7 @@ def print_dataset_info(df1, df2):
     print("STUDY BREAKDOWN:")
     study_counts = df1['study_id'].value_counts()
     for study_id, count in study_counts.items():
-        if study_id == "study_1":
-            study_name = "JCEM Case Reports (2025)"
-        elif study_id == "study_2":
-            study_name = "EDM Case Reports (2024)"
-        elif study_id == "study_3":
-            study_name = "Thyroid Journal (2016)"
-        elif study_id == "study_4":
-            study_name = "European Journal of Endocrinology (2006)"
-        else:
-            study_name = study_id
-        print(f"- {study_name}: {count} patients")
+        print(f"- {get_study_display_name(study_id)}: {count} patients")
     print()
 
     # variant breakdown
