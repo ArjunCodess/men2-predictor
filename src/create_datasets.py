@@ -3,6 +3,8 @@ import os
 import re
 from pathlib import Path
 
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -12,7 +14,7 @@ from sklearn.linear_model import LinearRegression
 
 STUDY_NAME_MAP = {
     "study_1": "JCEM Case Reports (2025)",
-    "study_2": "EDM Case Reports (2024)",
+    "study_2": "JCEM (2016) RET Exon 7 Deletion",
     "study_3": "Thyroid Journal (2016)",
     "study_4": "European Journal of Endocrinology (2006)",
     "study_5": "Laryngoscope (2021) MEN2A Penetrance",
@@ -68,6 +70,12 @@ def normalize_variant_code(variant_text):
         return None
     text = str(variant_text).strip()
     text = text.replace("p.", "")
+    text = text.replace("P.", "")
+    del_match = re.match(r"([A-Za-z]{1,3})(\d+)_([A-Za-z]{1,3})(\d+)(del.*)", text, re.IGNORECASE)
+    if del_match:
+        start, pos1, end, pos2, suffix = del_match.groups()
+        suffix = suffix.lower()
+        return f"{amino_acid_to_one(start)}{pos1}_{amino_acid_to_one(end)}{pos2}{suffix}"
     match = re.match(r"([A-Za-z]{1,3})(\d+)([A-Za-z]{1,3})", text)
     if match:
         start, pos, end = match.groups()
@@ -169,6 +177,53 @@ def convert_biochemical_entries(entries, test_key="test", value_key="value"):
         }
         converted.append(normalized)
     return converted
+
+
+def build_study2_patients(study):
+    """convert RET exon 7 deletion case report"""
+    variant = parse_ret_variant_string((study.get("variant_info") or {}).get("protein")) or "E505_G506del"
+    patients = []
+    for record in study.get("patient_data", []):
+        mtc_info = record.get("mtc", {})
+        mtc_biochem = mtc_info.get("biochemistry") or {}
+        basal_calcitonin = mtc_biochem.get("basal_calcitonin", {})
+        stimulated_calcitonin = mtc_biochem.get("pentagastrin_stimulated_calcitonin", {})
+        bio_entries = []
+        if basal_calcitonin:
+            bio_entries.append({
+                "test": "calcitonin",
+                "value": basal_calcitonin.get("value"),
+                "unit": basal_calcitonin.get("unit"),
+                "reference_range": basal_calcitonin.get("normal")
+            })
+        if stimulated_calcitonin:
+            bio_entries.append({
+                "test": "stimulated_calcitonin",
+                "value": stimulated_calcitonin.get("value"),
+                "unit": stimulated_calcitonin.get("unit"),
+                "reference_range": stimulated_calcitonin.get("normal")
+            })
+        patient = {
+            "patient_id": f"{study.get('study_id', 'study_2')}_{record.get('patient_id', 'proband')}",
+            "age": record.get("age_mtc") or record.get("age_pheo"),
+            "gender": record.get("sex"),
+            "relationship": "Proband",
+            "ret_variant": variant,
+            "men2_syndrome": "Yes",
+            "mtc_diagnosis": "Yes",
+            "pheochromocytoma": "Yes",
+            "hyperparathyroidism": "No",
+            "family_history_mtc": "No",
+            "calcitonin_level": basal_calcitonin.get("value"),
+            "calcitonin_normal_range": basal_calcitonin.get("normal"),
+            "cea_level": None,
+            "thyroid_ultrasound": (mtc_info.get("ultrasound") or {}).get("nodule_size"),
+            "family_screening": "Yes" if study.get("family_screening") else "No"
+        }
+        if bio_entries:
+            patient["biochemical_data"] = bio_entries
+        patients.append(patient)
+    return patients
 
 
 def prepare_study8_patients(study):
@@ -414,6 +469,8 @@ def build_study13_patients(study):
 def extract_patients_from_study(study):
     """extract patient objects regardless of original study schema"""
     study_id = study.get("study_id")
+    if study_id == "study_2":
+        return build_study2_patients(study)
     if study_id == "study_8":
         return prepare_study8_patients(study)
     if study_id == "study_9":
@@ -878,6 +935,7 @@ def create_paper_dataset():
         'A883F': 3,
         'C620W': 2,
         'C630G': 2,
+        'E505_G506del': 2,
         'E632_C634del': 3,
         'E632_L633del': 3,
         'V899_E902del': 2,
