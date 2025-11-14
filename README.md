@@ -1,15 +1,14 @@
 # MEN2 Predictor: Rare Disease ML with Critical Discovery
-`
+
 ![Accuracy](https://img.shields.io/badge/Accuracy-94.85%25-brightgreen)
 ![Recall](https://img.shields.io/badge/Recall%20(Original)-100%25-success)
 ![Recall Drop](https://img.shields.io/badge/Recall%20(Expanded)-77--91%25-critical)
 ![Models](https://img.shields.io/badge/Models-5-blue)
 ![Variants](https://img.shields.io/badge/RET%20Variants-11-blue)
-`
+
 > **dYZ_ Key Finding:** After integrating two new peer-reviewed cohorts (RET K666N homozygous, RET S891A FMTC/CA), the paper-only dataset now covers **103 real patients** and logistic regression still hits **100% recall**. Synthetic augmentation boosts accuracy to 95% but still **cuts recall by up to 9%** on the safest models, proving that high accuracy does not guarantee zero missed cancers.
-`
+
 ## Table of Contents
-`
 - [Key Findings](#key-findings)
 - [About The Project](#about-the-project)
 - [Clinical Performance](#clinical-performance)
@@ -53,7 +52,6 @@ Synthetic variant-matched controls + SMOTE enlarge the training pool to 123 reco
 The two new cohorts prove that even as the real dataset grows to 103 patients, synthetic augmentation remains volatile. Accuracy headlines (94-95%) hide clinically meaningful recall shifts. Every percentage point of recall lost now corresponds to a real patient in these cohorts, so preserving perfect sensitivity is still the only safe deployment strategy.
 
 ### Learning Paradigm Coverage
-### Learning Paradigm Coverage
 
 This project implements **five complementary machine learning approaches** across three learning paradigms:
 
@@ -77,7 +75,6 @@ This comprehensive coverage ensures findings generalize across fundamentally dif
 - `create_datasets.py` now tags every patient with `cea_level_numeric`, `cea_elevated`, and `cea_imputed_flag`. Ten true observations seed the **MICE + Predictive Mean Matching** pipeline that fills the remaining **93 gaps** while re-using observed donor values.
 - Full provenance is saved in `results/biomarker_ceaimputation_summary.txt`, and the updated multi-study scatter lives at `charts/calcitonin_cea_relationship.png`.
 
-## About The Project
 ## About The Project
 
 MEN2 (Multiple Endocrine Neoplasia type 2) is a rare hereditary cancer syndrome caused by RET gene mutations. This project developed machine learning models to predict MTC (medullary thyroid carcinoma) risk across **11 different RET variants** using clinical and genetic features from **103 confirmed carriers** across 7 peer-reviewed research studies.
@@ -115,7 +112,6 @@ MEN2 (Multiple Endocrine Neoplasia type 2) is a rare hereditary cancer syndrome 
 
 **Recommendation:** Use original dataset models for clinical deployment. Accuracy bumps of ~10% are not worth losing perfect sensitivity when each additional missed case now corresponds to a real patient.
 
-## Scientific Contribution
 ## Scientific Contribution
 
 This project makes three critical contributions to medical machine learning:
@@ -279,7 +275,7 @@ The dataset includes the following structured clinical and genetic features:
 
 ### Dataset Organization
 
-the raw clinical data is stored in the [`data/raw`](data/raw) folder as structured json files:
+The raw clinical data is stored in the [`data/raw`](data/raw) folder as structured json files:
 
 - **[study_1.json](data/raw/study_1.json)**: JCEM Case Reports (2025) - 4 patients (K666N)
 - **[study_2.json](data/raw/study_2.json)**: EDM Case Reports (2024) - 4 patients (K666N)
@@ -396,7 +392,6 @@ The [create_datasets.py](src/create_datasets.py) script:
 3. Install dependencies:
    ```sh
    pip install -r requirements.txt
-`
    ```
 
 ### Project Structure
@@ -466,7 +461,7 @@ python main.py --m=random_forest --d=both
 
 # ⚠️ NOT RECOMMENDED: Expanded dataset (lower recall for safest models)
 python main.py --m=random_forest --d=expanded  # Only for research comparison
-`
+```
 
 
 ### Model Comparison Mode
