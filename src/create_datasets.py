@@ -16,9 +16,427 @@ STUDY_NAME_MAP = {
     "study_3": "Thyroid Journal (2016)",
     "study_4": "European Journal of Endocrinology (2006)",
     "study_5": "Laryngoscope (2021) MEN2A Penetrance",
+    "study_6": "JCEM (2018) Homozygous RET K666N",
+    "study_7": "Oncotarget (2015) RET S891A FMTC",
+    "study_8": "AJCR (2022) Calcitonin-Negative MTC",
+    "study_9": "JCEM (2022) ctDNA Cohort",
+    "study_10": "Genes (2022) RET c.1901G>A Family",
+    "study_11": "BMC Pediatrics (2020) MEN2B Case",
+    "study_12": "Annales d'Endocrinologie (2015) RET Y791F",
+    "study_13": "Surgery Today (2014) RET S891A Pheo",
     "ret_k666n_homozygous_2018": "JCEM (2018) Homozygous RET K666N",
     "ret_s891a_fmtc_ca_2015": "Oncotarget (2015) RET S891A FMTC"
 }
+
+AMINO_ACID_MAP = {
+    "ala": "A",
+    "arg": "R",
+    "asn": "N",
+    "asp": "D",
+    "cys": "C",
+    "gln": "Q",
+    "glu": "E",
+    "gly": "G",
+    "his": "H",
+    "ile": "I",
+    "leu": "L",
+    "lys": "K",
+    "met": "M",
+    "phe": "F",
+    "pro": "P",
+    "ser": "S",
+    "thr": "T",
+    "trp": "W",
+    "tyr": "Y",
+    "val": "V"
+}
+
+
+def amino_acid_to_one(code):
+    """convert 3-letter amino acid shorthand into 1-letter"""
+    if not code:
+        return ""
+    cleaned = str(code).strip().lower()
+    if len(cleaned) == 1:
+        return cleaned.upper()
+    return AMINO_ACID_MAP.get(cleaned, cleaned[0].upper())
+
+
+def normalize_variant_code(variant_text):
+    """normalize variant notation such as p.Cys634Tyr into C634Y"""
+    if not variant_text:
+        return None
+    text = str(variant_text).strip()
+    text = text.replace("p.", "")
+    match = re.match(r"([A-Za-z]{1,3})(\d+)([A-Za-z]{1,3})", text)
+    if match:
+        start, pos, end = match.groups()
+        return f"{amino_acid_to_one(start)}{pos}{amino_acid_to_one(end)}"
+    return text.upper().replace(" ", "")
+
+
+def parse_ret_variant_string(raw_value):
+    """extract a normalized RET variant from free text"""
+    if not raw_value:
+        return None
+    text = str(raw_value).strip()
+    # remove gene label if present
+    if " " in text and text.upper().startswith("RET"):
+        text = text.split(" ", 1)[1]
+    complex_match = re.search(r"([A-Z]\d+_[A-Z]\d+del(?:ins[A-Z]+)?)", text)
+    if complex_match:
+        return complex_match.group(1)
+    simple_match = re.search(r"([A-Z]\d+[A-Z])", text)
+    if simple_match:
+        return simple_match.group(1)
+    return normalize_variant_code(text)
+
+
+def parse_age_range(range_text):
+    """parse an age range string like '25-77' into numeric bounds"""
+    if not range_text or "-" not in str(range_text):
+        return None
+    parts = str(range_text).replace(" ", "").split("-")
+    try:
+        low = float(parts[0])
+        high = float(parts[1])
+        if np.isnan(low) or np.isnan(high):
+            return None
+        return low, high
+    except (ValueError, TypeError):
+        return None
+
+
+def generate_age_sequence(count, age_stats):
+    """generate deterministic ages based on available study summary statistics"""
+    if count <= 0:
+        return []
+    age_stats = age_stats or {}
+    age_range = parse_age_range(age_stats.get("range"))
+    mean_age = age_stats.get("mean")
+    if age_range and age_range[0] != age_range[1]:
+        low, high = age_range
+        values = np.linspace(low, high, count)
+    elif mean_age is not None:
+        values = np.full(count, float(mean_age))
+    else:
+        values = np.full(count, 45.0)
+    return [float(val) for val in values]
+
+
+def generate_gender_sequence(count, sex_distribution):
+    """assign genders following the reported male/female distribution"""
+    if count <= 0:
+        return []
+    sex_distribution = sex_distribution or {}
+    total = sex_distribution.get("male", 0) + sex_distribution.get("female", 0)
+    if total <= 0:
+        return ["Female"] * count
+    male_ratio = sex_distribution.get("male", 0) / total
+    target_males = int(round(male_ratio * count))
+    target_males = min(max(target_males, 0), count)
+    male_remaining = target_males
+    female_remaining = count - target_males
+    genders = []
+    for idx in range(count):
+        remaining = count - idx
+        male_share = male_remaining / remaining if remaining else 0
+        female_share = female_remaining / remaining if remaining else 0
+        if male_share >= female_share and male_remaining > 0:
+            genders.append("Male")
+            male_remaining -= 1
+        elif female_remaining > 0:
+            genders.append("Female")
+            female_remaining -= 1
+        else:
+            genders.append("Female")
+    return genders
+
+
+def convert_biochemical_entries(entries, test_key="test", value_key="value"):
+    """normalize heterogeneous biochemical entry formats"""
+    converted = []
+    if not entries:
+        return converted
+    for entry in entries:
+        if not isinstance(entry, dict):
+            continue
+        normalized = {
+            "test": entry.get(test_key) or entry.get("analyte"),
+            "value": entry.get(value_key) or entry.get("result") or entry.get("value"),
+            "unit": entry.get("unit"),
+            "reference_range": entry.get("reference_range") or entry.get("reference")
+        }
+        converted.append(normalized)
+    return converted
+
+
+def prepare_study8_patients(study):
+    """convert study 8 structure into standardized patient records"""
+    patient_data = study.get("patient_data")
+    if not isinstance(patient_data, dict):
+        return []
+    patient = patient_data.copy()
+    patient.setdefault("patient_id", f"{study.get('study_id', 'study_8')}_proband")
+    patient.setdefault("relationship", "Proband")
+    variant_info = (study.get("variant_info") or {}).get("ret_variant") or {}
+    patient["ret_variant"] = parse_ret_variant_string(variant_info.get("protein"))
+    patient.setdefault("mtc_diagnosis", "Yes")
+    patient.setdefault("men2_syndrome", "Yes")
+    patient.setdefault("pheochromocytoma", "No")
+    patient.setdefault("hyperparathyroidism", "No")
+    patient.setdefault("family_history_mtc", "Yes")
+    bio_entries = convert_biochemical_entries(patient.pop("biochemical_results", []))
+    if bio_entries:
+        patient["biochemical_data"] = bio_entries
+        calcitonin_entry = next((entry for entry in bio_entries if entry.get("test") and "calcitonin" in entry["test"].lower()), None)
+        cea_entry = next((entry for entry in bio_entries if entry.get("test") and "cea" in entry["test"].lower()), None)
+        if calcitonin_entry:
+            patient.setdefault("calcitonin_level", calcitonin_entry.get("value"))
+            if calcitonin_entry.get("reference_range"):
+                patient["calcitonin_normal_range"] = calcitonin_entry["reference_range"]
+        if cea_entry:
+            patient.setdefault("cea_level", cea_entry.get("value"))
+    ultrasound = None
+    for imaging in patient.get("imaging", []):
+        if isinstance(imaging, dict) and imaging.get("modality", "").lower() == "ultrasound":
+            ultrasound = imaging.get("finding")
+            break
+    if ultrasound:
+        patient["thyroid_ultrasound"] = ultrasound
+        nodule_count = ultrasound.lower().count("nodule")
+        if nodule_count:
+            patient["thyroid_nodule_count"] = max(nodule_count, patient.get("thyroid_nodule_count", 0))
+    tumor_sizes = (patient.get("pathology") or {}).get("tumor_sizes_cm")
+    if tumor_sizes and isinstance(tumor_sizes, list):
+        patient["thyroid_nodule_count"] = max(len(tumor_sizes), patient.get("thyroid_nodule_count", 0))
+    return [patient]
+
+
+def build_study9_patients(study):
+    """convert ctDNA cohort cases into patient-level rows"""
+    cases = study.get("case_data", [])
+    ret_cases = [case for case in cases if str(case.get("mutation", "")).upper().startswith("RET")]
+    if not ret_cases:
+        return []
+    cohort_info = study.get("cohort_info", {})
+    age_sequence = generate_age_sequence(len(ret_cases), cohort_info.get("age_stats", {}))
+    gender_sequence = generate_gender_sequence(len(ret_cases), cohort_info.get("sex_distribution", {}))
+    patients = []
+    for idx, case in enumerate(ret_cases):
+        patient = {
+            "patient_id": f"{study.get('study_id', 'study_9')}_case_{case.get('case_id')}",
+            "age": age_sequence[idx] if idx < len(age_sequence) else cohort_info.get("age_stats", {}).get("mean"),
+            "gender": gender_sequence[idx] if idx < len(gender_sequence) else "Female",
+            "relationship": "Sporadic case",
+            "ret_variant": parse_ret_variant_string(case.get("mutation")),
+            "mtc_diagnosis": "Yes",
+            "men2_syndrome": "No",
+            "pheochromocytoma": "No",
+            "hyperparathyroidism": "No",
+            "family_history_mtc": "No",
+            "calcitonin_level": case.get("preop_ct"),
+            "calcitonin_normal_range": "0-7.5 pg/mL",
+            "cea_level": case.get("preop_cea"),
+            "thyroid_ultrasound": "Not reported",
+            "study_id": study.get("study_id", "study_9")
+        }
+        bio_values = {}
+        if case.get("preop_ct") is not None:
+            bio_values["calcitonin_pg_per_ml"] = case.get("preop_ct")
+        if case.get("preop_cea") is not None:
+            bio_values["CEA_ng_per_ml"] = case.get("preop_cea")
+        if bio_values:
+            patient["biochemical_values"] = bio_values
+        patients.append(patient)
+    return patients
+
+
+def build_study10_patients(study):
+    """convert familial study into patient records"""
+    variant_info = (study.get("variant_info") or {}).get("ret_variant") or {}
+    base_variant = parse_ret_variant_string(variant_info.get("protein"))
+    patients = []
+    for record in study.get("patients", []):
+        genetics = record.get("genetics")
+        has_ret = False
+        if isinstance(genetics, dict):
+            for key, value in genetics.items():
+                if "ret" in key.lower() and str(value).lower() in {"present", "positive", "heterozygous"}:
+                    has_ret = True
+        elif isinstance(genetics, str):
+            has_ret = "ret" in genetics.lower() and any(term in genetics.lower() for term in ["present", "positive"])
+        if not has_ret:
+            continue
+        diag_list = [str(item).lower() for item in record.get("diagnoses", [])]
+        bio_data = record.get("biochemical_data", [])
+        calcitonin_high = any("calcitonin" in str(item).lower() and "elevated" in str(item).lower() for item in bio_data)
+        cea_high = any("cea" in str(item).lower() and "elevated" in str(item).lower() for item in bio_data)
+        patient = {
+            "patient_id": f"{study.get('study_id', 'study_10')}_{record.get('id', len(patients) + 1)}",
+            "age": record.get("age_at_presentation") or record.get("age_at_first_pheo") or record.get("age") or record.get("age_of_death"),
+            "gender": record.get("sex"),
+            "relationship": str(record.get("role", "Relative")).title(),
+            "ret_variant": base_variant,
+            "men2_syndrome": "Yes",
+            "family_history_mtc": "Yes",
+            "mtc_diagnosis": "Yes" if any("medullary thyroid carcinoma" in diag for diag in diag_list) else "Suspected (elevated calcitonin)",
+            "pheochromocytoma": "Yes" if any("pheochromocytoma" in diag for diag in diag_list) else "No",
+            "hyperparathyroidism": "Yes" if any("hyperparathyroidism" in diag for diag in diag_list) else "No",
+            "calcitonin_level": "elevated" if calcitonin_high else record.get("calcitonin_level"),
+            "cea_level": "elevated" if cea_high else record.get("cea_level"),
+            "thyroid_ultrasound": "; ".join(record.get("imaging", [])),
+            "family_screening": "Yes"
+        }
+        patients.append(patient)
+    return patients
+
+
+def build_study11_patients(study):
+    """convert MEN2B case into patient record"""
+    variant = parse_ret_variant_string(((study.get("variant_info") or {}).get("ret_variant") or {}).get("protein"))
+    patients = []
+    for record in study.get("patients", []):
+        if str(record.get("id")).lower() != "proband":
+            continue
+        lab_entries = convert_biochemical_entries(record.get("biochemical_data", []), test_key="analyte")
+        calcitonin_entry = next((entry for entry in lab_entries if entry.get("test") and "calcitonin" in entry["test"].lower()), None)
+        cea_entry = next((entry for entry in lab_entries if entry.get("test") and "cea" in entry["test"].lower()), None)
+        patient = {
+            "patient_id": f"{study.get('study_id', 'study_11')}_proband",
+            "age": record.get("age"),
+            "gender": record.get("sex"),
+            "relationship": "Proband",
+            "ret_variant": variant,
+            "men2_syndrome": "Yes",
+            "mtc_diagnosis": "Yes",
+            "pheochromocytoma": "No",
+            "hyperparathyroidism": "No",
+            "family_history_mtc": "No",
+            "biochemical_data": lab_entries,
+            "calcitonin_level": calcitonin_entry.get("value") if calcitonin_entry else None,
+            "cea_level": cea_entry.get("value") if cea_entry else None,
+            "thyroid_ultrasound": "; ".join(record.get("imaging", []))
+        }
+        patients.append(patient)
+    return patients
+
+
+def build_study12_patients(study):
+    """convert Annales d'Endocrinologie Y791F report"""
+    variant = parse_ret_variant_string(((study.get("variant_info") or {}).get("ret_variant") or {}).get("protein"))
+    patients = []
+    for record in study.get("patients", []):
+        if str(record.get("id")).lower() != "proband":
+            continue
+        labs = record.get("labs", {})
+        patient = {
+            "patient_id": f"{study.get('study_id', 'study_12')}_proband",
+            "age": record.get("age"),
+            "gender": record.get("sex"),
+            "relationship": "Proband",
+            "ret_variant": variant or "Y791F",
+            "men2_syndrome": "Yes",
+            "mtc_diagnosis": "No",
+            "pheochromocytoma": "Yes",
+            "hyperparathyroidism": "No",
+            "family_history_mtc": "No",
+            "calcitonin_level": labs.get("calcitonin_basal") or labs.get("calcitonin_calcium_stimulated"),
+            "calcitonin_normal_range": "<10 ng/L",
+            "cea_level": None,
+            "thyroid_ultrasound": (record.get("thyroid_workup") or {}).get("ultrasound"),
+            "biochemical_values": {"calcitonin_pg_per_ml": labs.get("calcitonin_basal")} if labs.get("calcitonin_basal") is not None else None
+        }
+        if patient["biochemical_values"] is None:
+            patient.pop("biochemical_values")
+        patients.append(patient)
+    return patients
+
+
+def build_study13_patients(study):
+    """convert Surgery Today S891A report"""
+    variant = parse_ret_variant_string(((study.get("variant_info") or {}).get("ret_variant") or {}).get("protein"))
+    patients = []
+    for record in study.get("patients", []):
+        record_id = str(record.get("id"))
+        if record_id == "proband":
+            labs = record.get("labs", {})
+            bio_values = {}
+            calcitonin_values = []
+            if labs.get("basal_calcitonin_pg_ml") is not None:
+                calcitonin_values.append(labs.get("basal_calcitonin_pg_ml"))
+            if labs.get("stimulated_calcitonin_pg_ml") is not None:
+                calcitonin_values.append(labs.get("stimulated_calcitonin_pg_ml"))
+            if calcitonin_values:
+                bio_values["calcitonin_pg_per_ml"] = calcitonin_values
+            patient = {
+                "patient_id": f"{study.get('study_id', 'study_13')}_proband",
+                "age": record.get("age"),
+                "gender": record.get("sex"),
+                "relationship": "Proband",
+                "ret_variant": variant or "S891A",
+                "men2_syndrome": "Yes",
+                "mtc_diagnosis": "No",
+                "pheochromocytoma": "Yes",
+                "hyperparathyroidism": "Yes",
+                "family_history_mtc": "Yes",
+                "calcitonin_level": labs.get("basal_calcitonin_pg_ml"),
+                "cea_level": None,
+                "calcitonin_normal_range": "0-7.5 pg/mL",
+                "thyroid_ultrasound": (record.get("follow_up") or {}).get("thyroid_ultrasound_preop"),
+                "biochemical_values": bio_values if bio_values else None
+            }
+            if patient["biochemical_values"] is None:
+                patient.pop("biochemical_values")
+            patients.append(patient)
+        elif record_id == "son_27":
+            thyroid_info = record.get("thyroid", {})
+            patient = {
+                "patient_id": f"{study.get('study_id', 'study_13')}_son27",
+                "age": record.get("age"),
+                "gender": record.get("sex"),
+                "relationship": "Son",
+                "ret_variant": variant or "S891A",
+                "men2_syndrome": "Yes",
+                "mtc_diagnosis": "No",
+                "pheochromocytoma": "No",
+                "hyperparathyroidism": "No",
+                "family_history_mtc": "Yes",
+                "calcitonin_level": thyroid_info.get("basal_calcitonin"),
+                "calcitonin_normal_range": "0-7.5 pg/mL",
+                "cea_level": None,
+                "thyroid_ultrasound": thyroid_info.get("ultrasound")
+            }
+            patients.append(patient)
+    return patients
+
+
+def extract_patients_from_study(study):
+    """extract patient objects regardless of original study schema"""
+    study_id = study.get("study_id")
+    if study_id == "study_8":
+        return prepare_study8_patients(study)
+    if study_id == "study_9":
+        return build_study9_patients(study)
+    if study_id == "study_10":
+        return build_study10_patients(study)
+    if study_id == "study_11":
+        return build_study11_patients(study)
+    if study_id == "study_12":
+        return build_study12_patients(study)
+    if study_id == "study_13":
+        return build_study13_patients(study)
+    raw_patients = study.get("patient_data")
+    if isinstance(raw_patients, dict):
+        patient_copy = raw_patients.copy()
+        patient_copy.setdefault("patient_id", f"{study_id}_patient")
+        return [patient_copy]
+    if isinstance(raw_patients, list):
+        return raw_patients
+    generic_patients = study.get("patients")
+    if isinstance(generic_patients, list):
+        return generic_patients
+    return []
 
 
 def get_study_display_name(study_id):
@@ -63,6 +481,9 @@ def normalize_patient_record(patient):
 
     if 'hyperparathyroidism' not in record and record.get('primary_hyperparathyroidism_present'):
         record['hyperparathyroidism'] = record['primary_hyperparathyroidism_present']
+
+    if not record.get('biochemical_data') and isinstance(record.get('biochemical_results'), list):
+        record['biochemical_data'] = convert_biochemical_entries(record['biochemical_results'])
 
     if not record.get('biochemical_values') and isinstance(record.get('biochemical_data'), list):
         bio_values = {}
@@ -346,7 +767,13 @@ def create_paper_dataset():
         'study_4.json',
         'study_5.json',
         'study_6.json',
-        'study_7.json'
+        'study_7.json',
+        'study_8.json',
+        'study_9.json',
+        'study_10.json',
+        'study_11.json',
+        'study_12.json',
+        'study_13.json'
     ]
     for study_file in study_files:
         with open(os.path.join(dataset_dir, study_file), 'r', encoding='utf-8') as f:
@@ -372,7 +799,8 @@ def create_paper_dataset():
     
     for study in paper_data["studies"]:
         study_id = study["study_id"]
-        for patient in study["patient_data"]:
+        study_patients = extract_patients_from_study(study)
+        for patient in study_patients:
             patient_copy = normalize_patient_record(patient)
             patient_copy['study_id'] = study_id
             patient_copy['source_id'] = source_id_counter
@@ -384,8 +812,43 @@ def create_paper_dataset():
     
     # remove duplicates based on patient_id
     print(f"Before deduplication: {len(df)} patients")
-    df = df.drop_duplicates(subset=['patient_id'], keep='first')
+    df = df.drop_duplicates(subset=['study_id', 'patient_id'], keep='first')
     print(f"After deduplication: {len(df)} patients")
+
+    # ensure required columns exist with sensible defaults
+    default_string_columns = {
+        'family_screening': 'No',
+        'family_history_mtc': 'No',
+        'c_cell_hyperplasia': 'No',
+        'c_cell_disease_suspected': 'No',
+        'men2_syndrome': 'No',
+        'pheochromocytoma': 'No',
+        'hyperparathyroidism': 'No',
+        'calcitonin_level': '',
+        'cea_level': '',
+        'thyroid_ultrasound': '',
+        'relationship': 'Proband'
+    }
+    for col, default in default_string_columns.items():
+        if col not in df.columns:
+            df[col] = default
+        df[col] = df[col].fillna(default)
+
+    if 'thyroid_nodule_count' not in df.columns:
+        df['thyroid_nodule_count'] = 0
+    df['thyroid_nodule_count'] = pd.to_numeric(df['thyroid_nodule_count'], errors='coerce').fillna(0)
+
+    if 'gender' not in df.columns:
+        df['gender'] = 'Female'
+    df['gender'] = df['gender'].fillna('Female')
+
+    if 'age' not in df.columns:
+        df['age'] = np.nan
+    df['age'] = pd.to_numeric(df.get('age'), errors='coerce')
+    if df['age'].isna().all():
+        df['age'] = df['age'].fillna(45.0)
+    else:
+        df['age'] = df['age'].fillna(df['age'].median())
 
     # feature engineering
 
@@ -409,7 +872,16 @@ def create_paper_dataset():
         'C620Y': 2,
         'C634R': 3,
         'C634Y': 3,
-        'C634W': 3
+        'C634W': 3,
+        'C634S': 3,
+        'M918T': 3,
+        'A883F': 3,
+        'C620W': 2,
+        'C630G': 2,
+        'E632_C634del': 3,
+        'E632_L633del': 3,
+        'V899_E902del': 2,
+        'D898_E901del': 2
     }
     df['ret_risk_level'] = df['ret_variant'].map(ret_risk_mapping).fillna(1).astype(int)
     
@@ -481,6 +953,8 @@ def create_paper_dataset():
     def determine_calcitonin_elevated(row):
         calcitonin_level = str(row.get('calcitonin_level', '')).lower()
         calcitonin_numeric = row['calcitonin_level_numeric']
+        if pd.isna(calcitonin_numeric):
+            calcitonin_numeric = 0.0
         gender = row.get('gender', 0)  # 0=Female, 1=Male
 
         # handle special cases
@@ -488,6 +962,11 @@ def create_paper_dataset():
             return 0
         if 'not screened' in calcitonin_level or 'unknown' in calcitonin_level or 'not evaluated' in calcitonin_level:
             return 0
+        if 'not elevated' in calcitonin_level or 'within normal' in calcitonin_level:
+            return 0
+        if any(token in calcitonin_level for token in ['elevated', 'high', 'raised']):
+            if 'not elevated' not in calcitonin_level and 'non-elevated' not in calcitonin_level:
+                return 1
 
         # extract normal range from calcitonin_normal_range
         normal_range = str(row.get('calcitonin_normal_range', ''))
@@ -509,6 +988,11 @@ def create_paper_dataset():
     
     # gender encoding (0=female, 1=male)
     df['gender'] = df['gender'].map({'Female': 0, 'Male': 1})
+    if df['gender'].isna().any():
+        gender_mode = df['gender'].mode()
+        default_gender = int(gender_mode.iloc[0]) if not gender_mode.empty else 0
+        df['gender'] = df['gender'].fillna(default_gender)
+    df['gender'] = df['gender'].astype(int)
     
     # thyroid nodules
     df['thyroid_nodules_present'] = df['thyroid_ultrasound'].str.contains('nodules', case=False, na=False).astype(int)
@@ -516,7 +1000,10 @@ def create_paper_dataset():
     df['multiple_nodules'] = df['multiple_nodules'].astype(int)
     
     # family history of MTC (based on relationship, family screening, and explicit family_history_mtc field)
-    relationship_family = df['relationship'].isin(['Sister', 'Father', 'Paternal grandmother', 'Proband\'s daughter', 'Sister\'s son'])
+    relationship_family = df['relationship'].isin([
+        'Sister', 'Father', 'Paternal grandmother', 'Proband\'s daughter',
+        'Sister\'s son', 'Mother', 'Brother', 'Daughter', 'Son'
+    ])
     family_screening_yes = df['family_screening'].fillna('No').str.lower() == 'yes'
     explicit_family_history = df['family_history_mtc'].fillna('No').str.lower() == 'yes'
     
