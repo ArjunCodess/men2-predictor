@@ -1,91 +1,232 @@
 {
   "study_id": "study_2",
   "study_info": {
-    "title": "MEN2 phenotype in a family with germline heterozygous rare RET K666N variant",
-    "journal": "Endocrinology, Diabetes & Metabolism Case Reports",
-    "publication_date": "September 2024",
-    "study_type": "Case report",
-    "doi": "10.1530/EDM-24-0009"
+    "title": "A 6-Base Pair In-Frame Germline Deletion in Exon 7 of RET Leads to Increased RET Phosphorylation, ERK Activation, and MEN2A",
+    "authors": [
+      "S. Latteyer",
+      "L. Klein-Hitpass",
+      "C. Khandanpour",
+      "D. Zwanziger",
+      "T. D. Poeppel",
+      "K. W. Schmid",
+      "D. Führer",
+      "L. C. Moeller",
+      "Dagmar Führer-Sakel"
+    ],
+    "journal": "JCEM",
+    "publication_year": 2016,
+    "volume_issue": "101(3)",
+    "pages": "1016-1022",
+    "doi": "10.1210/jc.2015-2948",
+    "study_type": "Case report + functional characterization",
+    "study_focus": "Novel RET exon 7 in-frame deletion (p.505_506del) causing MEN2A",
+    "country": "Germany"
+  },
+  "variant_info": {
+    "cDNA": "c.1512_1517delGGAGGG",
+    "protein": "p.Glu505_Gly506del",
+    "exon": 7,
+    "domain": "End of cadherin-like domain, upstream of cysteine-rich region",
+    "zygosity": "Heterozygous",
+    "type": "Gain-of-function",
+    "evidence": {
+      "tyr905_phosphorylation": "Increased in p.505_506del vs WT (ligand-independent)",
+      "autophosphorylation": "Yes, ligand-independent",
+      "MAPK_ERK": "Strong activation (luciferase and Western blot)",
+      "PI3K_AKT": "Strong activation (Western blot)",
+      "colony_formation": "4× WT (similar to C634R)",
+      "comparison": "Less potent than C634R",
+      "database": "Not in COSMIC, not in Utah MEN2 database, not found in 135 healthy controls",
+      "origin": "De novo"
+    }
   },
   "patient_data": [
     {
-      "patient_id": "New_Patient_1_Proband",
-      "age": 40,
-      "gender": "Female",
-      "relationship": "Proband",
-      "ret_variant": "K666N",
-      "ret_status": "Positive",
-      "calcitonin_level": "12.3 pg/mL",
-      "calcitonin_normal_range": "0-5.1 pg/mL",
-      "calcitonin_elevated": "Yes",
-      "thyroid_ultrasound": "No nodules",
-      "mtc_diagnosis": "Yes",
-      "mtc_stage": "pT1aN1",
-      "mtc_size_mm": 4,
-      "pheochromocytoma": "Yes",
-      "pheochromocytoma_size_cm": 3.7,
-      "pheochromocytoma_laterality": "Unilateral",
-      "hyperparathyroidism": "Yes",
-      "men2_syndrome": "Yes",
-      "family_history_mtc": "No",
-      "genetic_testing_reason": "PHEO diagnosis"
-    },
-    {
-      "patient_id": "New_Patient_2_Sister",
-      "age": 42,
-      "gender": "Female",
-      "relationship": "Sister",
-      "ret_variant": "K666N",
-      "ret_status": "Positive",
-      "calcitonin_level": "5.2 pg/mL",
-      "calcitonin_normal_range": "0-5.1 pg/mL",
-      "calcitonin_elevated": "No",
-      "thyroid_ultrasound": "Two suspicious nodules (5 mm and 11 mm), suspicious lymph nodes",
-      "mtc_diagnosis": "No",
-      "ptc_diagnosis": "Yes",
-      "ptc_stage": "pT1aN1b",
-      "ptc_size_mm": 8,
-      "pheochromocytoma": "No",
-      "hyperparathyroidism": "No",
-      "men2_syndrome": "No",
-      "family_history_mtc": "No",
-      "genetic_testing_reason": "Cascade testing"
-    },
-    {
-      "patient_id": "New_Patient_3_Brother",
-      "age": 46,
-      "gender": "Male",
-      "relationship": "Brother",
-      "ret_variant": "K666N",
-      "ret_status": "Positive",
-      "calcitonin_level": "17.3 pg/mL",
-      "calcitonin_normal_range": "0-5.1 pg/mL",
-      "calcitonin_elevated": "Yes",
-      "thyroid_ultrasound": "No nodules",
-      "mtc_diagnosis": "Suspected (elevated calcitonin)",
-      "pheochromocytoma": "No",
-      "hyperparathyroidism": "No",
-      "men2_syndrome": "No",
-      "family_history_mtc": "No",
-      "genetic_testing_reason": "Cascade testing"
-    },
-    {
-      "patient_id": "New_Patient_4_Daughter",
-      "age": 22,
-      "gender": "Female",
-      "relationship": "Proband's daughter",
-      "ret_variant": "K666N",
-      "ret_status": "Positive",
-      "calcitonin_level": "Normal",
-      "calcitonin_normal_range": "0-5.1 pg/mL",
-      "calcitonin_elevated": "No",
-      "thyroid_ultrasound": "Normal",
-      "mtc_diagnosis": "No",
-      "pheochromocytoma": "No",
-      "hyperparathyroidism": "No",
-      "men2_syndrome": "No",
-      "family_history_mtc": "No",
-      "genetic_testing_reason": "Cascade testing"
+      "patient_id": "proposita",
+      "sex": "Female",
+      "ethnicity": "Caucasian",
+      "age_pheo": 31,
+      "age_mtc": 37,
+      "ret_variant": "p.505_506del",
+      "mutation_origin": "de novo",
+      "men2_subtype": "MEN2A",
+      "pheochromocytoma": {
+        "presentation_age": 31,
+        "symptoms": [
+          "severe headache",
+          "hypertension (170/100 mmHg)",
+          "tachycardia (100 bpm)",
+          "deterioration in general condition"
+        ],
+        "biochemistry": {
+          "plasma_normetanephrine": {
+            "value": 432,
+            "unit": "ng/mL",
+            "normal": "< 200"
+          },
+          "plasma_metanephrine": {
+            "value": 927,
+            "unit": "ng/mL",
+            "normal": "< 90"
+          },
+          "urine_normetanephrine": {
+            "value": 2523,
+            "unit": "μg/d",
+            "normal": "< 600"
+          },
+          "urine_metanephrine": {
+            "value": 4110,
+            "unit": "μg/d",
+            "normal": "< 350"
+          }
+        },
+        "imaging": [
+          {
+            "type": "MRI",
+            "finding": "bilateral adrenal masses"
+          },
+          {
+            "type": "I-131 MIBG PET-CT",
+            "finding": "increased tracer uptake bilaterally"
+          }
+        ],
+        "surgery": "Bilateral adrenalectomy",
+        "pathology": "Bilateral pheochromocytoma"
+      },
+      "genetic_testing_prior_exome": [
+        {
+          "gene": "RET",
+          "exons": "10, 11, 13",
+          "result": "Negative"
+        },
+        {
+          "gene": "VHL",
+          "exons": "1–3",
+          "result": "Negative"
+        },
+        {
+          "gene": "SDHB",
+          "exons": "1–8",
+          "result": "Negative"
+        },
+        {
+          "gene": "SDHD",
+          "exons": "1–4",
+          "result": "Negative"
+        }
+      ],
+      "mtc": {
+        "presentation_age": 37,
+        "ultrasound": {
+          "nodule_size": "4–5 mm (left lobe, hypoechogenic)"
+        },
+        "biochemistry": {
+          "basal_calcitonin": {
+            "value": 7.9,
+            "unit": "pg/mL",
+            "normal": "<5"
+          },
+          "pentagastrin_stimulated_calcitonin": {
+            "value": 492,
+            "unit": "pg/mL at 2 min"
+          }
+        },
+        "surgery": [
+          "Total thyroidectomy",
+          "Central lymphadenectomy"
+        ],
+        "histology": {
+          "mtc_size": 4,
+          "unit": "mm",
+          "stromal_desmoplasia": true,
+          "calcitonin_positive": true,
+          "chromogranin_A_positive": true,
+          "lymph_nodes_N0": true,
+          "staging": "pT1a N0 L0 V0 R0"
+        },
+        "postoperative": {
+          "plasma_metanephrines": {
+            "value": "<88",
+            "unit": "pg/mL",
+            "normal": "<88"
+          },
+          "calcitonin": {
+            "value": "<2.0",
+            "unit": "pg/mL",
+            "normal": "<2.0"
+          },
+          "remission_status": "Complete remission"
+        }
+      },
+      "postoperative_status": "Complete remission (plasma metanephrines and calcitonin undetectable)",
+      "other_manifestations": {
+        "parathyroid": {
+          "pth": "always normal",
+          "calcium": "always normal"
+        },
+        "men2b_exclusion": [
+          "no mucosal neuromas",
+          "no marfanoid habitus",
+          "no skeletal/joint abnormalities"
+        ]
+      }
     }
-  ]
+  ],
+  "family_screening": [
+    {
+      "relation": "mother",
+      "age": 66,
+      "mutation_carrier": false
+    },
+    {
+      "relation": "father",
+      "age": 71,
+      "mutation_carrier": false
+    },
+    {
+      "relation": "brother",
+      "age": 43,
+      "mutation_carrier": false
+    }
+  ],
+  "functional_data": {
+    "autophosphorylation": "Increased ligand-independent Tyr905 phosphorylation (stronger than WT, less than C634R)",
+    "erk_activation": "Strong activation (significant luciferase increase vs WT; less than C634R)",
+    "akt_activation": "Increased phosphorylation compared to WT; less than C634R",
+    "colony_formation": "4× WT RET (similar to C634R); statistically significant",
+    "dimerization": "Absent for p.505_506del; present for C634R",
+    "comparisons": {
+      "vs_wt": "All functional effects stronger than WT RET",
+      "vs_c634r": "Weaker MAPK/ERK/AKT activation than C634R, but similar increased colony formation; no dimerization in deletion mutant"
+    }
+  },
+  "clinical_patterns": {
+    "phenotype": "Bilateral pheochromocytoma at 31 years, MTC at 37 years (atypical timeline for MEN2A)",
+    "disease_course": "Pheo→MTC sequence, similar to V292M (exon 5) RET mutations",
+    "mutation_novelty": "First reported activating deletion in RET exon 7; not in major mutation databases",
+    "mutation_origin": "De novo (family confirmed negative)",
+    "exon_screening_issues": [
+      "Missed by routine RET exon 10/11/13 analysis",
+      "Exon 7 not commonly sequenced in clinical practice"
+    ]
+  },
+  "discussion_notes": [
+    "Routine RET screening misses rare/non-hotspot mutations; exon 7 not typically analyzed.",
+    "Novelty: First MEN2A-causing mutation described in RET exon 7.",
+    "Strict clinical/genetic diagnosis needed full-coding RET sequencing.",
+    "Phenotype resembles V292M (codon 292, exon 5) with early pheo and late MTC.",
+    "Supports full RET sequencing (not just hotspot exons) in MEN2-suspect cases.",
+    "No family history and no mutation in parents/sibling confirms de novo status.",
+    "Molecular mechanism: No dimerization (unlike cysteine mutations); likely conformational effect activating kinase domain.",
+    "Mutation not detected in >135 controls or known disease/variant databases.",
+    "Clinical: Milder gain-of-function than C634R (canonical MEN2A); clinical course still justifies pathogenicity classification.",
+    "Remission after surgery; no further MTC/pheo or parathyroid abnormalities.",
+    "Whole-exome or Sanger sequencing of non-hotspot exons should be considered when clinical suspicion persists and initial screening is negative.",
+    "Implications for broader genetic screening strategies in hereditary pheochromocytoma/MTC syndromes."
+  ],
+  "validation": {
+    "single_case": true,
+    "mutation_confirmed": true,
+    "de_novo_confirmed": true
+  }
 }
