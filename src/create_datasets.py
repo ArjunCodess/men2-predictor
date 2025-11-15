@@ -26,7 +26,6 @@ STUDY_NAME_MAP = {
     "study_11": "BMC Pediatrics (2020) MEN2B Case",
     "study_12": "Annales d'Endocrinologie (2015) RET Y791F",
     "study_13": "Surgery Today (2014) RET S891A Pheo",
-    "study_14": "Annals of Surgery (2014) MEN2B Cohort",
     "ret_k666n_homozygous_2018": "JCEM (2018) Homozygous RET K666N",
     "ret_s891a_fmtc_ca_2015": "Oncotarget (2015) RET S891A FMTC"
 }
@@ -180,24 +179,6 @@ def convert_biochemical_entries(entries, test_key="test", value_key="value"):
     return converted
 
 
-def normalize_yes_no(value, default="No"):
-    """standardize yes/no style flags"""
-    if value is None:
-        return default
-    if isinstance(value, str):
-        val = value.strip().lower()
-        if not val:
-            return default
-        if val in {"yes", "y", "true", "1", "present"}:
-            return "Yes"
-        if val in {"no", "n", "false", "0", "absent"}:
-            return "No"
-        return value
-    if isinstance(value, (int, float)):
-        return "Yes" if value else "No"
-    return value
-
-
 def build_study2_patients(study):
     """convert RET exon 7 deletion case report"""
     variant = parse_ret_variant_string((study.get("variant_info") or {}).get("protein")) or "E505_G506del"
@@ -241,78 +222,8 @@ def build_study2_patients(study):
         }
         if bio_entries:
             patient["biochemical_data"] = bio_entries
-        patients.append(patient)
-    return patients
-
-
-def build_study14_patients(study):
-    """convert Annals of Surgery 2014 MEN2B cohort"""
-    patients = []
-
-    def relationship_for(record):
-        if record.get("relationship"):
-            return record["relationship"]
-        if str(record.get("diagnosis_group", "")).lower() == "inherited":
-            return "Family member"
-        return "Proband"
-
-    for record in study.get("patient_data", []):
-        patient = {
-            "patient_id": f"{study.get('study_id', 'study_14')}_{record.get('patient_id', 'patient')}",
-            "age": record.get("age") or record.get("age_at_diagnosis"),
-            "gender": record.get("gender"),
-            "relationship": relationship_for(record),
-            "ret_variant": parse_ret_variant_string(record.get("ret_variant")) or "M918T",
-            "men2_syndrome": normalize_yes_no(record.get("men2_syndrome"), default="Yes"),
-            "mtc_diagnosis": normalize_yes_no(record.get("mtc_diagnosis"), default="No"),
-            "pheochromocytoma": normalize_yes_no(record.get("pheochromocytoma"), default="No"),
-            "hyperparathyroidism": normalize_yes_no(record.get("hyperparathyroidism"), default="No"),
-            "family_history_mtc": normalize_yes_no(
-                record.get("family_history_mtc"),
-                default="Yes" if str(record.get("diagnosis_group", "")).lower() == "inherited" else "No"
-            ),
-            "calcitonin_level": record.get("calcitonin_level"),
-            "calcitonin_normal_range": record.get("calcitonin_normal_range"),
-            "thyroid_ultrasound": record.get("thyroid_ultrasound"),
-            "family_screening": "Yes" if str(record.get("diagnosis_trigger", "")).lower() == "family screening" else "No",
-            "c_cell_hyperplasia": record.get("c_cell_hyperplasia"),
-            "men2b_diagnosis": record.get("men2b_diagnosis"),
-            "diagnosis_trigger": record.get("diagnosis_trigger"),
-            "diagnosis_group": record.get("diagnosis_group")
-        }
-
-        if patient["men2_syndrome"] not in {"Yes", "No"}:
-            patient["men2_syndrome"] = normalize_yes_no(record.get("men2b_diagnosis"), default="Yes")
-
-        if patient["mtc_diagnosis"] not in {"Yes", "No"} and record.get("mtc_stage"):
-            patient["mtc_diagnosis"] = "Yes"
-
-        bio_entries = []
-        for key, label in [
-            ("calcitonin_preoperative_basal", "calcitonin_preoperative_basal"),
-            ("calcitonin_preoperative_stimulated", "calcitonin_preoperative_stimulated"),
-            ("calcitonin_postoperative_basal", "calcitonin_postoperative_basal"),
-            ("calcitonin_postoperative_stimulated", "calcitonin_postoperative_stimulated"),
-        ]:
-            value = record.get(key)
-            if value is None or (isinstance(value, str) and not value.strip()):
-                continue
-            try:
-                numeric_value = float(value)
-            except (TypeError, ValueError):
-                continue
-            bio_entries.append({
-                "test": label,
-                "value": numeric_value,
-                "unit": "pg/mL",
-                "reference_range": record.get("calcitonin_normal_range")
-            })
-
-        if bio_entries:
-            patient["biochemical_data"] = bio_entries
 
         patients.append(patient)
-
     return patients
 
 
@@ -573,8 +484,6 @@ def extract_patients_from_study(study):
         return build_study12_patients(study)
     if study_id == "study_13":
         return build_study13_patients(study)
-    if study_id == "study_14":
-        return build_study14_patients(study)
     raw_patients = study.get("patient_data")
     if isinstance(raw_patients, dict):
         patient_copy = raw_patients.copy()
@@ -922,8 +831,7 @@ def create_paper_dataset():
         'study_10.json',
         'study_11.json',
         'study_12.json',
-        'study_13.json',
-        'study_14.json'
+        'study_13.json'
     ]
     for study_file in study_files:
         with open(os.path.join(dataset_dir, study_file), 'r', encoding='utf-8') as f:
@@ -1213,8 +1121,15 @@ def create_expanded_dataset(paper_df, paper_data, regression_params=None):
 
     regression_params = regression_params or {'slope': 0.05, 'intercept': 0.5, 'residual_std': 0.3, 'samples': 0}
 
-    # literature MTC diagnosis ages
+    # literature MTC diagnosis ages (limit to avoid runaway synthetic counts)
     lit_ages = paper_data['literature_data']['mtc_diagnosis_ages']
+    if not isinstance(lit_ages, list):
+        lit_ages = []
+    lit_ages = [float(age) for age in lit_ages if age is not None]
+    if len(lit_ages) > 25:
+        lit_ages_sorted = sorted(lit_ages)
+        indices = np.linspace(0, len(lit_ages_sorted) - 1, 25).astype(int)
+        lit_ages = [lit_ages_sorted[i] for i in indices.tolist()]
 
     # create synthetic cases based on literature
     np.random.seed(42)  # for reproducibility
