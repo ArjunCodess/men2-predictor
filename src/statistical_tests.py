@@ -173,6 +173,24 @@ def build_positive_maps(
     return mapping
 
 
+def _mcnemar_p_value(b: int, c: int, exact: bool) -> float | None:
+    """Return McNemar p-value using binomial or chi-squared approximation."""
+
+    discordant = b + c
+    if discordant == 0:
+        return None
+
+    if exact or discordant < 25:
+        # two-sided binomial test on the smaller count
+        result = stats.binomtest(min(b, c), discordant, 0.5, alternative="two-sided")
+        return float(result.pvalue)
+
+    # Chi-squared with continuity correction
+    statistic = (abs(b - c) - 1) ** 2 / discordant
+    p_value = stats.chi2.sf(statistic, 1)
+    return float(p_value)
+
+
 def run_mcnemar_test(
     original_entries: Iterable[DatasetEntry],
     expanded_entries: Iterable[DatasetEntry],
@@ -221,7 +239,7 @@ def run_mcnemar_test(
 
     # Use the exact binomial variant when discordant pairs are scarce.
     exact = discordant < 25
-    mcnemar_result = stats.mcnemar(contingency, exact=exact)
+    p_value = _mcnemar_p_value(orig_only, exp_only, exact)
     odds_effect = None
     if discordant > 0:
         odds_effect = (orig_only - exp_only) / discordant
@@ -229,7 +247,7 @@ def run_mcnemar_test(
     return {
         "pairs": pair_count,
         "table": tuple(tuple(row) for row in contingency.tolist()),
-        "p_value": float(mcnemar_result.pvalue),
+        "p_value": p_value,
         "effect_size": odds_effect,
         "note": None,
     }

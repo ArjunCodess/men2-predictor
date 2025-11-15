@@ -1,0 +1,255 @@
+{
+  "study_id": "study_5",
+  "study_info": {
+    "title": "MEN2 phenotype in a family with germline heterozygous rare RET K666N variant presenting with pheochromocytoma, medullary thyroid microcarcinoma, and primary hyperparathyroidism",
+    "authors": "A La Greca, D Dawes, M Albuja-Cruz, C Raeburn, L Axell, L Ku, C Klein, C Marshall, L Fishbein",
+    "journal": "Endocrinology, Diabetes & Metabolism Case Reports",
+    "publication_date": "2024",
+    "doi": "10.1530/EDM-24-0009",
+    "study_type": "Case report and family genetic analysis",
+    "study_focus": "Clinical characterization of RET K666N heterozygous variant carriers in a family with MEN2-associated tumors",
+    "total_family_members_reported": 6,
+    "key_findings": "RET K666N variant is pathogenic but low-penetrance, predilection for MTC, PHEO, PHPT in younger patients, variable phenotypic expression among carriers"
+  },
+  "patient_data": [
+    {
+      "patient_id": "Proband",
+      "gender": "Female",
+      "age_at_diagnosis": 40,
+      "relationship_in_family": "Proband",
+      "genotype": "RET c.1998G>T; p.K666N heterozygous",
+      "pheochromocytoma_present": "Yes",
+      "pheochromocytoma_size_cm": 3.7,
+      "medullary_thyroid_carcinoma_present": "Yes",
+      "primary_hyperparathyroidism_present": "Yes",
+      "other_tumors/conditions": "Toxic megacolon; Hyalinizing trabecular tumor (5 mm, right-sided) on thyroidectomy",
+      "biochemical_values": {
+        "calcitonin_pg_per_ml": [
+          12.3,
+          16.8,
+          30.7
+        ],
+        "plasma_free_metanephrine_pg_per_ml": 1957,
+        "plasma_free_normetanephrine_pg_per_ml": 1329,
+        "PTH_pg_per_ml": [
+          103,
+          120,
+          95,
+          51
+        ],
+        "calcium_mg_per_dl": [
+          9.8,
+          9.8,
+          11.4,
+          9.3
+        ],
+        "vitamin_D_ng_per_dl": [
+          16,
+          20,
+          13,
+          33
+        ],
+        "CEA_ng_per_ml": [
+          1.3,
+          1.7,
+          1.4
+        ],
+        "chromogranin_A_ng_per_ml": 35,
+        "TSH_mIU_per_L": 1.51,
+        "24hr_urine_calcium_mg": 159
+      },
+      "imaging_findings": {
+        "adrenal_mass_size_cm": "4.5 x 4.2",
+        "thyroid_nodules": "None detected (initially); post-op trabecular tumor 5 mm",
+        "cervical_node": "Right level IV node—FNAC benign"
+      },
+      "pathology_findings": {
+        "pheochromocytoma": "3.7 cm, lymphovascular invasion, Ki-67/Mib-1 3–4%",
+        "thyroid_microcarcinoma": "4 mm medullary microcarcinoma, left lobe, no extrathyroidal extension",
+        "hyalinizing_trabecular_tumor": "Right-sided, 5 mm, negative margins",
+        "lymph_node_metastasis": "1/13 nodes positive for metastatic microcarcinoma, tumor deposit 0.2 mm",
+        "parathyroid_gland": "Left inferior gland 0.1 g hypercellular tissue"
+      },
+      "surgical_treatments": [
+        "Retroperitoneoscopic right adrenalectomy",
+        "Total colectomy and end ileostomy (for toxic megacolon)",
+        "Total thyroidectomy and partial parathyroidectomy (left inferior gland)"
+      ],
+      "medical_treatments": [
+        "Doxazosin",
+        "Phenoxybenzamine (pre-op)",
+        "Metoprolol",
+        "Vitamin D3 supplementation"
+      ],
+      "clinical_course": "Complicated perioperative course (cardiogenic shock, multi-organ failure, ileostomy, toxic megacolon, enteral feeding via PEG); full recovery, followed by adrenalectomy, biochemical remission, and later surgical cure of micro-MTC and parathyroid disease. Labs normalized post-op. Stable condition at 2-year follow-up.",
+      "family_history": "Father: Jaw tumor age 41. Mother: Graves’ disease. No family history otherwise of MEN2 features.",
+      "patient_symptoms_and_perspective": "Episodes described as 'surge running up towards her head' with palpitations, sweating, headache for 2 years. Retrospective narrative: anxiety, achy/heavy feet, night sweats, headaches (base of skull), hot flashes after showers/hot tubs. History of frequent UTIs before PHEO removal."
+    },
+    {
+      "patient_id": "Sister_42",
+      "gender": "Female",
+      "age_at_diagnosis": 42,
+      "relationship_in_family": "Older Sister",
+      "genotype": "RET c.1998G>T; p.K666N heterozygous",
+      "pheochromocytoma_present": "NID",
+      "medullary_thyroid_carcinoma_present": "NID",
+      "primary_hyperparathyroidism_present": "NID",
+      "other_tumors/conditions": "Papillary thyroid cancer (PTC), multifocal classical type; metastatic deposits in lymph nodes; No MTC or C-cell hyperplasia.",
+      "biochemical_values": {
+        "calcitonin_pg_per_ml": 5.2,
+        "CEA_ng_per_ml": 1.5,
+        "calcium_mg_per_dl": 9.6,
+        "PTH_pg_per_ml": 44,
+        "vitamin_D_ng_per_dl": 29,
+        "plasma_free_metanephrine_pg_per_ml": "Normal",
+        "plasma_free_normetanephrine_pg_per_ml": "Normal"
+      },
+      "imaging_findings": {
+        "thyroid_nodules": "Two: 5 mm and 11 mm, suspicious features",
+        "left_neck_LN": "Suspicious central and lateral neck lymph nodes",
+        "FNA_findings": "PTC and metastatic PTC in left level IV node"
+      },
+      "pathology_findings": {
+        "thyroid": "Multifocal PTC greatest dimension 0.8 cm, no angioinvasion or extra-thyroidal extension",
+        "lymph_nodes": "8/47 positive for PTC, largest 0.4 cm, no extra-nodal extension (pT1aN1b AJCC 8th Ed.)",
+        "no_MTC": "No evidence of MTC or C-cell hyperplasia"
+      },
+      "surgical_treatments": [
+        "Total thyroidectomy with central and left lateral neck dissection"
+      ],
+      "medical_treatments": [],
+      "clinical_course": "Post-op thyroglobulin <0.1 (with TgAb); continues on annual MEN2 surveillance",
+      "family_history": "Shares RET variant with proband, brother, and her own son.",
+      "patient_symptoms_and_perspective": "Concern about neck mass prompted workup."
+    },
+    {
+      "patient_id": "Brother_46",
+      "gender": "Male",
+      "age_at_diagnosis": 46,
+      "relationship_in_family": "Older Brother",
+      "genotype": "RET c.1998G>T; p.K666N heterozygous",
+      "pheochromocytoma_present": "NID",
+      "medullary_thyroid_carcinoma_present": "NID (possible — not yet operated, persistently elevated calcitonin)",
+      "primary_hyperparathyroidism_present": "NID",
+      "biochemical_values": {
+        "calcitonin_pg_per_ml": [
+          22.3,
+          17.3
+        ],
+        "CEA_ng_per_ml": "Normal",
+        "PTH_pg_per_ml": "Normal",
+        "calcium_mg_per_dl": "Normal",
+        "vitamin_D_ng_per_dl": "Normal",
+        "plasma_free_metanephrine_pg_per_ml": "Normal"
+      },
+      "imaging_findings": {
+        "thyroid_nodules": "None",
+        "thyroid_ultrasound": "No nodules"
+      },
+      "surgical_treatments": [],
+      "medical_treatments": [],
+      "clinical_course": "Declined thyroidectomy; labs monitored every 4–6 months; 3 years of stable elevated calcitonin; no clinical MEN2 features.",
+      "family_history": "Shares RET variant; monitored for MEN2 features.",
+      "patient_symptoms_and_perspective": "Prefer surveillance to surgery."
+    },
+    {
+      "patient_id": "Daughter_22",
+      "gender": "Female",
+      "age_at_diagnosis": 21,
+      "relationship_in_family": "Proband’s Daughter",
+      "genotype": "RET c.1998G>T; p.K666N heterozygous",
+      "pheochromocytoma_present": "NID",
+      "medullary_thyroid_carcinoma_present": "NID",
+      "primary_hyperparathyroidism_present": "NID",
+      "biochemical_values": {
+        "calcitonin_pg_per_ml": "Normal",
+        "plasma_free_metanephrine_pg_per_ml": "Normal",
+        "calcium_mg_per_dl": "Normal",
+        "vitamin_D_ng_per_dl": "Normal",
+        "PTH_pg_per_ml": "Normal",
+        "CEA_ng_per_ml": "Normal"
+      },
+      "imaging_findings": {
+        "thyroid_ultrasound": "Normal"
+      },
+      "surgical_treatments": [],
+      "medical_treatments": [],
+      "clinical_course": "No clinical or biochemical MEN2 features; annual follow-up.",
+      "family_history": "RET carrier; mother is proband.",
+      "patient_symptoms_and_perspective": "Elected for surveillance, not preventive surgery."
+    }
+  ],
+  "summary_table": [
+    {
+      "patient_id": "Proband",
+      "relationship": "Proband",
+      "genotype": "K666N/wt",
+      "age": 40,
+      "MTC": "Yes",
+      "PHEO": "Yes (unilateral)",
+      "PHPT": "Yes",
+      "calcitonin_pg_per_ml": [
+        12.3,
+        16.8,
+        30.7
+      ],
+      "metanephrine_pg_per_ml": 1957,
+      "normetanephrine_pg_per_ml": 1329,
+      "PTH_pg_per_ml": [
+        103,
+        120,
+        95,
+        51
+      ],
+      "calcium_mg_per_dl": [
+        9.8,
+        9.8,
+        11.4,
+        9.3
+      ]
+    },
+    {
+      "patient_id": "Sister_42",
+      "relationship": "Older Sister",
+      "genotype": "K666N/wt",
+      "age": 42,
+      "MTC": "NID",
+      "PHEO": "NID",
+      "PHPT": "NID",
+      "calcitonin_pg_per_ml": 5.2
+    },
+    {
+      "patient_id": "Daughter_22",
+      "relationship": "Proband's Daughter",
+      "genotype": "K666N/wt",
+      "age": 21,
+      "MTC": "NID",
+      "PHEO": "NID",
+      "PHPT": "NID",
+      "calcitonin_pg_per_ml": "Normal"
+    },
+    {
+      "patient_id": "Brother_46",
+      "relationship": "Older Brother",
+      "genotype": "K666N/wt",
+      "age": 46,
+      "MTC": "NID (possible)",
+      "PHEO": "NID",
+      "PHPT": "NID",
+      "calcitonin_pg_per_ml": [
+        22.3,
+        17.3
+      ]
+    },
+    {
+      "patient_id": "Nephew_24",
+      "relationship": "Sister's Son",
+      "genotype": "K666N/wt",
+      "age": 24,
+      "MTC": "NID",
+      "PHEO": "NID",
+      "PHPT": "NID",
+      "calcitonin_pg_per_ml": "Not yet screened"
+    }
+  ]
+}

@@ -1,0 +1,175 @@
+{
+  "study_id": "study_13",
+  "study_info": {
+    "title": "Pheochromocytoma as the first manifestation of MEN2A with RET mutation S891A: report of a case",
+    "journal": "Surgery Today",
+    "publication_year": 2014,
+    "doi": "10.1007/s00595-013-0826-8",
+    "country": "Japan",
+    "study_type": "Case report",
+    "authors": [
+      "Yatsuka Hibi",
+      "Tamae Ohye",
+      "Kimio Ogawa",
+      "Yoshimi Shimizu",
+      "Masahiro Shibata",
+      "Chikara Kagawa",
+      "Yutaka Mizuno",
+      "Shinya Uchino",
+      "Shinji Kosugi",
+      "Hiroki Kurahashi",
+      "Katsumi Iwase"
+    ],
+    "keywords": ["MEN2A", "pheochromocytoma", "RET S891A"]
+  },
+  "variant_info": {
+    "ret_variant": {
+      "cDNA": "Unknown",
+      "protein": "p.S891A",
+      "exon": "intracellular tyrosine kinase domain",
+      "zygosity": "Unknown",
+      "classification_ATA": "Level 1 / Level A",
+      "notes": "previously classified as FMTC-only mutation"
+    }
+  },
+  "patients": [
+    {
+      "id": "proband",
+      "age": 57,
+      "sex": "Female",
+      "family_history": {
+        "aunt_with_adrenal_disease": true,
+        "cause_of_aunt_death": "cerebral vascular disease"
+      },
+      "presentation": {
+        "symptoms": [
+          "cough",
+          "vomiting",
+          "periodic headaches",
+          "paroxysmal palpitations"
+        ],
+        "blood_pressure_mmHg": "111/68"
+      },
+      "imaging": {
+        "ct_abdomen": {
+          "right_adrenal_mass_cm": 4,
+          "left_adrenal_mass_cm": 9
+        },
+        "mibg_131I": "bilateral adrenal uptake"
+      },
+      "labs": {
+        "basal_calcitonin_pg_ml": 37.0,
+        "stimulated_calcitonin_pg_ml": 330,
+        "pth_pg_ml": 340.5,
+        "serum_calcium_mg_dl": 9.3,
+        "serum_phosphorus_mg_dl": 3.8,
+        "urinary_calcium_creatinine_ratio": 0.163,
+        "urinary_catecholamines": "elevated (exact values in Table 1)"
+      },
+      "genetics": {
+        "ret_S891A": "positive"
+      },
+      "surgery": {
+        "adrenalectomy": "bilateral",
+        "thyroidectomy": "prophylactic total thyroidectomy 1 year later",
+        "parathyroids_removed": 4,
+        "parathyroid_autotransplant": "one-third implanted in left forearm"
+      },
+      "pathology": {
+        "adrenal": "pheochromocytoma",
+        "thyroid": "C-cell hyperplasia",
+        "parathyroid": {
+          "right_superior_weight_mg": 231,
+          "right_inferior_weight_mg": 118,
+          "left_superior_weight_mg": 48,
+          "left_inferior_weight_mg": 15,
+          "hyperplasia": "none"
+        }
+      },
+      "follow_up": {
+        "status": "alive",
+        "thyroid_ultrasound_preop": "no lesions",
+        "notes": "MEN2A confirmed after genetic testing"
+      }
+    },
+    {
+      "id": "son_27",
+      "age": 27,
+      "sex": "Male",
+      "genetics": {
+        "ret_S891A": "positive"
+      },
+      "thyroid": {
+        "ultrasound": "normal",
+        "basal_calcitonin": "normal"
+      },
+      "status": "presymptomatic MEN2A carrier"
+    },
+    {
+      "id": "son_29",
+      "age": 29,
+      "sex": "Male",
+      "genetics": "Unknown",
+      "symptoms": "none"
+    },
+    {
+      "id": "brothers_and_sisters",
+      "members": [
+        {
+          "relation": "brother",
+          "age": 59,
+          "symptoms": "none",
+          "genetics": "not tested"
+        },
+        {
+          "relation": "brother",
+          "age": 53,
+          "symptoms": "none",
+          "genetics": "not tested"
+        },
+        {
+          "relation": "sister",
+          "age": 69,
+          "symptoms": "none",
+          "genetics": "not tested"
+        },
+        {
+          "relation": "sister",
+          "age": 64,
+          "symptoms": "none",
+          "genetics": "not tested"
+        },
+        {
+          "relation": "sister",
+          "age": 61,
+          "symptoms": "none",
+          "genetics": "not tested"
+        }
+      ]
+    }
+  ],
+  "tables": {
+    "table_1": "Urinary catecholamines and metabolites (values not reprinted)",
+    "table_2": "Summary of previous S891A MEN2A cases"
+  },
+  "figures": [
+    "Fig 1: CT + MIBG of bilateral adrenal tumors",
+    "Fig 2: Pathology of pheochromocytoma and C-cell hyperplasia",
+    "Fig 3: Parathyroid macroscopic and microscopic images",
+    "Fig 4: Family pedigree"
+  ],
+  "discussion_notes": [
+    "S891A accounts for 2% of RET mutations in MEN2/FMTC",
+    "Previously associated mainly with FMTC",
+    "Increasing evidence shows MEN2A spectrum possible",
+    "S891A causes MTC in ~63.5% of cases and pheochromocytoma in ~4.1%",
+    "Mutation classified as lowest risk (ATA Level 1 / A)",
+    "Guidelines still recommend prophylactic thyroidectomy",
+    "Case shows pheochromocytoma can precede thyroid disease",
+    "Parathyroid findings likely secondary to C-cell hyperplasia"
+  ],
+  "validation_checks": {
+    "all_values_from_text": true,
+    "no_hallucinations": true
+  }
+}

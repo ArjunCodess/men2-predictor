@@ -1,0 +1,136 @@
+{
+  "study_id": "study_12",
+  "study_info": {
+    "title": "Questioning the pathogenic role of the pTyr791Phe mutation of the RET proto-oncogene: Insight from a case report",
+    "journal": "Annales d'Endocrinologie",
+    "publication_year": 2015,
+    "doi": "10.1016/j.ando.2015.10.007",
+    "country": "France",
+    "study_type": "Case report / Letter to the Editor",
+    "authors": [
+      "Maria Mavromati",
+      "Myriam Amsallem",
+      "Christel Jublanc",
+      "Eric Bruckert",
+      "Laurence Leenhardt",
+      "Xavier Girerd"
+    ],
+    "keywords": ["RET", "p.Tyr791Phe", "pheochromocytoma", "MEN2"]
+  },
+  "variant_info": {
+    "ret_variant": {
+      "cDNA": "Unknown",
+      "protein": "p.Tyr791Phe",
+      "exon": 13,
+      "zygosity": "Unknown",
+      "classification": "controversial / questioned pathogenicity",
+      "confirmation": "detected twice"
+    }
+  },
+  "patients": [
+    {
+      "id": "proband",
+      "age": 27,
+      "sex": "Female",
+      "presentation": {
+        "symptoms": [
+          "severe hypertension",
+          "paroxysmal tachycardia",
+          "diaphoresis",
+          "headaches"
+        ],
+        "duration_symptoms_months": 6,
+        "blood_pressure_24h": "mean 160/100 mmHg, abolished circadian rhythm"
+      },
+      "labs": {
+        "glucose_fasting_mmol_L": 7.2,
+        "hba1c_percent": 6.1,
+        "potassium_mmol_L": 3.4,
+        "catecholamines_24h": {
+          "preop": {
+            "normetanephrine_nmol_24h": 35788,
+            "metanephrine_nmol_24h": 1668,
+            "3methoxytyramine_nmol_24h": 4780
+          },
+          "postop_3_months": {
+            "normetanephrine_nmol_24h": 1872,
+            "metanephrine_nmol_24h": 603,
+            "3methoxytyramine_nmol_24h": 3966
+          },
+          "units": "nmol/24h"
+        },
+        "calcitonin_basal": "<5 ng/L",
+        "calcitonin_calcium_stimulated": "<10 ng/L at all timepoints",
+        "pth": "normal",
+        "calcium": "normal",
+        "cortisol_24h": "normal"
+      },
+      "imaging": {
+        "ct_mri": "35 mm right adrenal mass, T2 hyperintense, T1 hypointense, gadolinium-enhancing",
+        "mibg_123I": "no uptake"
+      },
+      "tumor": {
+        "type": "pheochromocytoma",
+        "location": "right adrenal",
+        "size_mm": 35,
+        "pathology": {
+          "pass_score": "7/20",
+          "chromogranin_A": "positive",
+          "ki67_percent": 5
+        }
+      },
+      "genetics": {
+        "ret_pY791F": "positive",
+        "sdhb": "negative",
+        "sdhc": "negative",
+        "sdhd": "negative",
+        "vhl": "negative",
+        "tmem127": "negative",
+        "max": "negative"
+      },
+      "thyroid_workup": {
+        "ultrasound": "4 × 6 mm TIRADS 3 nodule",
+        "fine_needle_aspiration": "benign",
+        "calcitonin_basal": "<5 ng/L",
+        "calcitonin_stim_test": "<10 ng/L"
+      },
+      "management": {
+        "surgery": "right adrenalectomy",
+        "thyroidectomy": "suggested but refused",
+        "follow_up": "2 years, no recurrence, no thyroid disease"
+      },
+      "notes": "exclusive normetanephrine elevation; norepinephrine/normetanephrine >20x normal"
+    },
+    {
+      "id": "sister",
+      "sex": "Female",
+      "thyroid_history": "two thyroid nodules with undetermined cytology",
+      "surgery": "total thyroidectomy",
+      "pathology": "not available",
+      "catecholamines_24h": "normal",
+      "genetics": "not tested"
+    }
+  ],
+  "table_info": {
+    "table_1": {
+      "description": "Pre- and postoperative urinary catecholamines and metanephrines",
+      "metadata_only": true
+    },
+    "table_2": {
+      "description": "Clinical features of previously published p.Tyr791Phe-related pheochromocytoma cases",
+      "metadata_only": true
+    }
+  },
+  "discussion_notes": [
+    "Pathogenicity of p.Y791F is disputed.",
+    "Frequency in controls and cases similar (0.9% vs 0.8%).",
+    "Many reported cases had coexisting C634 mutations.",
+    "Exclusive normetanephrine secretion pattern unusual for RET mutations.",
+    "ATA 2009 classifies Y791F as level A risk.",
+    "Most p.Y791F carriers do not have MTC."
+  ],
+  "validation_checks": {
+    "all_values_from_text": true,
+    "no_hallucinations": true
+  }
+}

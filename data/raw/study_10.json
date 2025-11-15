@@ -1,0 +1,156 @@
+{
+  "study_id": "study_10",
+  "study_info": {
+    "title": "RET c.1901G>A and Novel SLC12A3 Mutations in Familial Pheochromocytomas",
+    "journal": "Genes",
+    "publication_year": 2022,
+    "doi": "10.3390/genes13050864",
+    "country": "China",
+    "study_type": "Case report / family study",
+    "authors": [
+      "Lin Zhao",
+      "Kun-Qi Yang",
+      "Peng Fan",
+      "Ding-Xu Gong",
+      "Lin Zhang",
+      "Yi-Ting Lu",
+      "Xu Meng",
+      "Xian-Liang Zhou"
+    ],
+    "keywords": [
+      "hypertension",
+      "pheochromocytoma",
+      "RET proto-oncogene",
+      "SLC12A3 gene",
+      "MEN2A"
+    ]
+  },
+  "variant_info": {
+    "ret_variant": {
+      "cDNA": "c.1901G>A",
+      "protein": "p.Cys634Tyr",
+      "exon": 11,
+      "zygosity": "Unknown",
+      "classification": "pathogenic (per ACMG cited)",
+      "prediction_tools": ["Provean", "PolyPhen-2", "SIFT", "MutationTaster"]
+    },
+    "slc12a3_variant": {
+      "cDNA": "c.3070_3079delinsCAG",
+      "protein": "p.Val1024Glnfs*10",
+      "exon": 26,
+      "zygosity": "Unknown",
+      "classification": "variant of uncertain significance (per ACMG)",
+      "prediction_tools": ["MutationTaster"]
+    }
+  },
+  "patients": [
+    {
+      "id": "III-2",
+      "role": "proband",
+      "sex": "Male",
+      "age_at_presentation": 28,
+      "symptoms": ["paroxysmal palpitation", "sweating", "headache"],
+      "blood_pressure": [
+        "160/103 mmHg during onset",
+        "140/93 mmHg after onset"
+      ],
+      "biochemical_data": [
+        "elevated serum and urine catecholamine metabolites",
+        "elevated calcitonin",
+        "elevated CEA",
+        "serum thyroid function, calcium, phosphorus, potassium, magnesium, and blood gas within normal range"
+      ],
+      "imaging": [
+        "CT: multiple nodules on both adrenal glands (right: 3.1 x 2.8 cm); larger tumor right side",
+        "Echocardiogram/X-ray: normal heart size",
+        "Thyroid ultrasound: multiple nodules",
+        "Parathyroid ultrasound: no obvious abnormalities",
+        "Somatostatin receptor imaging: high adrenal expression (left: 1.1 x 1.2 cm, right: 2.5 x 3.2 cm)",
+        "131I-MIBG: abnormal findings right adrenal"
+      ],
+      "diagnoses": [
+        "Right pheochromocytoma (PHEO)",
+        "Familial MEN2A (genetically proven)",
+        "Probable medullary thyroid carcinoma (based on high calcitonin and CEA)"
+      ],
+      "genetics": {
+        "ret_c1901ga": "present",
+        "slc12a3_c3070_3079delinsCAG": "present"
+      },
+      "surgery": ["Right adrenal tumor resection (histologically PHEO)"],
+      "follow_up": [
+        "Symptoms improved after surgery",
+        "3 months post-op: 24-h urine catecholamines lower, blood gas/electrolytes normal",
+        "CT: right adrenal—post-op change; left adrenal nodule unchanged",
+        "Recommendation: monitor left adrenal and catecholamines; resect if growth/change"
+      ],
+      "notes": "No evidence of hyperparathyroidism (HPT) to date. Recommendation for regular monitoring of calcitonin and CEA, and consideration of thyroidectomy. Disease progression may parallel mother's course."
+    },
+    {
+      "id": "II-2",
+      "role": "mother",
+      "sex": "Female",
+      "age_at_first_pheo": 34,
+      "diagnoses": [
+        "Bilateral pheochromocytomas (at 34)",
+        "Medullary thyroid carcinoma (after thyroidectomy)",
+        "Hyperparathyroidism (diagnosed; asymptomatic)"
+      ],
+      "biochemical_data": [
+        "elevated urine catecholamines before surgery",
+        "serum thyroid function, calcium, phosphorus, potassium, magnesium, blood gas normal",
+        "elevated parathormone"
+      ],
+      "genetics": {
+        "ret_c1901ga": "present",
+        "slc12a3_c3070_3079delinsCAG": "present"
+      },
+      "notes": "Abnormalities in thyroid at recent visit; diagnosed with MTC after thyroidectomy. Bilateral pheochromocytomas at first presentation; no recurrence or metastasis after surgery. Asymptomatic HPT."
+    },
+    {
+      "id": "I-2",
+      "role": "grandmother",
+      "sex": "Female",
+      "age_of_death": 55,
+      "clinical_notes": ["Severe hypertension during lifetime"],
+      "genetics": "not sequenced",
+      "notes": "Genetic mutations presumed inherited but not sequenced."
+    }
+  ],
+  "laboratory_results_table": {
+    "table_name": "Table 1",
+    "metadata_only": true,
+    "data": "Laboratory examinations compared between the proband and his mother before surgery; included numerical values for serum and urine catecholamines, electrolytes, calcitonin, CEA, thyroid hormones, parathormone, etc. Only exact values from table should be extracted if reproducing full table; see text for summary."
+  },
+  "protein_modelling": {
+    "template_structure": "6NPL",
+    "software": ["MODELLER v9.19", "PROCHECK", "Verify3D"],
+    "findings": "Structural models built for wildtype and mutant SLC12A3. Mutation located in C-terminal; alters structure and changes interaction pattern of terminal amino acids. In mutant, number of C-terminal amino acids increased; hydrogen bond and hydrophobic interaction pattern altered. Mutation theoretically destabilizes protein and affects function."
+  },
+  "methods": {
+    "sequencing": "WES + Sanger confirmation",
+    "platform": "Illumina PE150",
+    "bioinformatics_pipeline": [
+      "BWA",
+      "GATK",
+      "Picard",
+      "ANNOVAR",
+      "SIFT",
+      "PolyPhen-2",
+      "M-CAP"
+    ]
+  },
+  "figures": {
+    "Figure1_caption": "Family pedigree. Black-filled symbols, subjects carrying the identified RET c.1901G>A and SLC12A3 c.3070_3079delinsCAG mutations; empty symbols, subjects without identified mutations; gray-filled symbols, not sequenced; the black arrow indicates the proband.",
+    "Figure2_caption": "The computed tomography of the proband showed multiple nodules on both sides of the adrenal glands.",
+    "Figure3_caption": "Sanger sequencing identified the mutation in RET.",
+    "Figure4_caption": "Sanger sequencing identified the mutation in SLC12A3.",
+    "Figure5_caption": "Structural models of the protein encoded by SLC12A3 (a) and the mutant (SLC12A3 c.3070_3079delinsCAG) (b). Yellow spheres indicate mutated amino acid residues.",
+    "Figure6_caption": "(a,b): Interaction pattern between the C-terminal amino acids and surrounding amino acid residues in the protein encoded by SLC12A3. (c,d): Interaction pattern between the C-terminal amino acids and the surrounding amino acid residues in the predicted protein encoded by SLC12A3 c.3070_3079-delinsCAG. Yellow spheres indicate mutated amino acid residues."
+  },
+  "notes": "Study is first to describe familial MEN2A with compounded RET c.1901G>A and SLC12A3 c.3070_3079delinsCAG. Suggests MEN2A patients with RET c.1901G>A may develop bilateral PHEOs earlier than MTC. SLC12A3 variant likely not related to MEN2A phenotype; theoretical structural effect on protein. Limitations: small sample, rare mutation, possible reporting bias, cautious generalization recommended. Ambiguous genotype/phenotype correlations, sequence of PHEO vs MTC in MEN2A not fully clear; recommendation for regular monitoring and individualized management.",
+  "validation_checks": {
+    "all_values_from_text": true,
+    "no_hallucinations": true
+  }
+}

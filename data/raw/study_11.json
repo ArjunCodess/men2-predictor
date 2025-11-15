@@ -1,0 +1,161 @@
+{
+  "study_id": "study_11",
+  "study_info": {
+    "title": "Severe constipation as the first clinical manifestation in multiple endocrine neoplasia type 2B: a case report and literature review",
+    "journal": "BMC Pediatrics",
+    "publication_year": 2020,
+    "doi": "10.1186/s12887-020-02224-4",
+    "article_number": "318",
+    "country": "China",
+    "study_type": "Case report + literature review",
+    "authors": [
+      "Lidan Zhang",
+      "Yan Guo",
+      "Lei Ye",
+      "Wenli Lu",
+      "Zhiya Dong",
+      "Wei Wang",
+      "Yuan Xiao"
+    ],
+    "keywords": [
+      "MEN2B",
+      "medullary thyroid carcinoma",
+      "Hirschsprung disease",
+      "RET mutation",
+      "constipation"
+    ]
+  },
+  "variant_info": {
+    "ret_variant": {
+      "cDNA": "c.2753T>C",
+      "protein": "p.M918T",
+      "exon": "Unknown",
+      "zygosity": "Unknown",
+      "inheritance": "Unknown (mother not tested)",
+      "classification": "pathogenic (ACMG)"
+    }
+  },
+  "patients": [
+    {
+      "id": "proband",
+      "age": 12,
+      "sex": "Female",
+      "birth_info": {
+        "gestational_age_weeks": 38.4,
+        "neonatal_history": "unremarkable"
+      },
+      "family_history": {
+        "mtc": "none",
+        "hd": "none",
+        "other_relatives": [
+          { "relation": "half-brother", "condition": "pancreatic dysplasia" }
+        ]
+      },
+      "symptoms": [
+        "severe constipation since infancy",
+        "neck lumps for 2 years"
+      ],
+      "physical_exam": {
+        "weight_kg": 26.8,
+        "height_cm": 136,
+        "bmi": 14.49,
+        "growth_status": "retarded",
+        "puberty_status": "prepubertal (Tanner I)",
+        "blood_pressure": "100/64 mmHg",
+        "mucosal_neuromas": "present",
+        "thyroid_enlargement": "present"
+      },
+      "biochemical_data": [
+        { "analyte": "FT3", "value": "normal" },
+        { "analyte": "FT4", "value": "normal" },
+        { "analyte": "TSH", "value": "normal" },
+        {
+          "analyte": "calcitonin",
+          "value": "1187 pg/ml (high, pre-op); 850.8 pg/ml (post-op, decreased); 1072.1 pg/ml (5 months postop, increased); 442.5-2000 pg/ml (follow-up, fluctuating)"
+        },
+        {
+          "analyte": "CEA",
+          "value": "655.4 ng/ml (pre-op, high); 9.95–98.32 ng/ml (follow-up, fluctuating)"
+        },
+        { "analyte": "PTH", "value": "slightly elevated" },
+        { "analyte": "IGF-1", "value": "61 ng/ml (low for age)" },
+        { "analyte": "serum insulin", "value": "normal" },
+        { "analyte": "GH", "value": "normal" },
+        { "analyte": "prolactin", "value": "normal" },
+        { "analyte": "cortisol", "value": "normal" },
+        { "analyte": "adrenaline", "value": "normal" },
+        { "analyte": "norepinephrine", "value": "normal" },
+        { "analyte": "electrolytes", "value": "normal" }
+      ],
+      "imaging": [
+        "Ultrasound: two thyroid masses (right: 37x20 mm, left: 43x20 mm), both TI-RADS 5; multiple metastatic cervical lymph nodes",
+        "Abdominal X-ray, CT: transverse colon dilatation, colon wall thickening → suggests megacolon",
+        "Head MRI: no abnormality",
+        "Adrenal CT: no abnormality"
+      ],
+      "pathology": [
+        "Post-thyroidectomy: bilateral medullary thyroid carcinoma (T3N1bM0, stage IV A), 24/38 lymph node metastases",
+        "Colon: ganglioneuromatosis throughout colon"
+      ],
+      "genetics": {
+        "ret_c2753tc_m918t": "present",
+        "others": "none detected"
+      },
+      "diagnoses": [
+        "MEN2B",
+        "medullary thyroid carcinoma",
+        "Hirschsprung disease",
+        "ganglioneuromatosis",
+        "mucosal neuromas"
+      ],
+      "surgeries": [
+        "Extended radical thyroidectomy + cervical lymph node dissection",
+        "Mediastinal tumor resection + further radical thyroid surgery (for metastases, 5 months after first surgery)",
+        "Colectomy (for megacolon/HD) at age 13"
+      ],
+      "follow_up": [
+        "L-thyroxine 50μg/d replacement, adjusted per thyroid function",
+        "Pubertal development started post-thyroidectomy; menstruated at age 14",
+        "Height at most recent follow-up: 156.8 cm (-0.62 SD)",
+        "Regular monitoring of IGF-1, BP, thyroid/adrenal function, CEA, calcitonin"
+      ],
+      "notes": "No Marfan-like habitus. Calcitonin doubling time over 6 months. Metastatic disease documented. Catch-up growth and puberty occurred after MTC surgery. MEN2B diagnosis confirmed via phenotype and RET sequencing."
+    },
+    {
+      "id": "father",
+      "sequencing": "RET negative",
+      "notes": "Healthy"
+    },
+    {
+      "id": "half_brother",
+      "condition": "pancreatic dysplasia",
+      "sequencing": "RET negative",
+      "notes": "Shares father with proband"
+    },
+    {
+      "id": "mother",
+      "sequencing": "not obtained",
+      "notes": "De novo mutation cannot be confirmed"
+    }
+  ],
+  "laboratory_table": {
+    "table_name": "Table 1",
+    "metadata_only": true,
+    "data": "Values include: Calcitonin (1187 pg/ml pre-op, see above), CEA (655.4 ng/ml), IGF-1 (61 ng/ml), thyroid hormones and others as above; full table not reproduced."
+  },
+  "figures": {
+    "Figure1_caption": "Clinical characteristics of the patient: (a) thickened lips, (b) neuromas of gingival tissue/tongue/oral mucosa, (c) thyroid nodule, (d) metastatic lymph nodes, (e) thyroid enlargement with multiple calcifications, (f, g) colon dilatation, (h) colon wall thickening.",
+    "Figure2_caption": "Thyroid tumor pathology: (a) HE stain (spindle cell arrangement, amyloid), (b-d) immunohistochemical (calcitonin+, Ki67+, TTF-1+).",
+    "Figure3_caption": "RET gene mutation sequencing map: c.2753T>C, p.M918T in proband.",
+    "Figure4_caption": "Follow-up of CEA (a) and calcitonin (b) index over time."
+  },
+  "methods": {
+    "sequencing": "RET gene sequencing (platform unspecified)",
+    "classification_system": "ACMG guidelines"
+  },
+  "notes": "Retrospective review, no intervention. Several Chinese/English MEN2B cases reviewed in literature. p.M918T accounts for >95% MEN2B; 100% of children develop MTC. Early thyroidectomy (before age 1 if possible) per ATA guideline. Survival linked to calcitonin doubling time (see discussion). Targeted therapy options (vandetanib, etc.) not available to this patient. Mother unavailable, so de novo status unconfirmed.",
+  "validation_checks": {
+    "all_values_from_text": true,
+    "no_hallucinations": true
+  }
+}

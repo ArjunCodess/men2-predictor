@@ -1,11 +1,11 @@
 RANDOM_FOREST TEST RESULTS (ORIGINAL)
 ==================================================
-Accuracy: 0.9375 (95% CI: [0.8125, 1.0000])
-Precision: 0.8571 (95% CI: [0.5000, 1.0000])
-Recall: 1.0000 (95% CI: [1.0000, 1.0000])
-F1 Score: 0.9231 (95% CI: [0.6667, 1.0000])
-ROC AUC: 0.9833 (95% CI: [0.9048, 1.0000])
-Average Precision: 0.9762
+Accuracy: 0.8462 (95% CI: [0.6923, 0.9615])
+Precision: 0.7692 (95% CI: [0.5000, 1.0000])
+Recall: 0.9091 (95% CI: [0.7000, 1.0000])
+F1 Score: 0.8333 (95% CI: [0.6314, 0.9630])
+ROC AUC: 0.9273 (95% CI: [0.7988, 1.0000])
+Average Precision: 0.9245
 ==================================================
 
 Bootstrap method: 1000 iterations, 95% confidence level
