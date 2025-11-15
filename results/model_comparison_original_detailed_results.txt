@@ -2,7 +2,7 @@ MODEL COMPARISON - COMPLETE PATIENT DATA WITH PREDICTIONS
 Dataset: ORIGINAL
 Data Split: 80/20 train/test, random_state=42, stratified by target
 SMOTE applied: Only to training data (test data is 100% real)
-Test set size: 28 patients
+Test set size: 26 patients
 ========================================================================================================================================================================================================
 
 LEGEND:
@@ -24,41 +24,39 @@ LEGEND:
 
 Patient_ID      Age   Sex RET_Var  Risk Calc_Elev  Calc_Lvl Nod MN  FH  Pheo HPT  | Actual   | LR   | RF   | LGB  | XGB  | SVM 
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-study_3         39    F   K666N    1    N          0.2      N   N   Y   N    N    | No_MTC   | OK   | OK   | OK   | OK   | OK  
-study_5         40    F   K666N    1    Y          16.8     N   N   N   Y    Y    | MTC      | OK   | OK   | OK   | OK   | OK  
-study_4         36    F   C630R    2    Y          75.0     N   N   N   N    N    | MTC      | OK   | OK   | OK   | OK   | OK  
-study_7         1     F   R525W    1    N          0.0      N   N   N   N    N    | No_MTC   | OK   | OK   | OK   | OK   | OK  
-study_4         20    F   C634R    3    N          0.0      N   N   Y   N    N    | No_MTC   | OK   | OK   | OK   | OK   | XX  
-study_7         44    F   S891A    1    N          0.0      N   N   N   N    N    | No_MTC   | OK   | OK   | OK   | OK   | OK  
-study_4         38    M   C634Y    3    N          0.0      N   N   Y   N    N    | No_MTC   | XX   | OK   | XX   | XX   | XX  
-study_10        34    F   C634Y    3    N          0.0      N   N   Y   Y    Y    | MTC      | OK   | XX   | XX   | OK   | OK  
-study_4         25    M   C634R    3    Y          41.0     N   N   N   N    N    | MTC      | OK   | OK   | OK   | OK   | OK  
-study_7         45    F   S891A    1    N          0.0      N   N   N   N    N    | No_MTC   | OK   | OK   | OK   | OK   | OK  
-study_4         31    M   C634R    3    Y          43.6     N   N   N   N    N    | MTC      | OK   | OK   | OK   | OK   | OK  
-study_6         61    F   K666N    1    N          0.0      N   N   Y   N    N    | No_MTC   | XX   | OK   | OK   | OK   | XX  
-study_7         6     F   S891A    1    N          0.0      N   N   N   N    N    | No_MTC   | OK   | OK   | OK   | OK   | OK  
-study_4         40    F   C634R    3    Y          250.0    N   N   N   N    N    | MTC      | OK   | OK   | OK   | OK   | OK  
-study_14        3     F   M918T    3    Y          1350.0   Y   N   N   N    N    | MTC      | OK   | OK   | OK   | OK   | OK  
-study_4         21    M   L790F    1    Y          5.0      N   N   N   N    N    | No_MTC   | XX   | OK   | OK   | XX   | XX  
-study_4         41    M   C634Y    3    Y          80.0     N   N   Y   N    N    | MTC      | OK   | OK   | OK   | OK   | OK  
-study_7         20    F   R525W    1    N          0.0      N   N   N   N    N    | No_MTC   | OK   | OK   | OK   | OK   | OK  
-study_1         84    F   K666N    1    Y          37.0     Y   N   Y   N    N    | No_MTC   | XX   | XX   | XX   | XX   | XX  
-study_9         67    F   M918T    3    N          0.0      N   N   N   N    N    | MTC      | OK   | OK   | OK   | OK   | OK  
-study_4         24    F   V804M    1    N          0.0      N   N   N   N    N    | No_MTC   | OK   | OK   | OK   | OK   | XX  
-study_4         47    M   C634Y    3    Y          26.2     N   N   Y   N    N    | MTC      | OK   | OK   | OK   | OK   | OK  
-study_9         61    F   C630R    2    Y          7838.0   N   N   N   N    N    | MTC      | OK   | OK   | OK   | OK   | OK  
-study_9         51    F   C620W    2    N          0.0      N   N   N   N    N    | MTC      | OK   | XX   | OK   | OK   | OK  
+study_3         39    F   K666N    1    N          0.2      N   N   Y   N    N    | No_MTC   | OK   | OK   | OK   | XX   | OK  
 study_1         21    F   K666N    1    N          0.2      N   N   Y   N    N    | No_MTC   | OK   | OK   | OK   | OK   | OK  
-study_6         32    M   K666N    1    Y          16.0     N   N   Y   N    N    | No_MTC   | OK   | XX   | OK   | XX   | OK  
-study_12        27    F   Y791F    1    N          5.0      N   N   N   Y    N    | No_MTC   | OK   | OK   | OK   | OK   | XX  
+study_4         38    M   C634Y    3    N          0.0      N   N   Y   N    N    | No_MTC   | XX   | XX   | XX   | XX   | XX  
+study_9         51    F   C620W    2    N          0.0      N   N   N   N    N    | MTC      | OK   | OK   | OK   | OK   | OK  
+study_5         40    F   K666N    1    Y          16.8     N   N   N   Y    Y    | MTC      | OK   | OK   | OK   | OK   | OK  
+study_6         61    F   K666N    1    N          0.0      N   N   Y   N    N    | No_MTC   | XX   | OK   | OK   | OK   | OK  
+study_4         20    F   C634R    3    N          0.0      N   N   Y   N    N    | No_MTC   | OK   | OK   | OK   | OK   | XX  
+study_4         24    F   V804M    1    N          0.0      N   N   N   N    N    | No_MTC   | OK   | OK   | OK   | OK   | XX  
+study_7         8     F   S891A    1    N          0.0      N   N   N   N    N    | No_MTC   | OK   | OK   | OK   | OK   | OK  
+study_4         40    F   C634R    3    Y          250.0    N   N   N   N    N    | MTC      | OK   | OK   | OK   | OK   | OK  
+study_7         45    F   S891A    1    N          0.0      N   N   N   N    N    | No_MTC   | OK   | OK   | OK   | OK   | OK  
+study_7         1     F   R525W    1    N          0.0      N   N   N   N    N    | No_MTC   | OK   | OK   | OK   | OK   | OK  
+study_9         67    F   M918T    3    N          0.0      N   N   N   N    N    | MTC      | OK   | OK   | OK   | OK   | OK  
+study_7         44    F   S891A    1    N          0.0      N   N   N   N    N    | No_MTC   | OK   | OK   | OK   | OK   | OK  
+study_4         21    M   L790F    1    Y          5.0      N   N   N   N    N    | No_MTC   | XX   | OK   | OK   | OK   | XX  
+study_4         31    M   C634R    3    Y          43.6     N   N   N   N    N    | MTC      | OK   | OK   | OK   | OK   | OK  
+study_4         41    M   C634Y    3    Y          80.0     N   N   Y   N    N    | MTC      | OK   | OK   | OK   | OK   | OK  
+study_10        28    M   C634Y    3    Y          0.0      Y   N   Y   Y    N    | MTC      | OK   | XX   | XX   | XX   | OK  
+study_9         61    F   C630R    2    Y          7838.0   N   N   N   N    N    | MTC      | OK   | OK   | OK   | OK   | OK  
 study_4         10    M   Y791F    1    Y          8.0      N   N   N   N    N    | No_MTC   | OK   | OK   | OK   | OK   | XX  
+study_7         1     F   R525W    1    N          0.0      N   N   N   N    N    | No_MTC   | OK   | OK   | OK   | OK   | OK  
+study_1         84    F   K666N    1    Y          37.0     Y   N   Y   N    N    | No_MTC   | XX   | XX   | XX   | XX   | OK  
+study_4         47    M   C634Y    3    Y          26.2     N   N   Y   N    N    | MTC      | OK   | OK   | OK   | OK   | OK  
+study_6         32    M   K666N    1    Y          16.0     N   N   Y   N    N    | No_MTC   | OK   | XX   | OK   | XX   | OK  
+study_4         25    M   C634R    3    Y          41.0     N   N   N   N    N    | MTC      | OK   | OK   | OK   | OK   | OK  
+study_4         36    F   C630R    2    Y          75.0     N   N   N   N    N    | MTC      | OK   | OK   | OK   | OK   | OK  
 ========================================================================================================================================================================================================
 
 MODEL ACCURACY SUMMARY:
 --------------------------------------------------
-LR         | 24/28 correct (85.7%)
-RF         | 24/28 correct (85.7%)
-LGB        | 25/28 correct (89.3%)
-XGB        | 24/28 correct (85.7%)
-SVM        | 20/28 correct (71.4%)
+LR         | 22/26 correct (84.6%)
+RF         | 22/26 correct (84.6%)
+LGB        | 23/26 correct (88.5%)
+XGB        | 21/26 correct (80.8%)
+SVM        | 21/26 correct (80.8%)
 ========================================================================================================================================================================================================
