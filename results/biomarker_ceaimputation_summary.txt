@@ -1,14 +1,23 @@
 BIOMARKER INTEGRATION SUMMARY
 ============================================================
-Study 5 correlation sample size: 4 pairs
-Pearson correlation (calcitonin vs CEA): -0.0989
-Regression slope: -0.0016
-Regression intercept: 1.5005
-Residual std: 0.1472
+Observed correlation sample size: 29 pairs across 8 studies
+Pearson correlation (calcitonin vs CEA): 0.7147
+Regression slope: 0.0204
+Regression intercept: 52.3297
+Residual std: 178.2219
+Pair contributions by study:
+- JCEM (2022) ctDNA Cohort: 16 pairs
+- Thyroid Journal (2016): 3 pairs
+- Oncotarget (2015) RET S891A FMTC: 3 pairs
+- European Journal of Endocrinology (2006): 2 pairs
+- Laryngoscope (2021) MEN2A Penetrance: 2 pairs
+- JCEM (2018) Homozygous RET K666N: 1 pairs
+- AJCR (2022) Calcitonin-Negative MTC: 1 pairs
+- BMC Pediatrics (2020) MEN2B Case: 1 pairs
 
 MICE + PMM Imputation
-Observed CEA values before: 7
-Missing CEA values before: 75
+Observed CEA values before: 29
+Missing CEA values before: 109
 Strategy: mice_pmm
 MICE iterations: 20
 Missing after imputation: 0
