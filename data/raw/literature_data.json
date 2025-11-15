@@ -1,13 +1,12 @@
 {
-  "total_studies": 14,
-  "total_patients": 138,
+  "total_studies": 13,
+  "total_patients": 129,
   "study_patient_counts": {
     "JCEM Case Reports (2025)": 4,
     "Genes (2022) RET c.1901G>A Family": 2,
     "BMC Pediatrics (2020) MEN2B Case": 1,
     "Annales d'Endocrinologie (2015) RET Y791F": 1,
     "Surgery Today (2014) RET S891A Pheo": 2,
-    "Annals of Surgery (2014) MEN2B Cohort": 9,
     "JCEM (2016) RET Exon 7 Deletion": 1,
     "Thyroid Journal (2016)": 24,
     "European Journal of Endocrinology (2006)": 46,
@@ -19,10 +18,10 @@
   },
   "ret_variant_counts": {
     "K666N": 39,
-    "M918T": 17,
     "C634Y": 17,
     "S891A": 12,
     "C634R": 10,
+    "M918T": 8,
     "R525W": 7,
     "C630R": 6,
     "C634W": 5,
@@ -42,24 +41,17 @@
     "C630G": 1
   },
   "gender_counts": {
-    "female": 92,
-    "male": 46
+    "female": 87,
+    "male": 42
   },
-  "mtc_cases_total": 61,
-  "c_cell_disease_cases": 67,
-  "men2_cases": 63,
+  "mtc_cases_total": 54,
+  "c_cell_disease_cases": 58,
+  "men2_cases": 54,
   "pheochromocytoma_cases": 7,
   "hyperparathyroidism_cases": 3,
-  "calcitonin_elevated_rate": 0.4420289855072464,
-  "thyroid_nodules_rate": 0.036231884057971016,
+  "calcitonin_elevated_rate": 0.40310077519379844,
+  "thyroid_nodules_rate": 0.023255813953488372,
   "mtc_diagnosis_ages": [
-    0.5,
-    0.5,
-    0.6,
-    1.0,
-    2.9,
-    3.0,
-    3.8,
     12.0,
     16.0,
     25.0,
@@ -116,9 +108,9 @@
     77.0
   ],
   "age_summary": {
-    "mean": 34.266666666666666,
-    "median": 31.5,
-    "min": 0.5,
+    "mean": 36.542635658914726,
+    "median": 34.0,
+    "min": 1.0,
     "max": 90.0
   }
 }
