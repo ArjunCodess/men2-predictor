@@ -8,3 +8,4 @@ joblib
 imbalanced-learn
 xgboost
 lightgbm
+shap
