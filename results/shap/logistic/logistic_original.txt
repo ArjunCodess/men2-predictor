@@ -1,0 +1,18 @@
+SHAP SUMMARY
+Model: logistic
+Dataset: original
+Background size: 26
+Sample size: 26
+============================================================
+Top features by mean |SHAP|:
+ 1. family_history_mtc: 1.148125
+ 2. risk_age_interaction: 0.930429
+ 3. ret_risk_level: 0.830877
+ 4. variant_S891A: 0.797973
+ 5. variant_R525W: 0.494944
+ 6. age_group_young: 0.457429
+ 7. age_group_elderly: 0.388940
+ 8. age: 0.329963
+ 9. variant_C630R: 0.324226
+10. age_squared: 0.323089
+============================================================

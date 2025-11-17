@@ -1,0 +1,18 @@
+SHAP SUMMARY
+Model: xgboost
+Dataset: expanded
+Background size: 50
+Sample size: 178
+============================================================
+Top features by mean |SHAP|:
+ 1. calcitonin_elevated: 0.114060
+ 2. risk_age_interaction: 0.075229
+ 3. risk_calcitonin_interaction: 0.036666
+ 4. thyroid_nodules_present: 0.036511
+ 5. age_squared: 0.033828
+ 6. calcitonin_age_interaction: 0.030280
+ 7. calcitonin_level_numeric: 0.026769
+ 8. variant_C634Y: 0.026705
+ 9. family_history_mtc: 0.025776
+10. age: 0.021462
+============================================================

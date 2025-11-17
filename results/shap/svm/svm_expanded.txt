@@ -1,0 +1,18 @@
+SHAP SUMMARY
+Model: svm
+Dataset: expanded
+Background size: 50
+Sample size: 178
+============================================================
+Top features by mean |SHAP|:
+ 1. age_squared: 0.203213
+ 2. age: 0.102307
+ 3. ret_risk_level: 0.068866
+ 4. calcitonin_elevated: 0.068751
+ 5. age_group_middle: 0.060425
+ 6. risk_age_interaction: 0.052835
+ 7. multiple_nodules: 0.048762
+ 8. family_history_mtc: 0.043190
+ 9. variant_C634Y: 0.040293
+10. calcitonin_age_interaction: 0.037381
+============================================================

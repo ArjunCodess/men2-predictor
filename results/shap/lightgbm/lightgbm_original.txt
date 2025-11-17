@@ -1,0 +1,18 @@
+SHAP SUMMARY
+Model: lightgbm
+Dataset: original
+Background size: 26
+Sample size: 26
+============================================================
+Top features by mean |SHAP|:
+ 1. risk_age_interaction: 0.148325
+ 2. calcitonin_age_interaction: 0.073657
+ 3. calcitonin_level_numeric: 0.053969
+ 4. calcitonin_elevated: 0.050203
+ 5. ret_risk_level: 0.048097
+ 6. family_history_mtc: 0.034892
+ 7. age: 0.030718
+ 8. age_group_young: 0.024582
+ 9. risk_calcitonin_interaction: 0.021155
+10. age_group_middle: 0.011825
+============================================================
