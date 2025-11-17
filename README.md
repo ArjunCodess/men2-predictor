@@ -520,6 +520,12 @@ When using `--d=both`, the pipeline:
 
 This mode clearly demonstrates the recall degradation from synthetic augmentation.
 
+### Explainability (SHAP)
+
+- Run `python src/test_model.py --m=<model> --d=<dataset>` to print SHAP summaries inside the existing evaluation pipeline.
+- Text outputs land at `results/shap_<model>_<dataset>.txt` (e.g., `results/shap_logistic_expanded.txt`); charts save to `charts/shap/` (`*_bar.png` and `*_beeswarm.png`).
+- Explainers are tailored per model: tree ensembles use `shap.TreeExplainer`, linear/logistic/SVM use `shap.LinearExplainer`, with an automatic fallback to `shap.Explainer` if needed.
+
 ### Model comparison with patient data
 
 **New feature:** Every test run now automatically generates a comprehensive comparison of all 5 models on the same test set, showing complete patient data alongside each model's predictions.
