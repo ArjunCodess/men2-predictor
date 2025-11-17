@@ -849,17 +849,27 @@ def _create_shap_explainer(model, model_type, background_data):
         return None
 
     try:
-        if model_type in ['random_forest', 'lightgbm', 'xgboost']:
+        if model_type in ['random_forest', 'lightgbm']:
             return shap.TreeExplainer(model.model, data=background_data, model_output="probability")
+        elif model_type == 'xgboost':
+            # Try native, then booster
+            try:
+                return shap.TreeExplainer(model.model, data=background_data, model_output="probability")
+            except Exception:
+                booster = getattr(model.model, "get_booster", lambda: None)()
+                if booster is not None:
+                    return shap.TreeExplainer(booster, data=background_data, model_output="probability")
+                raise
         elif model_type in ['logistic', 'svm']:
             return shap.LinearExplainer(model.model, background_data, feature_perturbation="interventional", model_output="probability")
         else:
             return shap.Explainer(model.model, background_data)
     except Exception as e:
         print(f"Unable to initialize SHAP explainer for {model_type}: {e}")
+        # Final fallback: use callable predict_proba if available
         try:
-            print("Falling back to shap.Explainer.")
-            return shap.Explainer(model.model, background_data)
+            print("Falling back to shap.Explainer with predict_proba.")
+            return shap.Explainer(getattr(model.model, "predict_proba"), background_data)
         except Exception as fallback_error:
             print(f"Fallback SHAP explainer also failed: {fallback_error}")
             return None
@@ -922,16 +932,19 @@ def generate_shap_explanations(model, X_test, test_patients, model_type='logisti
     top_indices = np.argsort(mean_abs_importance)[::-1]
     top_display = top_indices[:min(10, len(top_indices))]
 
-    # Prepare paths
-    results_dir = Path("results")
-    charts_dir = Path("charts") / "shap"
-    results_dir.mkdir(parents=True, exist_ok=True)
-    charts_dir.mkdir(parents=True, exist_ok=True)
-
+    # Prepare paths (organized per model/dataset)
+    root_results = Path("results")
+    root_charts = Path("charts")
     dataset_label = "original" if dataset_type == 'original' else "expanded"
-    text_path = results_dir / f"shap_{model_type}_{dataset_label}.txt"
-    bar_path = charts_dir / f"{model_type}_{dataset_label}_bar.png"
-    beeswarm_path = charts_dir / f"{model_type}_{dataset_label}_beeswarm.png"
+
+    shap_results_dir = root_results / "shap" / model_type
+    shap_charts_dir = root_charts / "shap" / model_type
+    shap_results_dir.mkdir(parents=True, exist_ok=True)
+    shap_charts_dir.mkdir(parents=True, exist_ok=True)
+
+    text_path = shap_results_dir / f"{model_type}_{dataset_label}.txt"
+    bar_path = shap_charts_dir / f"{dataset_label}_bar.png"
+    beeswarm_path = shap_charts_dir / f"{dataset_label}_beeswarm.png"
 
     # Save textual summary
     with open(text_path, "w") as f:
