@@ -1,0 +1,18 @@
+SHAP SUMMARY
+Model: svm
+Dataset: original
+Background size: 26
+Sample size: 26
+============================================================
+Top features by mean |SHAP|:
+ 1. age_squared: 0.086703
+ 2. family_history_mtc: 0.077392
+ 3. risk_age_interaction: 0.056130
+ 4. ret_risk_level: 0.050843
+ 5. variant_S891A: 0.047575
+ 6. variant_C630R: 0.022748
+ 7. variant_C634R: 0.022449
+ 8. age_group_very_elderly: 0.021521
+ 9. age_group_middle: 0.018433
+10. variant_R525W: 0.016880
+============================================================

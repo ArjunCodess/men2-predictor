@@ -1,0 +1,18 @@
+SHAP SUMMARY
+Model: lightgbm
+Dataset: expanded
+Background size: 50
+Sample size: 178
+============================================================
+Top features by mean |SHAP|:
+ 1. calcitonin_elevated: 0.084926
+ 2. risk_age_interaction: 0.047935
+ 3. thyroid_nodules_present: 0.034540
+ 4. calcitonin_age_interaction: 0.033336
+ 5. risk_calcitonin_interaction: 0.030253
+ 6. family_history_mtc: 0.022846
+ 7. ret_risk_level: 0.022746
+ 8. age: 0.021870
+ 9. age_squared: 0.016681
+10. calcitonin_level_numeric: 0.015776
+============================================================

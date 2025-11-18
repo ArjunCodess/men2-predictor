@@ -154,7 +154,7 @@ This project makes three critical contributions to medical machine learning:
 
 **Immediate (0-3 months)**:
 
-- Add SHAP explainability to show models learned real biology, not artifacts
+- ✅ Add SHAP explainability to show models learned real biology, not artifacts
 - Implement uncertainty quantification (confidence intervals on predictions)
 - Create clinical decision support interface with deployment guidelines
 
@@ -519,6 +519,13 @@ When using `--d=both`, the pipeline:
 4. Displays a comparison table showing performance differences
 
 This mode clearly demonstrates the recall degradation from synthetic augmentation.
+
+### Explainability (SHAP)
+
+- Run `python src/test_model.py --m=<model> --d=<dataset>` (or via `main.py --m=all --d=both`) to print SHAP summaries inside the existing evaluation pipeline.
+- Text outputs now live under `results/shap/<model>/<model>_<dataset>.txt` (e.g., `results/shap/logistic/logistic_expanded.txt`).
+- Charts are written to `charts/shap/<model>/` (`expanded_bar.png`, `expanded_beeswarm.png`, `original_bar.png`, `original_beeswarm.png`), so every model/dataset pair produces its own plots.
+- Explainers are tailored per model: tree ensembles use `shap.TreeExplainer`, linear/logistic/SVM use `shap.LinearExplainer`, and there is an automatic fallback to a callable-based `shap.Explainer` when native explainers are unsupported (e.g., calibrated SVM or certain XGBoost wrappers).
 
 ### Model comparison with patient data
 

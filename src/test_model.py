@@ -3,8 +3,10 @@ import numpy as np
 import sys
 import os
 import argparse
+from pathlib import Path
 import matplotlib.pyplot as plt
 import seaborn as sns
+import shap
 
 # Add models directory to path
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'models'))
@@ -835,6 +837,151 @@ def generate_confusion_matrix(model, X_test, y_test, model_type='logistic', data
     
     return cm
 
+
+def _create_shap_explainer(model, model_type, background_data):
+    """Create a SHAP explainer tailored to the model type."""
+    if shap is None:
+        print("SHAP is not installed. Install from requirements.txt to enable explainability.")
+        return None
+
+    try:
+        if model_type in ['random_forest', 'lightgbm']:
+            return shap.TreeExplainer(model.model, data=background_data, model_output="probability")
+        elif model_type == 'xgboost':
+            # Try native, then booster
+            try:
+                return shap.TreeExplainer(model.model, data=background_data, model_output="probability")
+            except Exception:
+                booster = getattr(model.model, "get_booster", lambda: None)()
+                if booster is not None:
+                    return shap.TreeExplainer(booster, data=background_data, model_output="probability")
+                raise
+        elif model_type in ['logistic', 'svm']:
+            return shap.LinearExplainer(model.model, background_data, feature_perturbation="interventional", model_output="probability")
+        else:
+            return shap.Explainer(model.model, background_data)
+    except Exception as e:
+        print(f"Unable to initialize SHAP explainer for {model_type}: {e}")
+        # Final fallback: use callable predict_proba if available
+        try:
+            print("Falling back to shap.Explainer with predict_proba.")
+            return shap.Explainer(getattr(model.model, "predict_proba"), background_data)
+        except Exception as fallback_error:
+            print(f"Fallback SHAP explainer also failed: {fallback_error}")
+            return None
+
+
+def generate_shap_explanations(model, X_test, test_patients, model_type='logistic', dataset_type='expanded'):
+    """Generate SHAP values, save summaries to results, and plots to charts."""
+    print("\n" + "=" * 60)
+    print("GENERATING SHAP EXPLANATIONS")
+    print("=" * 60)
+
+    if shap is None:
+        print("Skipping SHAP generation because the shap package is not available.")
+        return
+
+    if X_test is None or len(X_test) == 0:
+        print("No test data available for SHAP computation.")
+        return
+
+    # Ensure deterministic sampling for reproducibility
+    rng = np.random.default_rng(42)
+
+    feature_names = model.feature_columns if model.feature_columns is not None else [f"feature_{i}" for i in range(X_test.shape[1])]
+    background_size = min(50, X_test.shape[0])
+    sample_size = min(200, X_test.shape[0])
+
+    background_idx = rng.choice(X_test.shape[0], size=background_size, replace=False)
+    sample_idx = rng.choice(X_test.shape[0], size=sample_size, replace=False)
+
+    background_data = X_test[background_idx]
+    sample_data = X_test[sample_idx]
+
+    explainer = _create_shap_explainer(model, model_type, background_data)
+    if explainer is None:
+        print("SHAP explainer could not be created; skipping SHAP outputs.")
+        return
+
+    try:
+        shap_values = explainer(sample_data)
+    except Exception as e:
+        print(f"Failed to compute SHAP values: {e}")
+        return
+
+    # Handle multi-output explanations by selecting the positive class if needed
+    shap_array = shap_values.values
+    if shap_array.ndim == 3:
+        # Handle both (samples, features, outputs) and (samples, outputs, features)
+        if shap_array.shape[1] == len(feature_names):
+            class_axis = 2
+            class_index = min(1, shap_array.shape[class_axis] - 1)
+            shap_array = shap_array[:, :, class_index]
+        elif shap_array.shape[2] == len(feature_names):
+            class_axis = 1
+            class_index = min(1, shap_array.shape[class_axis] - 1)
+            shap_array = shap_array[:, class_index, :]
+        else:
+            shap_array = shap_array.reshape(shap_array.shape[0], -1)
+
+    mean_abs_importance = np.abs(shap_array).mean(axis=0)
+    top_indices = np.argsort(mean_abs_importance)[::-1]
+    top_display = top_indices[:min(10, len(top_indices))]
+
+    # Prepare paths (organized per model/dataset)
+    root_results = Path("results")
+    root_charts = Path("charts")
+    dataset_label = "original" if dataset_type == 'original' else "expanded"
+
+    shap_results_dir = root_results / "shap" / model_type
+    shap_charts_dir = root_charts / "shap" / model_type
+    shap_results_dir.mkdir(parents=True, exist_ok=True)
+    shap_charts_dir.mkdir(parents=True, exist_ok=True)
+
+    text_path = shap_results_dir / f"{model_type}_{dataset_label}.txt"
+    bar_path = shap_charts_dir / f"{dataset_label}_bar.png"
+    beeswarm_path = shap_charts_dir / f"{dataset_label}_beeswarm.png"
+
+    # Save textual summary
+    with open(text_path, "w") as f:
+        f.write(f"SHAP SUMMARY\n")
+        f.write(f"Model: {model_type}\n")
+        f.write(f"Dataset: {dataset_label}\n")
+        f.write(f"Background size: {background_size}\n")
+        f.write(f"Sample size: {sample_size}\n")
+        f.write("=" * 60 + "\n")
+        f.write("Top features by mean |SHAP|:\n")
+        for rank, idx in enumerate(top_display, 1):
+            f.write(f"{rank:2d}. {feature_names[idx]}: {mean_abs_importance[idx]:.6f}\n")
+        f.write("=" * 60 + "\n")
+
+    print(f"Top SHAP drivers ({model_type}, {dataset_label}):")
+    for rank, idx in enumerate(top_display, 1):
+        print(f"  {rank:2d}. {feature_names[idx]} -> mean |SHAP| = {mean_abs_importance[idx]:.6f}")
+    print(f"Saved SHAP summary to {text_path}")
+
+    # Bar plot of global importance
+    plt.figure(figsize=(10, 6))
+    top_features = [feature_names[idx] for idx in top_display]
+    top_values = [mean_abs_importance[idx] for idx in top_display]
+    plt.barh(top_features[::-1], top_values[::-1], color="#1f77b4")
+    plt.xlabel("Mean |SHAP|")
+    plt.title(f"Global SHAP Importance - {model_type} ({dataset_label})")
+    plt.tight_layout()
+    plt.savefig(bar_path, dpi=300, bbox_inches="tight")
+    plt.close()
+    print(f"SHAP bar chart saved to: {bar_path}")
+
+    # Beeswarm / summary plot
+    try:
+        shap.summary_plot(shap_values, sample_data, feature_names=feature_names, show=False, max_display=20)
+        plt.tight_layout()
+        plt.savefig(beeswarm_path, dpi=300, bbox_inches="tight")
+        plt.close()
+        print(f"SHAP beeswarm plot saved to: {beeswarm_path}")
+    except Exception as e:
+        print(f"Failed to create SHAP beeswarm plot: {e}")
+
 if __name__ == "__main__":
     # parse command line arguments
     parser = argparse.ArgumentParser(description='test mtc prediction model')
@@ -880,6 +1027,7 @@ if __name__ == "__main__":
 
     print_individual_predictions(model, test_patients, y_test)
     print_model_insights(model, X_test_scaled, y_test, test_patients)
+    generate_shap_explanations(model, X_test_scaled, test_patients, model_type, dataset_type)
 
     # generate visualizations
     generate_correlation_matrix(model, test_patients, model_type, dataset_type)
