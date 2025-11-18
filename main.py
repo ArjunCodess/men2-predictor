@@ -411,8 +411,6 @@ if __name__ == "__main__":
     parser.add_argument('--d', '--data', type=str, default='e',
                        choices=['e', 'o', 'b', 'expanded', 'original', 'both'],
                        help='dataset type: e/expanded (with controls + SMOTE - default), o/original (paper data only), b/both (run on both datasets)')
-    parser.add_argument('--stats', action='store_true',
-                       help='run statistical significance tests on recall differences after the pipeline')
 
     args = parser.parse_args()
 
@@ -443,11 +441,13 @@ if __name__ == "__main__":
         success = main(model_type, dataset_type)
 
     stats_success = True
-    if success and args.stats:
+    if success and dataset_type == 'both':
         stats_success = run_module(
             "src/statistical_tests.py",
             "Statistical Significance Tests - Recall comparison for original vs expanded datasets",
             log_file="results/logs/statistical_tests.log"
         )
+    elif success:
+        print("Skipping statistical significance tests (requires running both datasets).")
 
     sys.exit(0 if success and stats_success else 1)

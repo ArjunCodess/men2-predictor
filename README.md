@@ -51,7 +51,7 @@ Variant-matched synthetic controls + SMOTE now grow the training pool to 198 rec
 
 - Permutation tests (10,000 shuffles) show **no statistically significant recall drop** for any model (`p = 1` for Logistic/Random Forest, `p ≈ 0.69` for LightGBM, `p ≈ 0.39` for XGBoost). SVM's 17.9 pp drop is directionally concerning but still not significant (`p ≈ 0.18`).
 - McNemar's test cannot be applied because the original and expanded test sets share no overlapping positive patients; all positives are unique to each cohort.
-- Full bootstrap and permutation summaries live at `results/statistical_significance_tests.txt` (generated via `python main.py --m=all --d=both --stats`).
+- Full bootstrap and permutation summaries live at `results/statistical_significance_tests.txt` (generated automatically when running both datasets together via `python main.py --m=all --d=both`; statistical tests run only in the both-datasets workflow).
 
 ### Why This Matters
 
@@ -519,6 +519,8 @@ When using `--d=both`, the pipeline:
 4. Displays a comparison table showing performance differences
 
 This mode clearly demonstrates the recall degradation from synthetic augmentation.
+
+Statistical significance tests are triggered automatically only when running both datasets together (e.g., `python main.py --m=all --d=both`).
 
 ### Explainability (SHAP)
 
