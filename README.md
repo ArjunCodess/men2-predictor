@@ -154,7 +154,7 @@ This project makes three critical contributions to medical machine learning:
 
 **Immediate (0-3 months)**:
 
-- Add SHAP explainability to show models learned real biology, not artifacts
+- ✅ Add SHAP explainability to show models learned real biology, not artifacts
 - Implement uncertainty quantification (confidence intervals on predictions)
 - Create clinical decision support interface with deployment guidelines
 

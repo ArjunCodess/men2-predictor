@@ -6,11 +6,7 @@ import argparse
 from pathlib import Path
 import matplotlib.pyplot as plt
 import seaborn as sns
-
-try:
-    import shap
-except ImportError:
-    shap = None
+import shap
 
 # Add models directory to path
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'models'))
