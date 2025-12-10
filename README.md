@@ -46,15 +46,15 @@ Synthetic controls + SMOTE expand the training pool to 198 records. The ctDNA co
 - **Ensemble shifts:** Expanded ensembles raise accuracy toward 95%.
 - **Model selection:** Deploy the original logistic model for screening workflows; treat expanded gradient boosters as high-accuracy triage models for ctDNA-positive or metastatic follow-up cases once validated prospectively.
 
-### Statistical Tests
+### Statistical Tests on Recall Drops
 
-- Permutation tests (10,000 shuffles) show no statistically significant differences in recall across models.
-- McNemar's test cannot be applied because the original and expanded test sets share no overlapping positive patients.
-- Full summaries are in `results/statistical_significance_tests.txt` (generated when running both datasets via `python main.py --m=all --d=both`).
+- Permutation tests (10,000 shuffles) show **no statistically significant recall drop** for any model (`p = 1` for Logistic/Random Forest, `p ≈ 0.69` for LightGBM, `p ≈ 0.39` for XGBoost). SVM's 17.9 pp drop is directionally concerning but still not significant (`p ≈ 0.18`).
+- McNemar's test cannot be applied because the original and expanded test sets share no overlapping positive patients; all positives are unique to each cohort.
+- Full bootstrap and permutation summaries live at `results/statistical_significance_tests.txt` (generated automatically when running both datasets together via `python main.py --m=all --d=both`; statistical tests run only in the both-datasets workflow).
 
 ### Why This Matters
 
-The real dataset now covers **129 patients with 29 calcitonin/CEA pairs**. Synthetic augmentation boosts accuracy into the 94–96% range. Preserving perfect sensitivity with the original logistic model remains the screening default until real-world validation is available.
+Even as the real dataset grows to **129 patients with 29 calcitonin/CEA pairs**, synthetic augmentation remains volatile. Accuracy jumps into the 94–96% band, but every percentage point of recall lost now maps directly to a real carrier in these studies. Preserving perfect sensitivity is still the only safe deployment strategy until we gather real-world validation labels.
 
 ### Learning Paradigm Coverage
 
@@ -173,19 +173,21 @@ This project makes three critical contributions to medical machine learning:
 
 Clinical data extracted from thirteen peer-reviewed research studies:
 
-1. **JCEM Case Reports (2025)** - 4 heterozygous RET K666N carriers (ATA Level 1) with prospective calcitonin and ultrasound surveillance.
-2. **JCEM (2016) RET Exon 7 Deletion** - 1 de novo MEN2A carrier (E505_G506del) presenting with bilateral pheochromocytomas years before micro-MTC.
-3. **Thyroid Journal (2016)** - 24 patients across eight RET K666N families with detailed age-of-onset and genotype annotations.
-4. **European Journal of Endocrinology (2006)** - 46 prophylactic thyroidectomy outcomes spanning 10 variants (ATA Levels 1-3).
-5. **Laryngoscope (2021) MEN2A penetrance** - 4 RET K666N family members with paired calcitonin and CEA trajectories.
-6. **JCEM (2018) Homozygous RET K666N** - 7 relatives (one homozygote) with bilateral pheochromocytomas and hepatic metastases.
-7. **Oncotarget (2015) RET S891A FMTC/CA** - 15 carriers with RET S891A/R525W plus OSMR G513D showing FMTC and cutaneous amyloidosis.
-8. **AJCR (2022) Calcitonin-negative V804M** - 1 metastatic V804M case proving imaging-driven diagnosis when calcitonin/CEA remain low.
-9. **JCEM (2022) ctDNA cohort** - 21 sporadic MTC cases with tissue vs ctDNA variant allele fractions and matched pre/post calcitonin & CEA logs.
-10. **Genes (2022) RET c.1901G>A family** - 2 RET C634Y carriers (with a novel SLC12A3 frameshift) presenting with early bilateral pheochromocytomas.
-11. **BMC Pediatrics (2020) MEN2B** - 1 pediatric RET M918T proband with Hirschsprung disease, megacolon, and repeated calcitonin/CEA labs.
-12. **Annales d'Endocrinologie (2015) RET Y791F** - 1 pheochromocytoma patient with consistently normal calcitonin who declined prophylactic thyroidectomy.
-13. **Surgery Today (2014) RET S891A pheochromocytoma** - 2 family members (proband + presymptomatic son) illustrating pheochromocytoma-first MEN2A.
+| Study No. | Citation & Year | Key Variant(s) / Description | Patients (n) |
+|-----------|-----------------|------------------------------|--------------|
+| 1 | JCEM Case Reports (2025) | RET K666N carriers | 4 |
+| 2 | JCEM (2016) RET Exon 7 Deletion | E505_G50del carrier | 1 |
+| 3 | Thyroid Journal (2016) | 8 K666N families | 24 |
+| 4 | Eur. J. Endocrinol. (2006) | 10 variants | 46 |
+| 5 | Endocrinol., Diab. & Metab. Case Rep. (2024) | RET K666N with calcitonin/CEA labs | 4 |
+| 6 | JCEM (2018) Homozygous K666N | Homozygous/heterozygous K666N | 7 |
+| 7 | Oncotarget (2015) RET S891A | RET S891A, FMTC/CA | 15 |
+| 8 | AJCR (2022) | Calcitonin-negative V804M metastatic | 1 |
+| 9 | JCEM (2022) ctDNA cohort | Sporadic MTC cases (ctDNA-pos) | 21 |
+| 10 | Genes (2022) RET c.1901G>A | RET C634Y carriers | 2 |
+| 11 | BMC Pediatr (2020) MEN2B | Pediatric RET M918T | 1 |
+| 12 | Annales d'Endocrinologie (2015) | RET Y791F pheochromocytoma | 1 |
+| 13 | Surgery Today (2014) RET S891A | Pheochromocytoma-first MEN2A | 2 |
 
 **Multi-Variant Dataset:** 129 confirmed RET germline mutation carriers across 22 variants (K666N, L790F, Y791F, V804M, S891A, R525W, M918T, E505_G506del, C634R, C634Y, C634W, C634S, C618S, C630R, C630G, C620Y, C620W, A883F, E632_C634del, E632_L633del, D898_E901del, V899_E902del) with ATA risk stratification.
 
