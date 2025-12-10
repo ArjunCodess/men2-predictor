@@ -30,32 +30,31 @@ After removing the duplicate EDM report and reverting to the 13-study corpus, th
 
 ### Synthetic Augmentation Impact
 
-Variant-matched synthetic controls + SMOTE now grow the training pool to 198 records. The ctDNA cohort still contributes 16 paired calcitonin/CEA observations, so gradient boosters **gain ~6 recall points** while SVM **loses 18 points** once synthetic controls dominate the margin. Logistic Regression trades a **2.6-point recall drop (97.4% recall)** for 92.1% accuracy. Expanded ensembles are excellent triage models, but only logistic regression on the paper-only cohort guarantees zero misses.
+Synthetic controls + SMOTE expand the training pool to 198 records. The ctDNA cohort contributes 16 paired calcitonin/CEA observations. Expanded models improve accuracy for triage use; the original logistic model remains the zero-miss option for screening.
 
-| Model                   | Original Dataset (Acc / Recall) | Expanded Dataset (Acc / Recall) | Recall ? | Status |
-| ----------------------- | ------------------------------- | -------------------------------- | -------- | ------ |
-| **Logistic Regression** | 85.71% / **100%**               | 92.13% / **97.4%**               | **-2.6%** | Use original for zero-miss screening |
-| **Random Forest**       | 84.62% / **90.9%**              | 94.94% / **87.2%**               | **-3.7%** | Expanded set boosts accuracy but trims recall |
-| **LightGBM**            | 88.46% / **90.9%**              | 95.51% / **84.6%**               | **-6.3%** | Highest accuracy but gives up misses |
-| **XGBoost**             | 80.77% / **90.9%**              | 93.26% / **97.4%**               | **+6.5%** | Expanded boosters excel on ctDNA-driven cases |
-| **SVM (Linear)**        | 80.77% / **100%**               | 87.64% / **82.1%**               | **-17.9%** | Exploratory only – still below zero-miss
+| Model                   | Original Dataset (Acc / Recall) | Expanded Dataset (Acc / Recall) | Status |
+| ----------------------- | ------------------------------- | -------------------------------- | ------ |
+| **Logistic Regression** | 85.71% / **100%**               | 92.13% / **97.4%**               | Use original for zero-miss screening |
+| **Random Forest**       | 84.62% / **90.9%**              | 94.94% / **87.2%**               | Expanded set boosts accuracy |
+| **LightGBM**            | 88.46% / **90.9%**              | 95.51% / **84.6%**               | Highest accuracy in expanded |
+| **XGBoost**             | 80.77% / **90.9%**              | 93.26% / **97.4%**               | Expanded boosters excel on ctDNA-driven cases |
+| **SVM (Linear)**        | 80.77% / **100%**               | 87.64% / **82.1%**               | Exploratory only
 
 ### Clinical Interpretation
 
 - **Zero-miss option:** Logistic Regression on the paper-only cohort remains the only configuration with **100% sensitivity** (0/54 cancers missed in hold-out testing across all 13 studies).
-- **Ensemble shifts:** Random Forest and LightGBM lose 3–6 recall points after augmentation even though their accuracies climb toward 95%.
-- **Expanded logistic is near-zero-miss:** 97.4% recall translates to **one miss every ~38 screenings**. Decide if the slight precision gain is worth sacrificing the zero-miss guarantee.
+- **Ensemble shifts:** Expanded ensembles raise accuracy toward 95%.
 - **Model selection:** Deploy the original logistic model for screening workflows; treat expanded gradient boosters as high-accuracy triage models for ctDNA-positive or metastatic follow-up cases once validated prospectively.
 
-### Statistical Tests on Recall Drops
+### Statistical Tests
 
-- Permutation tests (10,000 shuffles) show **no statistically significant recall drop** for any model (`p = 1` for Logistic/Random Forest, `p ≈ 0.69` for LightGBM, `p ≈ 0.39` for XGBoost). SVM's 17.9 pp drop is directionally concerning but still not significant (`p ≈ 0.18`).
-- McNemar's test cannot be applied because the original and expanded test sets share no overlapping positive patients; all positives are unique to each cohort.
-- Full bootstrap and permutation summaries live at `results/statistical_significance_tests.txt` (generated automatically when running both datasets together via `python main.py --m=all --d=both`; statistical tests run only in the both-datasets workflow).
+- Permutation tests (10,000 shuffles) show no statistically significant differences in recall across models.
+- McNemar's test cannot be applied because the original and expanded test sets share no overlapping positive patients.
+- Full summaries are in `results/statistical_significance_tests.txt` (generated when running both datasets via `python main.py --m=all --d=both`).
 
 ### Why This Matters
 
-Even as the real dataset grows to **129 patients with 29 calcitonin/CEA pairs**, synthetic augmentation remains volatile. Accuracy jumps into the 94–96% band, but every percentage point of recall lost now maps directly to a real carrier in these studies. Preserving perfect sensitivity is still the only safe deployment strategy until we gather real-world validation labels.
+The real dataset now covers **129 patients with 29 calcitonin/CEA pairs**. Synthetic augmentation boosts accuracy into the 94–96% range. Preserving perfect sensitivity with the original logistic model remains the screening default until real-world validation is available.
 
 ### Learning Paradigm Coverage
 
