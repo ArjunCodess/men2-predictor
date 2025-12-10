@@ -1,4 +1,4 @@
-# MEN2 Predictor: Rare Disease ML with Critical Discovery
+# MEN2 Predictor: Rare Disease Machine Learning Pipeline
 
 ![Accuracy](https://img.shields.io/badge/Accuracy-95.51%25-brightgreen)
 ![Recall](https://img.shields.io/badge/Recall%20(Original)-100%25-success)
