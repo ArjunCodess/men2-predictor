@@ -29,12 +29,10 @@ STUDY_NAME_MAP = {
     "study_14": "Annals of Medicine & Surgery (2025) RET C634R Case",
     "study_15": "Case Reports in Medicine (2012) MEN2B",
     "study_16": "Case Reports in Endocrinology (2020) RET Exon 11 delins",
-    "study_17": "Annals of Medicine & Surgery (2024) MEN2B Case",
-    "study_18": "Clinics and Practice (2024) RET C634G Kindred",
-    "study_19": "Endocrinol. Diabetes Metab. Case Reports (2024) RET K666N",
-    "study_20": "Journal of Kidney Cancer & VHL (2022) MEN2 Case",
-    "study_21": "Indian Journal of Cancer (2021) RET S891A Family",
-    "study_22": "World Journal of Clinical Cases (2024) RET C634Y Family",
+    "study_17": "Clinics and Practice (2024) RET C634G Kindred",
+    "study_18": "Endocrinol. Diabetes Metab. Case Reports (2024) RET K666N",
+    "study_19": "Indian Journal of Cancer (2021) RET S891A Family",
+    "study_20": "World Journal of Clinical Cases (2024) RET C634Y Family",
     "ret_k666n_homozygous_2018": "JCEM (2018) Homozygous RET K666N",
     "ret_s891a_fmtc_ca_2015": "Oncotarget (2015) RET S891A FMTC"
 }
@@ -599,38 +597,6 @@ def build_study16_patients(study):
 
 
 def build_study17_patients(study):
-    """convert MEN2B case report with missing genotype"""
-    patients = []
-    for record in study.get("patients", []):
-        ret_variant = parse_ret_variant_string(record.get("ret_variant"))
-        if not ret_variant:
-            continue
-        diagnoses = [str(item).lower() for item in record.get("diagnoses", [])]
-        mtc = any("medullary" in item and "thyroid" in item for item in diagnoses)
-        pheo = any("pheochromocytoma" in item for item in diagnoses)
-        men2 = any("men2" in item for item in diagnoses)
-        labs = record.get("biochemical_data", [])
-        cea_entry = select_biomarker_entry(labs, "cea")
-        patient = {
-            "patient_id": f"{study.get('study_id', 'study_17')}_{record.get('id', len(patients) + 1)}",
-            "age": record.get("age"),
-            "gender": record.get("sex"),
-            "relationship": record.get("relationship", "Proband"),
-            "ret_variant": ret_variant,
-            "men2_syndrome": "Yes" if men2 else "No",
-            "mtc_diagnosis": "Yes" if mtc else "No",
-            "pheochromocytoma": "Yes" if pheo else "No",
-            "hyperparathyroidism": "No",
-            "family_history_mtc": "Yes" if (record.get("family_history") or {}).get("mtc") else "No",
-            "cea_level": cea_entry.get("value") if cea_entry else None,
-            "thyroid_ultrasound": "; ".join(record.get("imaging", [])),
-            "biochemical_data": convert_biochemical_entries(labs, test_key="analyte")
-        }
-        patients.append(patient)
-    return patients
-
-
-def build_study18_patients(study):
     """convert RET C634G MEN2 kindred"""
     patients = []
     for record in study.get("patients", []):
@@ -649,7 +615,7 @@ def build_study18_patients(study):
         labs = record.get("biochemical_data", [])
         calcitonin_entry = select_biomarker_entry(labs, "calcitonin")
         patient = {
-            "patient_id": f"{study.get('study_id', 'study_18')}_{record.get('id', len(patients) + 1)}",
+            "patient_id": f"{study.get('study_id', 'study_17')}_{record.get('id', len(patients) + 1)}",
             "age": record.get("age"),
             "gender": record.get("sex"),
             "relationship": record.get("relationship", "Relative"),
@@ -669,7 +635,7 @@ def build_study18_patients(study):
     return patients
 
 
-def build_study19_patients(study):
+def build_study18_patients(study):
     """convert RET K666N family case report"""
     patients = []
     for record in study.get("patients", []):
@@ -683,7 +649,7 @@ def build_study19_patients(study):
         calcitonin_entry = select_biomarker_entry(labs, "calcitonin")
         cea_entry = select_biomarker_entry(labs, "cea")
         patient = {
-            "patient_id": f"{study.get('study_id', 'study_19')}_{record.get('id', len(patients) + 1)}",
+            "patient_id": f"{study.get('study_id', 'study_18')}_{record.get('id', len(patients) + 1)}",
             "age": record.get("age"),
             "gender": record.get("sex"),
             "relationship": record.get("relationship", "Relative"),
@@ -703,40 +669,7 @@ def build_study19_patients(study):
     return patients
 
 
-def build_study20_patients(study):
-    """convert MEN2 case report without genotype"""
-    patients = []
-    for record in study.get("patients", []):
-        ret_variant = parse_ret_variant_string(record.get("ret_variant"))
-        if not ret_variant:
-            continue
-        diagnoses = [str(item).lower() for item in record.get("diagnoses", [])]
-        mtc = any("medullary" in item and "thyroid" in item for item in diagnoses)
-        pheo = any("pheochromocytoma" in item for item in diagnoses)
-        men2 = any("men2" in item for item in diagnoses)
-        labs = record.get("biochemical_data", [])
-        calcitonin_entry = select_biomarker_entry(labs, "calcitonin")
-        patient = {
-            "patient_id": f"{study.get('study_id', 'study_20')}_{record.get('id', len(patients) + 1)}",
-            "age": record.get("age"),
-            "gender": record.get("sex"),
-            "relationship": record.get("relationship", "Proband"),
-            "ret_variant": ret_variant,
-            "men2_syndrome": "Yes" if men2 else "No",
-            "mtc_diagnosis": "Yes" if mtc else "No",
-            "pheochromocytoma": "Yes" if pheo else "No",
-            "hyperparathyroidism": "No",
-            "family_history_mtc": "Yes" if (record.get("family_history") or {}).get("mtc") else "No",
-            "calcitonin_level": calcitonin_entry.get("value") if calcitonin_entry else None,
-            "calcitonin_normal_range": calcitonin_entry.get("reference_range") if calcitonin_entry else None,
-            "thyroid_ultrasound": "; ".join(record.get("imaging", [])),
-            "biochemical_data": convert_biochemical_entries(labs, test_key="analyte")
-        }
-        patients.append(patient)
-    return patients
-
-
-def build_study21_patients(study):
+def build_study19_patients(study):
     """convert RET S891A familial case series"""
     patients = []
     for record in study.get("patients", []):
@@ -748,7 +681,7 @@ def build_study21_patients(study):
         calcitonin_entry = select_biomarker_entry(labs, "calcitonin")
         cea_entry = select_biomarker_entry(labs, "cea")
         patient = {
-            "patient_id": f"{study.get('study_id', 'study_21')}_{record.get('id', len(patients) + 1)}",
+            "patient_id": f"{study.get('study_id', 'study_19')}_{record.get('id', len(patients) + 1)}",
             "age": record.get("age"),
             "gender": record.get("sex"),
             "relationship": record.get("relationship", "Relative"),
@@ -768,7 +701,7 @@ def build_study21_patients(study):
     return patients
 
 
-def build_study22_patients(study):
+def build_study20_patients(study):
     """convert RET C634Y family case report"""
     patients = []
     for record in study.get("patients", []):
@@ -790,7 +723,7 @@ def build_study22_patients(study):
         labs = record.get("biochemical_data", [])
         calcitonin_entry = select_biomarker_entry(labs, "calcitonin")
         patient = {
-            "patient_id": f"{study.get('study_id', 'study_22')}_{record.get('id', len(patients) + 1)}",
+            "patient_id": f"{study.get('study_id', 'study_20')}_{record.get('id', len(patients) + 1)}",
             "age": record.get("age"),
             "gender": record.get("sex"),
             "relationship": record.get("relationship", "Relative"),
@@ -841,10 +774,6 @@ def extract_patients_from_study(study):
         return build_study19_patients(study)
     if study_id == "study_20":
         return build_study20_patients(study)
-    if study_id == "study_21":
-        return build_study21_patients(study)
-    if study_id == "study_22":
-        return build_study22_patients(study)
     raw_patients = study.get("patient_data")
     if isinstance(raw_patients, dict):
         patient_copy = raw_patients.copy()
@@ -1199,9 +1128,7 @@ def create_paper_dataset():
         'study_17.json',
         'study_18.json',
         'study_19.json',
-        'study_20.json',
-        'study_21.json',
-        'study_22.json'
+        'study_20.json'
     ]
     for study_file in study_files:
         with open(os.path.join(dataset_dir, study_file), 'r', encoding='utf-8') as f:
