@@ -1,25 +1,46 @@
 {
   "study_id": "study_17",
   "study_info": {
-    "title": "A case report of multiple endocrine neoplasia type 2B",
-    "journal": "Annals of Medicine & Surgery",
+    "title": "Endocrine Perspective of Cutaneous Lichen Amyloidosis: RET-C634 Pathogenic Variant in Multiple Endocrine Neoplasia Type 2",
+    "journal": "Clinics and Practice",
     "year": 2024,
-    "volume_issue": "86(5):3016-3019",
-    "doi": "10.1097/MS9.0000000000001867",
-    "country": null,
-    "study_type": "Case report",
-    "authors": ["Jahantab MB", "Rastegar B", "Aria A"],
+    "volume_issue": "14(6):2284-2299",
+    "doi": "10.3390/clinpract14060179",
+    "country": "Romania",
+    "study_type": "Case series (single-family MEN2 kindred)",
+    "authors": [
+      "Alexandru-Florin Florescu",
+      "Oana-Claudia Sima",
+      "Claudiu Nistor",
+      "Mihai-Lucian Ciobica",
+      "Mihai Costachescu",
+      "Mihaela Stanciu",
+      "Denisa Tanasescu",
+      "Florina Ligia Popa",
+      "Mara Carsote"
+    ],
     "keywords": [
-      "case report",
+      "skin",
+      "lichen",
+      "thyroid cancer",
+      "surgery",
+      "amyloidosis",
+      "multiple endocrine neoplasia",
       "medullary thyroid carcinoma",
-      "multiple endocrine neoplasia type 2",
-      "pheochromocytoma"
+      "RET gene"
     ]
   },
   "cohort_info": {
-    "total_patients": 1,
-    "sex_distribution": { "male": 0, "female": 1 },
-    "age_stats": { "mean": 38, "median": 38, "range": "38-38" },
+    "total_patients": 6,
+    "sex_distribution": {
+      "male": 0,
+      "female": 6
+    },
+    "age_stats": {
+      "mean": null,
+      "median": null,
+      "range": "6–~44"
+    },
     "sporadic_definition_criteria": null,
     "tumor_staging_distribution": {
       "stage_I": null,
@@ -34,184 +55,368 @@
     }
   },
   "mutation_summary": {
-    "ret_mutated_cases": null,
-    "ras_mutated_cases": null,
-    "mutation_negative_cases": null,
-    "mutations": []
+    "ret_mutated_cases": 5,
+    "ras_mutated_cases": 0,
+    "mutation_negative_cases": 5,
+    "mutations": [
+      {
+        "gene": "RET",
+        "variant": "C634G",
+        "count": 5
+      }
+    ]
   },
-  "case_data": [],
+  "case_data": [
+    {
+      "case_id": 1,
+      "mutation": "RET C634G",
+      "tissue_vaf": null,
+      "preop_ctdna_vaf": null,
+      "postop_ctdna_vaf": null,
+      "preop_ct": null,
+      "preop_cea": null,
+      "postop_ct": null,
+      "postop_cea": null,
+      "postop_timing_months": null,
+      "tki": null,
+      "outcome": null,
+      "ctdna_positive_preop": null,
+      "ctdna_positive_postop": null
+    }
+  ],
   "patients": [
     {
-      "id": "proband",
-      "age": 38,
+      "id": "IV.5",
+      "age": 6,
       "sex": "Female",
-      "relationship": "Proband",
-      "ret_variant": null,
+      "relationship": "Daughter of index case (III.6)",
+      "ret_variant": "C634G",
       "biochemical_data": [
         {
-          "analyte": "CEA",
-          "value": 12.9,
-          "unit": "ng/ml",
-          "reference_range": "<5.5 ng/ml",
-          "timing": "initial_presentation",
-          "elevated": true
+          "analyte": "calcitonin",
+          "value": null,
+          "unit": "pg/mL"
         },
         {
-          "analyte": "CA19-9",
-          "value": 110,
-          "unit": "U/ml",
-          "reference_range": "0-39 U/ml",
-          "timing": "initial_presentation",
-          "elevated": true
+          "analyte": "PTH",
+          "value": null,
+          "unit": "pg/mL"
         },
         {
-          "analyte": "TSH",
-          "value": 3.79,
-          "unit": "µIU/ml",
-          "reference_range": "0.39-6.16 µIU/ml",
-          "timing": "initial_presentation",
-          "elevated": false
-        },
-        {
-          "analyte": "urine_24h_metanephrine",
-          "value": 1779,
-          "unit": null,
-          "reference_range": "<350",
-          "timing": "initial_presentation",
-          "elevated": true
-        },
-        {
-          "analyte": "urine_24h_normetanephrine",
-          "value": 4659,
-          "unit": null,
-          "reference_range": "<600",
-          "timing": "initial_presentation",
-          "elevated": true
-        },
-        {
-          "analyte": "urine_24h_VMA",
-          "value": 5.0,
-          "unit": null,
-          "reference_range": "0-13.6",
-          "timing": "initial_presentation",
-          "elevated": false
-        },
-        {
-          "analyte": "urine_24h_free_cortisol",
-          "value": 72.6,
-          "unit": null,
-          "reference_range": "4.3-176",
-          "timing": "initial_presentation",
-          "elevated": false
-        },
-        {
-          "analyte": "aldosterone",
-          "value": 125.6,
-          "unit": null,
-          "reference_range": "40-310",
-          "timing": "initial_presentation",
-          "elevated": false
-        },
-        {
-          "analyte": "DHEA-SO4",
-          "value": 0.8,
-          "unit": null,
-          "reference_range": "0.03-5.88",
-          "timing": "initial_presentation",
-          "elevated": false
-        },
-        {
-          "analyte": "testosterone",
-          "value": 0.4,
-          "unit": "ng/ml",
-          "reference_range": "0.2-0.95 ng/ml",
-          "timing": "initial_presentation",
-          "elevated": false
-        },
-        {
-          "analyte": "ACTH",
-          "value": 10.52,
-          "unit": "pg/ml",
-          "reference_range": "9-52 pg/ml",
-          "timing": "initial_presentation",
-          "elevated": false
-        },
-        {
-          "analyte": "cortisol",
-          "value": 26.8,
-          "unit": "µg/dl",
-          "reference_range": "4.3-22.4 µg/dl",
-          "timing": "initial_presentation",
-          "elevated": true
-        },
-        {
-          "analyte": "ANA",
-          "value": 0.17,
-          "unit": null,
-          "reference_range": "0-1.2",
-          "timing": "initial_presentation",
-          "elevated": false
-        },
-        {
-          "analyte": "anti-dsDNA",
-          "value": 5.3,
-          "unit": null,
-          "reference_range": "<16",
-          "timing": "initial_presentation",
-          "elevated": false
-        },
-        {
-          "analyte": "anti-SS-A",
-          "value": 1.1,
-          "unit": null,
-          "reference_range": "<20",
-          "timing": "initial_presentation",
-          "elevated": false
-        },
-        {
-          "analyte": "anti-SS-B",
-          "value": 0.1,
-          "unit": null,
-          "reference_range": "<20",
-          "timing": "initial_presentation",
-          "elevated": false
+          "analyte": "serum_calcium",
+          "value": null,
+          "unit": "mg/dL"
         }
       ],
+      "biochemical_interpretation": {
+        "calcitonin_elevated": true,
+        "adrenal_profile_normal": true,
+        "parathyroid_profile_normal": true
+      },
       "diagnoses": [
-        "pheochromocytoma",
-        "medullary thyroid carcinoma",
-        "suspected MEN2B"
+        "RET-positive MEN2 (genetic carrier)",
+        "suspected medullary thyroid carcinoma",
+        "cutaneous lichen amyloidosis"
       ],
       "imaging": [
-        "Abdominopelvic CT: large heterogeneous well-defined solid left adrenal mass 64×52×68 mm with central necrosis and otherwise unremarkable abdomen/pelvis.",
-        "Neck ultrasound: right lobe hypoechoic nodule with calcification 14×13 mm; two left lobe hypoechoic nodules with calcification 14×13 mm and 8×7 mm; few benign-appearing reactive cervical lymph nodes; normal bilateral submandibular glands.",
-        "Breast/axillary ultrasound: murally calcified cyst 9.4 mm in inferior right breast; no axillary mass or lymphadenopathy."
+        "Thyroid ultrasound: right lobe 1.1×1.1×3.2 cm, left lobe 1.1×1.1×2.6 cm, intensely hypoechoic and inhomogeneous parenchyma, right lateral cervical lymph node 1.1 cm, left lateral cervical lymph node 0.6 cm; no TIRADS score reported"
+      ],
+      "pathology": [],
+      "genetics": {
+        "ret_c634": "present",
+        "zygosity": "heterozygous",
+        "inheritance": "autosomal_dominant_familial",
+        "classification": "pathogenic"
+      },
+      "family_history": {
+        "mtc": true,
+        "pheochromocytoma": true,
+        "hyperparathyroidism": true
+      },
+      "surgery": [],
+      "follow_up": [
+        "Total thyroidectomy recommended due to high risk of MTC and elevated calcitonin; life-long surveillance for pheochromocytoma and primary hyperparathyroidism proposed; serial calcitonin monitoring planned"
+      ]
+    },
+    {
+      "id": "III.6",
+      "age": 43,
+      "sex": "Female",
+      "relationship": "Index case; mother of IV.5; sister of III.8; cousin of III.1 and III.3",
+      "ret_variant": "C634G",
+      "biochemical_data": [
+        {
+          "analyte": "calcitonin",
+          "value": 304,
+          "unit": "ng/mL"
+        },
+        {
+          "analyte": "serum_calcium",
+          "value": 11.4,
+          "unit": "mg/dL"
+        },
+        {
+          "analyte": "PTH",
+          "value": 122,
+          "unit": "pg/mL"
+        }
+      ],
+      "biochemical_interpretation": {
+        "calcitonin_elevated": true,
+        "hypercalcemia": true,
+        "pth_elevated": true
+      },
+      "diagnoses": [
+        "medullary thyroid carcinoma",
+        "bilateral pheochromocytoma",
+        "primary hyperparathyroidism",
+        "MEN2"
+      ],
+      "imaging": [
+        "Initial imaging: bilateral adrenal tumors 2 cm each",
+        "Post-operative contrast CT (12 years later): no thyroid remnant, empty adrenal beds without recurrence"
       ],
       "pathology": [
-        "Left adrenalectomy: encapsulated lobulated mass 7.0×7.0 cm, smooth creamy-brown external surface, creamy-yellow cut surface, intact capsule; histology consistent with pheochromocytoma.",
-        "Total thyroidectomy: right lobe 4×2×1.5 cm with creamy-yellow mass 2×1.5×1 cm; left lobe 3.5×2×1.5 cm with creamy-yellowish mass 2×1×0.8 cm; isthmus 2×2×0.5 cm; histology consistent with medullary thyroid carcinoma with amyloid stroma."
+        "MTC confirmed after total thyroidectomy (no detailed TNM provided)",
+        "Bilateral pheochromocytoma confirmed after bilateral adrenalectomy",
+        "Parathyroid adenoma resected (left lower parathyroidectomy)"
       ],
       "genetics": {
-        "ret_mutation_tested": false,
-        "ret_variant": null,
+        "ret_c634": "present",
+        "zygosity": "heterozygous",
+        "inheritance": "autosomal_dominant_familial",
+        "classification": "pathogenic"
+      },
+      "family_history": {
+        "mtc": true,
+        "pheochromocytoma": true,
+        "hyperparathyroidism": true
+      },
+      "surgery": [
+        "Age 31: bilateral laparoscopic adrenalectomy for bilateral pheochromocytoma",
+        "A few months later: total thyroidectomy with neck lymph node dissection and left lower parathyroidectomy"
+      ],
+      "follow_up": [
+        "12 years follow-up with levothyroxine, calcium and vitamin D, glucocorticoid and mineralocorticoid replacement",
+        "Good clinical outcome including during pregnancy",
+        "No radiologic recurrence on CT at 12 years"
+      ]
+    },
+    {
+      "id": "III.1",
+      "age": 43,
+      "sex": "Female",
+      "relationship": "Cousin of index case (III.6); mother of IV.1 and IV.2",
+      "ret_variant": "C634G",
+      "biochemical_data": [
+        {
+          "analyte": "calcitonin",
+          "value": null,
+          "unit": "pg/mL"
+        }
+      ],
+      "biochemical_interpretation": {
+        "postop_calcitonin_normal_for_13_years": true
+      },
+      "diagnoses": [
+        "medullary thyroid carcinoma",
+        "bilateral pheochromocytoma",
+        "MEN2"
+      ],
+      "imaging": [],
+      "pathology": [
+        "MTC confirmed after total thyroidectomy and central neck dissection; no lymph node invasion",
+        "Unilateral pheochromocytoma followed by contralateral pheochromocytoma"
+      ],
+      "genetics": {
+        "ret_c634": "present",
+        "zygosity": "heterozygous",
+        "inheritance": "autosomal_dominant_familial",
+        "classification": "pathogenic"
+      },
+      "family_history": {
+        "mtc": true,
+        "pheochromocytoma": true,
+        "hyperparathyroidism": false
+      },
+      "surgery": [
+        "Age 30: total thyroidectomy with central neck dissection",
+        "2 years later: laparoscopic left adrenalectomy for left pheochromocytoma",
+        "6 years after first adrenalectomy: right adrenalectomy for right pheochromocytoma"
+      ],
+      "follow_up": [
+        "13 years follow-up",
+        "Post-thyroidectomy calcitonin remained normal for 13 years",
+        "On levothyroxine, hydrocortisone and fludrocortisone replacement with good outcome"
+      ]
+    },
+    {
+      "id": "III.3",
+      "age": 44,
+      "sex": "Female",
+      "relationship": "Cousin of index case (III.6); mother of IV.3 and IV.4",
+      "ret_variant": "C634G",
+      "biochemical_data": [],
+      "biochemical_interpretation": {},
+      "diagnoses": [
+        "medullary thyroid carcinoma",
+        "bilateral pheochromocytoma",
+        "MEN2"
+      ],
+      "imaging": [],
+      "pathology": [
+        "MTC confirmed after total thyroidectomy and central neck dissection; no lymph node invasion",
+        "Bilateral pheochromocytoma confirmed after bilateral adrenalectomy"
+      ],
+      "genetics": {
+        "ret_c634": "present",
+        "zygosity": "heterozygous",
+        "inheritance": "autosomal_dominant_familial",
+        "classification": "pathogenic"
+      },
+      "family_history": {
+        "mtc": true,
+        "pheochromocytoma": true,
+        "hyperparathyroidism": false
+      },
+      "surgery": [
+        "Age 33: synchronous total thyroidectomy with central neck dissection and laparoscopic bilateral adrenalectomy"
+      ],
+      "follow_up": [
+        "11 years follow-up",
+        "Remains on lifelong levothyroxine and adrenal replacement therapy during and after two pregnancies"
+      ]
+    },
+    {
+      "id": "III.5",
+      "age": null,
+      "sex": "Female",
+      "relationship": "Sister of III.3",
+      "ret_variant": null,
+      "biochemical_data": [],
+      "biochemical_interpretation": {},
+      "diagnoses": ["cutaneous lichen amyloidosis"],
+      "imaging": [],
+      "pathology": [],
+      "genetics": {
+        "ret_c634": null,
         "zygosity": null,
-        "inheritance_pattern": "suspected_autosomal_dominant_family_history",
+        "inheritance": "at_risk_untested",
         "classification": null
       },
       "family_history": {
         "mtc": true,
         "pheochromocytoma": true,
-        "hyperparathyroidism": null,
-        "details": "Mother died from thyroid cancer; sister had an adrenal mass at age 32."
+        "hyperparathyroidism": true
       },
-      "surgery": [
-        "Transperitoneal open total left adrenalectomy for pheochromocytoma.",
-        "Total thyroidectomy for medullary thyroid carcinoma."
-      ],
+      "surgery": [],
       "follow_up": [
-        "Postoperative course after adrenalectomy described as unremarkable; no quantitative follow-up biomarker data provided.",
-        "Timing: thyroidectomy performed approximately 2 months after adrenalectomy; no long-term calcitonin or CEA trends reported."
+        "Declined genetic and endocrine evaluation; no endocrine status data available"
       ]
+    },
+    {
+      "id": "III.8",
+      "age": null,
+      "sex": "Female",
+      "relationship": "Sister of index case III.6",
+      "ret_variant": null,
+      "biochemical_data": [],
+      "biochemical_interpretation": {},
+      "diagnoses": ["cutaneous lichen amyloidosis"],
+      "imaging": [],
+      "pathology": [],
+      "genetics": {
+        "ret_c634": null,
+        "zygosity": null,
+        "inheritance": "at_risk_untested",
+        "classification": null
+      },
+      "family_history": {
+        "mtc": true,
+        "pheochromocytoma": true,
+        "hyperparathyroidism": true
+      },
+      "surgery": [],
+      "follow_up": [
+        "Declined genetic and endocrine evaluation; no endocrine status data available"
+      ]
+    },
+    {
+      "id": "III.9",
+      "age": null,
+      "sex": "Female",
+      "relationship": "Other female relative with lichen (exact relation not fully specified)",
+      "ret_variant": null,
+      "biochemical_data": [],
+      "biochemical_interpretation": {},
+      "diagnoses": ["cutaneous lichen amyloidosis"],
+      "imaging": [],
+      "pathology": [],
+      "genetics": {
+        "ret_c634": null,
+        "zygosity": null,
+        "inheritance": "unknown",
+        "classification": null
+      },
+      "family_history": {
+        "mtc": true,
+        "pheochromocytoma": true,
+        "hyperparathyroidism": true
+      },
+      "surgery": [],
+      "follow_up": []
+    },
+    {
+      "id": "IV.1",
+      "age": null,
+      "sex": "Female",
+      "relationship": "Child of III.1",
+      "ret_variant": "C634G",
+      "biochemical_data": [],
+      "biochemical_interpretation": {},
+      "diagnoses": [],
+      "imaging": [],
+      "pathology": [],
+      "genetics": {
+        "ret_c634": "present",
+        "zygosity": "heterozygous",
+        "inheritance": "autosomal_dominant_familial",
+        "classification": "pathogenic"
+      },
+      "family_history": {
+        "mtc": true,
+        "pheochromocytoma": true,
+        "hyperparathyroidism": false
+      },
+      "surgery": [],
+      "follow_up": []
+    },
+    {
+      "id": "IV.4",
+      "age": "teenager",
+      "sex": "Female",
+      "relationship": "Child in family tree (exact parent not fully explicit, but described as RET-positive member)",
+      "ret_variant": "C634G",
+      "biochemical_data": [],
+      "biochemical_interpretation": {},
+      "diagnoses": ["medullary thyroid microcarcinoma", "MEN2"],
+      "imaging": [],
+      "pathology": [
+        "Medullary thyroid microcarcinoma confirmed after total thyroidectomy with central neck dissection"
+      ],
+      "genetics": {
+        "ret_c634": "present",
+        "zygosity": "heterozygous",
+        "inheritance": "autosomal_dominant_familial",
+        "classification": "pathogenic"
+      },
+      "family_history": {
+        "mtc": true,
+        "pheochromocytoma": true,
+        "hyperparathyroidism": false
+      },
+      "surgery": ["Total thyroidectomy with central neck dissection"],
+      "follow_up": ["No skin lesions reported to date"]
     }
   ],
   "statistics": {
@@ -227,29 +432,17 @@
     }
   },
   "methods": {
-    "sequencing_panel": null,
-    "biomarker_assays": "Standard hospital laboratory assays reported for CEA, CA19-9, thyroid and adrenal hormones; specific platforms and manufacturers not described.",
+    "sequencing_panel": "Exon 11 of RET (chromosome 10q11.21) analyzed by PCR and bidirectional Sanger sequencing for familial mutation c.1900T>G",
+    "biomarker_assays": "Standard hospital endocrine assays for calcitonin, PTH, calcium, adrenal hormones; exact platforms and reference ranges not specified",
     "coverage_depth": {
       "tissue_mean": null,
       "ctdna_mean": null
     },
     "normal_ranges": {
-      "TSH": "0.39-6.16 µIU/ml",
-      "CEA": "<5.5 ng/ml",
-      "CA19-9": "0-39 U/ml",
-      "urine_24h_metanephrine": "<350",
-      "urine_24h_normetanephrine": "<600",
-      "urine_24h_VMA": "0-13.6",
-      "urine_24h_free_cortisol": "4.3-176",
-      "aldosterone": "40-310",
-      "DHEA-SO4": "0.03-5.88",
-      "testosterone": "0.2-0.95 ng/ml",
-      "ACTH": "9-52 pg/ml",
-      "cortisol": "4.3-22.4 µg/dl",
-      "ANA": "0-1.2",
-      "anti-dsDNA": "<16",
-      "anti-SS-A": "<20",
-      "anti-SS-B": "<20"
+      "calcitonin": null,
+      "cea": null,
+      "pth": null,
+      "calcium": null
     }
   }
 }

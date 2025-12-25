@@ -1,52 +1,30 @@
 {
   "study_id": "study_19",
   "study_info": {
-    "title": "MEN2 phenotype in a family with germline heterozygous rare RET K666N variant",
-    "journal": "Endocrinology, Diabetes & Metabolism Case Reports",
-    "year": 2024,
-    "volume_issue": "2024(3):eEDM24-0009",
-    "doi": "10.1530/EDM-24-0009",
-    "country": "USA",
-    "study_type": "Case report",
-    "authors": [
-      "A La Greca",
-      "D Dawes",
-      "M Albuja-Cruz",
-      "C Raeburn",
-      "L Axell",
-      "L Ku",
-      "C Klein",
-      "C Marshall",
-      "L Fishbein"
-    ],
+    "title": "A rare RET mutation in an Indian pedigree with familial medullary thyroid carcinoma",
+    "journal": "Indian Journal of Cancer",
+    "year": 2021,
+    "volume_issue": "58(1):98-100",
+    "doi": "10.4103/ijc.IJC_639_19",
+    "country": "India",
+    "study_type": "Case report / familial case series",
+    "authors": ["Roopa Vijayan", "Vasantha Nair", "Usha Menon", "Harish Kumar"],
     "keywords": [
-      "Adult",
-      "Female",
-      "White",
-      "USA",
-      "Thyroid",
-      "Cardiovascular endocrinology",
-      "Genetics and mutation",
-      "Adrenal",
-      "Endocrine-related cancer",
-      "MEN2",
-      "RET",
-      "K666N",
-      "medullary thyroid carcinoma",
-      "pheochromocytoma",
-      "primary hyperparathyroidism"
+      "Familial medullary thyroid carcinoma",
+      "genetic counseling",
+      "rare RET gene mutation"
     ]
   },
   "cohort_info": {
-    "total_patients": 4,
+    "total_patients": 7,
     "sex_distribution": {
-      "male": 2,
-      "female": 2
+      "male": 1,
+      "female": 6
     },
     "age_stats": {
-      "mean": 37.5,
-      "median": 41.0,
-      "range": "21-46"
+      "mean": 47.1,
+      "median": null,
+      "range": "20-63"
     },
     "sporadic_definition_criteria": null,
     "tumor_staging_distribution": {
@@ -56,450 +34,380 @@
       "stage_IV": null
     },
     "followup_groups": {
-      "disease_free": 1,
-      "biochemical_persistent": 1,
-      "structural_disease": 1
+      "disease_free": null,
+      "biochemical_persistent": null,
+      "structural_disease": null
     }
   },
   "mutation_summary": {
-    "ret_mutated_cases": 4,
+    "ret_mutated_cases": 7,
     "ras_mutated_cases": null,
-    "mutation_negative_cases": null,
+    "mutation_negative_cases": 7,
     "mutations": [
       {
         "gene": "RET",
-        "variant": "K666N",
-        "count": 4
+        "variant": "S891A",
+        "count": 7
       }
     ]
   },
-  "case_data": [],
+  "case_data": [
+    {
+      "case_id": 1,
+      "mutation": "RET S891A",
+      "tissue_vaf": null,
+      "preop_ctdna_vaf": null,
+      "postop_ctdna_vaf": null,
+      "preop_ct": 447,
+      "preop_cea": 91.79,
+      "postop_ct": 3,
+      "postop_cea": null,
+      "postop_timing_months": 3,
+      "tki": "No",
+      "outcome": "Biochemical",
+      "ctdna_positive_preop": null,
+      "ctdna_positive_postop": null
+    }
+  ],
   "patients": [
     {
-      "id": "proband",
-      "age": 40,
+      "id": "index_case",
+      "age": 44,
       "sex": "Female",
       "relationship": "Proband",
-      "ret_variant": "K666N",
+      "ret_variant": "S891A",
       "biochemical_data": [
         {
-          "analyte": "plasma_metanephrine",
-          "value": 1957,
-          "unit": "pg/mL",
-          "reference_range": "<57 pg/mL",
-          "timing": "pre-adrenalectomy",
-          "elevated": true
-        },
-        {
-          "analyte": "plasma_normetanephrine",
-          "value": 1329,
-          "unit": "pg/mL",
-          "reference_range": "<148 pg/mL",
-          "timing": "pre-adrenalectomy",
-          "elevated": true
-        },
-        {
-          "analyte": "plasma_metanephrine",
-          "value": 0.25,
-          "unit": "nmol/mL",
-          "reference_range": "0-0.49 nmol/mL",
-          "timing": "8_weeks_post_adrenalectomy",
-          "elevated": false
-        },
-        {
-          "analyte": "plasma_normetanephrine",
-          "value": 0.76,
-          "unit": "nmol/mL",
-          "reference_range": "0-0.89 nmol/mL",
-          "timing": "8_weeks_post_adrenalectomy",
-          "elevated": false
-        },
-        {
-          "analyte": "PTH",
-          "value": 103,
-          "unit": "pg/mL",
-          "reference_range": "12-88 pg/mL",
-          "timing": "post-PHEO_diagnosis_pre-vitD",
-          "elevated": true
-        },
-        {
-          "analyte": "25_hydroxy_vitamin_D",
-          "value": 16,
-          "unit": "ng/mL",
-          "reference_range": null,
-          "timing": "post-PHEO_diagnosis_pre-vitD",
-          "elevated": false
-        },
-        {
-          "analyte": "calcium",
-          "value": 9.8,
-          "unit": "mg/dL",
-          "reference_range": null,
-          "timing": "post-PHEO_diagnosis_pre-vitD",
-          "elevated": false
-        },
-        {
-          "analyte": "albumin",
-          "value": 4.1,
-          "unit": "g/dL",
-          "reference_range": null,
-          "timing": "post-PHEO_diagnosis_pre-vitD",
-          "elevated": false
-        },
-        {
           "analyte": "calcitonin",
-          "value": 12.3,
+          "value": 447,
           "unit": "pg/mL",
-          "reference_range": "0-5.1 pg/mL",
-          "timing": "initial_post-PHEO_workup",
+          "reference_range": "≤5 pg/mL",
+          "timing": "preoperative",
           "elevated": true
         },
         {
           "analyte": "CEA",
-          "value": 1.3,
+          "value": 91.79,
           "unit": "ng/mL",
-          "reference_range": "0-3 ng/mL",
-          "timing": "initial_post-PHEO_workup",
-          "elevated": false
-        },
-        {
-          "analyte": "TSH",
-          "value": 1.51,
-          "unit": "mIU/L",
-          "reference_range": null,
-          "timing": "initial_post-PHEO_workup",
-          "elevated": false
-        },
-        {
-          "analyte": "chromogranin_A",
-          "value": 35,
-          "unit": "ng/mL",
-          "reference_range": "0-95 ng/mL",
-          "timing": "initial_post-PHEO_workup",
-          "elevated": false
-        },
-        {
-          "analyte": "PTH",
-          "value": 120,
-          "unit": "pg/mL",
-          "reference_range": null,
-          "timing": "post-vitD_supplementation_followup",
+          "reference_range": "≤5 ng/mL",
+          "timing": "preoperative",
           "elevated": true
-        },
-        {
-          "analyte": "25_hydroxy_vitamin_D",
-          "value": 20,
-          "unit": "ng/mL",
-          "reference_range": null,
-          "timing": "post-vitD_supplementation_followup",
-          "elevated": false
-        },
-        {
-          "analyte": "calcium",
-          "value": 9.8,
-          "unit": "mg/dL",
-          "reference_range": null,
-          "timing": "post-vitD_supplementation_followup",
-          "elevated": false
         },
         {
           "analyte": "calcitonin",
-          "value": 16.8,
+          "value": 3,
           "unit": "pg/mL",
-          "reference_range": "0-5.1 pg/mL",
-          "timing": "post-vitD_supplementation_followup",
-          "elevated": true
-        },
-        {
-          "analyte": "CEA",
-          "value": 1.7,
-          "unit": "ng/mL",
-          "reference_range": "0-3 ng/mL",
-          "timing": "post-vitD_supplementation_followup",
-          "elevated": false
-        },
-        {
-          "analyte": "PTH",
-          "value": 95,
-          "unit": "pg/mL",
-          "reference_range": "12-88 pg/mL",
-          "timing": "pre-thyroidectomy_max_PHPT",
-          "elevated": true
-        },
-        {
-          "analyte": "calcium",
-          "value": 11.4,
-          "unit": "mg/dL",
-          "reference_range": "8.6-10.3 mg/dL",
-          "timing": "pre-thyroidectomy_max_PHPT",
-          "elevated": true
-        },
-        {
-          "analyte": "25_hydroxy_vitamin_D",
-          "value": 13,
-          "unit": "ng/mL",
-          "reference_range": null,
-          "timing": "pre-thyroidectomy_max_PHPT",
-          "elevated": false
-        },
-        {
-          "analyte": "24h_urine_calcium",
-          "value": 159,
-          "unit": "mg/day",
-          "reference_range": null,
-          "timing": "pre-thyroidectomy",
-          "elevated": false
-        },
-        {
-          "analyte": "calcitonin",
-          "value": 30.7,
-          "unit": "pg/mL",
-          "reference_range": "0-5.1 pg/mL",
-          "timing": "pre-thyroidectomy_peak",
-          "elevated": true
-        },
-        {
-          "analyte": "PTH",
-          "value": 51,
-          "unit": "pg/mL",
-          "reference_range": "15-88 pg/mL",
-          "timing": "2_years_post_thyroidectomy",
-          "elevated": false
-        },
-        {
-          "analyte": "calcium",
-          "value": 9.3,
-          "unit": "mg/dL",
-          "reference_range": "8.6-10.3 mg/dL",
-          "timing": "2_years_post_thyroidectomy",
-          "elevated": false
-        },
-        {
-          "analyte": "25_hydroxy_vitamin_D",
-          "value": 33,
-          "unit": "ng/mL",
-          "reference_range": null,
-          "timing": "2_years_post_thyroidectomy",
-          "elevated": false
-        },
-        {
-          "analyte": "CEA",
-          "value": 1.4,
-          "unit": "ng/mL",
-          "reference_range": "0-3 ng/mL",
-          "timing": "2_years_post_thyroidectomy",
+          "reference_range": "≤5 pg/mL",
+          "timing": "3_months_postoperative",
           "elevated": false
         },
         {
           "analyte": "calcitonin",
           "value": 2,
           "unit": "pg/mL",
-          "reference_range": "0-5.1 pg/mL",
-          "timing": "2_years_post_thyroidectomy",
+          "reference_range": "≤5 pg/mL",
+          "timing": "6_months_postoperative",
           "elevated": false
         }
       ],
-      "diagnoses": [
-        "pheochromocytoma",
-        "medullary_thyroid_microcarcinoma",
-        "primary_hyperparathyroidism",
-        "MEN2"
-      ],
+      "diagnoses": ["medullary thyroid carcinoma"],
       "imaging": [
-        "CT: right 4.5x4.2 cm hypodense adrenal mass",
-        "Thyroid ultrasound: no nodules; indeterminate right level IV cervical node"
+        "Ultrasound of thyroid: hypoechoic nodule with calcifications",
+        "CT chest: no evidence of metastasis"
       ],
       "pathology": [
-        "Right adrenal: 3.7 cm pheochromocytoma with lymphovascular invasion; Ki-67/Mib-1 3-4%",
-        "Thyroid: 4 mm medullary microcarcinoma in left lobe without extrathyroidal extension",
-        "Thyroid: right-sided 5 mm hyalinizing trabecular tumor, negative margins",
-        "Lymph nodes: 1/13 positive for metastatic medullary microcarcinoma, 0.2 mm deposit, no extranodal extension",
-        "Parathyroid: left inferior parathyroid 0.1 g hypercellular tissue"
+        "Multifocal medullary thyroid carcinoma involving both lobes",
+        "Tumor size 3.2 × 1.7 × 1.5 cm",
+        "Extrathyroid extension present",
+        "Lymphovascular emboli present",
+        "No perineural invasion",
+        "Three of six lymph node levels I–VI with tumor deposits",
+        "Largest involved lymph node 1.0 cm",
+        "Extra-nodal spread present"
       ],
       "genetics": {
-        "ret_variant": "K666N",
-        "ret_cDNA": "c.1998G>T",
-        "transcript": "NM_020975.4",
-        "zygosity": "heterozygous",
-        "inheritance_pattern": "autosomal_dominant",
-        "classification": "likely_pathogenic"
+        "ret_S891A": "present",
+        "variant_cDNA": "c.2671T>G",
+        "exon": 15,
+        "zygosity": null,
+        "inheritance_pattern": "autosomal_dominant_familial",
+        "classification": "moderate_risk_pathogenic"
       },
       "family_history": {
-        "mtc": false,
-        "pheochromocytoma": false,
-        "hyperparathyroidism": false,
-        "other_tumors": "father jaw tumor at 41 years; mother Graves disease"
-      },
-      "surgery": [
-        "Retroperitoneoscopic right adrenalectomy",
-        "Total thyroidectomy",
-        "Partial parathyroidectomy (left inferior parathyroid removal)"
-      ],
-      "follow_up": [
-        "Biochemical remission of pheochromocytoma 8 weeks post-adrenalectomy (normalized metanephrines)",
-        "Progressive increase in calcitonin from 12.3 to 30.7 pg/mL over 2 years prompting thyroidectomy",
-        "2 years post-thyroidectomy: normalized PTH, calcium, vitamin D, CEA, and undetectable calcitonin; no reported recurrent disease"
-      ]
-    },
-    {
-      "id": "sister",
-      "age": 42,
-      "sex": "Female",
-      "relationship": "Sister",
-      "ret_variant": "K666N",
-      "biochemical_data": [
-        {
-          "analyte": "calcitonin",
-          "value": 5.2,
-          "unit": "pg/mL",
-          "reference_range": "0-5.1 pg/mL",
-          "timing": "pre-thyroidectomy_screening",
-          "elevated": true
-        },
-        {
-          "analyte": "CEA",
-          "value": 1.5,
-          "unit": "ng/mL",
-          "reference_range": "0-3 ng/mL",
-          "timing": "pre-thyroidectomy_screening",
-          "elevated": false
-        },
-        {
-          "analyte": "calcium",
-          "value": 9.6,
-          "unit": "mg/dL",
-          "reference_range": "8.6-10.3 mg/dL",
-          "timing": "pre-thyroidectomy_screening",
-          "elevated": false
-        },
-        {
-          "analyte": "PTH",
-          "value": 44,
-          "unit": "pg/mL",
-          "reference_range": "12-88 pg/mL",
-          "timing": "pre-thyroidectomy_screening",
-          "elevated": false
-        },
-        {
-          "analyte": "25_hydroxy_vitamin_D",
-          "value": 29,
-          "unit": "ng/mL",
-          "reference_range": null,
-          "timing": "pre-thyroidectomy_screening",
-          "elevated": false
-        }
-      ],
-      "diagnoses": [
-        "papillary_thyroid_carcinoma",
-        "metastatic_papillary_thyroid_carcinoma"
-      ],
-      "imaging": [
-        "Thyroid ultrasound: two highly suspicious nodules 5 mm and 11 mm (taller than wide, microcalcifications, ill-defined borders)",
-        "Suspicious left central neck lymph nodes (largest 12 mm) and left lateral level IV nodes (largest 11 mm)"
-      ],
-      "pathology": [
-        "Thyroid: multifocal classical papillary thyroid carcinoma, greatest dimension 0.8 cm, no angioinvasion, no extrathyroidal extension",
-        "Lymph nodes: 8/47 positive for papillary thyroid carcinoma, largest metastatic deposit 0.4 cm, no extranodal extension (pT1aN1b, AJCC 8th)",
-        "No evidence of medullary thyroid carcinoma or C-cell hyperplasia"
-      ],
-      "genetics": {
-        "ret_variant": "K666N",
-        "ret_cDNA": "c.1998G>T",
-        "transcript": "NM_020975.4",
-        "zygosity": "heterozygous",
-        "inheritance_pattern": "autosomal_dominant",
-        "classification": "likely_pathogenic"
-      },
-      "family_history": {
-        "mtc": false,
+        "mtc": true,
         "pheochromocytoma": false,
         "hyperparathyroidism": false
       },
       "surgery": [
         "Total thyroidectomy",
-        "Central neck dissection",
-        "Left lateral neck dissection"
+        "Central compartment neck dissection",
+        "Postoperative thyroxine and calcium supplements"
       ],
       "follow_up": [
-        "Postoperative thyroglobulin <0.1 with elevated anti-thyroglobulin antibodies (TgAb 78 IU/mL by immunometric assay, 30 IU/mL by radioimmunoassay)",
-        "No evidence of MTC on pathology; follow-up interval not numerically specified"
+        "Calcitonin 3 pg/mL at 3 months postoperative",
+        "Calcitonin 2 pg/mL at 6 months postoperative"
       ]
     },
     {
-      "id": "brother",
-      "age": 46,
-      "sex": "Male",
-      "relationship": "Brother",
-      "ret_variant": "K666N",
+      "id": "sister_1",
+      "age": null,
+      "sex": "Female",
+      "relationship": "Sibling",
+      "ret_variant": "S891A",
       "biochemical_data": [
         {
           "analyte": "calcitonin",
-          "value": 22.3,
+          "value": null,
           "unit": "pg/mL",
-          "reference_range": "0-5.1 pg/mL",
-          "timing": "initial_screening",
+          "reference_range": "≤5 pg/mL",
+          "timing": "preoperative",
           "elevated": true
         },
         {
           "analyte": "calcitonin",
-          "value": 17.3,
+          "value": 2,
           "unit": "pg/mL",
-          "reference_range": "0-5.1 pg/mL",
-          "timing": "followup_mean_over_3_years",
-          "elevated": true
+          "reference_range": "≤5 pg/mL",
+          "timing": "3_months_postoperative",
+          "elevated": false
         }
       ],
-      "diagnoses": ["suspected_medullary_thyroid_carcinoma"],
-      "imaging": ["Thyroid ultrasound: no nodules"],
-      "pathology": [],
+      "diagnoses": ["medullary thyroid carcinoma"],
+      "imaging": [],
+      "pathology": [
+        "Medullary thyroid carcinoma confirmed by immunohistochemistry for calcitonin"
+      ],
       "genetics": {
-        "ret_variant": "K666N",
-        "ret_cDNA": "c.1998G>T",
-        "transcript": "NM_020975.4",
-        "zygosity": "heterozygous",
-        "inheritance_pattern": "autosomal_dominant",
-        "classification": "likely_pathogenic"
+        "ret_S891A": "present",
+        "variant_cDNA": "c.2671T>G",
+        "exon": 15,
+        "zygosity": null,
+        "inheritance_pattern": "autosomal_dominant_familial",
+        "classification": "moderate_risk_pathogenic"
       },
       "family_history": {
-        "mtc": false,
+        "mtc": true,
         "pheochromocytoma": false,
         "hyperparathyroidism": false
       },
-      "surgery": [],
-      "follow_up": [
-        "Monitored every 4-6 months for 3 years",
-        "Calcitonin remained stably elevated (~17.3 pg/mL)",
-        "CEA, PTH, calcium, vitamin D, and metanephrines remained within normal limits",
-        "Patient continues surveillance and has declined thyroidectomy to date"
-      ]
+      "surgery": [
+        "Total thyroidectomy after ruling out pheochromocytoma and PHPT"
+      ],
+      "follow_up": ["Postoperative calcitonin <2 pg/mL at 3 months"]
     },
     {
-      "id": "proband_daughter",
-      "age": 22,
+      "id": "sister_2",
+      "age": null,
       "sex": "Female",
-      "relationship": "Daughter",
-      "ret_variant": "K666N",
-      "biochemical_data": [],
+      "relationship": "Sibling",
+      "ret_variant": "S891A",
+      "biochemical_data": [
+        {
+          "analyte": "calcitonin",
+          "value": null,
+          "unit": "pg/mL",
+          "reference_range": "≤5 pg/mL",
+          "timing": "preoperative",
+          "elevated": true
+        },
+        {
+          "analyte": "calcitonin",
+          "value": 2,
+          "unit": "pg/mL",
+          "reference_range": "≤5 pg/mL",
+          "timing": "3_months_postoperative",
+          "elevated": false
+        }
+      ],
+      "diagnoses": ["medullary thyroid carcinoma"],
+      "imaging": [],
+      "pathology": [
+        "Medullary thyroid carcinoma confirmed by immunohistochemistry for calcitonin"
+      ],
+      "genetics": {
+        "ret_S891A": "present",
+        "variant_cDNA": "c.2671T>G",
+        "exon": 15,
+        "zygosity": null,
+        "inheritance_pattern": "autosomal_dominant_familial",
+        "classification": "moderate_risk_pathogenic"
+      },
+      "family_history": {
+        "mtc": true,
+        "pheochromocytoma": false,
+        "hyperparathyroidism": false
+      },
+      "surgery": [
+        "Total thyroidectomy after ruling out pheochromocytoma and PHPT"
+      ],
+      "follow_up": ["Postoperative calcitonin <2 pg/mL at 3 months"]
+    },
+    {
+      "id": "sister_3",
+      "age": null,
+      "sex": "Female",
+      "relationship": "Sibling",
+      "ret_variant": "S891A",
+      "biochemical_data": [
+        {
+          "analyte": "calcitonin",
+          "value": null,
+          "unit": "pg/mL",
+          "reference_range": "≤5 pg/mL",
+          "timing": "preoperative",
+          "elevated": true
+        },
+        {
+          "analyte": "calcitonin",
+          "value": 2,
+          "unit": "pg/mL",
+          "reference_range": "≤5 pg/mL",
+          "timing": "3_months_postoperative",
+          "elevated": false
+        }
+      ],
+      "diagnoses": ["medullary thyroid carcinoma"],
+      "imaging": [],
+      "pathology": [
+        "Medullary thyroid carcinoma confirmed by immunohistochemistry for calcitonin"
+      ],
+      "genetics": {
+        "ret_S891A": "present",
+        "variant_cDNA": "c.2671T>G",
+        "exon": 15,
+        "zygosity": null,
+        "inheritance_pattern": "autosomal_dominant_familial",
+        "classification": "moderate_risk_pathogenic"
+      },
+      "family_history": {
+        "mtc": true,
+        "pheochromocytoma": false,
+        "hyperparathyroidism": false
+      },
+      "surgery": [
+        "Total thyroidectomy after ruling out pheochromocytoma and PHPT"
+      ],
+      "follow_up": ["Postoperative calcitonin <2 pg/mL at 3 months"]
+    },
+    {
+      "id": "sister_4",
+      "age": null,
+      "sex": "Female",
+      "relationship": "Sibling",
+      "ret_variant": "S891A",
+      "biochemical_data": [
+        {
+          "analyte": "calcitonin",
+          "value": null,
+          "unit": "pg/mL",
+          "reference_range": "≤5 pg/mL",
+          "timing": "preoperative",
+          "elevated": true
+        },
+        {
+          "analyte": "calcitonin",
+          "value": 2,
+          "unit": "pg/mL",
+          "reference_range": "≤5 pg/mL",
+          "timing": "3_months_postoperative",
+          "elevated": false
+        }
+      ],
+      "diagnoses": ["medullary thyroid carcinoma"],
+      "imaging": [],
+      "pathology": [
+        "Medullary thyroid carcinoma confirmed by immunohistochemistry for calcitonin"
+      ],
+      "genetics": {
+        "ret_S891A": "present",
+        "variant_cDNA": "c.2671T>G",
+        "exon": 15,
+        "zygosity": null,
+        "inheritance_pattern": "autosomal_dominant_familial",
+        "classification": "moderate_risk_pathogenic"
+      },
+      "family_history": {
+        "mtc": true,
+        "pheochromocytoma": false,
+        "hyperparathyroidism": false
+      },
+      "surgery": [
+        "Total thyroidectomy after ruling out pheochromocytoma and PHPT"
+      ],
+      "follow_up": ["Postoperative calcitonin <2 pg/mL at 3 months"]
+    },
+    {
+      "id": "younger_carrier_1",
+      "age": 20,
+      "sex": null,
+      "relationship": "Next_generation",
+      "ret_variant": "S891A",
+      "biochemical_data": [
+        {
+          "analyte": "calcitonin",
+          "value": null,
+          "unit": "pg/mL",
+          "reference_range": "≤5 pg/mL",
+          "timing": "baseline_followup",
+          "elevated": false
+        }
+      ],
       "diagnoses": [],
-      "imaging": ["Thyroid ultrasound: normal"],
+      "imaging": ["Serial ultrasound (details not specified)"],
       "pathology": [],
       "genetics": {
-        "ret_variant": "K666N",
-        "ret_cDNA": "c.1998G>T",
-        "transcript": "NM_020975.4",
-        "zygosity": "heterozygous",
-        "inheritance_pattern": "autosomal_dominant",
-        "classification": "likely_pathogenic"
+        "ret_S891A": "present",
+        "variant_cDNA": "c.2671T>G",
+        "exon": 15,
+        "zygosity": null,
+        "inheritance_pattern": "autosomal_dominant_familial",
+        "classification": "moderate_risk_pathogenic"
       },
       "family_history": {
-        "mtc": false,
+        "mtc": true,
         "pheochromocytoma": false,
         "hyperparathyroidism": false
       },
       "surgery": [],
       "follow_up": [
-        "All screening labs (plasma free metanephrines, calcium, vitamin D, PTH, calcitonin, CEA) normal at baseline",
-        "Planned annual biochemical surveillance; no prophylactic thyroidectomy elected"
+        "On follow-up with serial ultrasound and tumor markers; calcitonin not yet raised"
+      ]
+    },
+    {
+      "id": "younger_carrier_2",
+      "age": null,
+      "sex": null,
+      "relationship": "Next_generation",
+      "ret_variant": "S891A",
+      "biochemical_data": [
+        {
+          "analyte": "calcitonin",
+          "value": null,
+          "unit": "pg/mL",
+          "reference_range": "≤5 pg/mL",
+          "timing": "baseline_followup",
+          "elevated": false
+        }
+      ],
+      "diagnoses": [],
+      "imaging": ["Serial ultrasound (details not specified)"],
+      "pathology": [],
+      "genetics": {
+        "ret_S891A": "present",
+        "variant_cDNA": "c.2671T>G",
+        "exon": 15,
+        "zygosity": null,
+        "inheritance_pattern": "autosomal_dominant_familial",
+        "classification": "moderate_risk_pathogenic"
+      },
+      "family_history": {
+        "mtc": true,
+        "pheochromocytoma": false,
+        "hyperparathyroidism": false
+      },
+      "surgery": [],
+      "follow_up": [
+        "On follow-up with serial ultrasound and tumor markers; calcitonin not yet raised"
       ]
     }
   ],
@@ -516,22 +424,15 @@
     }
   },
   "methods": {
-    "sequencing_panel": "Invitae 83 gene cancer panel",
-    "biomarker_assays": "Plasma free metanephrines and normetanephrines; serum calcitonin, CEA, calcium, PTH, 25-hydroxyvitamin D, chromogranin A, and thyroglobulin with anti-thyroglobulin antibodies",
+    "sequencing_panel": "RET genetic screening by DNA PCR sequencing of exons 8, 10, 11, 13, 14, 15, and 16 in a central molecular laboratory offering RET mutational testing",
+    "biomarker_assays": "Calcitonin and CEA measured by unspecified immunoassays; reference ranges calcitonin ≤5 pg/mL, CEA ≤5 ng/mL",
     "coverage_depth": {
       "tissue_mean": null,
       "ctdna_mean": null
     },
     "normal_ranges": {
-      "calcitonin": "0-5.1 pg/mL",
-      "cea": "0-3 ng/mL",
-      "plasma_metanephrine_pg_ml": "<57 pg/mL",
-      "plasma_normetanephrine_pg_ml": "<148 pg/mL",
-      "plasma_metanephrine_nmol_ml": "0-0.49 nmol/mL",
-      "plasma_normetanephrine_nmol_ml": "0-0.89 nmol/mL",
-      "PTH_pg_ml": "12-88 pg/mL (initial), 15-88 pg/mL (later reference)",
-      "calcium_mg_dl": "8.6-10.3 mg/dL",
-      "chromogranin_A_ng_ml": "0-95 ng/mL"
+      "calcitonin": "≤5 pg/mL",
+      "cea": "≤5 ng/mL"
     }
   }
 }
