@@ -1,0 +1,273 @@
+{
+  "study_id": "study_14",
+  "study_info": {
+    "title": "Post-surgical natural history of MEN2A with RET C634R mutation and bilateral cervical node metastasis: a case report",
+    "journal": "Annals of Medicine & Surgery",
+    "year": 2025,
+    "volume_issue": "87(2):981-984",
+    "doi": "10.1097/MS9.0000000000002923",
+    "country": "Nepal (inferred from CMCTH; not explicitly stated, so set to null)",
+    "study_type": "Case report",
+    "authors": ["Adhikari B", "Niraula B", "Lamichhane S", "Sapkota A"],
+    "keywords": [
+      "C634R mutation",
+      "case report",
+      "genetic analysis",
+      "medullary thyroid carcinoma (MTC)",
+      "MEN2A"
+    ]
+  },
+  "cohort_info": {
+    "total_patients": 1,
+    "sex_distribution": {
+      "male": 0,
+      "female": 1
+    },
+    "age_stats": {
+      "mean": 36,
+      "median": 36,
+      "range": "26-36"
+    },
+    "sporadic_definition_criteria": null,
+    "tumor_staging_distribution": {
+      "stage_I": 0,
+      "stage_II": 0,
+      "stage_III": 0,
+      "stage_IV": 1
+    },
+    "followup_groups": {
+      "disease_free": 0,
+      "biochemical_persistent": 1,
+      "structural_disease": 1
+    }
+  },
+  "mutation_summary": {
+    "ret_mutated_cases": 2,
+    "ras_mutated_cases": 0,
+    "mutation_negative_cases": 0,
+    "mutations": [
+      {
+        "gene": "RET",
+        "variant": "C634R",
+        "count": 2
+      }
+    ]
+  },
+  "case_data": [
+    {
+      "case_id": 1,
+      "mutation": "RET C634R",
+      "tissue_vaf": null,
+      "preop_ctdna_vaf": null,
+      "postop_ctdna_vaf": null,
+      "preop_ct": 1877,
+      "preop_cea": null,
+      "postop_ct": 72.5,
+      "postop_cea": null,
+      "postop_timing_months": 1,
+      "tki": null,
+      "outcome": "Persistent structural and biochemical disease",
+      "ctdna_positive_preop": null,
+      "ctdna_positive_postop": null
+    }
+  ],
+  "patients": [
+    {
+      "id": "proband",
+      "age": 36,
+      "sex": "Female",
+      "relationship": "Proband",
+      "ret_variant": "C634R",
+      "biochemical_data": [
+        {
+          "analyte": "calcitonin",
+          "value": 1877,
+          "unit": "pg/mL",
+          "timepoint": "Pre-operative",
+          "reference_range": "0-11.5 pg/mL",
+          "elevated": true
+        },
+        {
+          "analyte": "calcitonin",
+          "value": 72.5,
+          "unit": "pg/mL",
+          "timepoint": "1 month post-op",
+          "reference_range": "0-11.5 pg/mL",
+          "elevated": true
+        },
+        {
+          "analyte": "calcitonin",
+          "value": 115,
+          "unit": "pg/mL",
+          "timepoint": "7 months post-op",
+          "reference_range": "0-11.5 pg/mL",
+          "elevated": true
+        },
+        {
+          "analyte": "calcitonin",
+          "value": 432,
+          "unit": "pg/mL",
+          "timepoint": "4 years post-op",
+          "reference_range": "0-11.5 pg/mL",
+          "elevated": true
+        },
+        {
+          "analyte": "calcitonin",
+          "value": 327,
+          "unit": "pg/mL",
+          "timepoint": "4.5 years post-op",
+          "reference_range": "0-11.5 pg/mL",
+          "elevated": true
+        },
+        {
+          "analyte": "calcitonin",
+          "value": 186,
+          "unit": "pg/mL",
+          "timepoint": "5 years post-op",
+          "reference_range": "0-11.5 pg/mL",
+          "elevated": true
+        },
+        {
+          "analyte": "CEA",
+          "value": 28.9,
+          "unit": "ng/mL",
+          "timepoint": "Follow-up (year not precisely specified)",
+          "reference_range": "<3 ng/mL",
+          "elevated": true
+        },
+        {
+          "analyte": "PTH",
+          "value": null,
+          "unit": null,
+          "timepoint": "Follow-up",
+          "reference_range": "Intact PTH within normal range (exact not provided)",
+          "elevated": false
+        },
+        {
+          "analyte": "TSH",
+          "value": 33.92,
+          "unit": "µIU/L",
+          "timepoint": "Early post-thyroidectomy (pre-adrenalectomy)",
+          "reference_range": null,
+          "elevated": true
+        },
+        {
+          "analyte": "VMA",
+          "value": null,
+          "unit": null,
+          "timepoint": "Pre- and post-adrenalectomy",
+          "reference_range": "Within normal range",
+          "elevated": false
+        },
+        {
+          "analyte": "metanephrines",
+          "value": null,
+          "unit": null,
+          "timepoint": "Pre- and post-adrenalectomy",
+          "reference_range": "Within normal range",
+          "elevated": false
+        }
+      ],
+      "diagnoses": [
+        "medullary thyroid carcinoma",
+        "MEN2A",
+        "bilateral pheochromocytoma",
+        "pregnancy (gravida 2 para 1)"
+      ],
+      "imaging": [
+        "CECT Neck (2013): heterogeneously enhancing bilateral multifocal thyroid nodules with lymph node involvement in right cervical nodes (level 3/4), right pretracheal nodes, and paratracheal nodes",
+        "MIBG scan (1 month post-thyroidectomy): bilateral adrenal pheochromocytoma and faint tracer uptake in left neck",
+        "Abdominal MRI: confirmed bilateral pheochromocytoma",
+        "Ultrasound 4 years after thyroidectomy: hypoechoic nodules with microcalcifications in the left central region",
+        "CECT Neck at 4 years: enhancing lesion in left thyroid bed",
+        "PET-CT: somatostatin receptor-expressing soft tissue lesions and lymph nodes in left paratracheal region",
+        "CECT Chest and Abdomen: no distant metastasis; dermoid ovarian cyst noted",
+        "Bone scintigraphy: normal"
+      ],
+      "pathology": [
+        "Fine-needle aspiration cytology in 2013 diagnostic of medullary thyroid carcinoma",
+        "Bilateral cervical lymph node metastases at initial surgery",
+        "Lymph node pathology: 2/3 right cervical nodes positive, 1/3 left cervical nodes positive, 4/4 pre-tracheal nodes positive",
+        "Final staging (10 years after diagnosis): Stage IVA, T2N1bM0 (ATA 2015 guidelines)",
+        "Parathyroid glands uninvolved clinically (no primary hyperparathyroidism reported)"
+      ],
+      "genetics": {
+        "ret_variant": "C634R",
+        "zygosity": "heterozygous (assumed for germline MEN2A; not explicitly stated so treated as null)",
+        "inheritance": "autosomal_dominant",
+        "pathogenicity": "pathogenic",
+        "vaf": null
+      },
+      "family_history": {
+        "mtc": true,
+        "pheochromocytoma": true,
+        "hyperparathyroidism": false,
+        "details": "Mother had thyroidectomy for unknown cause; sibling underwent prophylactic thyroidectomy without MEN2A detected; 7-year-old daughter carries the same RET C634R mutation"
+      },
+      "surgery": [
+        "Total thyroidectomy with central node dissection and bilateral functional neck dissection (2013, at age 26)",
+        "Laparoscopic right total adrenalectomy and left partial adrenalectomy for bilateral pheochromocytoma (7 months after thyroidectomy)"
+      ],
+      "follow_up": [
+        "Regular monitoring of TSH, T4, PTH, calcitonin, CEA, and pheochromocytoma markers",
+        "Euthyroid on 100 mcg levothyroxine once daily at follow-up",
+        "Persistent elevation of basal calcitonin at all measured timepoints from 1 month to 5 years post-op",
+        "CEA became elevated to 28.9 ng/mL during later follow-up despite absence of new symptoms",
+        "Normotensive with no headaches, palpitations, diaphoresis, weight loss, or muscle spasms at latest follow-up"
+      ]
+    },
+    {
+      "id": "daughter",
+      "age": 7,
+      "sex": "Female",
+      "relationship": "Daughter",
+      "ret_variant": "C634R",
+      "biochemical_data": [],
+      "diagnoses": [],
+      "imaging": [],
+      "pathology": [],
+      "genetics": {
+        "ret_variant": "C634R",
+        "zygosity": null,
+        "inheritance": "autosomal_dominant",
+        "pathogenicity": "pathogenic",
+        "vaf": null
+      },
+      "family_history": {
+        "mtc": null,
+        "pheochromocytoma": null,
+        "hyperparathyroidism": null
+      },
+      "surgery": [],
+      "follow_up": []
+    }
+  ],
+  "statistics": {
+    "preop_ctdna_positive_count": null,
+    "postop_ctdna_positive_count": null,
+    "p_values": {
+      "biomarker_correlations": null,
+      "survival_associations": null
+    },
+    "correlation_coefficients": {
+      "calcitonin_cea": null,
+      "vaf_outcome": null
+    }
+  },
+  "methods": {
+    "sequencing_panel": "Genetic analysis for RET C634R germline mutation (exact platform not specified)",
+    "biomarker_assays": "Serum calcitonin, CEA, TSH, T4, parathyroid hormone, vanillylmandelic acid, and urinary metanephrines measured using unspecified standard clinical laboratory methods",
+    "coverage_depth": {
+      "tissue_mean": null,
+      "ctdna_mean": null
+    },
+    "normal_ranges": {
+      "calcitonin": "0-11.5 pg/mL",
+      "cea": "<3 ng/mL",
+      "tsh": null,
+      "pth": "Within laboratory normal range (exact not reported)",
+      "vma": "Within laboratory normal range (values not reported)",
+      "metanephrines": "Within laboratory normal range (values not reported)"
+    }
+  }
+}

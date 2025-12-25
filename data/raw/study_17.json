@@ -1,0 +1,255 @@
+{
+  "study_id": "study_17",
+  "study_info": {
+    "title": "A case report of multiple endocrine neoplasia type 2B",
+    "journal": "Annals of Medicine & Surgery",
+    "year": 2024,
+    "volume_issue": "86(5):3016-3019",
+    "doi": "10.1097/MS9.0000000000001867",
+    "country": null,
+    "study_type": "Case report",
+    "authors": ["Jahantab MB", "Rastegar B", "Aria A"],
+    "keywords": [
+      "case report",
+      "medullary thyroid carcinoma",
+      "multiple endocrine neoplasia type 2",
+      "pheochromocytoma"
+    ]
+  },
+  "cohort_info": {
+    "total_patients": 1,
+    "sex_distribution": { "male": 0, "female": 1 },
+    "age_stats": { "mean": 38, "median": 38, "range": "38-38" },
+    "sporadic_definition_criteria": null,
+    "tumor_staging_distribution": {
+      "stage_I": null,
+      "stage_II": null,
+      "stage_III": null,
+      "stage_IV": null
+    },
+    "followup_groups": {
+      "disease_free": null,
+      "biochemical_persistent": null,
+      "structural_disease": null
+    }
+  },
+  "mutation_summary": {
+    "ret_mutated_cases": null,
+    "ras_mutated_cases": null,
+    "mutation_negative_cases": null,
+    "mutations": []
+  },
+  "case_data": [],
+  "patients": [
+    {
+      "id": "proband",
+      "age": 38,
+      "sex": "Female",
+      "relationship": "Proband",
+      "ret_variant": null,
+      "biochemical_data": [
+        {
+          "analyte": "CEA",
+          "value": 12.9,
+          "unit": "ng/ml",
+          "reference_range": "<5.5 ng/ml",
+          "timing": "initial_presentation",
+          "elevated": true
+        },
+        {
+          "analyte": "CA19-9",
+          "value": 110,
+          "unit": "U/ml",
+          "reference_range": "0-39 U/ml",
+          "timing": "initial_presentation",
+          "elevated": true
+        },
+        {
+          "analyte": "TSH",
+          "value": 3.79,
+          "unit": "µIU/ml",
+          "reference_range": "0.39-6.16 µIU/ml",
+          "timing": "initial_presentation",
+          "elevated": false
+        },
+        {
+          "analyte": "urine_24h_metanephrine",
+          "value": 1779,
+          "unit": null,
+          "reference_range": "<350",
+          "timing": "initial_presentation",
+          "elevated": true
+        },
+        {
+          "analyte": "urine_24h_normetanephrine",
+          "value": 4659,
+          "unit": null,
+          "reference_range": "<600",
+          "timing": "initial_presentation",
+          "elevated": true
+        },
+        {
+          "analyte": "urine_24h_VMA",
+          "value": 5.0,
+          "unit": null,
+          "reference_range": "0-13.6",
+          "timing": "initial_presentation",
+          "elevated": false
+        },
+        {
+          "analyte": "urine_24h_free_cortisol",
+          "value": 72.6,
+          "unit": null,
+          "reference_range": "4.3-176",
+          "timing": "initial_presentation",
+          "elevated": false
+        },
+        {
+          "analyte": "aldosterone",
+          "value": 125.6,
+          "unit": null,
+          "reference_range": "40-310",
+          "timing": "initial_presentation",
+          "elevated": false
+        },
+        {
+          "analyte": "DHEA-SO4",
+          "value": 0.8,
+          "unit": null,
+          "reference_range": "0.03-5.88",
+          "timing": "initial_presentation",
+          "elevated": false
+        },
+        {
+          "analyte": "testosterone",
+          "value": 0.4,
+          "unit": "ng/ml",
+          "reference_range": "0.2-0.95 ng/ml",
+          "timing": "initial_presentation",
+          "elevated": false
+        },
+        {
+          "analyte": "ACTH",
+          "value": 10.52,
+          "unit": "pg/ml",
+          "reference_range": "9-52 pg/ml",
+          "timing": "initial_presentation",
+          "elevated": false
+        },
+        {
+          "analyte": "cortisol",
+          "value": 26.8,
+          "unit": "µg/dl",
+          "reference_range": "4.3-22.4 µg/dl",
+          "timing": "initial_presentation",
+          "elevated": true
+        },
+        {
+          "analyte": "ANA",
+          "value": 0.17,
+          "unit": null,
+          "reference_range": "0-1.2",
+          "timing": "initial_presentation",
+          "elevated": false
+        },
+        {
+          "analyte": "anti-dsDNA",
+          "value": 5.3,
+          "unit": null,
+          "reference_range": "<16",
+          "timing": "initial_presentation",
+          "elevated": false
+        },
+        {
+          "analyte": "anti-SS-A",
+          "value": 1.1,
+          "unit": null,
+          "reference_range": "<20",
+          "timing": "initial_presentation",
+          "elevated": false
+        },
+        {
+          "analyte": "anti-SS-B",
+          "value": 0.1,
+          "unit": null,
+          "reference_range": "<20",
+          "timing": "initial_presentation",
+          "elevated": false
+        }
+      ],
+      "diagnoses": [
+        "pheochromocytoma",
+        "medullary thyroid carcinoma",
+        "suspected MEN2B"
+      ],
+      "imaging": [
+        "Abdominopelvic CT: large heterogeneous well-defined solid left adrenal mass 64×52×68 mm with central necrosis and otherwise unremarkable abdomen/pelvis.",
+        "Neck ultrasound: right lobe hypoechoic nodule with calcification 14×13 mm; two left lobe hypoechoic nodules with calcification 14×13 mm and 8×7 mm; few benign-appearing reactive cervical lymph nodes; normal bilateral submandibular glands.",
+        "Breast/axillary ultrasound: murally calcified cyst 9.4 mm in inferior right breast; no axillary mass or lymphadenopathy."
+      ],
+      "pathology": [
+        "Left adrenalectomy: encapsulated lobulated mass 7.0×7.0 cm, smooth creamy-brown external surface, creamy-yellow cut surface, intact capsule; histology consistent with pheochromocytoma.",
+        "Total thyroidectomy: right lobe 4×2×1.5 cm with creamy-yellow mass 2×1.5×1 cm; left lobe 3.5×2×1.5 cm with creamy-yellowish mass 2×1×0.8 cm; isthmus 2×2×0.5 cm; histology consistent with medullary thyroid carcinoma with amyloid stroma."
+      ],
+      "genetics": {
+        "ret_mutation_tested": false,
+        "ret_variant": null,
+        "zygosity": null,
+        "inheritance_pattern": "suspected_autosomal_dominant_family_history",
+        "classification": null
+      },
+      "family_history": {
+        "mtc": true,
+        "pheochromocytoma": true,
+        "hyperparathyroidism": null,
+        "details": "Mother died from thyroid cancer; sister had an adrenal mass at age 32."
+      },
+      "surgery": [
+        "Transperitoneal open total left adrenalectomy for pheochromocytoma.",
+        "Total thyroidectomy for medullary thyroid carcinoma."
+      ],
+      "follow_up": [
+        "Postoperative course after adrenalectomy described as unremarkable; no quantitative follow-up biomarker data provided.",
+        "Timing: thyroidectomy performed approximately 2 months after adrenalectomy; no long-term calcitonin or CEA trends reported."
+      ]
+    }
+  ],
+  "statistics": {
+    "preop_ctdna_positive_count": null,
+    "postop_ctdna_positive_count": null,
+    "p_values": {
+      "biomarker_correlations": null,
+      "survival_associations": null
+    },
+    "correlation_coefficients": {
+      "calcitonin_cea": null,
+      "vaf_outcome": null
+    }
+  },
+  "methods": {
+    "sequencing_panel": null,
+    "biomarker_assays": "Standard hospital laboratory assays reported for CEA, CA19-9, thyroid and adrenal hormones; specific platforms and manufacturers not described.",
+    "coverage_depth": {
+      "tissue_mean": null,
+      "ctdna_mean": null
+    },
+    "normal_ranges": {
+      "TSH": "0.39-6.16 µIU/ml",
+      "CEA": "<5.5 ng/ml",
+      "CA19-9": "0-39 U/ml",
+      "urine_24h_metanephrine": "<350",
+      "urine_24h_normetanephrine": "<600",
+      "urine_24h_VMA": "0-13.6",
+      "urine_24h_free_cortisol": "4.3-176",
+      "aldosterone": "40-310",
+      "DHEA-SO4": "0.03-5.88",
+      "testosterone": "0.2-0.95 ng/ml",
+      "ACTH": "9-52 pg/ml",
+      "cortisol": "4.3-22.4 µg/dl",
+      "ANA": "0-1.2",
+      "anti-dsDNA": "<16",
+      "anti-SS-A": "<20",
+      "anti-SS-B": "<20"
+    }
+  }
+}

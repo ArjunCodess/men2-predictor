@@ -1,0 +1,323 @@
+{
+  "study_id": "study_16",
+  "study_info": {
+    "title": "A New MEN2 Syndrome with Clinical Features of Both MEN2A and MEN2B Associated with a New RET Germline Deletion",
+    "journal": "Case Reports in Endocrinology",
+    "year": 2020,
+    "volume_issue": "2020:4147097",
+    "doi": "10.1155/2020/4147097",
+    "country": "Italy",
+    "study_type": "Case report",
+    "authors": [
+      "Carlotta Giani",
+      "Teresa Ramone",
+      "Cristina Romei",
+      "Raffaele Ciampi",
+      "Alessia Tacito",
+      "Laura Valerio",
+      "Laura Agate",
+      "Clara Ugolini",
+      "Michele Marinò",
+      "Fulvio Basolo",
+      "Alessandro Franchi",
+      "Simona Borsari",
+      "Angela Michelucci",
+      "Gabriele Materazzi",
+      "Cesare Selli",
+      "Rossella Elisei"
+    ],
+    "keywords": [
+      "MEN2",
+      "MEN2A",
+      "MEN2B",
+      "RET",
+      "medullary thyroid carcinoma",
+      "primary hyperparathyroidism",
+      "plexiform neurofibroma",
+      "ganglioneuromatosis",
+      "megacolon",
+      "marfanoid habitus"
+    ]
+  },
+  "cohort_info": {
+    "total_patients": 1,
+    "sex_distribution": {
+      "male": 0,
+      "female": 1
+    },
+    "age_stats": {
+      "mean": 7,
+      "median": 7,
+      "range": "7-7"
+    },
+    "sporadic_definition_criteria": "Case described as carrying a de novo RET germline deletion not detected in the blood of the parents or brother, indicating absence of familial transmission.",
+    "tumor_staging_distribution": {
+      "stage_I": 0,
+      "stage_II": 0,
+      "stage_III": 0,
+      "stage_IV": 0
+    },
+    "followup_groups": {
+      "disease_free": null,
+      "biochemical_persistent": null,
+      "structural_disease": null
+    }
+  },
+  "mutation_summary": {
+    "ret_mutated_cases": 1,
+    "ras_mutated_cases": 0,
+    "mutation_negative_cases": 0,
+    "mutations": [
+      {
+        "gene": "RET",
+        "variant": "Exon11_Asp631_Leu633delinsGlu",
+        "count": 1
+      }
+    ]
+  },
+  "case_data": [
+    {
+      "case_id": 1,
+      "mutation": "RET Exon11_Asp631_Leu633delinsGlu",
+      "tissue_vaf": null,
+      "preop_ctdna_vaf": null,
+      "postop_ctdna_vaf": null,
+      "preop_ct": 496,
+      "preop_cea": null,
+      "postop_ct": 52,
+      "postop_cea": null,
+      "postop_timing_months": 2,
+      "tki": "No",
+      "outcome": "Biochemical",
+      "ctdna_positive_preop": null,
+      "ctdna_positive_postop": null
+    }
+  ],
+  "patients": [
+    {
+      "id": "proband",
+      "age": 7,
+      "sex": "Female",
+      "relationship": "Proband",
+      "ret_variant": "Exon11_Asp631_Leu633delinsGlu",
+      "biochemical_data": [
+        {
+          "analyte": "calcitonin",
+          "value": 665,
+          "unit": "pg/ml",
+          "context": "Pre-referral local measurement described as 665 pg/ml Ct with thyroid nodules.",
+          "timing": "pre-diagnosis",
+          "reference_range": null,
+          "elevated": true
+        },
+        {
+          "analyte": "calcitonin",
+          "value": 496,
+          "unit": "ng/L",
+          "context": "Baseline at referral to endocrine unit before thyroid surgery.",
+          "timing": "preoperative",
+          "reference_range": "<18 ng/L",
+          "elevated": true
+        },
+        {
+          "analyte": "calcitonin",
+          "value": 52,
+          "unit": "ng/L",
+          "context": "Follow-up two months after surgery.",
+          "timing": "2_months_postoperative",
+          "reference_range": "8-18 ng/L (upper limit 18 ng/L for Ct reported separately from PTH range)",
+          "elevated": true
+        },
+        {
+          "analyte": "calcium",
+          "value": 11.3,
+          "unit": "mg/dl",
+          "context": "Initial detection at 7 years of age triggering evaluation for hyperparathyroidism.",
+          "timing": "preoperative",
+          "reference_range": null,
+          "elevated": true
+        },
+        {
+          "analyte": "PTH",
+          "value": 49,
+          "unit": "pg/ml",
+          "context": "Initial PTH when calcium 11.3 mg/dl at 7 years.",
+          "timing": "preoperative",
+          "reference_range": null,
+          "elevated": true
+        },
+        {
+          "analyte": "calcium",
+          "value": 11.2,
+          "unit": "mg/dL",
+          "context": "Hypercalcemia at presentation to endocrine unit with MTC.",
+          "timing": "preoperative",
+          "reference_range": "8.6-10.2 mg/dL",
+          "elevated": true
+        },
+        {
+          "analyte": "PTH",
+          "value": 51,
+          "unit": "ng/L",
+          "context": "PTH at same time as calcium 11.2 mg/dL and Ct 496 ng/L.",
+          "timing": "preoperative",
+          "reference_range": "8-40 ng/L",
+          "elevated": true
+        },
+        {
+          "analyte": "bone_specific_alkaline_phosphatase",
+          "value": 127,
+          "unit": "μg/L",
+          "context": "Preoperative B-ALP associated with hyperparathyroidism.",
+          "timing": "preoperative",
+          "reference_range": "4.7-27.1 μg/L",
+          "elevated": true
+        },
+        {
+          "analyte": "osteocalcin",
+          "value": 98.7,
+          "unit": "μg/L",
+          "context": "Preoperative osteocalcin associated with hyperparathyroidism.",
+          "timing": "preoperative",
+          "reference_range": "10.4-45.6 μg/L",
+          "elevated": true
+        },
+        {
+          "analyte": "25_hydroxy_vitamin_D",
+          "value": 21,
+          "unit": "μg/L",
+          "context": "Preoperative vitamin D status.",
+          "timing": "preoperative",
+          "reference_range": ">30 μg/L",
+          "elevated": false
+        },
+        {
+          "analyte": "calcium",
+          "value": 9.5,
+          "unit": "mg/dl",
+          "context": "Calcium on calcitriol therapy two months after surgery.",
+          "timing": "2_months_postoperative",
+          "reference_range": "8.6-10.2 mg/dl",
+          "elevated": false
+        },
+        {
+          "analyte": "PTH",
+          "value": 21,
+          "unit": "ng/L",
+          "context": "PTH two months after surgery while on calcitriol.",
+          "timing": "2_months_postoperative",
+          "reference_range": "8-40 ng/L",
+          "elevated": false
+        },
+        {
+          "analyte": "bone_specific_alkaline_phosphatase",
+          "value": 75,
+          "unit": "μg/L",
+          "context": "B-ALP two months after surgery.",
+          "timing": "2_months_postoperative",
+          "reference_range": "4.7-27.1 μg/L",
+          "elevated": true
+        },
+        {
+          "analyte": "osteocalcin",
+          "value": 79.4,
+          "unit": "μg/L",
+          "context": "Osteocalcin two months after surgery.",
+          "timing": "2_months_postoperative",
+          "reference_range": "10.4-45.6 μg/L",
+          "elevated": true
+        }
+      ],
+      "diagnoses": [
+        "medullary thyroid carcinoma",
+        "MEN2B-like phenotype",
+        "primary hyperparathyroidism",
+        "C-cell hyperplasia",
+        "plexiform neurofibroma of bladder/pelvis",
+        "diffuse ganglioneuromatosis (intestinal and bladder)",
+        "megacolon",
+        "vesicoureteral reflux with recurrent pyelonephritis",
+        "marfanoid habitus",
+        "mucosal neuromas"
+      ],
+      "imaging": [
+        "Neck ultrasound at 7 years: bilateral solid hypoechoic thyroid micronodules; left roundish hypoechoic extrathyroid lesion of 9 mm suspected lymphadenopathy or hyperplastic parathyroid; latero-cervical lymphadenopathies.",
+        "Neck ultrasound preoperatively: three bilateral micronodules, suspicious left solid hypoechoic thyroid nodule 11 mm with irregular margin; 9 mm hypoechoic nodular lesion below left lobe suspected hyperplastic parathyroid; multiple jugular and left latero-cervical microlymphadenopathies.",
+        "Total body CT scan: excluded distant metastases; showed megacolon.",
+        "Pelvic MRI at age 2 and follow-up: large pelvic solid expansive lesion 14 cm extending to pubic region around urethra and bladder causing mild hydronephrosis; described as stable over time, consistent with plexiform neurofibroma.",
+        "Gastrointestinal scintigraphy at age 2: slowed gastric emptying.",
+        "Gastroscopy: irregular small duodenum with esophagitis.",
+        "Adrenal imaging: negative for pheochromocytoma.",
+        "Abdominal CT and MRI eight months after surgery: no metastatic lesions, stability of pelvic mass."
+      ],
+      "pathology": [
+        "Thyroid: multifocal bilateral medullary thyroid carcinoma; four microfoci (three left lobe, one right lobe); largest focus approximately 1 cm in left lobe; associated C-cell hyperplasia.",
+        "Tumor invasion: largest microfocus invaded perithyroid soft tissue with extensive neoplastic lymphangiosis and vascular embolization; neoplastic vascular emboli and deposits infiltrating adjacent ganglioneuromatosis lesion.",
+        "Lymph nodes: central compartment 5/10 positive, left latero-cervical 5/32 positive for MTC metastases.",
+        "Pathologic stage: pT1a(m)N1bM0 (AJCC 8th edition).",
+        "Parathyroid: one hyperplastic parathyroid (6 mm) and one parathyroid adenoma (8 mm).",
+        "Mucosal neuromas: histology consistent with diffuse ganglioneuromatosis of oral mucosa.",
+        "Pelvic lesion: plexiform neurofibroma with diffuse ganglioneuromatosis involving bladder wall; S100-positive spindle cells; ganglion-like cells positive for synaptophysin and neuron specific enolase; EMA-positive perineurial cells around fascicles."
+      ],
+      "genetics": {
+        "ret_variant_coding": "c.1893_1898delCGAGCT",
+        "ret_variant_protein": "Asp631_Leu633delinsGlu",
+        "ret_m918t": "absent",
+        "zygocity": "heterozygous",
+        "inheritance": "de_novo",
+        "pathogenicity_classification": "pathogenic",
+        "somatic_mutations_in_MTC": [],
+        "other_genes_tested": ["MEN1", "CDKN1B", "NF1", "PTEN", "FBN1", "SOS1"],
+        "other_genes_variants_found": []
+      },
+      "family_history": {
+        "mtc": false,
+        "pheochromocytoma": false,
+        "hyperparathyroidism": false,
+        "other_men_related_tumors": false,
+        "notes": "Parents and brother tested negative for the RET germline deletion; no familial MEN2 features reported."
+      },
+      "surgery": [
+        "Total thyroidectomy.",
+        "Central compartment lymph node dissection.",
+        "Left latero-cervical lymph node dissection.",
+        "Bilateral neck exploration for primary hyperparathyroidism with removal of hyperplastic parathyroid and parathyroid adenoma.",
+        "Biopsy of mucosal neuromas of the mouth.",
+        "Prior laparotomy at age 2 for debulking of unresectable pelvic mass (plexiform neurofibroma)."
+      ],
+      "follow_up": [
+        "Two months post-thyroidectomy: serum calcitonin 52 ng/L, calcium 9.5 mg/dl on calcitriol 0.25 μg/day, PTH 21 ng/L, B-ALP 75 μg/L, osteocalcin 79.4 μg/L; neck ultrasound showed no local recurrence.",
+        "Eight months post-thyroidectomy: CT and abdominal MRI confirmed absence of metastatic lesions and stability of pelvic mass; serum calcitonin and CEA reported as stable (values not specified).",
+        "Continued urological follow-up for vesicoureteral reflux and bladder involvement by plexiform neurofibroma."
+      ]
+    }
+  ],
+  "statistics": {
+    "preop_ctdna_positive_count": null,
+    "postop_ctdna_positive_count": null,
+    "p_values": {
+      "biomarker_correlations": null,
+      "survival_associations": null
+    },
+    "correlation_coefficients": {
+      "calcitonin_cea": null,
+      "vaf_outcome": null
+    }
+  },
+  "methods": {
+    "sequencing_panel": "Germline RET analysis by Sanger sequencing of genomic DNA amplified by PCR; next-generation sequencing panel used for primary MTC tumor, neck lymph node metastasis, and plexiform neurofibroma to search for additional somatic mutations.",
+    "biomarker_assays": "Serum calcitonin, calcium, and PTH measured with routine hospital assays (exact platforms not specified); bone-specific alkaline phosphatase, osteocalcin, metanephrines, and 25-hydroxyvitamin D also measured with standard methods.",
+    "coverage_depth": {
+      "tissue_mean": null,
+      "ctdna_mean": null
+    },
+    "normal_ranges": {
+      "calcitonin": "<18 ng/L",
+      "calcium": "8.6-10.2 mg/dL",
+      "PTH": "8-40 ng/L",
+      "bone_specific_alkaline_phosphatase": "4.7-27.1 μg/L",
+      "osteocalcin": "10.4-45.6 μg/L",
+      "25_hydroxy_vitamin_D": ">30 μg/L"
+    }
+  }
+}

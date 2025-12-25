@@ -1,0 +1,532 @@
+{
+  "study_id": "study_22",
+  "study_info": {
+    "title": "C634Y mutation in RET-induced multiple endocrine neoplasia type 2A: A case report",
+    "journal": "World Journal of Clinical Cases",
+    "year": 2024,
+    "volume_issue": "12(15):2627-2635",
+    "doi": "10.12998/wjcc.v12.i15.2627",
+    "country": "China",
+    "study_type": "Case report with family study",
+    "authors": [
+      "Hui-Fen Zhang",
+      "Shu-Ling Huang",
+      "Wen-Li Wang",
+      "Yu-Qing Zhou",
+      "Jun Jiang",
+      "Zhuo-Jin Dai"
+    ],
+    "keywords": [
+      "Multiple endocrine neoplasia type 2A",
+      "Mutation",
+      "RET proto-oncogene",
+      "Medullary thyroid carcinoma",
+      "Pheochromocytoma",
+      "Case report"
+    ]
+  },
+  "cohort_info": {
+    "total_patients": 5,
+    "sex_distribution": {
+      "male": 4,
+      "female": 1
+    },
+    "age_stats": {
+      "mean": null,
+      "median": null,
+      "range": "3-60"
+    },
+    "sporadic_definition_criteria": null,
+    "tumor_staging_distribution": {
+      "stage_I": null,
+      "stage_II": null,
+      "stage_III": null,
+      "stage_IV": null
+    },
+    "followup_groups": {
+      "disease_free": null,
+      "biochemical_persistent": null,
+      "structural_disease": null
+    }
+  },
+  "mutation_summary": {
+    "ret_mutated_cases": 3,
+    "ras_mutated_cases": null,
+    "mutation_negative_cases": 2,
+    "mutations": [
+      {
+        "gene": "RET",
+        "variant": "C634Y",
+        "count": 3
+      }
+    ]
+  },
+  "case_data": [],
+  "patients": [
+    {
+      "id": "Ia",
+      "age": 60,
+      "sex": "Male",
+      "relationship": "Father_of_proband",
+      "ret_variant": "C634Y",
+      "biochemical_data": [
+        {
+          "analyte": "3-MT",
+          "value": 0.1,
+          "unit": "nmol/L",
+          "reference_range": "<0.18",
+          "elevated": false
+        },
+        {
+          "analyte": "MN",
+          "value": 4.5,
+          "unit": "nmol/L",
+          "reference_range": "≤0.50",
+          "elevated": true
+        },
+        {
+          "analyte": "NMN",
+          "value": 2.26,
+          "unit": "nmol/L",
+          "reference_range": "≤0.90",
+          "elevated": true
+        },
+        {
+          "analyte": "calcitonin",
+          "value": 972.2,
+          "unit": "pg/mL",
+          "reference_range": "0-9.52",
+          "elevated": true
+        },
+        {
+          "analyte": "calcium",
+          "value": 2.47,
+          "unit": "mmol/L",
+          "reference_range": "2-2.5",
+          "elevated": false
+        },
+        {
+          "analyte": "PTH",
+          "value": 4.13,
+          "unit": "pmol/L",
+          "reference_range": "1.6-6.9",
+          "elevated": false
+        }
+      ],
+      "diagnoses": ["medullary thyroid carcinoma", "pheochromocytoma", "MEN2A"],
+      "mtc_present": true,
+      "pheochromocytoma_present": true,
+      "hyperparathyroidism_present": false,
+      "imaging": [
+        "Thyroid ultrasound: bilateral thyroid nodules",
+        "Adrenal CT: right adrenal space-occupying mass"
+      ],
+      "pathology": [
+        "Right pheochromocytoma",
+        "Bilateral medullary thyroid carcinoma with lymph node metastasis"
+      ],
+      "mtc_lymph_node_metastasis": true,
+      "genetics": {
+        "ret_C634Y": "present",
+        "zygosity": "heterozygous",
+        "inheritance_pattern": "autosomal_dominant",
+        "classification": "pathogenic",
+        "vaf": null
+      },
+      "family_history": {
+        "mtc": true,
+        "pheochromocytoma": true,
+        "hyperparathyroidism": false
+      },
+      "surgery": [
+        "Laparoscopic right adrenal mass resection",
+        "Complete bilateral thyroidectomy",
+        "Cervical lymph node dissection"
+      ],
+      "follow_up": [
+        "Postoperative dynamic review: MN, NMN, and calcitonin returned to normal; no recurrence reported"
+      ],
+      "thyroid_imaging": {
+        "nodules_present": true,
+        "nodule_count": null,
+        "largest_nodule_size_mm": null,
+        "tirads_score": null
+      },
+      "mtc_outcome_status": "postoperative_no_recurrence_reported"
+    },
+    {
+      "id": "IIa",
+      "age": 30,
+      "sex": "Female",
+      "relationship": "Proband",
+      "ret_variant": "C634Y",
+      "biochemical_data": [
+        {
+          "analyte": "3-MT",
+          "value": 0.12,
+          "unit": "nmol/L",
+          "reference_range": "<0.18",
+          "elevated": false
+        },
+        {
+          "analyte": "MN",
+          "value": 4.1,
+          "unit": "nmol/L",
+          "reference_range": "≤0.50",
+          "elevated": true
+        },
+        {
+          "analyte": "NMN",
+          "value": 2.36,
+          "unit": "nmol/L",
+          "reference_range": "≤0.90",
+          "elevated": true
+        },
+        {
+          "analyte": "calcitonin",
+          "value": 29.49,
+          "unit": "pg/mL",
+          "reference_range": "0-9.52",
+          "elevated": true
+        },
+        {
+          "analyte": "PTH",
+          "value": 1.97,
+          "unit": "pmol/L",
+          "reference_range": "1.6-6.9",
+          "elevated": false
+        },
+        {
+          "analyte": "calcium",
+          "value": 2.41,
+          "unit": "mmol/L",
+          "reference_range": "2-2.5",
+          "elevated": false
+        },
+        {
+          "analyte": "thyroglobulin",
+          "value": 13.587,
+          "unit": "ng/mL",
+          "reference_range": "0-30",
+          "elevated": false
+        }
+      ],
+      "diagnoses": [
+        "medullary thyroid carcinoma",
+        "pheochromocytoma",
+        "MEN2A",
+        "uterine fibroids (leiomyoma)"
+      ],
+      "mtc_present": true,
+      "pheochromocytoma_present": true,
+      "hyperparathyroidism_present": false,
+      "imaging": [
+        "Adrenal CT: bilateral adrenal space-occupying lesions; left diameter ~29 mm, right diameter ~50 mm",
+        "Thyroid B-ultrasound: bilateral thyroid nodules, 10 mm × 4 mm"
+      ],
+      "pathology": [
+        "Bilateral adrenal pheochromocytomas",
+        "Bilateral medullary thyroid carcinomas",
+        "Uterine leiomyoma"
+      ],
+      "mtc_lymph_node_metastasis": false,
+      "genetics": {
+        "ret_C634Y": "present",
+        "zygosity": "heterozygous",
+        "inheritance_pattern": "autosomal_dominant",
+        "classification": "pathogenic",
+        "vaf": null
+      },
+      "family_history": {
+        "mtc": true,
+        "pheochromocytoma": true,
+        "hyperparathyroidism": false
+      },
+      "surgery": [
+        "Bilateral adrenal mass excision with enterolysis",
+        "Bilateral total thyroidectomy",
+        "Hysterectomy for uterine fibroids"
+      ],
+      "follow_up": [
+        "5-year follow-up: calcitonin levels and thyroid ultrasound normal; no recurrence of MTC",
+        "Abdominal CT and MN levels normal; no recurrent pheochromocytoma"
+      ],
+      "thyroid_imaging": {
+        "nodules_present": true,
+        "nodule_count": null,
+        "largest_nodule_size_mm": 10.0,
+        "tirads_score": null
+      },
+      "mtc_outcome_status": "disease_free_at_5_years"
+    },
+    {
+      "id": "IIc",
+      "age": 27,
+      "sex": "Male",
+      "relationship": "Younger_brother_of_proband",
+      "ret_variant": null,
+      "biochemical_data": [
+        {
+          "analyte": "3-MT",
+          "value": null,
+          "unit": "nmol/L",
+          "reference_range": "<0.18",
+          "elevated": false
+        },
+        {
+          "analyte": "MN",
+          "value": null,
+          "unit": "nmol/L",
+          "reference_range": "≤0.50",
+          "elevated": false
+        },
+        {
+          "analyte": "NMN",
+          "value": null,
+          "unit": "nmol/L",
+          "reference_range": "≤0.90",
+          "elevated": false
+        },
+        {
+          "analyte": "calcitonin",
+          "value": null,
+          "unit": "pg/mL",
+          "reference_range": "0-9.52",
+          "elevated": false
+        },
+        {
+          "analyte": "calcium",
+          "value": null,
+          "unit": "mmol/L",
+          "reference_range": "2-2.5",
+          "elevated": false
+        },
+        {
+          "analyte": "PTH",
+          "value": null,
+          "unit": "pmol/L",
+          "reference_range": "1.6-6.9",
+          "elevated": false
+        }
+      ],
+      "diagnoses": [],
+      "mtc_present": false,
+      "pheochromocytoma_present": false,
+      "hyperparathyroidism_present": false,
+      "imaging": [
+        "Thyroid and parathyroid color Doppler ultrasound: normal",
+        "Adrenal CT/color Doppler ultrasound: normal"
+      ],
+      "pathology": [],
+      "mtc_lymph_node_metastasis": false,
+      "genetics": {
+        "ret_C634Y": "absent",
+        "zygosity": null,
+        "inheritance_pattern": null,
+        "classification": "mutation_negative",
+        "vaf": null
+      },
+      "family_history": {
+        "mtc": true,
+        "pheochromocytoma": true,
+        "hyperparathyroidism": false
+      },
+      "surgery": [],
+      "follow_up": [
+        "Biochemical markers and imaging reported as normal at evaluation"
+      ],
+      "thyroid_imaging": {
+        "nodules_present": false,
+        "nodule_count": 0,
+        "largest_nodule_size_mm": null,
+        "tirads_score": null
+      },
+      "mtc_outcome_status": "no_disease_detected"
+    },
+    {
+      "id": "IId",
+      "age": 24,
+      "sex": "Male",
+      "relationship": "Younger_brother_of_proband",
+      "ret_variant": null,
+      "biochemical_data": [
+        {
+          "analyte": "3-MT",
+          "value": null,
+          "unit": "nmol/L",
+          "reference_range": "<0.18",
+          "elevated": false
+        },
+        {
+          "analyte": "MN",
+          "value": null,
+          "unit": "nmol/L",
+          "reference_range": "≤0.50",
+          "elevated": false
+        },
+        {
+          "analyte": "NMN",
+          "value": null,
+          "unit": "nmol/L",
+          "reference_range": "≤0.90",
+          "elevated": false
+        },
+        {
+          "analyte": "calcitonin",
+          "value": null,
+          "unit": "pg/mL",
+          "reference_range": "0-9.52",
+          "elevated": false
+        },
+        {
+          "analyte": "calcium",
+          "value": null,
+          "unit": "mmol/L",
+          "reference_range": "2-2.5",
+          "elevated": false
+        },
+        {
+          "analyte": "PTH",
+          "value": null,
+          "unit": "pmol/L",
+          "reference_range": "1.6-6.9",
+          "elevated": false
+        }
+      ],
+      "diagnoses": [],
+      "mtc_present": false,
+      "pheochromocytoma_present": false,
+      "hyperparathyroidism_present": false,
+      "imaging": [
+        "Thyroid and parathyroid color Doppler ultrasound: normal",
+        "Adrenal CT/color Doppler ultrasound: normal"
+      ],
+      "pathology": [],
+      "mtc_lymph_node_metastasis": false,
+      "genetics": {
+        "ret_C634Y": "absent",
+        "zygosity": null,
+        "inheritance_pattern": null,
+        "classification": "mutation_negative",
+        "vaf": null
+      },
+      "family_history": {
+        "mtc": true,
+        "pheochromocytoma": true,
+        "hyperparathyroidism": false
+      },
+      "surgery": [],
+      "follow_up": [
+        "Biochemical markers and imaging reported as normal at evaluation"
+      ],
+      "thyroid_imaging": {
+        "nodules_present": false,
+        "nodule_count": 0,
+        "largest_nodule_size_mm": null,
+        "tirads_score": null
+      },
+      "mtc_outcome_status": "no_disease_detected"
+    },
+    {
+      "id": "IIIa",
+      "age": 9,
+      "sex": "Male",
+      "relationship": "Son_of_proband",
+      "ret_variant": "C634Y",
+      "biochemical_data": [
+        {
+          "analyte": "calcitonin",
+          "value": 18.93,
+          "unit": "pg/mL",
+          "reference_range": "0-9.52",
+          "elevated": true
+        },
+        {
+          "analyte": "thyroglobulin",
+          "value": 19.6,
+          "unit": "ng/mL",
+          "reference_range": "0-30",
+          "elevated": false
+        },
+        {
+          "analyte": "PTH",
+          "value": 7.22,
+          "unit": "pmol/L",
+          "reference_range": "1.6-6.9",
+          "elevated": true
+        },
+        {
+          "analyte": "calcium",
+          "value": 1.96,
+          "unit": "mmol/L",
+          "reference_range": "2-2.5",
+          "elevated": false
+        }
+      ],
+      "diagnoses": ["medullary thyroid carcinoma", "MEN2A"],
+      "mtc_present": true,
+      "pheochromocytoma_present": false,
+      "hyperparathyroidism_present": false,
+      "imaging": [
+        "At age 3 years 10 months: thyroid and parathyroid color Doppler ultrasound normal",
+        "At age 9: thyroid/parathyroid color Doppler ultrasound reported as normal in table"
+      ],
+      "pathology": ["Medullary thyroid carcinoma in left lobe"],
+      "mtc_lymph_node_metastasis": null,
+      "genetics": {
+        "ret_C634Y": "present",
+        "zygosity": "heterozygous",
+        "inheritance_pattern": "autosomal_dominant",
+        "classification": "pathogenic",
+        "vaf": null
+      },
+      "family_history": {
+        "mtc": true,
+        "pheochromocytoma": true,
+        "hyperparathyroidism": false
+      },
+      "surgery": [
+        "Bilateral total thyroidectomy (prophylactic, after calcitonin rise)"
+      ],
+      "follow_up": [
+        "5-year follow-up from age 3 to 9 with serial calcitonin and ultrasound monitoring before surgery; postoperative course not quantified but case describes early-stage MTC detection"
+      ],
+      "thyroid_imaging": {
+        "nodules_present": false,
+        "nodule_count": 0,
+        "largest_nodule_size_mm": null,
+        "tirads_score": null
+      },
+      "mtc_outcome_status": "early_stage_treated_outcome_not_quantified"
+    }
+  ],
+  "statistics": {
+    "preop_ctdna_positive_count": null,
+    "postop_ctdna_positive_count": null,
+    "p_values": {
+      "biomarker_correlations": null,
+      "survival_associations": null
+    },
+    "correlation_coefficients": {
+      "calcitonin_cea": null,
+      "vaf_outcome": null
+    }
+  },
+  "methods": {
+    "sequencing_panel": "First-generation exon sequencing of RET proto-oncogene (NM_020975), exon 11; mutation c.T1901A (p.Cys634Tyr) identified",
+    "biomarker_assays": "Plasma/serum 3-methoxytyramine, metanephrine, normetanephrine, calcitonin, calcium, parathyroid hormone, thyroglobulin measured using hospital laboratory assays; exact platforms not specified",
+    "coverage_depth": {
+      "tissue_mean": null,
+      "ctdna_mean": null
+    },
+    "normal_ranges": {
+      "calcitonin": "0-9.52 pg/mL",
+      "calcium": "2-2.5 mmol/L",
+      "PTH": "1.6-6.9 pmol/L",
+      "3-MT": "<0.18 nmol/L",
+      "MN": "≤0.50 nmol/L",
+      "NMN": "≤0.90 nmol/L",
+      "thyroglobulin": "0-30 ng/mL"
+    }
+  }
+}

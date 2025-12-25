@@ -1,0 +1,337 @@
+{
+  "study_id": "study_15",
+  "study_info": {
+    "title": "A Case of Multiple Endocrine Neoplasia Type 2B and Gangliomatosis of Gastrointestinal Tract",
+    "journal": "Case Reports in Medicine",
+    "year": 2012,
+    "volume_issue": "2012:491054",
+    "doi": "10.1155/2012/491054",
+    "country": "Iran",
+    "study_type": "Case report",
+    "authors": [
+      "Banafshe Shahnazari",
+      "Aria Aghamaleki",
+      "Bagher Larijani",
+      "Mohammad Reza Mohajeri Tehrani",
+      "Hasan Rafati",
+      "Abdolreza Babamahmoodi"
+    ],
+    "keywords": [
+      "multiple endocrine neoplasia type 2B",
+      "MEN2B",
+      "RET",
+      "medullary thyroid carcinoma",
+      "ganglioneuromatosis",
+      "gastrointestinal tract"
+    ]
+  },
+  "cohort_info": {
+    "total_patients": 1,
+    "sex_distribution": {
+      "male": 0,
+      "female": 1
+    },
+    "age_stats": {
+      "mean": 18.0,
+      "median": 18.0,
+      "range": "18-18"
+    },
+    "sporadic_definition_criteria": null,
+    "tumor_staging_distribution": {
+      "stage_I": null,
+      "stage_II": null,
+      "stage_III": null,
+      "stage_IV": null
+    },
+    "followup_groups": {
+      "disease_free": null,
+      "biochemical_persistent": null,
+      "structural_disease": null
+    }
+  },
+  "mutation_summary": {
+    "ret_mutated_cases": 1,
+    "ras_mutated_cases": null,
+    "mutation_negative_cases": null,
+    "mutations": [
+      {
+        "gene": "RET",
+        "variant": "M918T",
+        "count": 1
+      },
+      {
+        "gene": "RET",
+        "variant": "L769L",
+        "count": 1
+      }
+    ]
+  },
+  "case_data": [
+    {
+      "case_id": 1,
+      "mutation": "RET M918T",
+      "tissue_vaf": null,
+      "preop_ctdna_vaf": null,
+      "postop_ctdna_vaf": null,
+      "preop_ct": 2000.0,
+      "preop_cea": 3689.0,
+      "postop_ct": null,
+      "postop_cea": null,
+      "postop_timing_months": null,
+      "tki": null,
+      "outcome": "Metastatic",
+      "ctdna_positive_preop": null,
+      "ctdna_positive_postop": null
+    }
+  ],
+  "patients": [
+    {
+      "id": "proband",
+      "age": 18,
+      "sex": "Female",
+      "relationship": "Proband",
+      "ret_variant": "M918T",
+      "biochemical_data": [
+        {
+          "analyte": "calcitonin",
+          "value": 2000.0,
+          "unit": "pg/mL",
+          "reference_range": "≤140 pg/mL",
+          "timing": "preoperative",
+          "elevated": true
+        },
+        {
+          "analyte": "CEA",
+          "value": 3689.0,
+          "unit": "ng/mL",
+          "reference_range": "≤37 ng/mL",
+          "timing": "preoperative",
+          "elevated": true
+        },
+        {
+          "analyte": "24h_urine_metanephrine",
+          "value": 192.0,
+          "unit": "mcg/24 hr",
+          "reference_range": "<350 mcg/24 hr",
+          "timing": "diagnostic_workup",
+          "elevated": false
+        },
+        {
+          "analyte": "24h_urine_normetanephrine",
+          "value": 93.0,
+          "unit": "mcg/24 hr",
+          "reference_range": "<600 mcg/24 hr",
+          "timing": "diagnostic_workup",
+          "elevated": false
+        },
+        {
+          "analyte": "Hb",
+          "value": 13.1,
+          "unit": "g/dL",
+          "reference_range": null,
+          "timing": "baseline",
+          "elevated": null
+        },
+        {
+          "analyte": "WBC",
+          "value": 16600.0,
+          "unit": "/µL",
+          "reference_range": null,
+          "timing": "baseline",
+          "elevated": true
+        },
+        {
+          "analyte": "Platelets",
+          "value": 533000.0,
+          "unit": "/µL",
+          "reference_range": null,
+          "timing": "baseline",
+          "elevated": true
+        },
+        {
+          "analyte": "ESR",
+          "value": 22.0,
+          "unit": "mm/hr",
+          "reference_range": null,
+          "timing": "baseline",
+          "elevated": null
+        },
+        {
+          "analyte": "serum_albumin",
+          "value": 4.4,
+          "unit": "g/dL",
+          "reference_range": "3.5–5 g/dL",
+          "timing": "baseline",
+          "elevated": false
+        },
+        {
+          "analyte": "cholesterol",
+          "value": 145.0,
+          "unit": "mg/dL",
+          "reference_range": null,
+          "timing": "baseline",
+          "elevated": null
+        },
+        {
+          "analyte": "HDL",
+          "value": 51.0,
+          "unit": "mg/dL",
+          "reference_range": null,
+          "timing": "baseline",
+          "elevated": null
+        },
+        {
+          "analyte": "triglycerides",
+          "value": 175.0,
+          "unit": "mg/dL",
+          "reference_range": null,
+          "timing": "baseline",
+          "elevated": null
+        },
+        {
+          "analyte": "serum_iron",
+          "value": 71.0,
+          "unit": "µg/dL",
+          "reference_range": null,
+          "timing": "baseline",
+          "elevated": null
+        },
+        {
+          "analyte": "TIBC",
+          "value": 406.0,
+          "unit": "µg/dL",
+          "reference_range": null,
+          "timing": "baseline",
+          "elevated": null
+        },
+        {
+          "analyte": "24h_urine_calcium",
+          "value": 66.0,
+          "unit": "µg/dL",
+          "reference_range": null,
+          "timing": "baseline",
+          "elevated": null
+        },
+        {
+          "analyte": "antiendomysial_antibody",
+          "value": 0.1,
+          "unit": "index",
+          "reference_range": null,
+          "timing": "baseline",
+          "elevated": false
+        },
+        {
+          "analyte": "BUN",
+          "value": 7.0,
+          "unit": "mg/dL",
+          "reference_range": null,
+          "timing": "baseline",
+          "elevated": null
+        },
+        {
+          "analyte": "creatinine",
+          "value": 0.7,
+          "unit": "mg/dL",
+          "reference_range": null,
+          "timing": "baseline",
+          "elevated": null
+        },
+        {
+          "analyte": "anti_TPO",
+          "value": 14.3,
+          "unit": "IU/mL",
+          "reference_range": null,
+          "timing": "baseline",
+          "elevated": null
+        },
+        {
+          "analyte": "anti_tTG_IgA",
+          "value": 1.4,
+          "unit": "index",
+          "reference_range": "negative",
+          "timing": "baseline",
+          "elevated": false
+        }
+      ],
+      "diagnoses": [
+        "medullary thyroid carcinoma",
+        "MEN2B",
+        "celiac disease (prior diagnosis; later serology negative)",
+        "hypothyroidism",
+        "primary amenorrhea",
+        "intestinal ganglioneuromatosis / diverticulosis of sigmoid and left colon "
+      ],
+      "imaging": [
+        "Thyroid ultrasound: multinodular goiter with one large nodule and cervical lymphadenopathy",
+        "EUS: several calcified lesions and multiple round hyperechoic lesions in the liver, suggestive of metastasis of MTC",
+        "Abdominopelvic CT: abscess at previous surgery site; multiple calcified and noncalcified liver lesions (metastases suspected); thickened small bowel loops; mild right hydronephrosis; anterior abdominal wall fistula; small paraaortic lymph nodes; mild left pleural effusion; massive ascites",
+        "Barium enema: diverticulosis of sigmoid colon and left colon",
+        "Colonoscopy: hypervascular areas with several fistula orifices in sigmoid colon",
+        "Ophthalmologic exam: sclerotic neuropathy and large corneal nerves "
+      ],
+      "pathology": [
+        "Fine needle aspiration of thyroid: medullary thyroid carcinoma",
+        "Both thyroid lobes involved with capsular invasion and lymphatic vessel invasion",
+        "IHC: calcitonin positive in tumor cells",
+        "IHC: chromogranin positive in tumor cells",
+        "IHC: synaptophysin positive in tumor cells",
+        "IHC: TTF1 negative in tumor cells "
+      ],
+      "genetics": {
+        "ret_m918t": "present",
+        "ret_l769l": "present",
+        "mutations_detail": [
+          "Heterozygous T2307G in exon 13 (Leu769Leu, synonymous polymorphism)",
+          "Heterozygous T2753A in exon 16 (Met918Thr, M918T) "
+        ],
+        "zygosity": "heterozygous",
+        "inheritance_pattern": "autosomal_dominant_suspected",
+        "classification_m918t": "pathogenic (common MEN2B mutation; present in >95% of MEN2B patients)",
+        "classification_l769l": "benign_polymorphism "
+      },
+      "family_history": {
+        "mtc": null,
+        "pheochromocytoma": null,
+        "hyperparathyroidism": null,
+        "notes": null
+      },
+      "surgery": [
+        "Total thyroidectomy",
+        "Excision of left anterior cervical lymphatic chain",
+        "One week later: excision of right cervical lymphatic chain",
+        "One additional week later: surgery for enterocutaneous fistula including sigmoidectomy and appendectomy "
+      ],
+      "follow_up": [
+        "Persistent fecaloid secretions until fistula surgery; no quantitative follow-up calcitonin or CEA values reported",
+        "Metastatic liver disease present at diagnosis by EUS and CT "
+      ]
+    }
+  ],
+  "statistics": {
+    "preop_ctdna_positive_count": null,
+    "postop_ctdna_positive_count": null,
+    "p_values": {
+      "biomarker_correlations": null,
+      "survival_associations": null
+    },
+    "correlation_coefficients": {
+      "calcitonin_cea": null,
+      "vaf_outcome": null
+    }
+  },
+  "methods": {
+    "sequencing_panel": "RET gene analysis with exon-level sequencing; reported changes in exon 13 and exon 16 (specific platform not stated)",
+    "biomarker_assays": "Serum calcitonin and CEA measured by unspecified immunoassays; 24-hour urinary metanephrines and normetanephrines measured (methods not specified)",
+    "coverage_depth": {
+      "tissue_mean": null,
+      "ctdna_mean": null
+    },
+    "normal_ranges": {
+      "calcitonin": "0-140 pg/mL",
+      "cea": "0-37 ng/mL",
+      "urine_metanephrine_24h": "<350 mcg/24 hr",
+      "urine_normetanephrine_24h": "<600 mcg/24 hr",
+      "serum_albumin": "3.5-5 g/dL "
+    }
+  }
+}

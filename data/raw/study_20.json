@@ -1,0 +1,265 @@
+{
+  "study_id": "study_20",
+  "study_info": {
+    "title": "Synchronized Laparoscopic Bilateral Adrenalectomy for Pheochromocytoma in Multiple Endocrine Neoplasia Syndrome: A Case Report",
+    "journal": "Journal of Kidney Cancer and VHL",
+    "year": 2022,
+    "volume_issue": "9(3):24-28",
+    "doi": "10.15586/jkcvhl.v9i3.239",
+    "country": "Iran",
+    "study_type": "Case report",
+    "authors": [
+      "Ali Eslahi",
+      "Shahryar Zeighami",
+      "Faisal Ahmed",
+      "Seyed Hossein Hosseini",
+      "Bahareh Ebrahimi",
+      "Mohammad Hossein Anbardar"
+    ],
+    "keywords": [
+      "adrenalectomy",
+      "case report",
+      "laparoscopic",
+      "pheochromocytoma",
+      "multiple endocrine neoplasia",
+      "MEN2"
+    ]
+  },
+  "cohort_info": {
+    "total_patients": 1,
+    "sex_distribution": {
+      "male": 0,
+      "female": 1
+    },
+    "age_stats": {
+      "mean": 48,
+      "median": 48,
+      "range": "48-48"
+    },
+    "sporadic_definition_criteria": null,
+    "tumor_staging_distribution": {
+      "stage_I": null,
+      "stage_II": null,
+      "stage_III": null,
+      "stage_IV": null
+    },
+    "followup_groups": {
+      "disease_free": null,
+      "biochemical_persistent": null,
+      "structural_disease": null
+    }
+  },
+  "mutation_summary": {
+    "ret_mutated_cases": null,
+    "ras_mutated_cases": null,
+    "mutation_negative_cases": null,
+    "mutations": []
+  },
+  "case_data": [
+    {
+      "case_id": 1,
+      "mutation": null,
+      "tissue_vaf": null,
+      "preop_ctdna_vaf": null,
+      "postop_ctdna_vaf": null,
+      "preop_ct": 8076,
+      "preop_cea": null,
+      "postop_ct": null,
+      "postop_cea": null,
+      "postop_timing_months": null,
+      "tki": null,
+      "outcome": "Clinically improved_no_crisis_reported",
+      "ctdna_positive_preop": null,
+      "ctdna_positive_postop": null
+    }
+  ],
+  "patients": [
+    {
+      "id": "proband",
+      "age": 48,
+      "sex": "Female",
+      "relationship": "Proband",
+      "ret_variant": null,
+      "biochemical_data": [
+        {
+          "analyte": "metanephrines_24h_urine",
+          "value": 5481,
+          "unit": "pg/day",
+          "reference_range": "<350 pg/day",
+          "elevated": true
+        },
+        {
+          "analyte": "normetanephrine_24h_urine",
+          "value": 7732,
+          "unit": "pg/day",
+          "reference_range": "<600 pg/day",
+          "elevated": true
+        },
+        {
+          "analyte": "T3",
+          "value": 0.83,
+          "unit": "nmol/L",
+          "reference_range": "0.89–2.44 nmol/L",
+          "elevated": false
+        },
+        {
+          "analyte": "T4",
+          "value": 9.13,
+          "unit": "µg/dl",
+          "reference_range": "4.87–11.72 µg/dl",
+          "elevated": false
+        },
+        {
+          "analyte": "TSH",
+          "value": 0.27,
+          "unit": "µIU/mL",
+          "reference_range": "0.27–5.95 µIU/mL",
+          "elevated": false
+        },
+        {
+          "analyte": "calcitonin",
+          "value": 8076,
+          "unit": "pg/mL",
+          "reference_range": "≤50 pg/mL",
+          "elevated": true
+        },
+        {
+          "analyte": "parathyroid_hormone",
+          "value": 71.5,
+          "unit": "pg/mL",
+          "reference_range": "10–65 pg/mL",
+          "elevated": true
+        },
+        {
+          "analyte": "fasting_blood_sugar",
+          "value": 169,
+          "unit": "mg/dL",
+          "reference_range": null,
+          "elevated": null
+        },
+        {
+          "analyte": "white_blood_cell_count",
+          "value": 7.3,
+          "unit": "×10^3/mL",
+          "reference_range": null,
+          "elevated": null
+        },
+        {
+          "analyte": "hemoglobin",
+          "value": 11.4,
+          "unit": "g/dL",
+          "reference_range": null,
+          "elevated": null
+        }
+      ],
+      "diagnoses": [
+        "pheochromocytoma",
+        "bilateral adrenal masses",
+        "multiple endocrine neoplasia type 2",
+        "medullary thyroid carcinoma",
+        "diabetes_mellitus",
+        "hypertension"
+      ],
+      "imaging": [
+        "Thyroid_ultrasound_bilateral_enlarged_heterogeneous_nodules_with_numerous_internal_calcifications_left_34x27_mm_right_44x24_mm_no_cervical_lymphadenopathy",
+        "Contrast_enhanced_abdominal_CT_two_masses_right_adrenal_30x22_mm_and_18x15_mm_two_masses_left_adrenal_40x33_mm_and_35x28_mm_no_detectable_metastasis"
+      ],
+      "pathology": [
+        "Thyroid_FNA_medullary_thyroid_carcinoma",
+        "Adrenal_histology_pheochromocytoma_nested_and_solid_pattern_sustentacular_cells_polygonal_tumor_cells_with_granular_cytoplasm_prominent_nucleoli_no_atypia_necrosis_or_mitosis"
+      ],
+      "genetics": {
+        "ret_m918t": null,
+        "ret_c634": null,
+        "ret_variant_other": null,
+        "zygosity": null,
+        "inheritance_pattern": "Autosomal_dominant_suspected",
+        "pathogenicity_classification": null
+      },
+      "family_history": {
+        "mtc": null,
+        "pheochromocytoma": true,
+        "hyperparathyroidism": null,
+        "details": "Son had cerebrovascular accident secondary to pheochromocytoma"
+      },
+      "surgery": [
+        "Simultaneous_bilateral_laparoscopic_adrenalectomy_left_then_right_lateral_transperitoneal_approach_total_operating_time_4_hours_estimated_blood_loss_50_cc",
+        "Postoperative_steroid_replacement_hydrocortisone_then_fludrocortisone_with_gradual_dose_titration",
+        "Total_thyroidectomy_with_bilateral_neck_dissection_for_medullary_thyroid_carcinoma_performed_after_adrenalectomy"
+      ],
+      "follow_up": [
+        "Panic_attacks_and_hypertensive_crises_resolved_by_3_months_after_surgery",
+        "Significant_reduction_in_urinary_metanephrines_levels_postoperatively",
+        "Clinically_improved_at_12_months_follow_up_with_no_future_pain_attacks_reported"
+      ],
+      "vitals_at_presentation": {
+        "pulse_rate_bpm": 72,
+        "respiratory_rate_per_min": 30,
+        "blood_pressure_systolic_mmHg": 170,
+        "blood_pressure_diastolic_mmHg": 90,
+        "temperature_celsius": 37.3,
+        "bmi": 35
+      },
+      "medications_preop": [
+        {
+          "name": "phenoxybenzamine",
+          "dose_mg_per_administration": 10,
+          "frequency_per_day": 2,
+          "indication": "Alpha_blockade_for_blood_pressure_control_in_pheochromocytoma"
+        },
+        {
+          "name": "propranolol",
+          "dose_mg_per_administration": 10,
+          "frequency_per_day": 2,
+          "indication": "Beta_blockade_for_heart_rate_and_blood_pressure_control"
+        },
+        {
+          "name": "oral_hypoglycemic_agents",
+          "dose_mg_per_administration": null,
+          "frequency_per_day": null,
+          "indication": "Diabetes_mellitus"
+        }
+      ],
+      "symptoms_history": [
+        "Recurrent_panic_attacks_for_10_years",
+        "Headaches_for_10_years",
+        "Abdominal_discomfort_for_10_years"
+      ]
+    }
+  ],
+  "statistics": {
+    "preop_ctdna_positive_count": null,
+    "postop_ctdna_positive_count": null,
+    "p_values": {
+      "biomarker_correlations": null,
+      "survival_associations": null
+    },
+    "correlation_coefficients": {
+      "calcitonin_cea": null,
+      "vaf_outcome": null
+    }
+  },
+  "methods": {
+    "sequencing_panel": null,
+    "biomarker_assays": "24h_urinary_metanephrines_and_normetanephrine_measurement; standard_thyroid_function_tests_T3_T4_TSH; serum_calcitonin; serum_parathyroid_hormone; fasting_blood_sugar; complete_blood_count",
+    "coverage_depth": {
+      "tissue_mean": null,
+      "ctdna_mean": null
+    },
+    "normal_ranges": {
+      "metanephrines_24h_urine": "<350 pg/day",
+      "normetanephrine_24h_urine": "<600 pg/day",
+      "T3": "0.89–2.44 nmol/L",
+      "T4": "4.87–11.72 µg/dl",
+      "TSH": "0.27–5.95 µIU/mL",
+      "calcitonin": "≤50 pg/mL",
+      "parathyroid_hormone": "10–65 pg/mL"
+    }
+  },
+  "_source_metadata": {
+    "contains_ret_specific_genetic_data": false,
+    "contains_mtc_risk_stratification": false,
+    "men2_type": "MEN2_unspecified_subtype",
+    "note": "Case report focuses on surgical management of bilateral pheochromocytoma in MEN2; RET genotype and detailed MTC biomarker longitudinal data not reported explicitly."
+  }
+}
