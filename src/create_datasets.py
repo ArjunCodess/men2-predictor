@@ -33,8 +33,6 @@ STUDY_NAME_MAP = {
     "study_18": "Endocrinol. Diabetes Metab. Case Reports (2024) RET K666N",
     "study_19": "Indian Journal of Cancer (2021) RET S891A Family",
     "study_20": "World Journal of Clinical Cases (2024) RET C634Y Family",
-    "ret_k666n_homozygous_2018": "JCEM (2018) Homozygous RET K666N",
-    "ret_s891a_fmtc_ca_2015": "Oncotarget (2015) RET S891A FMTC"
 }
 
 AMINO_ACID_MAP = {
