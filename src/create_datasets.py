@@ -26,6 +26,15 @@ STUDY_NAME_MAP = {
     "study_11": "BMC Pediatrics (2020) MEN2B Case",
     "study_12": "Annales d'Endocrinologie (2015) RET Y791F",
     "study_13": "Surgery Today (2014) RET S891A Pheo",
+    "study_14": "Annals of Medicine & Surgery (2025) RET C634R Case",
+    "study_15": "Case Reports in Medicine (2012) MEN2B",
+    "study_16": "Case Reports in Endocrinology (2020) RET Exon 11 delins",
+    "study_17": "Annals of Medicine & Surgery (2024) MEN2B Case",
+    "study_18": "Clinics and Practice (2024) RET C634G Kindred",
+    "study_19": "Endocrinol. Diabetes Metab. Case Reports (2024) RET K666N",
+    "study_20": "Journal of Kidney Cancer & VHL (2022) MEN2 Case",
+    "study_21": "Indian Journal of Cancer (2021) RET S891A Family",
+    "study_22": "World Journal of Clinical Cases (2024) RET C634Y Family",
     "ret_k666n_homozygous_2018": "JCEM (2018) Homozygous RET K666N",
     "ret_s891a_fmtc_ca_2015": "Oncotarget (2015) RET S891A FMTC"
 }
@@ -75,6 +84,10 @@ def normalize_variant_code(variant_text):
     if del_match:
         start, pos1, end, pos2, suffix = del_match.groups()
         suffix = suffix.lower()
+        if suffix.startswith("delins"):
+            ins_part = suffix.replace("delins", "")
+            ins_part = amino_acid_to_one(ins_part) if ins_part else ""
+            suffix = f"delins{ins_part}"
         return f"{amino_acid_to_one(start)}{pos1}_{amino_acid_to_one(end)}{pos2}{suffix}"
     match = re.match(r"([A-Za-z]{1,3})(\d+)([A-Za-z]{1,3})", text)
     if match:
@@ -91,6 +104,9 @@ def parse_ret_variant_string(raw_value):
     # remove gene label if present
     if " " in text and text.upper().startswith("RET"):
         text = text.split(" ", 1)[1]
+    delins_three_letter = re.search(r"([A-Za-z]{3}\d+_[A-Za-z]{3}\d+del(?:ins[A-Za-z]{3})?)", text)
+    if delins_three_letter:
+        return normalize_variant_code(delins_three_letter.group(1))
     complex_match = re.search(r"([A-Z]\d+_[A-Z]\d+del(?:ins[A-Z]+)?)", text)
     if complex_match:
         return complex_match.group(1)
@@ -177,6 +193,25 @@ def convert_biochemical_entries(entries, test_key="test", value_key="value"):
         }
         converted.append(normalized)
     return converted
+
+
+def select_biomarker_entry(entries, keyword, preferred_terms=None):
+    """select an entry for a given biomarker, preferring baseline/pre-op timing"""
+    if not entries:
+        return None
+    preferred_terms = preferred_terms or ("pre", "baseline", "initial")
+    matches = []
+    for entry in entries:
+        test_name = str(entry.get("analyte") or entry.get("test") or "").lower()
+        if keyword in test_name:
+            matches.append(entry)
+    if not matches:
+        return None
+    for entry in matches:
+        timing = str(entry.get("timepoint") or entry.get("timing") or entry.get("context") or "").lower()
+        if any(term in timing for term in preferred_terms):
+            return entry
+    return matches[0]
 
 
 def build_study2_patients(study):
@@ -467,6 +502,314 @@ def build_study13_patients(study):
     return patients
 
 
+def build_study14_patients(study):
+    """convert RET C634R MEN2A case report"""
+    patients = []
+    for record in study.get("patients", []):
+        diagnoses = [str(item).lower() for item in record.get("diagnoses", [])]
+        mtc = any("medullary" in item and "thyroid" in item for item in diagnoses)
+        pheo = any("pheochromocytoma" in item for item in diagnoses)
+        hyperpara = any("hyperparathyroidism" in item for item in diagnoses)
+        men2 = any("men2" in item for item in diagnoses)
+        labs = record.get("biochemical_data", [])
+        calcitonin_entry = select_biomarker_entry(labs, "calcitonin")
+        cea_entry = select_biomarker_entry(labs, "cea")
+        patient = {
+            "patient_id": f"{study.get('study_id', 'study_14')}_{record.get('id', len(patients) + 1)}",
+            "age": record.get("age"),
+            "gender": record.get("sex"),
+            "relationship": record.get("relationship", "Proband"),
+            "ret_variant": parse_ret_variant_string(record.get("ret_variant") or (record.get("genetics") or {}).get("ret_variant")),
+            "men2_syndrome": "Yes" if men2 or record.get("ret_variant") else "No",
+            "mtc_diagnosis": "Yes" if mtc else "No",
+            "pheochromocytoma": "Yes" if pheo else "No",
+            "hyperparathyroidism": "Yes" if hyperpara else "No",
+            "family_history_mtc": "Yes" if (record.get("family_history") or {}).get("mtc") else "No",
+            "calcitonin_level": calcitonin_entry.get("value") if calcitonin_entry else None,
+            "calcitonin_normal_range": calcitonin_entry.get("reference_range") if calcitonin_entry else None,
+            "cea_level": cea_entry.get("value") if cea_entry else None,
+            "thyroid_ultrasound": "; ".join(record.get("imaging", [])),
+            "biochemical_data": convert_biochemical_entries(labs, test_key="analyte")
+        }
+        patients.append(patient)
+    return patients
+
+
+def build_study15_patients(study):
+    """convert MEN2B case report (M918T)"""
+    patients = []
+    for record in study.get("patients", []):
+        diagnoses = [str(item).lower() for item in record.get("diagnoses", [])]
+        mtc = any("medullary" in item and "thyroid" in item for item in diagnoses)
+        men2 = any("men2" in item for item in diagnoses)
+        labs = record.get("biochemical_data", [])
+        calcitonin_entry = select_biomarker_entry(labs, "calcitonin")
+        cea_entry = select_biomarker_entry(labs, "cea")
+        patient = {
+            "patient_id": f"{study.get('study_id', 'study_15')}_{record.get('id', len(patients) + 1)}",
+            "age": record.get("age"),
+            "gender": record.get("sex"),
+            "relationship": record.get("relationship", "Proband"),
+            "ret_variant": parse_ret_variant_string(record.get("ret_variant")),
+            "men2_syndrome": "Yes" if men2 else "No",
+            "mtc_diagnosis": "Yes" if mtc else "No",
+            "pheochromocytoma": "No",
+            "hyperparathyroidism": "No",
+            "family_history_mtc": "No",
+            "calcitonin_level": calcitonin_entry.get("value") if calcitonin_entry else None,
+            "calcitonin_normal_range": calcitonin_entry.get("reference_range") if calcitonin_entry else None,
+            "cea_level": cea_entry.get("value") if cea_entry else None,
+            "thyroid_ultrasound": "; ".join(record.get("imaging", [])),
+            "biochemical_data": convert_biochemical_entries(labs, test_key="analyte")
+        }
+        patients.append(patient)
+    return patients
+
+
+def build_study16_patients(study):
+    """convert RET exon 11 deletion MEN2 case report"""
+    patients = []
+    for record in study.get("patients", []):
+        diagnoses = [str(item).lower() for item in record.get("diagnoses", [])]
+        mtc = any("medullary" in item and "thyroid" in item for item in diagnoses)
+        pheo = any("pheochromocytoma" in item for item in diagnoses)
+        hyperpara = any("hyperparathyroidism" in item for item in diagnoses)
+        men2 = any("men2" in item for item in diagnoses)
+        labs = record.get("biochemical_data", [])
+        calcitonin_entry = select_biomarker_entry(labs, "calcitonin")
+        patient = {
+            "patient_id": f"{study.get('study_id', 'study_16')}_{record.get('id', len(patients) + 1)}",
+            "age": record.get("age"),
+            "gender": record.get("sex"),
+            "relationship": record.get("relationship", "Proband"),
+            "ret_variant": parse_ret_variant_string(record.get("ret_variant") or (record.get("genetics") or {}).get("ret_variant_protein")),
+            "men2_syndrome": "Yes" if men2 else "No",
+            "mtc_diagnosis": "Yes" if mtc else "No",
+            "pheochromocytoma": "Yes" if pheo else "No",
+            "hyperparathyroidism": "Yes" if hyperpara else "No",
+            "family_history_mtc": "Yes" if (record.get("family_history") or {}).get("mtc") else "No",
+            "calcitonin_level": calcitonin_entry.get("value") if calcitonin_entry else None,
+            "calcitonin_normal_range": calcitonin_entry.get("reference_range") if calcitonin_entry else None,
+            "cea_level": None,
+            "thyroid_ultrasound": "; ".join(record.get("imaging", [])),
+            "biochemical_data": convert_biochemical_entries(labs, test_key="analyte")
+        }
+        patients.append(patient)
+    return patients
+
+
+def build_study17_patients(study):
+    """convert MEN2B case report with missing genotype"""
+    patients = []
+    for record in study.get("patients", []):
+        ret_variant = parse_ret_variant_string(record.get("ret_variant"))
+        if not ret_variant:
+            continue
+        diagnoses = [str(item).lower() for item in record.get("diagnoses", [])]
+        mtc = any("medullary" in item and "thyroid" in item for item in diagnoses)
+        pheo = any("pheochromocytoma" in item for item in diagnoses)
+        men2 = any("men2" in item for item in diagnoses)
+        labs = record.get("biochemical_data", [])
+        cea_entry = select_biomarker_entry(labs, "cea")
+        patient = {
+            "patient_id": f"{study.get('study_id', 'study_17')}_{record.get('id', len(patients) + 1)}",
+            "age": record.get("age"),
+            "gender": record.get("sex"),
+            "relationship": record.get("relationship", "Proband"),
+            "ret_variant": ret_variant,
+            "men2_syndrome": "Yes" if men2 else "No",
+            "mtc_diagnosis": "Yes" if mtc else "No",
+            "pheochromocytoma": "Yes" if pheo else "No",
+            "hyperparathyroidism": "No",
+            "family_history_mtc": "Yes" if (record.get("family_history") or {}).get("mtc") else "No",
+            "cea_level": cea_entry.get("value") if cea_entry else None,
+            "thyroid_ultrasound": "; ".join(record.get("imaging", [])),
+            "biochemical_data": convert_biochemical_entries(labs, test_key="analyte")
+        }
+        patients.append(patient)
+    return patients
+
+
+def build_study18_patients(study):
+    """convert RET C634G MEN2 kindred"""
+    patients = []
+    for record in study.get("patients", []):
+        genetics = record.get("genetics") or {}
+        ret_variant = parse_ret_variant_string(record.get("ret_variant"))
+        if not ret_variant and str(genetics.get("ret_c634", "")).lower() in {"present", "positive", "heterozygous"}:
+            ret_variant = "C634G"
+        if not ret_variant:
+            continue
+        diagnoses = [str(item).lower() for item in record.get("diagnoses", [])]
+        mtc = any("medullary" in item and "thyroid" in item for item in diagnoses)
+        suspected = any("suspected" in item and "medullary" in item for item in diagnoses)
+        pheo = any("pheochromocytoma" in item for item in diagnoses)
+        hyperpara = any("hyperparathyroidism" in item for item in diagnoses)
+        men2 = any("men2" in item for item in diagnoses)
+        labs = record.get("biochemical_data", [])
+        calcitonin_entry = select_biomarker_entry(labs, "calcitonin")
+        patient = {
+            "patient_id": f"{study.get('study_id', 'study_18')}_{record.get('id', len(patients) + 1)}",
+            "age": record.get("age"),
+            "gender": record.get("sex"),
+            "relationship": record.get("relationship", "Relative"),
+            "ret_variant": ret_variant,
+            "men2_syndrome": "Yes" if men2 or ret_variant else "No",
+            "mtc_diagnosis": "Yes" if mtc else ("Suspected (elevated calcitonin)" if suspected else "No"),
+            "pheochromocytoma": "Yes" if pheo else "No",
+            "hyperparathyroidism": "Yes" if hyperpara else "No",
+            "family_history_mtc": "Yes" if (record.get("family_history") or {}).get("mtc") else "No",
+            "calcitonin_level": calcitonin_entry.get("value") if calcitonin_entry else None,
+            "calcitonin_normal_range": calcitonin_entry.get("reference_range") if calcitonin_entry else None,
+            "cea_level": None,
+            "thyroid_ultrasound": "; ".join(record.get("imaging", [])),
+            "biochemical_data": convert_biochemical_entries(labs, test_key="analyte")
+        }
+        patients.append(patient)
+    return patients
+
+
+def build_study19_patients(study):
+    """convert RET K666N family case report"""
+    patients = []
+    for record in study.get("patients", []):
+        diagnoses = [str(item).lower() for item in record.get("diagnoses", [])]
+        mtc = any("medullary" in item and "thyroid" in item for item in diagnoses)
+        suspected = any("suspected" in item and "medullary" in item for item in diagnoses)
+        pheo = any("pheochromocytoma" in item for item in diagnoses)
+        hyperpara = any("hyperparathyroidism" in item for item in diagnoses)
+        men2 = any("men2" in item for item in diagnoses)
+        labs = record.get("biochemical_data", [])
+        calcitonin_entry = select_biomarker_entry(labs, "calcitonin")
+        cea_entry = select_biomarker_entry(labs, "cea")
+        patient = {
+            "patient_id": f"{study.get('study_id', 'study_19')}_{record.get('id', len(patients) + 1)}",
+            "age": record.get("age"),
+            "gender": record.get("sex"),
+            "relationship": record.get("relationship", "Relative"),
+            "ret_variant": parse_ret_variant_string(record.get("ret_variant")),
+            "men2_syndrome": "Yes" if men2 or record.get("ret_variant") else "No",
+            "mtc_diagnosis": "Yes" if mtc else ("Suspected (elevated calcitonin)" if suspected else "No"),
+            "pheochromocytoma": "Yes" if pheo else "No",
+            "hyperparathyroidism": "Yes" if hyperpara else "No",
+            "family_history_mtc": "Yes" if (record.get("family_history") or {}).get("mtc") else "No",
+            "calcitonin_level": calcitonin_entry.get("value") if calcitonin_entry else None,
+            "calcitonin_normal_range": calcitonin_entry.get("reference_range") if calcitonin_entry else None,
+            "cea_level": cea_entry.get("value") if cea_entry else None,
+            "thyroid_ultrasound": "; ".join(record.get("imaging", [])),
+            "biochemical_data": convert_biochemical_entries(labs, test_key="analyte")
+        }
+        patients.append(patient)
+    return patients
+
+
+def build_study20_patients(study):
+    """convert MEN2 case report without genotype"""
+    patients = []
+    for record in study.get("patients", []):
+        ret_variant = parse_ret_variant_string(record.get("ret_variant"))
+        if not ret_variant:
+            continue
+        diagnoses = [str(item).lower() for item in record.get("diagnoses", [])]
+        mtc = any("medullary" in item and "thyroid" in item for item in diagnoses)
+        pheo = any("pheochromocytoma" in item for item in diagnoses)
+        men2 = any("men2" in item for item in diagnoses)
+        labs = record.get("biochemical_data", [])
+        calcitonin_entry = select_biomarker_entry(labs, "calcitonin")
+        patient = {
+            "patient_id": f"{study.get('study_id', 'study_20')}_{record.get('id', len(patients) + 1)}",
+            "age": record.get("age"),
+            "gender": record.get("sex"),
+            "relationship": record.get("relationship", "Proband"),
+            "ret_variant": ret_variant,
+            "men2_syndrome": "Yes" if men2 else "No",
+            "mtc_diagnosis": "Yes" if mtc else "No",
+            "pheochromocytoma": "Yes" if pheo else "No",
+            "hyperparathyroidism": "No",
+            "family_history_mtc": "Yes" if (record.get("family_history") or {}).get("mtc") else "No",
+            "calcitonin_level": calcitonin_entry.get("value") if calcitonin_entry else None,
+            "calcitonin_normal_range": calcitonin_entry.get("reference_range") if calcitonin_entry else None,
+            "thyroid_ultrasound": "; ".join(record.get("imaging", [])),
+            "biochemical_data": convert_biochemical_entries(labs, test_key="analyte")
+        }
+        patients.append(patient)
+    return patients
+
+
+def build_study21_patients(study):
+    """convert RET S891A familial case series"""
+    patients = []
+    for record in study.get("patients", []):
+        diagnoses = [str(item).lower() for item in record.get("diagnoses", [])]
+        mtc = any("medullary" in item and "thyroid" in item for item in diagnoses)
+        pheo = any("pheochromocytoma" in item for item in diagnoses)
+        men2 = any("men2" in item for item in diagnoses)
+        labs = record.get("biochemical_data", [])
+        calcitonin_entry = select_biomarker_entry(labs, "calcitonin")
+        cea_entry = select_biomarker_entry(labs, "cea")
+        patient = {
+            "patient_id": f"{study.get('study_id', 'study_21')}_{record.get('id', len(patients) + 1)}",
+            "age": record.get("age"),
+            "gender": record.get("sex"),
+            "relationship": record.get("relationship", "Relative"),
+            "ret_variant": parse_ret_variant_string(record.get("ret_variant")),
+            "men2_syndrome": "Yes" if men2 or record.get("ret_variant") else "No",
+            "mtc_diagnosis": "Yes" if mtc else "No",
+            "pheochromocytoma": "Yes" if pheo else "No",
+            "hyperparathyroidism": "No",
+            "family_history_mtc": "Yes" if (record.get("family_history") or {}).get("mtc") else "No",
+            "calcitonin_level": calcitonin_entry.get("value") if calcitonin_entry else None,
+            "calcitonin_normal_range": calcitonin_entry.get("reference_range") if calcitonin_entry else None,
+            "cea_level": cea_entry.get("value") if cea_entry else None,
+            "thyroid_ultrasound": "; ".join(record.get("imaging", [])),
+            "biochemical_data": convert_biochemical_entries(labs, test_key="analyte")
+        }
+        patients.append(patient)
+    return patients
+
+
+def build_study22_patients(study):
+    """convert RET C634Y family case report"""
+    patients = []
+    for record in study.get("patients", []):
+        genetics = record.get("genetics") or {}
+        if str(genetics.get("ret_C634Y", "")).lower() in {"absent", "negative"}:
+            continue
+        ret_variant = parse_ret_variant_string(record.get("ret_variant"))
+        if not ret_variant and str(genetics.get("ret_C634Y", "")).lower() in {"present", "positive", "heterozygous"}:
+            ret_variant = "C634Y"
+        if not ret_variant:
+            continue
+        mtc_present = record.get("mtc_present")
+        pheo_present = record.get("pheochromocytoma_present")
+        hyperpara_present = record.get("hyperparathyroidism_present")
+        diagnoses = [str(item).lower() for item in record.get("diagnoses", [])]
+        mtc = mtc_present if mtc_present is not None else any("medullary" in item and "thyroid" in item for item in diagnoses)
+        pheo = pheo_present if pheo_present is not None else any("pheochromocytoma" in item for item in diagnoses)
+        hyperpara = hyperpara_present if hyperpara_present is not None else any("hyperparathyroidism" in item for item in diagnoses)
+        labs = record.get("biochemical_data", [])
+        calcitonin_entry = select_biomarker_entry(labs, "calcitonin")
+        patient = {
+            "patient_id": f"{study.get('study_id', 'study_22')}_{record.get('id', len(patients) + 1)}",
+            "age": record.get("age"),
+            "gender": record.get("sex"),
+            "relationship": record.get("relationship", "Relative"),
+            "ret_variant": ret_variant,
+            "men2_syndrome": "Yes",
+            "mtc_diagnosis": "Yes" if mtc else "No",
+            "pheochromocytoma": "Yes" if pheo else "No",
+            "hyperparathyroidism": "Yes" if hyperpara else "No",
+            "family_history_mtc": "Yes" if (record.get("family_history") or {}).get("mtc") else "No",
+            "calcitonin_level": calcitonin_entry.get("value") if calcitonin_entry else None,
+            "calcitonin_normal_range": calcitonin_entry.get("reference_range") if calcitonin_entry else None,
+            "cea_level": None,
+            "thyroid_ultrasound": "; ".join(record.get("imaging", [])),
+            "biochemical_data": convert_biochemical_entries(labs, test_key="analyte")
+        }
+        patients.append(patient)
+    return patients
+
+
 def extract_patients_from_study(study):
     """extract patient objects regardless of original study schema"""
     study_id = study.get("study_id")
@@ -484,6 +827,24 @@ def extract_patients_from_study(study):
         return build_study12_patients(study)
     if study_id == "study_13":
         return build_study13_patients(study)
+    if study_id == "study_14":
+        return build_study14_patients(study)
+    if study_id == "study_15":
+        return build_study15_patients(study)
+    if study_id == "study_16":
+        return build_study16_patients(study)
+    if study_id == "study_17":
+        return build_study17_patients(study)
+    if study_id == "study_18":
+        return build_study18_patients(study)
+    if study_id == "study_19":
+        return build_study19_patients(study)
+    if study_id == "study_20":
+        return build_study20_patients(study)
+    if study_id == "study_21":
+        return build_study21_patients(study)
+    if study_id == "study_22":
+        return build_study22_patients(study)
     raw_patients = study.get("patient_data")
     if isinstance(raw_patients, dict):
         patient_copy = raw_patients.copy()
@@ -831,7 +1192,16 @@ def create_paper_dataset():
         'study_10.json',
         'study_11.json',
         'study_12.json',
-        'study_13.json'
+        'study_13.json',
+        'study_14.json',
+        'study_15.json',
+        'study_16.json',
+        'study_17.json',
+        'study_18.json',
+        'study_19.json',
+        'study_20.json',
+        'study_21.json',
+        'study_22.json'
     ]
     for study_file in study_files:
         with open(os.path.join(dataset_dir, study_file), 'r', encoding='utf-8') as f:
@@ -912,8 +1282,12 @@ def create_paper_dataset():
 
     # Extract RET variant from ret_variant field
     # Studies 1-3 patients are all K666N carriers (variant not explicitly stored in JSON)
-    # Study 4 has explicit variant field for each patient
-    df['ret_variant'] = df['ret_variant'].fillna('K666N')
+    default_variant_by_study = {
+        'study_1': 'K666N',
+        'study_3': 'K666N'
+    }
+    df['ret_variant'] = df['ret_variant'].fillna(df['study_id'].map(default_variant_by_study))
+    df = df[df['ret_variant'].notna()].copy()
 
     # Create RET risk level mapping based on ATA guidelines
     # Level 1 (Moderate): L790F, Y791F, V804M, S891A, K666N
@@ -940,7 +1314,9 @@ def create_paper_dataset():
         'E632_C634del': 3,
         'E632_L633del': 3,
         'V899_E902del': 2,
-        'D898_E901del': 2
+        'D898_E901del': 2,
+        'C634G': 3,
+        'D631_L633delinsE': 3
     }
     df['ret_risk_level'] = df['ret_variant'].map(ret_risk_mapping).fillna(1).astype(int)
     
@@ -1040,6 +1416,10 @@ def create_paper_dataset():
         elif '0-7.5' in normal_range or '0.0-7.5' in normal_range:
             return 1 if calcitonin_numeric > 7.5 else 0
         else:
+            range_values = re.findall(r'(\d+\.?\d*)', normal_range)
+            if range_values:
+                threshold = float(max(range_values, key=float))
+                return 1 if calcitonin_numeric > threshold else 0
             # default to 7.5 if range unclear
             return 1 if calcitonin_numeric > 7.5 else 0
 
