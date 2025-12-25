@@ -12,7 +12,7 @@
       "risk_level": 1,
       "studies": [
         "study_1",
-        "study_19",
+        "study_18",
         "study_3",
         "study_5",
         "study_6"
@@ -26,7 +26,7 @@
       "risk_level": 3,
       "studies": [
         "study_10",
-        "study_22",
+        "study_20",
         "study_4",
         "study_9"
       ],
@@ -39,7 +39,7 @@
       "risk_level": 1,
       "studies": [
         "study_13",
-        "study_21",
+        "study_19",
         "study_4",
         "study_7"
       ],
@@ -85,7 +85,7 @@
       "patient_count": 6,
       "risk_level": 3,
       "studies": [
-        "study_18"
+        "study_17"
       ],
       "mtc_rate": 0.8333333333333334,
       "pheochromocytoma_cases": 3
