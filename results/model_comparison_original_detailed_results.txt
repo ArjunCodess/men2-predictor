@@ -26,7 +26,7 @@ Patient_ID      Age   Sex RET_Var  Risk Calc_Elev  Calc_Lvl Nod MN  FH  Pheo HPT
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 study_4         34    F   C634Y    3    Y          18.0     N   N   Y   N    N    | MTC      | OK   | OK   | OK   | OK   | OK  
 study_4         21    M   L790F    1    Y          5.0      N   N   N   N    N    | No_MTC   | XX   | OK   | OK   | XX   | XX  
-study_19        40    F   K666N    1    Y          12.3     Y   N   N   Y    Y    | MTC      | OK   | OK   | OK   | OK   | OK  
+study_18        40    F   K666N    1    Y          12.3     Y   N   N   Y    Y    | MTC      | OK   | OK   | OK   | OK   | OK  
 study_14        7     F   C634R    3    N          0.0      N   N   Y   N    N    | No_MTC   | XX   | OK   | OK   | OK   | XX  
 study_9         51    F   C620W    2    N          0.0      N   N   N   N    N    | MTC      | OK   | XX   | OK   | OK   | OK  
 study_7         64    F   R525W    1    N          0.2      N   N   N   N    N    | No_MTC   | XX   | XX   | XX   | XX   | XX  
@@ -39,9 +39,9 @@ study_4         38    M   C634Y    3    N          0.0      N   N   Y   N    N  
 study_3         39    F   K666N    1    N          0.2      N   N   Y   N    N    | No_MTC   | XX   | OK   | OK   | XX   | XX  
 study_4         31    M   C634R    3    Y          43.6     N   N   N   N    N    | MTC      | OK   | OK   | OK   | OK   | OK  
 study_7         44    F   S891A    1    N          0.0      N   N   N   N    N    | No_MTC   | XX   | OK   | OK   | OK   | XX  
-study_18        43    F   C634G    3    N          0.0      N   N   Y   Y    N    | MTC      | OK   | OK   | OK   | OK   | OK  
+study_17        43    F   C634G    3    N          0.0      N   N   Y   Y    N    | MTC      | OK   | OK   | OK   | OK   | OK  
 study_1         84    F   K666N    1    Y          37.0     Y   N   Y   N    N    | No_MTC   | OK   | XX   | XX   | XX   | XX  
-study_21        44    F   S891A    1    Y          447.0    N   N   Y   N    N    | MTC      | OK   | OK   | OK   | OK   | OK  
+study_19        44    F   S891A    1    Y          447.0    N   N   Y   N    N    | MTC      | OK   | OK   | OK   | OK   | OK  
 study_1         60    M   K666N    1    Y          13.0     Y   Y   Y   N    N    | MTC      | OK   | OK   | XX   | OK   | OK  
 study_7         10    F   S891A    1    N          0.0      N   N   N   N    N    | No_MTC   | OK   | OK   | OK   | OK   | OK  
 study_9         59    M   M918T    3    N          0.0      N   N   N   N    N    | MTC      | OK   | OK   | OK   | OK   | OK  

@@ -25,7 +25,7 @@ LEGEND:
 Patient_ID      Age   Sex RET_Var  Risk Calc_Elev  Calc_Lvl Nod MN  FH  Pheo HPT  | Actual   | LR   | RF   | LGB  | XGB  | SVM 
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 68_control      18    F   C630R    2    N          6.9      N   N   N   N    N    | No_MTC   | OK   | OK   | OK   | OK   | XX  
-study_21        18    F   S891A    1    N          6.3      Y   N   Y   N    N    | No_MTC   | OK   | OK   | OK   | XX   | XX  
+study_19        18    F   S891A    1    N          6.3      Y   N   Y   N    N    | No_MTC   | OK   | OK   | OK   | XX   | XX  
 study_7         64    F   R525W    1    N          0.2      N   N   N   N    N    | No_MTC   | OK   | OK   | OK   | XX   | OK  
 68_control      18    F   C630R    2    N          6.9      N   N   N   N    N    | No_MTC   | OK   | OK   | OK   | OK   | XX  
 study_1         86    F   K666N    1    Y          30.9     N   N   Y   N    N    | No_MTC   | OK   | OK   | OK   | XX   | OK  
@@ -57,7 +57,7 @@ study_14        37    F   C634R    3    Y          1876.4   Y   Y   Y   Y    N  
 68_control      18    F   C630R    2    N          6.9      N   N   N   N    N    | No_MTC   | OK   | OK   | OK   | OK   | XX  
 68_control      18    F   C630R    2    N          6.9      N   N   N   N    N    | No_MTC   | OK   | OK   | OK   | OK   | XX  
 68_control      18    F   C630R    2    N          6.9      N   N   N   N    N    | No_MTC   | OK   | OK   | OK   | OK   | XX  
-study_22        61    F   C634Y    3    Y          975.1    Y   N   Y   Y    N    | MTC      | OK   | OK   | OK   | OK   | OK  
+study_20        61    F   C634Y    3    Y          975.1    Y   N   Y   Y    N    | MTC      | OK   | OK   | OK   | OK   | OK  
 68_control      18    F   C630R    2    N          6.9      N   N   N   N    N    | No_MTC   | OK   | OK   | OK   | OK   | XX  
 study_9         57    F   V899_E90 2    Y          322.2    Y   N   N   N    N    | MTC      | OK   | OK   | OK   | OK   | OK  
 study_3         32    F   K666N    1    Y          28000.0  N   N   N   N    N    | MTC      | OK   | OK   | OK   | OK   | OK  
@@ -69,7 +69,7 @@ study_4         21    F   L790F    1    Y          5.0      N   N   N   N    N  
 study_15        18    F   M918T    3    Y          2000.0   N   N   N   N    N    | MTC      | OK   | OK   | OK   | OK   | OK  
 68_control      18    F   C630R    2    N          6.9      N   N   N   N    N    | No_MTC   | OK   | OK   | OK   | OK   | XX  
 study_7         45    F   S891A    1    N          0.0      N   N   N   N    N    | No_MTC   | XX   | OK   | OK   | OK   | XX  
-study_21        32    F   S891A    1    N          5.2      Y   Y   Y   N    N    | MTC      | OK   | OK   | OK   | OK   | OK  
+study_19        32    F   S891A    1    N          5.2      Y   Y   Y   N    N    | MTC      | OK   | OK   | OK   | OK   | OK  
 study_1         56    F   K666N    1    Y          20.4     Y   N   Y   N    N    | MTC      | OK   | OK   | OK   | OK   | OK  
 study_7         1     F   R525W    1    N          0.0      N   N   N   N    N    | No_MTC   | OK   | OK   | OK   | OK   | OK  
 68_control      18    F   C630R    2    N          6.9      N   N   N   N    N    | No_MTC   | OK   | OK   | OK   | OK   | XX  
@@ -82,7 +82,7 @@ study_4         45    F   C634W    3    N          0.0      Y   Y   N   Y    N  
 68_control      18    F   C630R    2    N          6.9      N   N   N   N    N    | No_MTC   | OK   | OK   | OK   | OK   | XX  
 68_control      18    F   C630R    2    N          6.9      N   N   N   N    N    | No_MTC   | OK   | OK   | OK   | OK   | XX  
 68_control      18    F   C630R    2    N          6.9      N   N   N   N    N    | No_MTC   | OK   | OK   | OK   | OK   | XX  
-study_18        32    F   C634G    3    N          4.4      Y   N   Y   N    N    | MTC      | OK   | OK   | OK   | OK   | OK  
+study_17        32    F   C634G    3    N          4.4      Y   N   Y   N    N    | MTC      | OK   | OK   | OK   | OK   | OK  
 68_control      18    F   C630R    2    N          6.9      N   N   N   N    N    | No_MTC   | OK   | OK   | OK   | OK   | XX  
 study_9         38    F   M918T    3    Y          443.0    N   N   N   N    N    | MTC      | OK   | OK   | OK   | OK   | OK  
 study_4         21    F   L790F    1    Y          5.0      N   N   N   N    N    | No_MTC   | XX   | OK   | OK   | OK   | XX  
@@ -110,10 +110,10 @@ study_4         43    F   C634R    3    N          2.5      Y   Y   Y   N    N  
 study_3         30    F   K666N    1    N          0.0      N   N   Y   N    N    | No_MTC   | OK   | OK   | OK   | OK   | OK  
 study_5         46    F   K666N    1    Y          19.8     N   N   N   N    N    | No_MTC   | XX   | XX   | OK   | XX   | XX  
 study_7         18    F   R525W    1    N          0.0      Y   N   N   N    N    | No_MTC   | OK   | OK   | OK   | OK   | OK  
-study_22        60    F   C634Y    3    Y          972.2    Y   N   Y   Y    N    | MTC      | OK   | OK   | OK   | OK   | OK  
+study_20        60    F   C634Y    3    Y          972.2    Y   N   Y   Y    N    | MTC      | OK   | OK   | OK   | OK   | OK  
 68_control      18    F   C630R    2    N          6.9      N   N   N   N    N    | No_MTC   | OK   | OK   | OK   | OK   | XX  
-study_18        43    F   C634G    3    Y          299.1    N   N   Y   Y    Y    | MTC      | OK   | OK   | OK   | OK   | OK  
-study_19        47    F   K666N    1    Y          7.7      N   N   Y   N    N    | No_MTC   | XX   | OK   | OK   | XX   | XX  
+study_17        43    F   C634G    3    Y          299.1    N   N   Y   Y    Y    | MTC      | OK   | OK   | OK   | OK   | OK  
+study_18        47    F   K666N    1    Y          7.7      N   N   Y   N    N    | No_MTC   | XX   | OK   | OK   | XX   | XX  
 study_5         42    F   K666N    1    N          5.2      N   N   N   N    N    | No_MTC   | XX   | OK   | OK   | XX   | XX  
 study_4         17    F   C634Y    3    N          0.0      N   N   Y   N    N    | No_MTC   | OK   | OK   | OK   | OK   | XX  
 68_control      18    F   C630R    2    N          6.9      N   N   N   N    N    | No_MTC   | OK   | OK   | OK   | OK   | XX  
@@ -143,10 +143,10 @@ study_4         18    F   C634Y    3    Y          8.9      N   N   Y   N    N  
 study_3         58    F   K666N    1    N          0.0      N   N   Y   N    N    | No_MTC   | OK   | OK   | OK   | OK   | XX  
 study_9         49    F   C634S    3    Y          256.9    Y   Y   N   N    N    | MTC      | OK   | OK   | OK   | OK   | OK  
 study_7         44    F   S891A    1    N          0.0      N   N   N   N    N    | No_MTC   | XX   | OK   | OK   | OK   | XX  
-study_18        37    F   C634G    3    N          2.9      Y   N   Y   N    N    | No_MTC   | XX   | XX   | XX   | XX   | XX  
+study_17        37    F   C634G    3    N          2.9      Y   N   Y   N    N    | No_MTC   | XX   | XX   | XX   | XX   | XX  
 68_control      18    F   C630R    2    N          6.9      N   N   N   N    N    | No_MTC   | OK   | OK   | OK   | OK   | XX  
 study_14        18    F   C634R    3    N          2.1      N   N   Y   N    N    | No_MTC   | OK   | OK   | OK   | OK   | XX  
-study_18        31    F   C634G    3    N          2.7      Y   N   Y   N    N    | MTC      | OK   | OK   | OK   | OK   | OK  
+study_17        31    F   C634G    3    N          2.7      Y   N   Y   N    N    | MTC      | OK   | OK   | OK   | OK   | OK  
 study_6         40    F   K666N    1    N          1.9      Y   N   N   N    N    | No_MTC   | XX   | XX   | XX   | XX   | XX  
 68_control      18    F   C630R    2    N          6.9      N   N   N   N    N    | No_MTC   | OK   | OK   | OK   | OK   | XX  
 study_5         46    F   K666N    1    Y          19.8     N   N   N   N    N    | No_MTC   | XX   | XX   | OK   | XX   | XX  
@@ -155,7 +155,7 @@ study_4         49    F   C634Y    3    Y          200.0    N   N   N   N    N  
 68_control      18    F   C630R    2    N          6.9      N   N   N   N    N    | No_MTC   | OK   | OK   | OK   | OK   | XX  
 68_control      18    F   C630R    2    N          6.9      N   N   N   N    N    | No_MTC   | OK   | OK   | OK   | OK   | XX  
 68_control      18    F   C630R    2    N          6.9      N   N   N   N    N    | No_MTC   | OK   | OK   | OK   | OK   | XX  
-study_18        44    F   C634G    3    N          0.0      N   N   Y   Y    N    | MTC      | OK   | OK   | OK   | OK   | OK  
+study_17        44    F   C634G    3    N          0.0      N   N   Y   Y    N    | MTC      | OK   | OK   | OK   | OK   | OK  
 study_3         35    F   K666N    1    N          0.0      N   N   Y   N    N    | No_MTC   | OK   | OK   | OK   | OK   | XX  
 study_1         22    F   K666N    1    N          2.8      N   N   N   N    N    | No_MTC   | OK   | OK   | OK   | OK   | OK  
 study_4         33    F   C634R    3    N          5.1      N   N   Y   N    N    | No_MTC   | XX   | XX   | OK   | XX   | XX  
@@ -164,7 +164,7 @@ study_3         39    F   K666N    1    N          0.2      N   N   Y   N    N  
 study_9         38    F   C634W    3    Y          60.3     Y   N   N   N    N    | MTC      | OK   | OK   | OK   | OK   | OK  
 68_control      18    F   C630R    2    N          6.9      N   N   N   N    N    | No_MTC   | OK   | OK   | OK   | OK   | XX  
 68_control      18    F   C630R    2    N          6.9      N   N   N   N    N    | No_MTC   | OK   | OK   | OK   | OK   | XX  
-study_21        40    F   S891A    1    Y          446.8    Y   N   Y   N    N    | MTC      | OK   | OK   | OK   | OK   | OK  
+study_19        40    F   S891A    1    Y          446.8    Y   N   Y   N    N    | MTC      | OK   | OK   | OK   | OK   | OK  
 68_control      18    F   C630R    2    N          6.9      N   N   N   N    N    | No_MTC   | OK   | OK   | OK   | OK   | XX  
 study_15        18    F   M918T    3    Y          1998.7   N   N   N   N    N    | MTC      | OK   | OK   | OK   | OK   | OK  
 study_9         22    F   C634R    3    Y          729.4    Y   N   N   N    N    | MTC      | OK   | OK   | OK   | OK   | OK  
@@ -193,13 +193,13 @@ mtc_s2_control  38    F   L790F    1    N          6.9      N   N   N   N    N  
 study_3         23    F   K666N    1    N          0.0      N   N   Y   N    N    | No_MTC   | OK   | OK   | OK   | OK   | OK  
 study_3         90    F   K666N    1    N          0.0      N   N   Y   N    N    | No_MTC   | OK   | OK   | OK   | OK   | OK  
 14_control      59    F   K666N    1    N          6.9      N   N   N   N    N    | No_MTC   | XX   | OK   | OK   | OK   | XX  
-study_19        42    F   K666N    1    Y          5.2      Y   N   Y   N    N    | No_MTC   | XX   | XX   | OK   | XX   | XX  
+study_18        42    F   K666N    1    Y          5.2      Y   N   Y   N    N    | No_MTC   | XX   | XX   | OK   | XX   | XX  
 68_control      18    F   C630R    2    N          6.9      N   N   N   N    N    | No_MTC   | OK   | OK   | OK   | OK   | XX  
 study_4         24    F   V804M    1    N          2.0      N   N   N   N    N    | No_MTC   | OK   | OK   | OK   | OK   | OK  
 study_4         21    F   Y791F    1    N          0.0      N   N   N   N    N    | No_MTC   | OK   | OK   | OK   | OK   | OK  
 68_control      18    F   C630R    2    N          6.9      N   N   N   N    N    | No_MTC   | OK   | OK   | OK   | OK   | XX  
 study_3         30    F   K666N    1    N          0.0      N   N   Y   N    N    | No_MTC   | OK   | OK   | OK   | OK   | OK  
-study_19        40    F   K666N    1    Y          12.3     Y   N   N   Y    Y    | MTC      | OK   | OK   | OK   | OK   | OK  
+study_18        40    F   K666N    1    Y          12.3     Y   N   N   Y    Y    | MTC      | OK   | OK   | OK   | OK   | OK  
 study_3         31    F   K666N    1    Y          1987.4   Y   N   N   N    N    | MTC      | OK   | OK   | OK   | OK   | OK  
 study_4         25    F   C618S    2    Y          24.5     Y   Y   N   N    N    | MTC      | OK   | OK   | OK   | OK   | OK  
 study_7         18    F   S891A    1    N          3.5      N   N   N   N    N    | No_MTC   | OK   | OK   | OK   | OK   | OK  
@@ -229,7 +229,7 @@ study_3         20    F   K666N    1    N          0.2      N   N   Y   N    N  
 study_7         63    F   R525W    1    N          0.9      N   N   N   N    N    | No_MTC   | OK   | OK   | OK   | XX   | OK  
 study_6         43    F   K666N    1    N          0.0      N   N   N   N    N    | No_MTC   | XX   | OK   | OK   | OK   | XX  
 study_4         24    F   C634Y    3    N          3.4      N   N   Y   N    N    | No_MTC   | OK   | OK   | OK   | OK   | XX  
-study_18        43    F   C634G    3    N          0.8      N   N   Y   Y    N    | MTC      | OK   | OK   | OK   | OK   | OK  
+study_17        43    F   C634G    3    N          0.8      N   N   Y   Y    N    | MTC      | OK   | OK   | OK   | OK   | OK  
 study_9         67    F   M918T    3    N          0.0      N   N   N   N    N    | MTC      | OK   | OK   | OK   | OK   | OK  
 study_3         61    F   K666N    1    Y          69.1     Y   N   N   N    N    | MTC      | OK   | OK   | OK   | OK   | OK  
 study_9         61    F   M918T    3    Y          10278.9  Y   N   N   N    N    | MTC      | OK   | OK   | OK   | OK   | OK  
