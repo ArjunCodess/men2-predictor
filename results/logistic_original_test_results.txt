@@ -1,11 +1,11 @@
 LOGISTIC_REGRESSION TEST RESULTS (ORIGINAL)
 ==================================================
-Accuracy: 0.8462 (95% CI: [0.8077, 1.0000])
-Precision: 0.7333 (95% CI: [0.6998, 1.0000])
-Recall: 1.0000 (95% CI: [0.7000, 1.0000])
-F1 Score: 0.8462 (95% CI: [0.7368, 1.0000])
-ROC AUC: 0.9939 (95% CI: [0.9643, 1.0000])
-Average Precision: 0.9924
+Accuracy: 0.7097 (95% CI: [0.6774, 0.9677])
+Precision: 0.6250 (95% CI: [0.6667, 1.0000])
+Recall: 1.0000 (95% CI: [0.5714, 1.0000])
+F1 Score: 0.7692 (95% CI: [0.6667, 0.9600])
+ROC AUC: 0.9375 (95% CI: [0.8333, 1.0000])
+Average Precision: 0.9309
 ==================================================
 
 Bootstrap method: 1000 iterations, 95% confidence level

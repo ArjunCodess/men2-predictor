@@ -1,11 +1,11 @@
 SUPPORT_VECTOR_MACHINE TEST RESULTS (EXPANDED)
 ==================================================
-Accuracy: 0.8764 (95% CI: [0.9157, 0.9775])
-Precision: 0.6809 (95% CI: [0.8139, 1.0000])
-Recall: 0.8205 (95% CI: [0.7297, 0.9487])
-F1 Score: 0.7442 (95% CI: [0.7941, 0.9512])
-ROC AUC: 0.8604 (95% CI: [0.9235, 0.9943])
-Average Precision: 0.7749
+Accuracy: 0.4393 (95% CI: [0.9018, 0.9626])
+Precision: 0.2982 (95% CI: [0.7111, 0.9000])
+Recall: 1.0000 (95% CI: [0.8679, 1.0000])
+F1 Score: 0.4595 (95% CI: [0.8000, 0.9273])
+ROC AUC: 0.9284 (95% CI: [0.9584, 0.9945])
+Average Precision: 0.8174
 ==================================================
 
 Bootstrap method: 1000 iterations, 95% confidence level

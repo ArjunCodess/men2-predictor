@@ -1,11 +1,11 @@
 XGBOOST TEST RESULTS (ORIGINAL)
 ==================================================
-Accuracy: 0.8077 (95% CI: [0.6538, 0.9240])
-Precision: 0.7143 (95% CI: [0.4545, 0.9286])
-Recall: 0.9091 (95% CI: [0.7000, 1.0000])
-F1 Score: 0.8000 (95% CI: [0.5714, 0.9412])
-ROC AUC: 0.9333 (95% CI: [0.7970, 1.0000])
-Average Precision: 0.9375
+Accuracy: 0.7419 (95% CI: [0.5806, 0.9032])
+Precision: 0.6522 (95% CI: [0.4582, 0.8462])
+Recall: 1.0000 (95% CI: [1.0000, 1.0000])
+F1 Score: 0.7895 (95% CI: [0.6285, 0.9167])
+ROC AUC: 0.8667 (95% CI: [0.7149, 0.9706])
+Average Precision: 0.8608
 ==================================================
 
 Bootstrap method: 1000 iterations, 95% confidence level

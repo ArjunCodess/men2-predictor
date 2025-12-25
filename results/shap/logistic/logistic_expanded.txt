@@ -2,17 +2,17 @@ SHAP SUMMARY
 Model: logistic
 Dataset: expanded
 Background size: 50
-Sample size: 178
+Sample size: 200
 ============================================================
 Top features by mean |SHAP|:
- 1. age_squared: 2.016881
- 2. calcitonin_elevated: 1.272596
- 3. age_group_very_elderly: 1.128254
- 4. ret_risk_level: 1.083904
- 5. age_group_middle: 0.800799
- 6. age: 0.753421
- 7. family_history_mtc: 0.695689
- 8. age_group_young: 0.623268
- 9. multiple_nodules: 0.569983
-10. thyroid_nodules_present: 0.520737
+ 1. age_squared: 2.118954
+ 2. age: 1.049788
+ 3. ret_risk_level: 0.772161
+ 4. age_group_middle: 0.743222
+ 5. calcitonin_elevated: 0.649846
+ 6. age_group_young: 0.579846
+ 7. thyroid_nodules_present: 0.570484
+ 8. age_group_very_elderly: 0.507437
+ 9. risk_age_interaction: 0.465366
+10. pheochromocytoma: 0.453205
 ============================================================

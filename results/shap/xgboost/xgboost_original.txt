@@ -1,18 +1,18 @@
 SHAP SUMMARY
 Model: xgboost
 Dataset: original
-Background size: 26
-Sample size: 26
+Background size: 31
+Sample size: 31
 ============================================================
 Top features by mean |SHAP|:
- 1. risk_age_interaction: 0.120252
- 2. calcitonin_level_numeric: 0.084083
- 3. calcitonin_age_interaction: 0.077097
- 4. ret_risk_level: 0.060017
- 5. age: 0.041720
- 6. age_group_young: 0.034984
- 7. family_history_mtc: 0.032395
- 8. risk_calcitonin_interaction: 0.023111
- 9. age_group_middle: 0.022037
-10. age_squared: 0.014450
+ 1. calcitonin_age_interaction: 0.108431
+ 2. risk_age_interaction: 0.104186
+ 3. calcitonin_level_numeric: 0.087643
+ 4. ret_risk_level: 0.068717
+ 5. calcitonin_elevated: 0.021207
+ 6. age: 0.021017
+ 7. variant_K666N: 0.020567
+ 8. age_group_young: 0.020535
+ 9. age_squared: 0.018326
+10. age_group_middle: 0.017727
 ============================================================

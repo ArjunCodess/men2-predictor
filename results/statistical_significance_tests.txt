@@ -2,54 +2,54 @@ STATISTICAL SIGNIFICANCE TESTS: ORIGINAL VS EXPANDED DATASETS
 =============================================================
 
 Model: Logistic Regression
-- Original Recall: 100.0% (n=11)
-- Expanded Recall: 97.4% (n=39)
-- Recall Drop (original - expanded): 2.6%
-- Bootstrap Mean Drop: 2.6% (Std: 0.025, 95% CI: [0.0%, 7.7%])
-- McNemar's Test: No overlapping positive patients; McNemar's test not applicable.
+- Original Recall: 100.0% (n=15)
+- Expanded Recall: 98.0% (n=51)
+- Recall Drop (original - expanded): 2.0%
+- Bootstrap Mean Drop: 1.9% (Std: 0.020, 95% CI: [0.0%, 5.9%])
+- McNemar's Test: None
 - Permutation Test p-value: 1
 - Significance (alpha=0.05/0.01/0.001): 0.050:No/0.010:No/0.001:No
-- Effect Size (Cohen's h): 0.322
+- Effect Size (Cohen's h): 0.281
 
 Model: Random Forest
-- Original Recall: 90.9% (n=11)
-- Expanded Recall: 87.2% (n=39)
-- Recall Drop (original - expanded): 3.7%
-- Bootstrap Mean Drop: 4.0% (Std: 0.101, 95% CI: [-17.0%, 20.5%])
-- McNemar's Test: No overlapping positive patients; McNemar's test not applicable.
+- Original Recall: 93.3% (n=15)
+- Expanded Recall: 96.1% (n=51)
+- Recall Drop (original - expanded): -2.7%
+- Bootstrap Mean Drop: -2.5% (Std: 0.069, 95% CI: [-18.0%, 7.8%])
+- McNemar's Test: None
 - Permutation Test p-value: 1
 - Significance (alpha=0.05/0.01/0.001): 0.050:No/0.010:No/0.001:No
-- Effect Size (Cohen's h): 0.120
+- Effect Size (Cohen's h): -0.124
 
 Model: LightGBM
-- Original Recall: 90.9% (n=11)
-- Expanded Recall: 84.6% (n=39)
-- Recall Drop (original - expanded): 6.3%
-- Bootstrap Mean Drop: 6.7% (Std: 0.104, 95% CI: [-15.9%, 25.6%])
-- McNemar's Test: No overlapping positive patients; McNemar's test not applicable.
-- Permutation Test p-value: 0.6871
+- Original Recall: 93.3% (n=15)
+- Expanded Recall: 96.1% (n=51)
+- Recall Drop (original - expanded): -2.7%
+- Bootstrap Mean Drop: -3.0% (Std: 0.072, 95% CI: [-18.0%, 7.8%])
+- McNemar's Test: None
+- Permutation Test p-value: 1
 - Significance (alpha=0.05/0.01/0.001): 0.050:No/0.010:No/0.001:No
-- Effect Size (Cohen's h): 0.194
+- Effect Size (Cohen's h): -0.124
 
 Model: XGBoost
-- Original Recall: 90.9% (n=11)
-- Expanded Recall: 97.4% (n=39)
-- Recall Drop (original - expanded): -6.5%
-- Bootstrap Mean Drop: -6.3% (Std: 0.090, 95% CI: [-27.3%, 7.7%])
-- McNemar's Test: No overlapping positive patients; McNemar's test not applicable.
-- Permutation Test p-value: 0.3927
+- Original Recall: 100.0% (n=15)
+- Expanded Recall: 98.0% (n=51)
+- Recall Drop (original - expanded): 2.0%
+- Bootstrap Mean Drop: 1.9% (Std: 0.020, 95% CI: [0.0%, 5.9%])
+- McNemar's Test: None
+- Permutation Test p-value: 1
 - Significance (alpha=0.05/0.01/0.001): 0.050:No/0.010:No/0.001:No
-- Effect Size (Cohen's h): -0.291
+- Effect Size (Cohen's h): 0.281
 
 Model: Support Vector Machine
-- Original Recall: 100.0% (n=11)
-- Expanded Recall: 82.1% (n=39)
-- Recall Drop (original - expanded): 17.9%
-- Bootstrap Mean Drop: 18.0% (Std: 0.061, 95% CI: [7.7%, 30.8%])
-- McNemar's Test: No overlapping positive patients; McNemar's test not applicable.
-- Permutation Test p-value: 0.1829
+- Original Recall: 100.0% (n=15)
+- Expanded Recall: 100.0% (n=51)
+- Recall Drop (original - expanded): 0.0%
+- Bootstrap Mean Drop: 0.0% (Std: 0.000, 95% CI: [0.0%, 0.0%])
+- McNemar's Test: None
+- Permutation Test p-value: 1
 - Significance (alpha=0.05/0.01/0.001): 0.050:No/0.010:No/0.001:No
-- Effect Size (Cohen's h): 0.875
+- Effect Size (Cohen's h): 0.000
 
 Overall Conclusion:
 Permutation testing did not flag any recall drops as statistically significant.

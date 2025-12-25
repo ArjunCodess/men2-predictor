@@ -1,18 +1,18 @@
 SHAP SUMMARY
 Model: random_forest
 Dataset: original
-Background size: 26
-Sample size: 26
+Background size: 31
+Sample size: 31
 ============================================================
 Top features by mean |SHAP|:
- 1. risk_age_interaction: 0.061047
- 2. risk_calcitonin_interaction: 0.057404
- 3. age: 0.044308
- 4. calcitonin_level_numeric: 0.041460
- 5. age_group_young: 0.038723
- 6. calcitonin_age_interaction: 0.038497
- 7. calcitonin_elevated: 0.038214
- 8. ret_risk_level: 0.022732
- 9. age_squared: 0.021224
-10. family_history_mtc: 0.013430
+ 1. risk_age_interaction: 0.064958
+ 2. risk_calcitonin_interaction: 0.061715
+ 3. calcitonin_age_interaction: 0.048614
+ 4. calcitonin_level_numeric: 0.032929
+ 5. ret_risk_level: 0.025911
+ 6. age_group_young: 0.024364
+ 7. calcitonin_elevated: 0.023191
+ 8. variant_K666N: 0.020902
+ 9. age: 0.020734
+10. age_squared: 0.018430
 ============================================================

@@ -2,17 +2,17 @@ SHAP SUMMARY
 Model: random_forest
 Dataset: expanded
 Background size: 50
-Sample size: 178
+Sample size: 200
 ============================================================
 Top features by mean |SHAP|:
- 1. calcitonin_elevated: 0.061323
- 2. risk_calcitonin_interaction: 0.037587
- 3. risk_age_interaction: 0.035669
- 4. calcitonin_level_numeric: 0.035090
- 5. calcitonin_age_interaction: 0.034151
- 6. age: 0.030741
- 7. ret_risk_level: 0.027645
- 8. thyroid_nodules_present: 0.026542
- 9. age_squared: 0.018597
-10. age_group_middle: 0.015140
+ 1. calcitonin_age_interaction: 0.048327
+ 2. age_group_young: 0.047148
+ 3. risk_calcitonin_interaction: 0.039307
+ 4. thyroid_nodules_present: 0.036679
+ 5. risk_age_interaction: 0.035260
+ 6. calcitonin_elevated: 0.034562
+ 7. calcitonin_level_numeric: 0.032811
+ 8. age_squared: 0.023617
+ 9. age: 0.020220
+10. ret_risk_level: 0.019715
 ============================================================
