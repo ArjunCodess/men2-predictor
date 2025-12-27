@@ -203,6 +203,11 @@ def run_all_models(dataset_type='expanded'):
 
     # Create results directory for logs
     os.makedirs('results/logs', exist_ok=True)
+    if dataset_type == 'both':
+        summary_path = Path("results") / "explainability_summary.txt"
+        summary_path.parent.mkdir(parents=True, exist_ok=True)
+        with open(summary_path, "w", encoding="utf-8") as f:
+            f.write("")
 
     # Run data preparation steps once (common to all models)
     print("\n" + "=" * 80)
@@ -265,10 +270,14 @@ def run_all_models(dataset_type='expanded'):
 
             # Test model - save log to file
             test_log = f"results/logs/{model_type}_{dt}_testing.log"
+            test_args = [f"--m={model_type}"]
+            if dataset_type == 'both':
+                test_args.append("--explain")
+
             test_success = run_module(
                 "src/test_model.py",
                 f"Model Testing - Evaluate {model_desc} performance on test set ({dataset_label})",
-                [f"--m={model_type}"],
+                test_args,
                 log_file=test_log,
                 dataset_type=dt
             )
