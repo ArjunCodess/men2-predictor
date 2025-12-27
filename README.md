@@ -555,12 +555,39 @@ This mode clearly demonstrates the recall degradation from synthetic augmentatio
 
 Statistical significance tests are triggered automatically only when running both datasets together (e.g., `python main.py --m=all --d=both`).
 
-### Explainability (SHAP)
+### Explainability (SHAP + LIME)
 
-- Run `python src/test_model.py --m=<model> --d=<dataset>` (or via `main.py --m=all --d=both`) to print SHAP summaries inside the existing evaluation pipeline.
-- Text outputs now live under `results/shap/<model>/<model>_<dataset>.txt` (e.g., `results/shap/logistic/logistic_expanded.txt`).
-- Charts are written to `charts/shap/<model>/` (`expanded_bar.png`, `expanded_beeswarm.png`, `original_bar.png`, `original_beeswarm.png`), so every model/dataset pair produces its own plots.
-- Explainers are tailored per model: tree ensembles use `shap.TreeExplainer`, linear/logistic/SVM use `shap.LinearExplainer`, and there is an automatic fallback to a callable-based `shap.Explainer` when native explainers are unsupported (e.g., calibrated SVM or certain XGBoost wrappers).
+- Explainability runs automatically during testing (including `python main.py --m=all --d=both`). Use `python src/test_model.py --no-explain ...` to skip.
+- **SHAP**:
+  - Text: `results/shap/<model>/<model>_<dataset>.txt` (e.g., `results/shap/logistic/logistic_expanded.txt`)
+  - Charts (PNG): `charts/shap/<model>/` (`expanded_bar.png`, `original_bar.png`)
+- **LIME** (local explanations + global summary over selected cases):
+  - Results: `results/lime/<model>/`
+  - Charts (PNG): `charts/lime/<model>/` (per-sample LIME plots + `lime_global_importance.png` + `lime_shap_global_<dataset>.png`)
+  - The script explains 5 correctly classified + up to 5 misclassified cases (false negatives prioritized).
+  - Counterfactual suggestions (when possible) are written to `results/lime/<model>/<model>_<dataset>_counterfactuals.txt`.
+- Summary: `results/explainability_summary.txt`
+
+**Important clinical disclaimer:** This project is for research and educational use only and is not medical advice or a clinical decision support device. Do not use these outputs to diagnose, treat, or delay care; consult qualified clinicians and confirm with guideline-based evaluation and genetic testing.
+
+### Hugging Face Space (Gradio UI + API)
+
+Interactive demo and hosted inference are available via the Hugging Face Space:
+
+`https://huggingface.co/spaces/arjuncodess/men2-predictor`
+
+- **Gradio app:** Use the web UI to enter patient features and view the predicted MEN2/MTC risk output.
+- **API:** You can call the Space programmatically. The easiest way is `gradio_client`:
+
+```python
+from gradio_client import Client
+
+client = Client("arjuncodess/men2-predictor")
+client.view_api()
+# Then call the printed endpoint with client.predict(...)
+```
+
+**Disclaimer for the Space:** The hosted app/API is provided as-is for demonstration only. It may change without notice, and it must not be used for real-world clinical decisions.
 
 ### Model comparison with patient data
 
