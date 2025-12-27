@@ -254,8 +254,14 @@ The pipeline computes SHAP attributions \cite{lundberg2017shap} for supported mo
 
 \begin{figure}[ht]
 \centering
-\includegraphics[width=\linewidth]{../charts/shap/lightgbm/expanded_beeswarm.png}
-\caption{SHAP summary (beeswarm) for LightGBM on the expanded dataset.}
+\includegraphics[width=\linewidth]{../charts/shap/lightgbm/expanded_bar.png}
+\caption{SHAP global feature importance (mean absolute SHAP) for LightGBM on the expanded dataset.}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\linewidth]{../charts/lime/lightgbm/lime_global_importance.png}
+\caption{LIME global feature importance (mean absolute LIME weight) computed over representative explained cases for LightGBM.}
 \end{figure}
 
 \FloatBarrier
@@ -265,7 +271,9 @@ MEN2 Predictor presents a reproducible machine learning workflow for rare-diseas
 
 In an expanded case-control setting (n = 1{,}069 total records) using variant-matched synthetic controls and SMOTE applied to training folds, LightGBM achieved the highest accuracy (96.73\%) with 96.08\% recall. These results suggest that augmentation can improve discrimination for triage-style use, but recall volatility remains a critical risk in safety-sensitive workflows where missed cancers are unacceptable.
 
-Key limitations include the modest cohort size, heterogeneity across published sources, and biomarker missingness requiring imputation. Prospective external validation with standardized biomarker collection, explicit calibration and threshold selection, and subgroup analyses across MEN2 subtypes and RET risk strata are required before clinical deployment. Overall, MEN2 Predictor is best positioned as a screening and prioritization aid that complements, rather than replaces, genetic testing and guideline-based care.
+Key limitations include the cohort size, heterogeneity across published sources, and biomarker missingness requiring imputation. Prospective external validation is required before clinical deployment. Overall, MEN2 Predictor is best positioned as a screening and prioritization aid that complements, rather than replaces, genetic testing and guideline-based care.
+
+\textbf{Clinical disclaimer:} This work and the accompanying software are provided for research and educational purposes only. They are not medical advice and must not be used as a diagnostic tool or as a substitute for clinician judgment, guideline-based evaluation, and confirmatory genetic testing.
 
 \FloatBarrier
 
@@ -295,5 +303,7 @@ We acknowledge the open-source community and software ecosystem that supported t
 \input{supplementary_tables.tex}
 
 Supplementary figures are available in the project GitHub repository at \url{https://github.com/arjuncodess/men2-predictor} under \texttt{charts/}.
+
+An interactive demonstration (Gradio web app) and a programmatic API are also available via the Hugging Face Space at \url{https://huggingface.co/spaces/arjuncodess/men2-predictor}. The hosted Space is provided as-is for demonstration only and must not be used for clinical decision-making.
 
 \end{document}
