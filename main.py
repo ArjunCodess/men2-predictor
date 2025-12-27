@@ -203,11 +203,10 @@ def run_all_models(dataset_type='expanded'):
 
     # Create results directory for logs
     os.makedirs('results/logs', exist_ok=True)
-    if dataset_type == 'both':
-        summary_path = Path("results") / "explainability_summary.txt"
-        summary_path.parent.mkdir(parents=True, exist_ok=True)
-        with open(summary_path, "w", encoding="utf-8") as f:
-            f.write("")
+    summary_path = Path("results") / "explainability_summary.txt"
+    summary_path.parent.mkdir(parents=True, exist_ok=True)
+    with open(summary_path, "w", encoding="utf-8") as f:
+        f.write("")
 
     # Run data preparation steps once (common to all models)
     print("\n" + "=" * 80)
@@ -270,14 +269,10 @@ def run_all_models(dataset_type='expanded'):
 
             # Test model - save log to file
             test_log = f"results/logs/{model_type}_{dt}_testing.log"
-            test_args = [f"--m={model_type}"]
-            if dataset_type == 'both':
-                test_args.append("--explain")
-
             test_success = run_module(
                 "src/test_model.py",
                 f"Model Testing - Evaluate {model_desc} performance on test set ({dataset_label})",
-                test_args,
+                [f"--m={model_type}"],
                 log_file=test_log,
                 dataset_type=dt
             )
@@ -301,6 +296,7 @@ def run_all_models(dataset_type='expanded'):
                 print(f"  - Training log: {train_log}")
                 print(f"  - Testing log: {test_log}")
                 print(f"  - Metrics: Accuracy={metrics['accuracy']:.4f}, F1={metrics['f1_score']:.4f}, ROC-AUC={metrics['roc_auc']:.4f}")
+                print(f"  - Explainability outputs: results/shap/{model_type}, results/lime/{model_type}, charts/shap/{model_type}, charts/lime/{model_type}")
             else:
                 print(f"\n{model_desc} on {dataset_label} encountered issues. Check logs for details.")
 
@@ -340,6 +336,12 @@ def run_all_models(dataset_type='expanded'):
     print("- results/logs/lightgbm_testing.log")
     print("- results/logs/svm_training.log")
     print("- results/logs/svm_testing.log")
+    print("\nExplainability outputs:")
+    print("- results/shap/<model>/*")
+    print("- charts/shap/<model>/*")
+    print("- results/lime/<model>/*")
+    print("- charts/lime/<model>/*")
+    print("- results/explainability_summary.txt")
     print()
 
     return True
@@ -408,6 +410,13 @@ def main(model_type='logistic', dataset_type='expanded'):
     print()
     print("The trained model can now be used for multi-variant RET mutation")
     print("and MEN2 syndrome risk prediction in new patients.")
+    print()
+    print("Explainability outputs:")
+    print(f"- results/shap/{model_type}")
+    print(f"- charts/shap/{model_type}")
+    print(f"- results/lime/{model_type}")
+    print(f"- charts/lime/{model_type}")
+    print("- results/explainability_summary.txt")
 
     return True
 
