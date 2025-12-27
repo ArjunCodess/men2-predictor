@@ -1,0 +1,8 @@
+LIME vs SHAP CONSISTENCY SUMMARY
+==================================================
+Model: lightgbm
+Dataset: original
+Samples compared: 10
+Agree: 10
+Partial: 0
+Disagree: 0

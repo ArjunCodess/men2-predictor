@@ -1,0 +1,8 @@
+LIME vs SHAP CONSISTENCY SUMMARY
+==================================================
+Model: xgboost
+Dataset: original
+Samples compared: 10
+Agree: 9
+Partial: 1
+Disagree: 0

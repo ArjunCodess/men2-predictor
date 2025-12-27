@@ -1,0 +1,8 @@
+LIME vs SHAP CONSISTENCY SUMMARY
+==================================================
+Model: random_forest
+Dataset: original
+Samples compared: 10
+Agree: 7
+Partial: 3
+Disagree: 0
