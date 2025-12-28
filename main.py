@@ -72,8 +72,10 @@ def extract_model_metrics(model_type, dataset_type='expanded'):
                 # Split on colon first, then remove CI portion if present
                 if 'Accuracy:' in line:
                     metrics['accuracy'] = float(line.split(':')[1].split('(')[0].strip())
-                elif 'Precision:' in line:
+                elif line.strip().startswith('Precision:'):
                     metrics['precision'] = float(line.split(':')[1].split('(')[0].strip())
+                elif 'Average Precision:' in line:
+                    metrics['avg_precision'] = float(line.split(':')[1].strip())
                 elif 'Recall:' in line:
                     metrics['recall'] = float(line.split(':')[1].split('(')[0].strip())
                 elif 'F1 Score:' in line:
@@ -99,8 +101,8 @@ def print_comparison_table(results):
     print("=" * 120)
 
     # Define table headers
-    headers = ["Model", "Dataset", "Accuracy", "Precision", "Recall", "F1 Score", "ROC AUC", "Status"]
-    col_widths = [20, 15, 12, 12, 12, 12, 12, 15]
+    headers = ["Model", "Dataset", "Accuracy", "Precision", "Avg Precision", "Recall", "F1 Score", "ROC AUC", "Status"]
+    col_widths = [21, 15, 12, 12, 17, 12, 12, 12, 15]
 
     # Print header
     header_row = "".join(f"{h:<{w}}" for h, w in zip(headers, col_widths))
@@ -137,13 +139,14 @@ def print_comparison_table(results):
                 dataset_label,
                 f"{data['metrics'].get('accuracy', 0):.4f}",
                 f"{data['metrics'].get('precision', 0):.4f}",
+                f"{data['metrics'].get('avg_precision', 0):.4f}",
                 f"{data['metrics'].get('recall', 0):.4f}",
                 f"{data['metrics'].get('f1_score', 0):.4f}",
                 f"{data['metrics'].get('roc_auc', 0):.4f}",
                 status
             ]
         else:
-            row = [model_name, dataset_label, "N/A", "N/A", "N/A", "N/A", "N/A", status]
+            row = [model_name, dataset_label, "N/A", "N/A", "N/A", "N/A", "N/A", "N/A", status]
 
         row_str = "".join(f"{str(val):<{w}}" for val, w in zip(row, col_widths))
         print(row_str)
