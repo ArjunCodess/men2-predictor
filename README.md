@@ -38,16 +38,16 @@ Synthetic controls + SMOTE expand the training pool to 1,069 records (case-contr
 
 | Model                | Dataset      | Accuracy   | Precision  | Avg Precision   | Recall     | F1 Score  | ROC AUC  | Status                        |
 | ---------------------- | ------------ | ---------- | ---------- | --------------- | ---------- | ---------- | -------- | ----------------------------- |
-| **Logistic Regression**| Original     | 70.97%     | 62.50%     | 93.09%          | **100%**   | 76.92%     | 0.9375   | Use original for zero-miss screening |
-| **Logistic Regression**| Expanded     | 79.44%     | 53.76%     | 95.53%          | **98.0%**  | 69.44%     | 0.9833   |                               |
-| **Random Forest**      | Original     | 83.87%     | 77.78%     | 86.31%          | **93.3%**  | 84.85%     | 0.8708   | Expanded set boosts accuracy   |
-| **Random Forest**      | Expanded     | 93.93%     | 81.67%     | 97.26%          | **96.1%**  | 88.29%     | 0.9854   |                               |
-| **LightGBM**           | Original     | 83.87%     | 77.78%     | 85.58%          | **93.3%**  | 84.85%     | 0.8729   | Highest accuracy in expanded   |
-| **LightGBM**           | Expanded     | 96.73%     | 90.74%     | 98.21%          | **96.1%**  | 93.33%     | 0.9924   |                               |
-| **XGBoost**            | Original     | 74.19%     | 65.22%     | 86.08%          | **100%**   | 78.95%     | 0.8667   | Expanded boosters stay high-recall |
-| **XGBoost**            | Expanded     | 88.32%     | 67.57%     | 97.19%          | **98.0%**  | 80.00%     | 0.9881   |                               |
-| **SVM (Linear)**       | Original     | 54.84%     | 51.72%     | 89.91%          | **100%**   | 68.18%     | 0.9042   | Exploratory only              |
-| **SVM (Linear)**       | Expanded     | 43.93%     | 29.82%     | 81.74%          | **100%**   | 45.95%     | 0.9284   |                               |
+| **Logistic Regression**| Original     | 70.97%     | 62.50%     | 93.09%          | **100%**   | 76.92%     | 0.9375   | ✅ **CLINICAL READY**: Zero-miss screening - catches every documented cancer |
+| **Logistic Regression**| Expanded     | 79.44%     | 53.76%     | 95.53%          | **98.0%**  | 69.44%     | 0.9833   | ⚠️ **CAUTION**: 2% recall drop - not recommended for clinical use |
+| **Random Forest**      | Original     | 83.87%     | 77.78%     | 86.31%          | **93.3%**  | 84.85%     | 0.8708   | 🔬 **RESEARCH**: Good balance but misses ~7% of cancers |
+| **Random Forest**      | Expanded     | 93.93%     | 81.67%     | 97.26%          | **96.1%**  | 88.29%     | 0.9854   | 🔬 **RESEARCH**: High accuracy but still misses ~4% of cancers |
+| **LightGBM**           | Original     | 83.87%     | 77.78%     | 85.58%          | **93.3%**  | 84.85%     | 0.8729   | 🔬 **RESEARCH**: Same as RF original - misses ~7% of cancers |
+| **LightGBM**           | Expanded     | **96.73%** | **90.74%** | **98.21%**      | **96.1%**  | **93.33%** | **0.9924** | 🔬 **RESEARCH**: Highest accuracy (96.7%) - best for triage, misses ~4% |
+| **XGBoost**            | Original     | 74.19%     | 65.22%     | 86.08%          | **100%**   | 78.95%     | 0.8667   | ✅ **CLINICAL READY**: Zero-miss screening alternative to logistic |
+| **XGBoost**            | Expanded     | 88.32%     | 67.57%     | 97.19%          | **98.0%**  | 80.00%     | 0.9881   | ⚠️ **CAUTION**: 2% recall drop - not recommended for clinical use |
+| **SVM (Linear)**       | Original     | 54.84%     | 51.72%     | 89.91%          | **100%**   | 68.18%     | 0.9042   | 🔬 **EXPLORATORY**: Zero-miss but very low accuracy - research only |
+| **SVM (Linear)**       | Expanded     | 43.93%     | 29.82%     | 81.74%          | **100%**   | 45.95%     | 0.9284   | 🔬 **EXPLORATORY**: Maintains zero-miss but accuracy drops to 44% |
 
 ### Clinical Interpretation
 
