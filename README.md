@@ -32,18 +32,24 @@ The paper-only dataset now contains **152 confirmed carriers** across 24 variant
 
 Synthetic controls + SMOTE expand the training pool to 1,069 records (case-control dataset). The ctDNA cohort contributes 16 paired calcitonin/CEA observations. Expanded models improve accuracy for triage use; the original logistic model remains the zero-miss option for screening.
 
-| Model                   | Original Dataset (Acc / Recall) | Expanded Dataset (Acc / Recall) | Status |
-| ----------------------- | ------------------------------- | -------------------------------- | ------ |
-| **Logistic Regression** | 70.97% / **100%**               | 79.44% / **98.0%**               | Use original for zero-miss screening |
-| **Random Forest**       | 83.87% / **93.3%**              | 93.93% / **96.1%**               | Expanded set boosts accuracy |
-| **LightGBM**            | 83.87% / **93.3%**              | 96.73% / **96.1%**               | Highest accuracy in expanded |
-| **XGBoost**             | 74.19% / **100%**               | 88.32% / **98.0%**               | Expanded boosters stay high-recall |
-| **SVM (Linear)**        | 54.84% / **100%**               | 43.93% / **100%**                | Exploratory only
+| Model                | Dataset      | Accuracy   | Precision  | Avg Precision   | Recall     | F1 Score  | ROC AUC  | Status                        |
+| ---------------------- | ------------ | ---------- | ---------- | --------------- | ---------- | ---------- | -------- | ----------------------------- |
+| **Logistic Regression**| Original     | 70.97%     | 62.50%     | 93.09%          | **100%**   | 76.92%     | 0.9375   | Use original for zero-miss screening |
+| **Logistic Regression**| Expanded     | 79.44%     | 53.76%     | 95.53%          | **98.0%**  | 69.44%     | 0.9833   |                               |
+| **Random Forest**      | Original     | 83.87%     | 77.78%     | 86.31%          | **93.3%**  | 84.85%     | 0.8708   | Expanded set boosts accuracy   |
+| **Random Forest**      | Expanded     | 93.93%     | 81.67%     | 97.26%          | **96.1%**  | 88.29%     | 0.9854   |                               |
+| **LightGBM**           | Original     | 83.87%     | 77.78%     | 85.58%          | **93.3%**  | 84.85%     | 0.8729   | Highest accuracy in expanded   |
+| **LightGBM**           | Expanded     | 96.73%     | 90.74%     | 98.21%          | **96.1%**  | 93.33%     | 0.9924   |                               |
+| **XGBoost**            | Original     | 74.19%     | 65.22%     | 86.08%          | **100%**   | 78.95%     | 0.8667   | Expanded boosters stay high-recall |
+| **XGBoost**            | Expanded     | 88.32%     | 67.57%     | 97.19%          | **98.0%**  | 80.00%     | 0.9881   |                               |
+| **SVM (Linear)**       | Original     | 54.84%     | 51.72%     | 89.91%          | **100%**   | 68.18%     | 0.9042   | Exploratory only              |
+| **SVM (Linear)**       | Expanded     | 43.93%     | 29.82%     | 81.74%          | **100%**   | 45.95%     | 0.9284   |                               |
 
 ### Clinical Interpretation
 
 - **Zero-miss option:** Logistic Regression, XGBoost, and SVM on the paper-only cohort maintain **100% sensitivity** (0/15 cancers missed in hold-out testing across all 20 studies).
-- **Ensemble shifts:** Expanded ensembles raise accuracy into the mid- to high-90% range.
+- **Precision metrics:** Standard precision shows model reliability when predicting positive cases (62.5% for original logistic regression); average precision provides threshold-independent quality measure (93.1% for original logistic regression).
+- **Ensemble shifts:** Expanded ensembles raise accuracy into the mid- to high-90% range while maintaining high sensitivity.
 - **Model selection:** Deploy the original logistic model for screening workflows; treat expanded gradient boosters as high-accuracy triage models for ctDNA-positive or metastatic follow-up cases once validated prospectively.
 
 ### Statistical Tests on Recall Drops
