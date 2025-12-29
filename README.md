@@ -168,7 +168,7 @@ This project makes three critical contributions to medical machine learning:
 **Immediate (0-3 months)**:
 
 - ✅ Add SHAP explainability to show models learned real biology, not artifacts
-- Implement uncertainty quantification (confidence intervals on predictions)
+- ✅ Implement uncertainty quantification (bootstrap confidence intervals on all metrics)
 - Create clinical decision support interface with deployment guidelines
 
 **Short-term (3-6 months)**:
@@ -422,7 +422,8 @@ The [create_datasets.py](src/create_datasets.py) script:
 3. **data_expansion.py:** Produces variant-matched synthetic control samples to improve model balance.
 4. **train_model.py:** Trains models with variant features, cross-validation, SMOTE balancing, and threshold optimization.
 5. **test_model.py:** Evaluates the model on test data with variant-specific risk stratification, comprehensive metrics, and automatic comparison of all 5 models with complete patient data.
-6. **Artifact summary:** Includes `ret_multivariant_training_data.csv`, `ret_multivariant_expanded_training_data.csv`, `ret_multivariant_case_control_dataset.csv`, `model.pkl`, and `model_comparison_detailed_results.txt`.
+6. **calculate_ci.py:** Calculates 95% bootstrap confidence intervals for all performance metrics (automatically runs for all models).
+7. **Artifact summary:** Includes `ret_multivariant_training_data.csv`, `ret_multivariant_expanded_training_data.csv`, `ret_multivariant_case_control_dataset.csv`, `model.pkl`, `model_comparison_detailed_results.txt`, and confidence interval reports.
 
 **Advanced features:**
 
@@ -432,7 +433,7 @@ The [create_datasets.py](src/create_datasets.py) script:
 - **Variant-Aware Modeling:** One-hot encoding of 22 RET variants + risk level stratification
 - **Constant Feature Removal:** Automatic detection and removal of non-informative features
 - **Risk Stratification:** 4-tier system for clinical decision support instead of binary classification
-- **Comprehensive Metrics:** ROC-AUC, F1-Score, Average Precision Score, ROC curves, confusion matrices, and bootstrap confidence intervals
+- **Comprehensive Metrics:** ROC-AUC, F1-Score, Average Precision Score, ROC curves, confusion matrices, and automatic 95% bootstrap confidence intervals
 - **Patient-Level Transparency:** See exactly which patients each model predicted correctly/incorrectly with full clinical context
 
 **Typical features used:**
@@ -524,6 +525,10 @@ Choose which dataset to use:
 - `e` or `expanded`: Expanded with synthetic controls + SMOTE (default)
 - `b` or `both`: Run on both datasets for comparison
 
+### Performance Options (`--no-ci`)
+
+- `--no-ci`: Skip confidence interval calculations for faster execution (confidence intervals run automatically by default)
+
 ### Examples
 
 ```sh
@@ -538,6 +543,9 @@ python main.py --m=svm --d=original
 
 # Compare all models on original dataset (identify best performer)
 python main.py --m=all --d=original
+
+# Fast execution without confidence intervals
+python main.py --m=all --d=original --no-ci
 
 # Demonstrate recall drop from synthetic augmentation (research use)
 python main.py --m=random_forest --d=both
@@ -655,7 +663,7 @@ Patients with source_id (e.g., "33_control", "mtc_s0_control") are synthetic con
 
 - `results/{model_type}_{dataset_type}_test_results.txt` - individual model performance summaries with embedded 95% confidence intervals
 - `results/model_comparison_{dataset_type}_detailed_results.txt` - comprehensive comparison of all models with complete patient data
-- `results/{model_type}_{dataset_type}_confidence_intervals.txt` - standalone bootstrap statistics exported during training (e.g., `results/logistic_original_confidence_intervals.txt`)
+- `results/{model_type}_{dataset_type}_confidence_intervals.txt` - standalone bootstrap confidence intervals (automatically calculated for all models)
 - `charts/roc_curves/{model_type}_{dataset_type}.png` - ROC curves with area under the curve and optimal-threshold marker
 - `charts/confusion_matrices/{model_type}_{dataset_type}.png` - paired raw-count and normalized confusion matrices
 - `charts/correlation_matrices/{model_type}_{dataset_type}.png` - feature correlation matrix for LightGBM (expanded dataset)
@@ -664,6 +672,7 @@ Patients with source_id (e.g., "33_control", "mtc_s0_control") are synthetic con
 
 - `results/logs/{model_type}_{dataset_type}_training.log`
 - `results/logs/{model_type}_{dataset_type}_testing.log`
+- `results/logs/{model_type}_{dataset_type}_confidence_intervals.log`
 
 ## Technical Details
 
@@ -713,6 +722,7 @@ Patients with source_id (e.g., "33_control", "mtc_s0_control") are synthetic con
 3. **data_expansion.py:** Produces variant-matched synthetic control samples (optional)
 4. **train_model.py:** Trains models with cross-validation, SMOTE balancing, threshold optimization
 5. **test_model.py:** Evaluates models with comprehensive metrics, risk stratification, and automatic comparison of all 5 models with complete patient data
+6. **calculate_ci.py:** Calculates 95% bootstrap confidence intervals for all performance metrics (automatically runs)
 
 </details>
 
@@ -739,7 +749,7 @@ Patients with source_id (e.g., "33_control", "mtc_s0_control") are synthetic con
 - Accuracy, Precision, Recall, F1-Score
 - ROC-AUC, Average Precision Score, ROC curve visualizations
 - Confusion matrices (raw and normalized)
-- Bootstrap 95% confidence intervals on key metrics
+- Automatic 95% bootstrap confidence intervals on all metrics (1,000 iterations)
 - Risk-stratified performance
 
 </details>
