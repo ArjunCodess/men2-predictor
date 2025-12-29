@@ -20,49 +20,57 @@ from xgboost_model import XGBoostModel
 from svm_model import SVMModel
 
 def calculate_bootstrap_ci(model, X, y, n_iterations=1000, confidence=0.95):
-    """Calculate bootstrap confidence intervals for model performance"""
+    """Calculate bootstrap confidence intervals for model performance metrics.
+
+    This method uses bootstrap resampling of the test set to estimate the variability
+    in performance metrics due to finite sample size. Note: This provides confidence
+    intervals around the point estimates but does not account for model training variability.
+    """
     from sklearn.utils import resample
-    from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score
-    
+    from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score, average_precision_score
+
     scores = {
         'accuracy': [],
         'precision': [],
         'recall': [],
         'f1': [],
-        'roc_auc': []
+        'roc_auc': [],
+        'avg_precision': []
     }
-    
-    print(f"\nCalculating {confidence*100:.0f}% confidence intervals (bootstrap with {n_iterations} iterations)...")
-    
+
+    print(f"\nCalculating {confidence*100:.0f}% confidence intervals (bootstrap resampling with {n_iterations} iterations)...")
+
     for i in range(n_iterations):
-        # Resample with replacement
+        # Resample test set with replacement to estimate metric variability
         X_boot, y_boot = resample(X, y, random_state=i)
-        
-        # Get predictions
+
+        # Get predictions on bootstrap sample
         y_pred = model.model.predict(X_boot)
         y_pred_proba = model.model.predict_proba(X_boot)[:, 1]
-        
-        # Calculate metrics
+
+        # Calculate all performance metrics
         scores['accuracy'].append(accuracy_score(y_boot, y_pred))
         scores['precision'].append(precision_score(y_boot, y_pred, zero_division=0))
         scores['recall'].append(recall_score(y_boot, y_pred, zero_division=0))
         scores['f1'].append(f1_score(y_boot, y_pred, zero_division=0))
         scores['roc_auc'].append(roc_auc_score(y_boot, y_pred_proba))
-    
-    # Calculate confidence intervals
+        scores['avg_precision'].append(average_precision_score(y_boot, y_pred_proba))
+
+    # Calculate confidence intervals using percentile method
     alpha = 1 - confidence
     lower_percentile = (alpha / 2) * 100
     upper_percentile = (1 - alpha / 2) * 100
-    
+
     ci_results = {}
     for metric, values in scores.items():
         ci_results[metric] = {
             'mean': np.mean(values),
-            'std': np.std(values),
+            'std': np.std(values, ddof=1),  # Use sample standard deviation
+            'median': np.median(values),
             'ci_lower': np.percentile(values, lower_percentile),
             'ci_upper': np.percentile(values, upper_percentile)
         }
-    
+
     return ci_results
 
 def load_model_and_test_data(model_type='logistic', dataset_type='expanded'):
@@ -217,28 +225,28 @@ def print_test_metrics(model, X_test, y_test, model_type='logistic', dataset_typ
     print("\n" + "=" * 60)
     print("CONFIDENCE INTERVALS (Bootstrap Method)")
     print("=" * 60)
-    
+
     ci_results = calculate_bootstrap_ci(model, X_test, y_test, n_iterations=1000, confidence=0.95)
-    
-    print(f"\n{'Metric':<15} {'Mean':<10} {'95% CI':<25}")
-    print("-" * 60)
+
+    print(f"\n{'Metric':<15} {'Mean':<10} {'Std Dev':<10} {'Median':<10} {'95% CI':<25}")
+    print("-" * 70)
     for metric, stats in ci_results.items():
         ci_str = f"[{stats['ci_lower']:.4f}, {stats['ci_upper']:.4f}]"
-        print(f"{metric.upper():<15} {stats['mean']:<10.4f} {ci_str:<25}")
-    print("=" * 60)
+        print(f"{metric.upper():<15} {stats['mean']:<10.4f} {stats['std']:<10.4f} {stats['median']:<10.4f} {ci_str:<25}")
+    print("=" * 70)
 
     # Update results file to include CI
     dataset_label = "EXPANDED" if dataset_type == 'expanded' else "ORIGINAL"
     with open(results_file, 'w') as f:
         f.write(f"{model.model_name.upper()} TEST RESULTS ({dataset_label})\n")
-        f.write("=" * 50 + "\n")
+        f.write("=" * 60 + "\n")
         f.write(f"Accuracy: {metrics['accuracy']:.4f} (95% CI: [{ci_results['accuracy']['ci_lower']:.4f}, {ci_results['accuracy']['ci_upper']:.4f}])\n")
         f.write(f"Precision: {precision:.4f} (95% CI: [{ci_results['precision']['ci_lower']:.4f}, {ci_results['precision']['ci_upper']:.4f}])\n")
         f.write(f"Recall: {recall:.4f} (95% CI: [{ci_results['recall']['ci_lower']:.4f}, {ci_results['recall']['ci_upper']:.4f}])\n")
         f.write(f"F1 Score: {metrics['f1']:.4f} (95% CI: [{ci_results['f1']['ci_lower']:.4f}, {ci_results['f1']['ci_upper']:.4f}])\n")
         f.write(f"ROC AUC: {metrics['roc_auc']:.4f} (95% CI: [{ci_results['roc_auc']['ci_lower']:.4f}, {ci_results['roc_auc']['ci_upper']:.4f}])\n")
-        f.write(f"Average Precision: {metrics['average_precision']:.4f}\n")
-        f.write("=" * 50 + "\n")
+        f.write(f"Average Precision: {metrics['average_precision']:.4f} (95% CI: [{ci_results['avg_precision']['ci_lower']:.4f}, {ci_results['avg_precision']['ci_upper']:.4f}])\n")
+        f.write("=" * 60 + "\n")
         f.write(f"\nBootstrap method: 1000 iterations, 95% confidence level\n")
 
     print(f"\nResults saved to {results_file}")
