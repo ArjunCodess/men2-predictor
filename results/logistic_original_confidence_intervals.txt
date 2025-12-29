@@ -1,13 +1,20 @@
 LOGISTIC_REGRESSION - 95% CONFIDENCE INTERVALS (ORIGINAL)
-============================================================
+======================================================================
 Method: Bootstrap resampling (n=1000 iterations)
+Confidence Level: 95%
+CI Method: Percentile bootstrap
 Test set size: 31 patients
 
-Metric          Mean       Std Dev    95% CI                   
-------------------------------------------------------------
-ACCURACY        0.8399     0.0675     [0.6774, 0.9677]         
-PRECISION       0.8603     0.0904     [0.6667, 1.0000]         
-RECALL          0.8029     0.1044     [0.5714, 1.0000]         
-F1              0.8258     0.0784     [0.6667, 0.9600]         
-ROC_AUC         0.9378     0.0434     [0.8333, 1.0000]         
-============================================================
+Metric          Mean       Std Dev    Median     95% CI                   
+----------------------------------------------------------------------
+ACCURACY        0.8399     0.0676     0.8387     [0.6774, 0.9677]         
+PRECISION       0.8603     0.0905     0.8667     [0.6667, 1.0000]         
+RECALL          0.8029     0.1044     0.8125     [0.5714, 1.0000]         
+F1              0.8258     0.0784     0.8333     [0.6667, 0.9600]         
+ROC_AUC         0.9378     0.0434     0.9455     [0.8333, 1.0000]         
+AVG_PRECISION   0.9339     0.0504     0.9436     [0.8005, 1.0000]         
+======================================================================
+Notes:
+- Std Dev: Bootstrap standard deviation (sample)
+- CI: Percentile-based confidence interval
+- All metrics calculated on test set using bootstrap resampling

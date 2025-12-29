@@ -6,8 +6,7 @@ Patient study_7 (sample 5) - predicted risk 0.661
   1. To reduce risk, patient would need to bring calcitonin into normal range (calcitonin_elevated: 1 -> 0)
 
 Patient study_6 (sample 12) - predicted risk 0.593
-  1. To reduce risk, patient would need to reduce calcitonin by 623.59 pg/mL (from 1678.41 to 1054.82)
-  2. To reduce risk, patient would need to bring calcitonin into normal range (calcitonin_elevated: 1 -> 0)
+  1. To reduce risk, patient would need to bring calcitonin into normal range (calcitonin_elevated: 1 -> 0)
 
 Patient study_5 (sample 15) - predicted risk 0.683
   1. To reduce risk, patient would need to bring calcitonin into normal range (calcitonin_elevated: 1 -> 0)

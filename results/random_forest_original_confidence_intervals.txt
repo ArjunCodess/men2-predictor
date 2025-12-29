@@ -1,13 +1,20 @@
 RANDOM_FOREST - 95% CONFIDENCE INTERVALS (ORIGINAL)
-============================================================
+======================================================================
 Method: Bootstrap resampling (n=1000 iterations)
+Confidence Level: 95%
+CI Method: Percentile bootstrap
 Test set size: 31 patients
 
-Metric          Mean       Std Dev    95% CI                   
-------------------------------------------------------------
-ACCURACY        0.8423     0.0649     [0.7097, 0.9677]         
-PRECISION       0.7830     0.0960     [0.5882, 0.9500]         
-RECALL          0.9361     0.0630     [0.7997, 1.0000]         
-F1              0.8489     0.0667     [0.7097, 0.9655]         
-ROC_AUC         0.8732     0.0647     [0.7208, 0.9744]         
-============================================================
+Metric          Mean       Std Dev    Median     95% CI                   
+----------------------------------------------------------------------
+ACCURACY        0.8423     0.0649     0.8387     [0.7097, 0.9677]         
+PRECISION       0.7830     0.0960     0.7895     [0.5882, 0.9500]         
+RECALL          0.9361     0.0630     0.9375     [0.7997, 1.0000]         
+F1              0.8489     0.0668     0.8571     [0.7097, 0.9655]         
+ROC_AUC         0.8732     0.0647     0.8824     [0.7208, 0.9744]         
+AVG_PRECISION   0.8699     0.0704     0.8813     [0.7120, 0.9786]         
+======================================================================
+Notes:
+- Std Dev: Bootstrap standard deviation (sample)
+- CI: Percentile-based confidence interval
+- All metrics calculated on test set using bootstrap resampling
