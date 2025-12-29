@@ -56,11 +56,6 @@ Dataset: expanded
 LIME explained: 10 samples
 Correct: 5, Misclassified: 5
 LIME vs SHAP agreements: 2, partial: 8, disagree: 0
-
-Counterfactual highlights:
-Patient study_1 (sample 4) - predicted risk 0.267
-  1. To reduce risk, patient would need to bring calcitonin into normal range (calcitonin_elevated: 1 -> 0)
-
 ============================================================
 
 EXPLAINABILITY SUMMARY
@@ -122,23 +117,5 @@ Model: svm
 Dataset: original
 LIME explained: 10 samples
 Correct: 5, Misclassified: 5
-============================================================
-
-EXPLAINABILITY SUMMARY
-============================================================
-Model: logistic
-Dataset: original
-LIME explained: 10 samples
-Correct: 5, Misclassified: 5
-LIME vs SHAP agreements: 0, partial: 6, disagree: 4
-
-Counterfactual highlights:
-Patient study_18 (sample 2) - predicted risk 0.740
-  1. To reduce risk, patient would need to bring calcitonin into normal range (calcitonin_elevated: 1 -> 0)
-  2. To reduce risk, patient would need to resolve thyroid nodules (nodules_present: 1 -> 0)
-
-Patient study_9 (sample 6) - predicted risk 0.570
-  1. To reduce risk, patient would need to bring calcitonin into normal range (calcitonin_elevated: 1 -> 0)
-
 ============================================================
 
