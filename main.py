@@ -69,19 +69,44 @@ def extract_model_metrics(model_type, dataset_type='expanded'):
 
             # Extract key metrics using simple parsing
             for line in content.split('\n'):
-                # Split on colon first, then remove CI portion if present
+                # Split on colon first, then extract the main value before any parentheses
                 if 'Accuracy:' in line:
-                    metrics['accuracy'] = float(line.split(':')[1].split('(')[0].strip())
+                    value_str = line.split(':')[1].strip()
+                    # Extract the numeric value before any parentheses
+                    if '(' in value_str:
+                        metrics['accuracy'] = float(value_str.split('(')[0].strip())
+                    else:
+                        metrics['accuracy'] = float(value_str)
                 elif line.strip().startswith('Precision:'):
-                    metrics['precision'] = float(line.split(':')[1].split('(')[0].strip())
+                    value_str = line.split(':')[1].strip()
+                    if '(' in value_str:
+                        metrics['precision'] = float(value_str.split('(')[0].strip())
+                    else:
+                        metrics['precision'] = float(value_str)
                 elif 'Average Precision:' in line:
-                    metrics['avg_precision'] = float(line.split(':')[1].strip())
+                    value_str = line.split(':')[1].strip()
+                    if '(' in value_str:
+                        metrics['avg_precision'] = float(value_str.split('(')[0].strip())
+                    else:
+                        metrics['avg_precision'] = float(value_str)
                 elif 'Recall:' in line:
-                    metrics['recall'] = float(line.split(':')[1].split('(')[0].strip())
+                    value_str = line.split(':')[1].strip()
+                    if '(' in value_str:
+                        metrics['recall'] = float(value_str.split('(')[0].strip())
+                    else:
+                        metrics['recall'] = float(value_str)
                 elif 'F1 Score:' in line:
-                    metrics['f1_score'] = float(line.split(':')[1].split('(')[0].strip())
+                    value_str = line.split(':')[1].strip()
+                    if '(' in value_str:
+                        metrics['f1_score'] = float(value_str.split('(')[0].strip())
+                    else:
+                        metrics['f1_score'] = float(value_str)
                 elif 'ROC AUC:' in line:
-                    metrics['roc_auc'] = float(line.split(':')[1].split('(')[0].strip())
+                    value_str = line.split(':')[1].strip()
+                    if '(' in value_str:
+                        metrics['roc_auc'] = float(value_str.split('(')[0].strip())
+                    else:
+                        metrics['roc_auc'] = float(value_str)
     except Exception as e:
         print(f"Warning: Could not extract metrics for {model_type}: {e}")
         return None
@@ -185,7 +210,7 @@ def print_comparison_table(results):
         print(f"\nBest performing model: {model_names[model_type]} on {dataset_label} (F1 Score: {best_f1:.4f})")
     print()
 
-def run_all_models(dataset_type='expanded'):
+def run_all_models(dataset_type='expanded', skip_ci=False):
     """Run all model types and compare results"""
     print("=" * 80)
     print("MULTI-VARIANT RET MUTATION - MEN2 SYNDROME PREDICTION PIPELINE")
@@ -283,13 +308,30 @@ def run_all_models(dataset_type='expanded'):
             if not test_success:
                 print(f"Testing failed! Check log: {test_log}")
 
+            # Calculate confidence intervals unless skipped
+            ci_success = True
+            if not skip_ci:
+                ci_log = f"results/logs/{model_type}_{dt}_confidence_intervals.log"
+                ci_success = run_module(
+                    "src/calculate_ci.py",
+                    f"Confidence Intervals - Calculate 95% bootstrap CIs for {model_desc} ({dataset_label})",
+                    [f"--m={model_type}", f"--iterations=1000"],
+                    log_file=ci_log,
+                    dataset_type=dt
+                )
+
+                if not ci_success:
+                    print(f"Confidence interval calculation failed! Check log: {ci_log}")
+            else:
+                print(f"Skipping confidence interval calculation for {model_desc} (--no-ci flag)")
+
             # Extract metrics
             metrics = extract_model_metrics(model_type, dt)
 
             # Store with combined key
             results_key = f"{model_type}_{dt}"
             results[results_key] = {
-                'success': train_success and test_success,
+                'success': train_success and test_success and ci_success,
                 'metrics': metrics
             }
 
@@ -314,31 +356,16 @@ def run_all_models(dataset_type='expanded'):
     print("- data/processed/ret_multivariant_training_data.csv")
     print("- data/processed/ret_multivariant_expanded_training_data.csv")
     print("- data/processed/ret_multivariant_case_control_dataset.csv")
-    print("- saved_models/logistic_regression_{expanded|original}_model.pkl")
-    print("- saved_models/random_forest_{expanded|original}_model.pkl")
-    print("- saved_models/xgboost_{expanded|original}_model.pkl")
-    print("- saved_models/lightgbm_{expanded|original}_model.pkl")
-    print("- saved_models/svm_{expanded|original}_model.pkl")
+    print("- saved_models/*_{expanded|original}_model.pkl")
     print("\nTest results:")
-    print("- results/logistic_test_results.txt")
-    print("- results/random_forest_test_results.txt")
-    print("- results/xgboost_test_results.txt")
-    print("- results/lightgbm_test_results.txt")
-    print("- results/svm_test_results.txt")
+    print("- results/*_test_results.txt")
     print("\nDetailed logs:")
     print("- results/logs/data_preparation_step1.log")
     print("- results/logs/data_preparation_step2.log")
     print("- results/logs/data_preparation_step3.log")
-    print("- results/logs/logistic_training.log")
-    print("- results/logs/logistic_testing.log")
-    print("- results/logs/random_forest_training.log")
-    print("- results/logs/random_forest_testing.log")
-    print("- results/logs/xgboost_training.log")
-    print("- results/logs/xgboost_testing.log")
-    print("- results/logs/lightgbm_training.log")
-    print("- results/logs/lightgbm_testing.log")
-    print("- results/logs/svm_training.log")
-    print("- results/logs/svm_testing.log")
+    print("- results/logs/*_training.log")
+    print("- results/logs/*_testing.log")
+    print("- results/logs/*_confidence_intervals.log")
     print("\nExplainability outputs:")
     print("- results/shap/<model>/*")
     print("- charts/shap/<model>/*")
@@ -349,7 +376,7 @@ def run_all_models(dataset_type='expanded'):
 
     return True
 
-def main(model_type='logistic', dataset_type='expanded'):
+def main(model_type='logistic', dataset_type='expanded', skip_ci=False):
     """main orchestration function"""
     print("=" * 80)
     print("MULTI-VARIANT RET MUTATION - MEN2 SYNDROME PREDICTION PIPELINE")
@@ -372,6 +399,8 @@ def main(model_type='logistic', dataset_type='expanded'):
 
     print(f"Selected model: {model_desc}")
     print(f"Dataset type: {dataset_label}")
+    if skip_ci:
+        print("Skipping confidence interval calculations (--no-ci flag)")
 
     # define pipeline steps
     pipeline_steps = [
@@ -381,6 +410,10 @@ def main(model_type='logistic', dataset_type='expanded'):
         ("src/train_model.py", f"Model Training - Train {model_desc} with cross-validation", [f"--m={model_type}"]),
         ("src/test_model.py", f"Model Testing - Evaluate {model_desc} performance on test set", [f"--m={model_type}"])
     ]
+
+    # Add confidence interval step unless skipped
+    if not skip_ci:
+        pipeline_steps.append(("src/calculate_ci.py", f"Confidence Intervals - Calculate 95% bootstrap CIs for {model_desc}", [f"--m={model_type}"]))
 
     # execute each step
     for module_name, description, args in pipeline_steps:
@@ -432,6 +465,8 @@ if __name__ == "__main__":
     parser.add_argument('--d', '--data', type=str, default='e',
                        choices=['e', 'o', 'b', 'expanded', 'original', 'both'],
                        help='dataset type: e/expanded (with controls + SMOTE - default), o/original (paper data only), b/both (run on both datasets)')
+    parser.add_argument('--no-ci', action='store_true',
+                       help='skip confidence interval calculations for faster execution')
 
     args = parser.parse_args()
 
@@ -445,7 +480,7 @@ if __name__ == "__main__":
 
     # Check if user wants to run all models
     if args.m in ['a', 'all']:
-        success = run_all_models(dataset_type)
+        success = run_all_models(dataset_type, skip_ci=args.no_ci)
     else:
         # determine model type
         if args.m in ['r', 'random_forest']:
@@ -459,7 +494,7 @@ if __name__ == "__main__":
         else:
             model_type = 'logistic'
 
-        success = main(model_type, dataset_type)
+        success = main(model_type, dataset_type, skip_ci=args.no_ci)
 
     stats_success = True
     if success and dataset_type == 'both':
