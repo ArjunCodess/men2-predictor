@@ -187,8 +187,6 @@ This project makes three critical contributions to medical machine learning:
 
 Clinical data extracted from twenty peer-reviewed research studies:
 
-Note: Two additional case reports (`study_17.json`, `study_20.json`) lack confirmed RET genotyping and are retained in `data/raw` for reference but excluded from cohort counts.
-
 | Study No. | Citation & Year | Key Variant(s) / Description | Patients (n) |
 |-----------|-----------------|------------------------------|--------------|
 | 1 | JCEM Case Reports (2025) | RET K666N carriers | 4 |
@@ -366,7 +364,7 @@ The dataset includes the following structured clinical and genetic features:
 
 The raw clinical data is stored in the [`data/raw`](data/raw) folder as structured json files:
 
-- **[study_1.json](data/raw/study_1.json) ... [study_22.json](data/raw/study_22.json)**: Individual study extracts covering 20 included cohorts (see Data Sources table)
+- **[study_1.json](data/raw/study_1.json) ... [study_20.json](data/raw/study_20.json)**: Individual study extracts covering 20 included cohorts (see Data Sources table)
 - **[literature_data.json](data/raw/literature_data.json)**: Aggregated statistics and meta-data
 - **[mutation_characteristics.json](data/raw/mutation_characteristics.json)**: RET variant characteristics
 
@@ -761,7 +759,7 @@ Patients with source_id (e.g., "33_control", "mtc_s0_control") are synthetic con
 
 - **Expanded Dataset:**
 
-- Original 152 patients + synthetic variant-matched controls (total rows: 1,069)
+- Original 152 patients + synthetic variant-matched controls (total rows: 216)
 - Literature-based synthetic cases for improved balance
 - SMOTE applied during training
 
