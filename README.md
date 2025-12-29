@@ -525,9 +525,6 @@ Choose which dataset to use:
 - `e` or `expanded`: Expanded with synthetic controls + SMOTE (default)
 - `b` or `both`: Run on both datasets for comparison
 
-### Performance Options (`--no-ci`)
-
-- `--no-ci`: Skip confidence interval calculations for faster execution (confidence intervals run automatically by default)
 
 ### Examples
 
@@ -543,9 +540,6 @@ python main.py --m=svm --d=original
 
 # Compare all models on original dataset (identify best performer)
 python main.py --m=all --d=original
-
-# Fast execution without confidence intervals
-python main.py --m=all --d=original --no-ci
 
 # Demonstrate recall drop from synthetic augmentation (research use)
 python main.py --m=random_forest --d=both

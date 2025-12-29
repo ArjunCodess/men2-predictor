@@ -210,7 +210,7 @@ def print_comparison_table(results):
         print(f"\nBest performing model: {model_names[model_type]} on {dataset_label} (F1 Score: {best_f1:.4f})")
     print()
 
-def run_all_models(dataset_type='expanded', skip_ci=False):
+def run_all_models(dataset_type='expanded'):
     """Run all model types and compare results"""
     print("=" * 80)
     print("MULTI-VARIANT RET MUTATION - MEN2 SYNDROME PREDICTION PIPELINE")
@@ -308,22 +308,18 @@ def run_all_models(dataset_type='expanded', skip_ci=False):
             if not test_success:
                 print(f"Testing failed! Check log: {test_log}")
 
-            # Calculate confidence intervals unless skipped
-            ci_success = True
-            if not skip_ci:
-                ci_log = f"results/logs/{model_type}_{dt}_confidence_intervals.log"
-                ci_success = run_module(
-                    "src/calculate_ci.py",
-                    f"Confidence Intervals - Calculate 95% bootstrap CIs for {model_desc} ({dataset_label})",
-                    [f"--m={model_type}", f"--iterations=1000"],
-                    log_file=ci_log,
-                    dataset_type=dt
-                )
+            # Calculate confidence intervals
+            ci_log = f"results/logs/{model_type}_{dt}_confidence_intervals.log"
+            ci_success = run_module(
+                "src/calculate_ci.py",
+                f"Confidence Intervals - Calculate 95% bootstrap CIs for {model_desc} ({dataset_label})",
+                [f"--m={model_type}", f"--iterations=1000"],
+                log_file=ci_log,
+                dataset_type=dt
+            )
 
-                if not ci_success:
-                    print(f"Confidence interval calculation failed! Check log: {ci_log}")
-            else:
-                print(f"Skipping confidence interval calculation for {model_desc} (--no-ci flag)")
+            if not ci_success:
+                print(f"Confidence interval calculation failed! Check log: {ci_log}")
 
             # Extract metrics
             metrics = extract_model_metrics(model_type, dt)
@@ -376,7 +372,7 @@ def run_all_models(dataset_type='expanded', skip_ci=False):
 
     return True
 
-def main(model_type='logistic', dataset_type='expanded', skip_ci=False):
+def main(model_type='logistic', dataset_type='expanded'):
     """main orchestration function"""
     print("=" * 80)
     print("MULTI-VARIANT RET MUTATION - MEN2 SYNDROME PREDICTION PIPELINE")
@@ -399,8 +395,6 @@ def main(model_type='logistic', dataset_type='expanded', skip_ci=False):
 
     print(f"Selected model: {model_desc}")
     print(f"Dataset type: {dataset_label}")
-    if skip_ci:
-        print("Skipping confidence interval calculations (--no-ci flag)")
 
     # define pipeline steps
     pipeline_steps = [
@@ -408,12 +402,9 @@ def main(model_type='logistic', dataset_type='expanded', skip_ci=False):
         ("src/data_analysis.py", "Data Analysis - Generate statistics and visualizations", None),
         ("src/data_expansion.py", "Data Expansion - Create synthetic controls and expand dataset", None),
         ("src/train_model.py", f"Model Training - Train {model_desc} with cross-validation", [f"--m={model_type}"]),
-        ("src/test_model.py", f"Model Testing - Evaluate {model_desc} performance on test set", [f"--m={model_type}"])
+        ("src/test_model.py", f"Model Testing - Evaluate {model_desc} performance on test set", [f"--m={model_type}"]),
+        ("src/calculate_ci.py", f"Confidence Intervals - Calculate 95% bootstrap CIs for {model_desc}", [f"--m={model_type}"])
     ]
-
-    # Add confidence interval step unless skipped
-    if not skip_ci:
-        pipeline_steps.append(("src/calculate_ci.py", f"Confidence Intervals - Calculate 95% bootstrap CIs for {model_desc}", [f"--m={model_type}"]))
 
     # execute each step
     for module_name, description, args in pipeline_steps:
@@ -465,8 +456,6 @@ if __name__ == "__main__":
     parser.add_argument('--d', '--data', type=str, default='e',
                        choices=['e', 'o', 'b', 'expanded', 'original', 'both'],
                        help='dataset type: e/expanded (with controls + SMOTE - default), o/original (paper data only), b/both (run on both datasets)')
-    parser.add_argument('--no-ci', action='store_true',
-                       help='skip confidence interval calculations for faster execution')
 
     args = parser.parse_args()
 
@@ -480,7 +469,7 @@ if __name__ == "__main__":
 
     # Check if user wants to run all models
     if args.m in ['a', 'all']:
-        success = run_all_models(dataset_type, skip_ci=args.no_ci)
+        success = run_all_models(dataset_type)
     else:
         # determine model type
         if args.m in ['r', 'random_forest']:
@@ -494,7 +483,7 @@ if __name__ == "__main__":
         else:
             model_type = 'logistic'
 
-        success = main(model_type, dataset_type, skip_ci=args.no_ci)
+        success = main(model_type, dataset_type)
 
     stats_success = True
     if success and dataset_type == 'both':
