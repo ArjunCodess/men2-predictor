@@ -71,9 +71,9 @@ A key barrier in resource-limited settings is access to confirmatory RET genetic
 
 Patient-level data were curated from published case reports and cohorts, yielding 152 confirmed RET carriers across 20 peer-reviewed studies spanning 24 RET variants and ATA risk levels 1--3. Key inputs include demographic and presentation variables, RET variant and risk level (when known), and biomarkers including calcitonin and CEA.
 
-We implemented a pipeline that harmonizes heterogeneous sources, imputes missing CEA values using Multiple Imputation by Chained Equations with Predictive Mean Matching (MICE+PMM), engineers variant-aware interactions, and benchmarks five model families (logistic regression, random forest, LightGBM, XGBoost, and linear SVM) under stratified validation with Synthetic Minority Over-sampling Technique (SMOTE) applied to training folds.
+We implemented a pipeline that harmonizes heterogeneous sources, imputes missing CEA values using Multiple Imputation by Chained Equations with Predictive Mean Matching (MICE+PMM), engineers variant-aware interactions, benchmarks five model families (logistic regression, random forest, LightGBM, XGBoost, and linear SVM) under stratified validation with Synthetic Minority Over-sampling Technique (SMOTE) applied to training folds, and automatically quantifies uncertainty through bootstrap confidence intervals (1,000 iterations).
 
-On the original paper-only cohort, logistic regression achieved 100\% recall (zero missed cancers) with 70.97\% accuracy. In the expanded case-control setting (n = 1{,}069 total records), LightGBM achieved the highest accuracy (96.73\%) with 96.08\% recall. These results support MEN2 Predictor as a screening and risk-stratification aid to complement genetic testing and clinical guidelines, with prospective validation required prior to clinical deployment.
+On the original paper-only cohort, logistic regression achieved 100\% recall (zero missed cancers) with 70.97\% accuracy. In the case-control setting (n = 1{,}069 total records), LightGBM achieved the highest accuracy (96.73\%) with 96.08\% recall. These results support MEN2 Predictor as a screening and risk-stratification aid to complement genetic testing and clinical guidelines, with prospective validation required prior to clinical deployment.
 
 \section*{Keywords}
 MEN2; RET; Medullary thyroid carcinoma; Calcitonin; Carcinoembryonic antigen; Rare disease; Machine learning; Screening; Risk stratification; Reproducibility
@@ -114,7 +114,7 @@ CEA missingness is handled using multivariate imputation by chained equations wi
 \subsection{Datasets: Paper-Only and Expanded Case-Control}
 Two datasets are evaluated:
 (i) \textbf{Original (paper-only)}: the 152-carrier cohort.
-(ii) \textbf{Expanded}: the original cohort augmented with variant-matched synthetic controls and trained with SMOTE class balancing applied only to the training split \cite{doi_10_1613_jair_953}. The expanded case-control dataset comprises 1{,}069 total records.
+(ii) \textbf{Case-control}: the original cohort augmented with variant-matched synthetic controls and trained with SMOTE class balancing applied only to the training split \cite{doi_10_1613_jair_953}. The case-control dataset comprises 1{,}069 total records.
 
 \subsection{Models}
 Five models are benchmarked: logistic regression, random forest, linear support vector machine (SVM), XGBoost \cite{doi_10_1145_2939672_2939785}, and LightGBM \cite{ke2017lightgbm}. Model training and evaluation follow a standardized pipeline implemented with scikit-learn \cite{pedregosa2011scikit}.
@@ -124,7 +124,7 @@ Logistic regression is used as the linear baseline model to estimate the probabi
 The pipeline, data artifacts, and figure-generation scripts are available in the GitHub repository: \url{https://github.com/arjuncodess/men2-predictor}.
 
 \subsection{Training and Statistical Approach}
-Each dataset is split using an 80/20 stratified train/test partition with fixed random seed (random\_state = 42). Hyperparameter tuning is performed via cross-validation on the training split, and SMOTE is applied only to the training data to mitigate leakage. Performance metrics include accuracy, precision, recall (sensitivity), F1-score, ROC-AUC, and average precision. Uncertainty is quantified via bootstrap resampling (1{,}000 iterations). Recall stability between original and expanded workflows is evaluated using permutation testing (10{,}000 shuffles); McNemar's test is not applicable because positive cases differ between the original and expanded test sets.
+Each dataset is split using an 80/20 stratified train/test partition with fixed random seed (random\_state = 42). Hyperparameter tuning is performed via cross-validation on the training split, and SMOTE is applied only to the training data to mitigate leakage. Performance metrics include accuracy, precision, recall (sensitivity), F1-score, ROC-AUC, and average precision. Uncertainty quantification through 95\% bootstrap confidence intervals (1{,}000 iterations) is automatically performed for all models. Recall stability between original and expanded workflows is evaluated using permutation testing (10{,}000 shuffles); McNemar's test is not applicable because positive cases differ between the original and expanded test sets.
 
 \section{Results and Discussion}
 
@@ -153,7 +153,7 @@ Observed calcitonin--CEA pairs & 34 (12 cohorts) \\
 On the paper-only test split (31 patients), logistic regression achieves 100\% recall (sensitivity) with 70.97\% accuracy. In safety-critical screening, sensitivity is prioritized because each incremental loss in recall corresponds to a missed cancer case in the tested cohort.
 
 \subsection{Effect of Synthetic Augmentation}
-Synthetic expansion increases accuracy substantially for ensemble models, with LightGBM achieving 96.73\% accuracy and 96.08\% recall on the expanded test split (214 patients). Relative to the paper-only baseline, augmentation can reduce recall for some models; permutation testing did not detect statistically significant recall drops under the study's test-set structure.
+Synthetic expansion increases accuracy substantially for ensemble models, with LightGBM achieving 96.73\% accuracy and 96.08\% recall on the expanded test split (44 patients). Relative to the paper-only baseline, augmentation can reduce recall for some models; permutation testing did not detect statistically significant recall drops under the study's test-set structure.
 
 \begin{table}[ht]
 \centering
@@ -187,7 +187,7 @@ The pipeline computes SHAP attributions \cite{lundberg2017shap} for supported mo
 \node[box, right=of feat] (split) {Train/test split\\(80/20 stratified)};
 \node[box, below=of split] (train) {Train models\\(5 families)};
 \node[box, left=of train] (orig) {Original dataset\\n=152};
-\node[box, left=of orig] (exp) {Expanded dataset\\n=1,069\\(synthetic + SMOTE)};
+\node[box, left=of orig] (exp) {Expanded dataset\\n=216\\(synthetic + SMOTE)};
 \node[box, below=of train] (eval) {Evaluation\\metrics + CIs\\permutation tests};
 
 \draw[arrow] (lit) -- (json);
@@ -198,7 +198,7 @@ The pipeline computes SHAP attributions \cite{lundberg2017shap} for supported mo
 \draw[arrow] (exp) -- (orig);
 \draw[arrow] (train) -- (eval);
 \end{tikzpicture}
-\caption{MEN2 Predictor workflow from cohort assembly to benchmarking across original and expanded datasets.}
+\caption{MEN2 Predictor workflow from cohort assembly to benchmarking across original and expanded datasets, with automatic confidence interval calculation for all models.}
 \end{figure}
 
 \begin{figure}[ht]
@@ -269,7 +269,7 @@ The pipeline computes SHAP attributions \cite{lundberg2017shap} for supported mo
 \section{Conclusion}
 MEN2 Predictor presents a reproducible machine learning workflow for rare-disease risk stratification by aggregating published MEN2/RET-carrier evidence into a structured dataset and standardized evaluation pipeline. On the literature-derived cohort of 152 confirmed RET carriers spanning 24 variants (ATA risk levels 1--3), the original paper-only logistic regression baseline achieved 100\% recall with 70.97\% accuracy, supporting its use as a conservative ``zero-miss'' screening-oriented model where sensitivity is prioritized over overall accuracy.
 
-In an expanded case-control setting (n = 1{,}069 total records) using variant-matched synthetic controls and SMOTE applied to training folds, LightGBM achieved the highest accuracy (96.73\%) with 96.08\% recall. These results suggest that augmentation can improve discrimination for triage-style use, but recall volatility remains a critical risk in safety-sensitive workflows where missed cancers are unacceptable.
+In a case-control setting (n = 1{,}069 total records) using variant-matched synthetic controls and SMOTE applied to training folds, LightGBM achieved the highest accuracy (96.73\%) with 96.08\% recall. These results suggest that augmentation can improve discrimination for triage-style use, but recall volatility remains a critical risk in safety-sensitive workflows where missed cancers are unacceptable.
 
 Key limitations include the cohort size, heterogeneity across published sources, and biomarker missingness requiring imputation. Prospective external validation is required before clinical deployment. Overall, MEN2 Predictor is best positioned as a screening and prioritization aid that complements, rather than replaces, genetic testing and guideline-based care.
 
