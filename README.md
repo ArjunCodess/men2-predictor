@@ -791,9 +791,31 @@ This study has several limitations that should be considered:
 
 This project is licensed under the MIT License.
 
-## Authors
+## Participants
 
-**Arjun Vijay Prakash**
+This project was not built in isolation, and I want to acknowledge the people who contributed meaningfully to it.
+
+### Arjun Vijay Prakash
+**Developer**  
+*Class 10 Student, City Montessori School, Kanpur Road Branch*  
+*E-mail: arjunv.prakash12345@gmail.com*
+
+I conceived the project, implemented the machine learning pipeline, conducted the statistical analysis, and wrote the research paper. I also managed the technical infrastructure, including the Hugging Face Space deployment and reproducible codebase.
+
+### Harnoor Kaur
+**Research Lead**  
+*Class 12 Student, City Montessori School, Kanpur Road Branch*  
+*E-mail: har.nooor16@gmail.com*
+
+Harnoor helped extensively with the research side of this project, including locating and compiling relevant peer-reviewed studies and assisting in sourcing and organizing the clinical data used for model development.
+
+### Shashwat Misra
+**Project Mentor**  
+*E-mail: mishra.shashwat4002@gmail.com*
+
+Shashwat provided guidance throughout the development process, helped review the approach, and offered feedback on both the technical and research decisions that shaped the final pipeline.
+
+Their support played an important role in turning this from an idea into a working, validated project.
 
 ## Acknowledgements
 
