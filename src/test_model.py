@@ -124,6 +124,7 @@ def load_model_and_test_data(model_type='logistic', dataset_type='expanded'):
     feature_cols = [
         'age', 'gender', 'ret_risk_level',
         'calcitonin_elevated', 'calcitonin_level_numeric',
+        'cea_level_numeric',
         'thyroid_nodules_present', 'multiple_nodules', 'family_history_mtc',
         'pheochromocytoma', 'hyperparathyroidism'
     ]
@@ -470,6 +471,7 @@ def print_individual_predictions(model, test_patients, y_test):
     # Prepare features for the test patients (same logic as training)
     feature_cols = ['age', 'gender', 'ret_risk_level',
                     'calcitonin_elevated', 'calcitonin_level_numeric',
+                    'cea_level_numeric',
                     'thyroid_nodules_present', 'multiple_nodules', 'family_history_mtc',
                     'pheochromocytoma', 'hyperparathyroidism']
     features = test_patients[feature_cols].copy()
@@ -595,6 +597,7 @@ def generate_correlation_matrix(model, test_patients, model_type='logistic', dat
     # Prepare features for the test patients (same logic as training)
     feature_cols = ['age', 'gender', 'ret_risk_level',
                     'calcitonin_elevated', 'calcitonin_level_numeric',
+                    'cea_level_numeric',
                     'thyroid_nodules_present', 'multiple_nodules', 'family_history_mtc',
                     'pheochromocytoma', 'hyperparathyroidism']
     features = test_patients[feature_cols].copy()
