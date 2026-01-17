@@ -233,7 +233,6 @@ def run_ablation_study(model_type='lightgbm', dataset_type='expanded', configs=N
     print("=" * 80)
     print(f"Model: {model_type.upper()}")
     print(f"Dataset: {dataset_type.upper()}")
-    print(f"Timestamp: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     print()
 
     # Load data
@@ -304,7 +303,6 @@ def save_ablation_results(results, model_type, dataset_type):
         f.write("=" * 80 + "\n")
         f.write(f"Model: {model_type.upper()}\n")
         f.write(f"Dataset: {dataset_type.upper()}\n")
-        f.write(f"Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
         f.write("\n")
 
         f.write("PURPOSE:\n")
