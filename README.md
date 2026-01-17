@@ -30,11 +30,11 @@ MEN2 Predictor aggregates **152 confirmed RET carriers from 20 peer-reviewed stu
 
 ### Real-Patient Cohort (152 carriers across 20 studies)
 
-The paper-only dataset now contains **152 confirmed carriers** across 24 variants (including non-hotspot deletions and the new C634G kindred). Logistic Regression on this purely clinical cohort still achieves **100% recall with 70.97% accuracy** (62.5% precision, 0 missed cancers). Ensembles trained on real patients reach **93-100% recall** (Random Forest/LightGBM sit at 93.3%; XGBoost and SVM still hit 100% but with lower accuracy), underscoring why the zero-miss baseline remains the clinical default.
+The paper-only dataset now contains **152 confirmed carriers** across 24 variants (including non-hotspot deletions and the new C634G kindred). On this purely clinical cohort, **XGBoost and SVM achieve 100% recall** (74.19% and 64.52% accuracy respectively), making them the recommended screening-safe models. For triage, **LightGBM on expanded data achieves 97.20% accuracy** with 96.08% recall.
 
 ### Synthetic Augmentation Impact
 
-Synthetic controls + SMOTE expand the training pool to 1,069 records (case-control dataset). The ctDNA cohort contributes 16 paired calcitonin/CEA observations. Expanded models improve accuracy for triage use; the original logistic model remains the zero-miss option for screening.
+Synthetic controls + SMOTE expand the training pool to 1,069 records (case-control dataset). The ctDNA cohort contributes 16 paired calcitonin/CEA observations. Expanded models improve accuracy for triage use; XGBoost and SVM on the original dataset remain the zero-miss options for screening (100% recall).
 
 | Model                | Dataset      | Accuracy   | Precision  | Avg Precision   | Recall     | F1 Score  | ROC AUC  |
 | ---------------------- | ------------ | ---------- | ---------- | --------------- | ---------- | ---------- | -------- |
@@ -51,10 +51,9 @@ Synthetic controls + SMOTE expand the training pool to 1,069 records (case-contr
 
 ### Clinical Interpretation
 
-- **Zero-miss option:** Logistic Regression, XGBoost, and SVM on the paper-only cohort maintain **100% sensitivity** (0/15 cancers missed in hold-out testing across all 20 studies).
-- **Precision metrics:** Standard precision shows model reliability when predicting positive cases (62.5% for original logistic regression); average precision provides threshold-independent quality measure (93.1% for original logistic regression).
-- **Ensemble shifts:** Expanded ensembles raise accuracy into the mid- to high-90% range while maintaining high sensitivity.
-- **Model selection:** Deploy the original logistic model for screening workflows; treat expanded gradient boosters as high-accuracy triage models for ctDNA-positive or metastatic follow-up cases once validated prospectively.
+- **Zero-miss option:** XGBoost and SVM on the paper-only cohort maintain **100% sensitivity** (0/15 cancers missed in hold-out testing across all 20 studies).
+- **Highest accuracy:** LightGBM on expanded data achieves **97.20% accuracy** with 96.08% recall, ideal for triage workflows.
+- **Model selection:** Deploy XGBoost or SVM on original data for screening (100% recall); use LightGBM on expanded data for high-accuracy triage.
 
 ### Statistical Tests on Recall Drops
 
@@ -64,7 +63,7 @@ Synthetic controls + SMOTE expand the training pool to 1,069 records (case-contr
 
 ### Why This Matters
 
-**Saving the 20k Rs People:** Every documented carrier in these studies represents a family that faced the 20k Rs barrier to genetic testing. Each percentage point of recall lost means another family denied access to early intervention. Our 100% sensitivity on real data shows it's possible to catch every cancer case using just blood tests and clinical features - potentially democratizing MEN2 screening for resource-limited settings.
+**Saving the 20k Rs People:** Every documented carrier in these studies represents a family that faced the 20k Rs barrier to genetic testing. Each percentage point of recall lost means another family denied access to early intervention. Our highest sensitivity models (XGBoost/SVM with 100% recall on real data) show it's possible to catch every cancer case using just blood tests and clinical features - potentially democratizing MEN2 screening for resource-limited settings.
 
 Even as the real dataset grows to **152 patients with 34 calcitonin/CEA pairs**, synthetic augmentation remains volatile. Accuracy climbs into the 96% band, but every percentage point of recall lost now maps directly to a real carrier in these studies. Preserving perfect sensitivity is still the only safe deployment strategy until we gather real-world validation labels.
 
@@ -102,34 +101,38 @@ MEN2 (Multiple Endocrine Neoplasia type 2) is a rare hereditary cancer syndrome 
 
 ## Clinical Performance
 
-### Recommended Model for Deployment
+### Recommended Model for Screening
 
-**Logistic Regression on the paper-only dataset**
+**XGBoost on the paper-only dataset** — Zero-miss option for safety-critical workflows.
 
 | Metric                   | Value     |
 | ------------------------ | --------- |
-| **Accuracy**             | 70.97%    |
+| **Accuracy**             | 74.19%    |
 | **Recall (Sensitivity)** | **100%**  |
-| **Precision**            | 62.50%    |
-| **F1 Score**             | 76.92%    |
-| **ROC AUC**              | 0.94      |
+| **Precision**            | 65.22%    |
+| **F1 Score**             | 78.95%    |
+| **ROC AUC**              | 0.8125    |
 
-**Clinical Interpretation:**
+### Recommended Model for Triage
 
-- Catches all known MTC cases (zero false negatives) across all 20 studies (15 positives in hold-out testing).
-- Accepts moderate false positives (precision 62.5%) to keep sensitivity at 100%.
-- Remains the safest decision support option until new real-world labels validate SMOTE-based variants.
+**LightGBM on the expanded dataset** — Highest accuracy with strong recall.
 
-> **?? CRITICAL:** Synthetic augmentation raises logistic accuracy to 79.44% but drops recall by **2.0 percentage points**. Keep clinical deployments on the paper-only cohort until a prospective study confirms the expanded models.
+| Metric                   | Value     |
+| ------------------------ | --------- |
+| **Accuracy**             | **97.20%**|
+| **Recall (Sensitivity)** | 96.08%    |
+| **Precision**            | 92.45%    |
+| **F1 Score**             | 94.23%    |
+| **ROC AUC**              | 0.9922    |
 
 ### Performance Comparison
 
-| Dataset                          | Accuracy | Recall   | Clinical Risk                                  |
-| -------------------------------- | -------- | -------- | ---------------------------------------------- |
-| **Original (152 patients)**      | 70.97%   | **100%** | Safe - catches every documented cancer case    |
-| **Expanded (synthetic + SMOTE)** | 79.44%   | **98.0%**| Caution - misses appear after augmentation     |
+| Model              | Dataset   | Accuracy   | Recall     | Use Case                        |
+| ------------------ | --------- | ---------- | ---------- | ------------------------------- |
+| **XGBoost**        | Original  | 74.19%     | **100%**   | Screening (zero missed cancers) |
+| **LightGBM**       | Expanded  | **97.20%** | 96.08%     | Triage (highest accuracy)       |
 
-**Recommendation:** Use original dataset models for clinical deployment. Accuracy bumps of ~8-9% are not worth losing the zero-miss safety net when each additional miss now corresponds to a documented carrier.
+> **⚠️ CRITICAL:** For screening workflows where missing a cancer is unacceptable, use XGBoost on original data (100% recall). For high-accuracy triage after initial screening, use LightGBM on expanded data (97.20% accuracy).
 
 ## Scientific Contribution
 
