@@ -1,0 +1,48 @@
+================================================================================
+ABLATION STUDY RESULTS
+================================================================================
+Model: LIGHTGBM
+Dataset: EXPANDED
+Generated: 2026-01-18 00:33:08
+
+PURPOSE:
+This ablation study addresses reviewer critique that 'ATA Risk Level
+Encodes Cancer A Priori' by systematically removing feature groups to
+demonstrate the model learns meaningful clinical patterns beyond
+consensus genetic knowledge.
+
+================================================================================
+RESULTS SUMMARY
+================================================================================
+
+Configuration: Baseline (All Features)
+  Description: Full model with all features including ATA risk and variants
+  Features Used: 44
+  Removed: None
+  Accuracy:  0.9673
+  Precision: 0.9074
+  Recall:    0.9608
+  F1 Score:  0.9333
+  ROC AUC:   0.9929
+  Avg Prec:  0.9836
+
+Configuration: Without Any Genetic Features (Delta = -1.87% from baseline)
+  Description: Removes all genetic-derived features (risk level + variants) - tests pure biomarker prediction
+  Features Used: 17
+  Removed: ['ret_risk_level', 'risk_calcitonin_interaction', 'risk_age_interaction', 'variant_']
+  Accuracy:  0.9486
+  Precision: 0.8448
+  Recall:    0.9608
+  F1 Score:  0.8991
+  ROC AUC:   0.9844
+  Avg Prec:  0.9725
+
+================================================================================
+KEY FINDINGS FOR REVIEWER RESPONSE
+================================================================================
+
+1. Removing ALL genetic features (ATA risk + variants):
+   Accuracy drops 1.9% (96.7% -> 94.9%)
+   -> Model STILL achieves 94.9% using ONLY biomarkers
+   -> Demonstrates learning beyond 'restating consensus knowledge'
+
