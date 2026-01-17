@@ -1,0 +1,120 @@
+================================================================================
+ABLATION STUDY RESULTS
+================================================================================
+Model: XGBOOST
+Dataset: EXPANDED
+
+PURPOSE:
+This ablation study addresses reviewer critique that 'ATA Risk Level
+Encodes Cancer A Priori' by systematically removing feature groups to
+demonstrate the model learns meaningful clinical patterns beyond
+consensus genetic knowledge.
+
+================================================================================
+RESULTS SUMMARY
+================================================================================
+
+Configuration: Baseline (All Features)
+  Description: Full model with all features including ATA risk and variants
+  Features Used: 44
+  Removed: None
+  Accuracy:  0.8879
+  Precision: 0.6849
+  Recall:    0.9804
+  F1 Score:  0.8065
+  ROC AUC:   0.9892
+  Avg Prec:  0.9729
+
+Configuration: Without ATA Risk Level (Delta = +0.00% from baseline)
+  Description: Removes ret_risk_level and its interaction terms
+  Features Used: 41
+  Removed: ['ret_risk_level', 'risk_calcitonin_interaction', 'risk_age_interaction']
+  Accuracy:  0.8879
+  Precision: 0.6849
+  Recall:    0.9804
+  F1 Score:  0.8065
+  ROC AUC:   0.9883
+  Avg Prec:  0.9764
+
+Configuration: Without Variant Encodings (Delta = -1.87% from baseline)
+  Description: Removes all one-hot encoded RET variant features
+  Features Used: 20
+  Removed: ['variant_']
+  Accuracy:  0.8692
+  Precision: 0.6494
+  Recall:    0.9804
+  F1 Score:  0.7812
+  ROC AUC:   0.9880
+  Avg Prec:  0.9748
+
+Configuration: Without Any Genetic Features (Delta = -3.27% from baseline)
+  Description: Removes all genetic-derived features (risk level + variants) - tests pure biomarker prediction
+  Features Used: 17
+  Removed: ['ret_risk_level', 'risk_calcitonin_interaction', 'risk_age_interaction', 'variant_']
+  Accuracy:  0.8551
+  Precision: 0.6250
+  Recall:    0.9804
+  F1 Score:  0.7634
+  ROC AUC:   0.9789
+  Avg Prec:  0.9599
+
+Configuration: Without Calcitonin (Delta = -2.34% from baseline)
+  Description: Removes calcitonin features - tests genetic-only prediction
+  Features Used: 41
+  Removed: ['calcitonin_elevated', 'calcitonin_level_numeric', 'calcitonin_age_interaction']
+  Accuracy:  0.8645
+  Precision: 0.6410
+  Recall:    0.9804
+  F1 Score:  0.7752
+  ROC AUC:   0.9892
+  Avg Prec:  0.9759
+
+Configuration: Without CEA (Delta = -0.93% from baseline)
+  Description: Removes CEA to address reviewer concern about weak imputation
+  Features Used: 43
+  Removed: ['cea_level_numeric']
+  Accuracy:  0.8785
+  Precision: 0.6667
+  Recall:    0.9804
+  F1 Score:  0.7937
+  ROC AUC:   0.9885
+  Avg Prec:  0.9716
+
+Configuration: Genetics Only (No Biomarkers) (Delta = -5.61% from baseline)
+  Description: Only genetic features + demographics - tests if prediction is "just consensus"
+  Features Used: 37
+  Removed: ['calcitonin_elevated', 'calcitonin_level_numeric', 'calcitonin_age_interaction', 'cea_level_numeric', 'thyroid_nodules_present', 'multiple_nodules', 'nodule_severity']
+  Accuracy:  0.8318
+  Precision: 0.5882
+  Recall:    0.9804
+  F1 Score:  0.7353
+  ROC AUC:   0.9792
+  Avg Prec:  0.9464
+
+Configuration: Biomarkers Only (No Genetics) (Delta = -3.27% from baseline)
+  Description: Only biomarker features - tests clinical utility without genetic encoding
+  Features Used: 17
+  Removed: ['ret_risk_level', 'risk_calcitonin_interaction', 'risk_age_interaction', 'variant_']
+  Accuracy:  0.8551
+  Precision: 0.6250
+  Recall:    0.9804
+  F1 Score:  0.7634
+  ROC AUC:   0.9789
+  Avg Prec:  0.9599
+
+================================================================================
+KEY FINDINGS FOR REVIEWER RESPONSE
+================================================================================
+
+1. Removing ALL genetic features (ATA risk + variants):
+   Accuracy drops 3.3% (88.8% -> 85.5%)
+   -> Model STILL achieves 85.5% using ONLY biomarkers
+   -> Demonstrates learning beyond 'restating consensus knowledge'
+
+2. Removing calcitonin features:
+   Accuracy drops 2.3% (88.8% -> 86.4%)
+   -> Calcitonin is the PRIMARY signal, not ATA risk level
+
+3. Using ONLY genetic features (no biomarkers):
+   Accuracy: 83.2%
+
