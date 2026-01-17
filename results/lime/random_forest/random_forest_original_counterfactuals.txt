@@ -2,6 +2,6 @@ COUNTERFACTUAL ANALYSIS (HIGH-RISK CASES)
 ============================================================
 High-risk definition: predicted probability >= 0.20
 
-Patient study_18 (sample 2) - predicted risk 0.707
-  1. To reduce risk, patient would need to resolve thyroid nodules (nodules_present: 1 -> 0)
+Patient study_3 (sample 12) - predicted risk 0.504
+  1. To reduce risk, patient would need to reduce calcitonin by 0.10 pg/mL (from 0.20 to 0.10)
 
