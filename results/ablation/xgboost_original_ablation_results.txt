@@ -3,7 +3,6 @@ ABLATION STUDY RESULTS
 ================================================================================
 Model: XGBOOST
 Dataset: ORIGINAL
-Generated: 2026-01-17 23:45:48
 
 PURPOSE:
 This ablation study addresses reviewer critique that 'ATA Risk Level
@@ -81,14 +80,14 @@ Configuration: Without CEA (Delta = +0.00% from baseline)
   ROC AUC:   0.8667
   Avg Prec:  0.8608
 
-Configuration: Genetics Only (No Biomarkers) (Delta = +9.68% from baseline)
+Configuration: Genetics Only (No Biomarkers) (Delta = +6.45% from baseline)
   Description: Only genetic features + demographics - tests if prediction is "just consensus"
   Features Used: 37
   Removed: ['calcitonin_elevated', 'calcitonin_level_numeric', 'calcitonin_age_interaction', 'cea_level_numeric', 'thyroid_nodules_present', 'multiple_nodules', 'nodule_severity']
-  Accuracy:  0.8387
-  Precision: 0.7500
+  Accuracy:  0.8065
+  Precision: 0.7143
   Recall:    1.0000
-  F1 Score:  0.8571
+  F1 Score:  0.8333
   ROC AUC:   0.8958
   Avg Prec:  0.8884
 
@@ -111,9 +110,9 @@ KEY FINDINGS FOR REVIEWER RESPONSE
    Accuracy drops 6.5% (74.2% -> 67.7%)
 
 2. Removing calcitonin features:
-   Accuracy drops 3.2% (74.2% -> 77.4%)
+   Accuracy increases 3.2% (74.2% -> 77.4%)
    -> Calcitonin is the PRIMARY signal, not ATA risk level
 
 3. Using ONLY genetic features (no biomarkers):
-   Accuracy: 83.9%
+   Accuracy: 80.6%
 

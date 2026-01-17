@@ -3,7 +3,6 @@ ABLATION STUDY RESULTS
 ================================================================================
 Model: SVM
 Dataset: ORIGINAL
-Generated: 2026-01-17 23:45:54
 
 PURPOSE:
 This ablation study addresses reviewer critique that 'ATA Risk Level
@@ -23,19 +22,19 @@ Configuration: Baseline (All Features)
   Precision: 0.7647
   Recall:    0.8667
   F1 Score:  0.8125
-  ROC AUC:   0.8208
-  Avg Prec:  0.8421
+  ROC AUC:   0.8250
+  Avg Prec:  0.8454
 
-Configuration: Without ATA Risk Level (Delta = -3.23% from baseline)
+Configuration: Without ATA Risk Level (Delta = -6.45% from baseline)
   Description: Removes ret_risk_level and its interaction terms
   Features Used: 41
   Removed: ['ret_risk_level', 'risk_calcitonin_interaction', 'risk_age_interaction']
-  Accuracy:  0.7742
-  Precision: 0.7222
+  Accuracy:  0.7419
+  Precision: 0.6842
   Recall:    0.8667
-  F1 Score:  0.7879
-  ROC AUC:   0.8000
-  Avg Prec:  0.8165
+  F1 Score:  0.7647
+  ROC AUC:   0.8042
+  Avg Prec:  0.8201
 
 Configuration: Without Variant Encodings (Delta = -9.68% from baseline)
   Description: Removes all one-hot encoded RET variant features
@@ -56,8 +55,8 @@ Configuration: Without Any Genetic Features (Delta = -9.68% from baseline)
   Precision: 0.6875
   Recall:    0.7333
   F1 Score:  0.7097
-  ROC AUC:   0.7417
-  Avg Prec:  0.6912
+  ROC AUC:   0.7375
+  Avg Prec:  0.6847
 
 Configuration: Without Calcitonin (Delta = -6.45% from baseline)
   Description: Removes calcitonin features - tests genetic-only prediction
@@ -67,19 +66,19 @@ Configuration: Without Calcitonin (Delta = -6.45% from baseline)
   Precision: 0.7333
   Recall:    0.7333
   F1 Score:  0.7333
-  ROC AUC:   0.7875
-  Avg Prec:  0.8046
+  ROC AUC:   0.7917
+  Avg Prec:  0.8060
 
-Configuration: Without CEA (Delta = +3.23% from baseline)
+Configuration: Without CEA (Delta = +0.00% from baseline)
   Description: Removes CEA to address reviewer concern about weak imputation
   Features Used: 43
   Removed: ['cea_level_numeric']
-  Accuracy:  0.8387
-  Precision: 0.7778
-  Recall:    0.9333
-  F1 Score:  0.8485
-  ROC AUC:   0.9042
-  Avg Prec:  0.8963
+  Accuracy:  0.8065
+  Precision: 0.7647
+  Recall:    0.8667
+  F1 Score:  0.8125
+  ROC AUC:   0.9125
+  Avg Prec:  0.9179
 
 Configuration: Genetics Only (No Biomarkers) (Delta = -3.23% from baseline)
   Description: Only genetic features + demographics - tests if prediction is "just consensus"
@@ -89,8 +88,8 @@ Configuration: Genetics Only (No Biomarkers) (Delta = -3.23% from baseline)
   Precision: 0.7500
   Recall:    0.8000
   F1 Score:  0.7742
-  ROC AUC:   0.8917
-  Avg Prec:  0.8946
+  ROC AUC:   0.8583
+  Avg Prec:  0.8605
 
 Configuration: Biomarkers Only (No Genetics) (Delta = -9.68% from baseline)
   Description: Only biomarker features - tests clinical utility without genetic encoding
@@ -100,8 +99,8 @@ Configuration: Biomarkers Only (No Genetics) (Delta = -9.68% from baseline)
   Precision: 0.6875
   Recall:    0.7333
   F1 Score:  0.7097
-  ROC AUC:   0.7417
-  Avg Prec:  0.6912
+  ROC AUC:   0.7375
+  Avg Prec:  0.6847
 
 ================================================================================
 KEY FINDINGS FOR REVIEWER RESPONSE
