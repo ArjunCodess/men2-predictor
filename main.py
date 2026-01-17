@@ -456,8 +456,32 @@ if __name__ == "__main__":
     parser.add_argument('--d', '--data', type=str, default='e',
                        choices=['e', 'o', 'b', 'expanded', 'original', 'both'],
                        help='dataset type: e/expanded (with controls + SMOTE - default), o/original (paper data only), b/both (run on both datasets)')
+    parser.add_argument('--ablation', action='store_true',
+                       help='run ablation study instead of normal training (for reviewer response)')
 
     args = parser.parse_args()
+
+    # Handle ablation study mode
+    if args.ablation:
+        print("=" * 80)
+        print("RUNNING ABLATION STUDY MODE")
+        print("=" * 80)
+        # Run data preparation first
+        prep_success = run_module("src/create_datasets.py", "Dataset Creation", None)
+        if prep_success:
+            prep_success = run_module("src/data_expansion.py", "Data Expansion", None)
+        if prep_success:
+            # Run ablation study
+            ablation_success = run_module(
+                "src/ablation_study.py",
+                "Ablation Study - Feature importance analysis for reviewer response",
+                [f"--m={args.m}", f"--d={args.d}"],
+                log_file="results/logs/ablation_study.log"
+            )
+            sys.exit(0 if ablation_success else 1)
+        else:
+            print("Data preparation failed. Cannot run ablation study.")
+            sys.exit(1)
 
     # Determine dataset type
     if args.d in ['o', 'original']:
