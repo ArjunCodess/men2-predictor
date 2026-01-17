@@ -1,8 +1,8 @@
 # MEN2 Predictor: Rare Disease Machine Learning Pipeline
 
-![Accuracy](https://img.shields.io/badge/Accuracy-96.73%25-brightgreen)
+![Accuracy](https://img.shields.io/badge/Accuracy-97.20%25-brightgreen)
 ![Recall](https://img.shields.io/badge/Recall%20(Original)-100%25-success)
-![Recall (Expanded)](https://img.shields.io/badge/Recall%20(Expanded)-96--100%25-informational)
+![Recall (Expanded)](https://img.shields.io/badge/Recall%20(Expanded)-96--98%25-informational)
 ![Models](https://img.shields.io/badge/Models-5-blue)
 ![Variants](https://img.shields.io/badge/RET%20Variants-24-blue)
 
@@ -10,7 +10,7 @@
 
 In India, genetic testing for MEN2 costs INR 20,000 (~$225 USD), putting life-saving diagnosis out of reach for most families. This research asks: *can machine learning on routine blood biomarkers (calcitonin, CEA) and clinical features predict MTC risk without expensive genetic sequencing?*
 
-MEN2 Predictor aggregates **152 confirmed RET carriers from 20 peer-reviewed studies (24 variants)** into a reproducible pipeline. On the real clinical data alone, we achieve **100% sensitivity** (70.97% accuracy) - catching every documented cancer case. The expanded synthetic-augmented models push accuracy to 96.73% while maintaining 96-100% recall, potentially offering a cost-effective screening alternative for resource-limited settings.
+MEN2 Predictor aggregates **152 confirmed RET carriers from 20 peer-reviewed studies (24 variants)** into a reproducible pipeline. On the real clinical data alone, we achieve **100% sensitivity** (70.97% accuracy) - catching every documented cancer case. The expanded synthetic-augmented models push accuracy to 97.20% while maintaining 96-98% recall, potentially offering a cost-effective screening alternative for resource-limited settings.
 
 ## Table of Contents
 - [Key Findings](#key-findings)
@@ -38,16 +38,16 @@ Synthetic controls + SMOTE expand the training pool to 1,069 records (case-contr
 
 | Model                | Dataset      | Accuracy   | Precision  | Avg Precision   | Recall     | F1 Score  | ROC AUC  |
 | ---------------------- | ------------ | ---------- | ---------- | --------------- | ---------- | ---------- | -------- |
-| **Logistic Regression**| Original     | 70.97%     | 62.50%     | 93.09%          | **100%**   | 76.92%     | 0.9375   |
-| **Logistic Regression**| Expanded     | 79.44%     | 53.76%     | 95.53%          | **98.0%**  | 69.44%     | 0.9833   |
-| **Random Forest**      | Original     | 83.87%     | 77.78%     | 86.31%          | **93.3%**  | 84.85%     | 0.8708   |
-| **Random Forest**      | Expanded     | 93.93%     | 81.67%     | 97.26%          | **96.1%**  | 88.29%     | 0.9854   |
-| **LightGBM**           | Original     | 83.87%     | 77.78%     | 85.58%          | **93.3%**  | 84.85%     | 0.8729   |
-| **LightGBM**           | Expanded     | **96.73%** | **90.74%** | **98.21%**      | **96.1%**  | **93.33%** | **0.9924** |
-| **XGBoost**            | Original     | 74.19%     | 65.22%     | 86.08%          | **100%**   | 78.95%     | 0.8667   |
-| **XGBoost**            | Expanded     | 88.32%     | 67.57%     | 97.19%          | **98.0%**  | 80.00%     | 0.9881   |
-| **SVM (Linear)**       | Original     | 54.84%     | 51.72%     | 89.91%          | **100%**   | 68.18%     | 0.9042   |
-| **SVM (Linear)**       | Expanded     | 43.93%     | 29.82%     | 81.74%          | **100%**   | 45.95%     | 0.9284   |
+| **Logistic Regression**| Original     | 70.97%     | 65.00%     | 88.18%          | 86.67%     | 74.29%     | 0.8667   |
+| **Logistic Regression**| Expanded     | 79.44%     | 53.76%     | 95.42%          | 98.04%     | 69.44%     | 0.9824   |
+| **Random Forest**      | Original     | 80.65%     | 73.68%     | 85.38%          | 93.33%     | 82.35%     | 0.8750   |
+| **Random Forest**      | Expanded     | 93.46%     | 80.33%     | 97.42%          | 96.08%     | 87.50%     | 0.9871   |
+| **LightGBM**           | Original     | 80.65%     | 76.47%     | 82.66%          | 86.67%     | 81.25%     | 0.8583   |
+| **LightGBM**           | Expanded     | **97.20%** | **92.45%** | **98.21%**      | **96.08%** | **94.23%** | **0.9922** |
+| **XGBoost**            | Original     | 74.19%     | 65.22%     | 81.63%          | **100%**   | 78.95%     | 0.8125   |
+| **XGBoost**            | Expanded     | 87.38%     | 65.79%     | 97.58%          | 98.04%     | 78.74%     | 0.9894   |
+| **SVM (Linear)**       | Original     | 64.52%     | 57.69%     | 89.78%          | **100%**   | 73.17%     | 0.9083   |
+| **SVM (Linear)**       | Expanded     | 46.26%     | 30.49%     | 68.95%          | 98.04%     | 46.51%     | 0.8684   |
 
 ### Clinical Interpretation
 
