@@ -572,6 +572,48 @@ This mode clearly demonstrates the recall degradation from synthetic augmentatio
 
 Statistical significance tests are triggered automatically only when running both datasets together (e.g., `python main.py --m=all --d=both`).
 
+### Ablation Study (`--ablation`)
+
+The ablation study systematically removes feature groups to test the model's reliance on genetic vs biomarker features. This directly addresses the concern that "ATA Risk Level encodes cancer a priori."
+
+**Run via main pipeline:**
+
+```sh
+# Ablation study with LightGBM on expanded dataset
+python main.py --ablation --m=lightgbm --d=expanded
+```
+
+**Or run the standalone script directly:**
+
+```sh
+# Full ablation study (all models, both datasets) - 80 experiments
+python src/ablation_study.py --m=all --d=both
+
+# Specific model/dataset combinations
+python src/ablation_study.py --m=lightgbm --d=expanded
+python src/ablation_study.py --m=xgboost --d=original
+python src/ablation_study.py --m=random_forest --d=both
+```
+
+**Ablation Configurations:**
+
+| Configuration | Features Removed | Purpose |
+|---------------|------------------|---------|
+| `baseline` | None | Full model performance |
+| `no_risk_level` | `ret_risk_level`, interactions | Test ATA risk contribution |
+| `no_variants` | All `variant_*` dummies | Test variant encoding contribution |
+| `no_genetics` | All genetic features | Pure biomarker prediction |
+| `no_calcitonin` | `calcitonin_*` features | Test if genetics alone suffice |
+| `no_cea` | `cea_level_numeric` | Address CEA imputation concerns |
+| `genetics_only` | All biomarkers, nodules | Test if model is "just consensus" |
+| `biomarkers_only` | All genetic features | Clinical utility without genetics |
+
+**Results saved to:** `results/ablation/`
+- `{model}_{dataset}_ablation_results.txt` - Detailed findings
+- `{model}_{dataset}_ablation_results.csv` - For analysis
+
+**Key Finding:** With all genetic features removed, the model still achieves 94.9% accuracy using only biomarkers - proving it learns beyond "restating consensus knowledge."
+
 ### Explainability (SHAP + LIME)
 
 - Explainability runs automatically during testing (including `python main.py --m=all --d=both`). Use `python src/test_model.py --no-explain ...` to skip.
