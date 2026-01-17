@@ -3,6 +3,6 @@ LIME vs SHAP CONSISTENCY SUMMARY
 Model: random_forest
 Dataset: expanded
 Samples compared: 10
-Agree: 4
-Partial: 6
+Agree: 2
+Partial: 8
 Disagree: 0

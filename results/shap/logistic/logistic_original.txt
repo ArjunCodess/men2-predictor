@@ -5,14 +5,14 @@ Background size: 31
 Sample size: 31
 ============================================================
 Top features by mean |SHAP|:
- 1. age_group_young: 0.676367
- 2. ret_risk_level: 0.599601
- 3. family_history_mtc: 0.586718
- 4. age_group_middle: 0.538271
- 5. age_group_elderly: 0.477519
- 6. calcitonin_elevated: 0.466062
- 7. pheochromocytoma: 0.430398
- 8. variant_K666N: 0.409838
- 9. multiple_nodules: 0.353300
-10. hyperparathyroidism: 0.243262
+ 1. age_group_young: 0.750153
+ 2. age_group_middle: 0.645296
+ 3. calcitonin_elevated: 0.641572
+ 4. ret_risk_level: 0.601810
+ 5. cea_level_numeric: 0.577898
+ 6. family_history_mtc: 0.570355
+ 7. variant_K666N: 0.471723
+ 8. age_group_elderly: 0.398496
+ 9. multiple_nodules: 0.388759
+10. pheochromocytoma: 0.374441
 ============================================================
