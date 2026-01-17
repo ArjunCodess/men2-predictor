@@ -5,14 +5,14 @@ Background size: 50
 Sample size: 200
 ============================================================
 Top features by mean |SHAP|:
- 1. age_squared: 2.118954
- 2. age: 1.049788
- 3. ret_risk_level: 0.772161
- 4. age_group_middle: 0.743222
- 5. calcitonin_elevated: 0.649846
- 6. age_group_young: 0.579846
- 7. thyroid_nodules_present: 0.570484
- 8. age_group_very_elderly: 0.507437
- 9. risk_age_interaction: 0.465366
-10. pheochromocytoma: 0.453205
+ 1. age_squared: 2.104037
+ 2. age: 1.074977
+ 3. ret_risk_level: 0.777332
+ 4. age_group_middle: 0.740890
+ 5. calcitonin_elevated: 0.685785
+ 6. age_group_young: 0.605071
+ 7. thyroid_nodules_present: 0.555382
+ 8. age_group_very_elderly: 0.504203
+ 9. risk_age_interaction: 0.480219
+10. pheochromocytoma: 0.455390
 ============================================================

@@ -3,6 +3,6 @@ LIME vs SHAP CONSISTENCY SUMMARY
 Model: lightgbm
 Dataset: expanded
 Samples compared: 10
-Agree: 2
-Partial: 8
+Agree: 6
+Partial: 4
 Disagree: 0

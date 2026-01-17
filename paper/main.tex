@@ -73,7 +73,7 @@ Patient-level data were curated from published case reports and cohorts, yieldin
 
 We implemented a pipeline that harmonizes heterogeneous sources, imputes missing CEA values using Multiple Imputation by Chained Equations with Predictive Mean Matching (MICE+PMM), engineers variant-aware interactions, benchmarks five model families (logistic regression, random forest, LightGBM, XGBoost, and linear SVM) under stratified validation with Synthetic Minority Over-sampling Technique (SMOTE) applied to training folds, and automatically quantifies uncertainty through bootstrap confidence intervals (1,000 iterations).
 
-On the original paper-only cohort, logistic regression achieved 100\% recall (zero missed cancers) with 70.97\% accuracy. In the case-control setting (n = 1{,}069 total records), LightGBM achieved the highest accuracy (96.73\%) with 96.08\% recall. These results support MEN2 Predictor as a screening and risk-stratification aid to complement genetic testing and clinical guidelines, with prospective validation required prior to clinical deployment.
+On the original paper-only cohort, XGBoost and SVM achieved 100\% recall (zero missed cancers) with 74.19\% and 64.52\% accuracy respectively. In the case-control setting (n = 1{,}069 total records), LightGBM achieved the highest accuracy (97.20\%) with 96.08\% recall. These results support MEN2 Predictor as a screening and risk-stratification aid to complement genetic testing and clinical guidelines, with prospective validation required prior to clinical deployment.
 
 \section*{Keywords}
 MEN2; RET; Medullary thyroid carcinoma; Calcitonin; Carcinoembryonic antigen; Rare disease; Machine learning; Screening; Risk stratification; Reproducibility
@@ -150,10 +150,10 @@ Observed calcitonin--CEA pairs & 34 (12 cohorts) \\
 \end{table}
 
 \subsection{Screening-Safe Baseline on Paper-Only Data}
-On the paper-only test split (31 patients), logistic regression achieves 100\% recall (sensitivity) with 70.97\% accuracy. In safety-critical screening, sensitivity is prioritized because each incremental loss in recall corresponds to a missed cancer case in the tested cohort.
+On the paper-only test split (31 patients), XGBoost and SVM achieve 100\% recall (sensitivity) with 74.19\% and 64.52\% accuracy respectively. In safety-critical screening, sensitivity is prioritized because each missed case corresponds to a potentially undetected cancer.
 
 \subsection{Effect of Synthetic Augmentation}
-Synthetic expansion increases accuracy substantially for ensemble models, with LightGBM achieving 96.73\% accuracy and 96.08\% recall on the expanded test split (44 patients). Relative to the paper-only baseline, augmentation can reduce recall for some models; permutation testing did not detect statistically significant recall drops under the study's test-set structure.
+Synthetic expansion increases accuracy substantially for ensemble models, with LightGBM achieving 97.20\% accuracy and 96.08\% recall on the expanded test split (44 patients). Relative to the paper-only baseline, augmentation can reduce recall for some models; permutation testing did not detect statistically significant recall drops under the study's test-set structure.
 
 \begin{table}[ht]
 \centering
@@ -162,11 +162,11 @@ Synthetic expansion increases accuracy substantially for ensemble models, with L
 \toprule
 Model & Acc (Original) & Recall (Original) & Acc (Expanded) & Recall (Expanded) \\
 \midrule
-Logistic Regression & 0.7097 & 1.0000 & 0.7944 & 0.9804 \\
-Random Forest & 0.8387 & 0.9333 & 0.9393 & 0.9608 \\
-LightGBM & 0.8387 & 0.9333 & 0.9673 & 0.9608 \\
-XGBoost & 0.7419 & 1.0000 & 0.8832 & 0.9804 \\
-SVM (Linear) & 0.5484 & 1.0000 & 0.4393 & 1.0000 \\
+Logistic Regression & 0.7097 & 0.8667 & 0.7944 & 0.9804 \\
+Random Forest & 0.8065 & 0.9333 & 0.9346 & 0.9608 \\
+LightGBM & 0.8065 & 0.8667 & 0.9720 & 0.9608 \\
+XGBoost & 0.7419 & 1.0000 & 0.8738 & 0.9804 \\
+SVM (Linear) & 0.6452 & 1.0000 & 0.4626 & 0.9804 \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -267,9 +267,9 @@ The pipeline computes SHAP attributions \cite{lundberg2017shap} for supported mo
 \FloatBarrier
 
 \section{Conclusion}
-MEN2 Predictor presents a reproducible machine learning workflow for rare-disease risk stratification by aggregating published MEN2/RET-carrier evidence into a structured dataset and standardized evaluation pipeline. On the literature-derived cohort of 152 confirmed RET carriers spanning 24 variants (ATA risk levels 1--3), the original paper-only logistic regression baseline achieved 100\% recall with 70.97\% accuracy, supporting its use as a conservative ``zero-miss'' screening-oriented model where sensitivity is prioritized over overall accuracy.
+MEN2 Predictor presents a reproducible machine learning workflow for rare-disease risk stratification by aggregating published MEN2/RET-carrier evidence into a structured dataset and standardized evaluation pipeline. On the literature-derived cohort of 152 confirmed RET carriers spanning 24 variants (ATA risk levels 1--3), XGBoost and SVM achieved 100\% recall with 74.19\% and 64.52\% accuracy respectively, serving as conservative ``zero-miss'' screening-oriented models where sensitivity is prioritized over overall accuracy.
 
-In a case-control setting (n = 1{,}069 total records) using variant-matched synthetic controls and SMOTE applied to training folds, LightGBM achieved the highest accuracy (96.73\%) with 96.08\% recall. These results suggest that augmentation can improve discrimination for triage-style use, but recall volatility remains a critical risk in safety-sensitive workflows where missed cancers are unacceptable.
+In a case-control setting (n = 1{,}069 total records) using variant-matched synthetic controls and SMOTE applied to training folds, LightGBM achieved the highest accuracy (97.20\%) with 96.08\% recall. These results suggest that augmentation can improve discrimination for triage-style use, but recall volatility remains a critical risk in safety-sensitive workflows where missed cancers are unacceptable.
 
 Key limitations include the cohort size, heterogeneity across published sources, and biomarker missingness requiring imputation. Prospective external validation is required before clinical deployment. Overall, MEN2 Predictor is best positioned as a screening and prioritization aid that complements, rather than replaces, genetic testing and guideline-based care.
 

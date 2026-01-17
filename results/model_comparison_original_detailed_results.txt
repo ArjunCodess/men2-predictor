@@ -27,41 +27,41 @@ Patient_ID      Age   Sex RET_Var  Risk Calc_Elev  Calc_Lvl Nod MN  FH  Pheo HPT
 study_4         34    F   C634Y    3    Y          18.0     N   N   Y   N    N    | MTC      | OK   | OK   | OK   | OK   | OK  
 study_4         21    M   L790F    1    Y          5.0      N   N   N   N    N    | No_MTC   | XX   | OK   | OK   | XX   | XX  
 study_18        40    F   K666N    1    Y          12.3     Y   N   N   Y    Y    | MTC      | OK   | OK   | OK   | OK   | OK  
-study_14        7     F   C634R    3    N          0.0      N   N   Y   N    N    | No_MTC   | XX   | OK   | OK   | OK   | XX  
-study_9         51    F   C620W    2    N          0.0      N   N   N   N    N    | MTC      | OK   | XX   | OK   | OK   | OK  
-study_7         64    F   R525W    1    N          0.2      N   N   N   N    N    | No_MTC   | XX   | XX   | XX   | XX   | XX  
+study_14        7     F   C634R    3    N          0.0      N   N   Y   N    N    | No_MTC   | OK   | OK   | OK   | OK   | OK  
+study_9         51    F   C620W    2    N          0.0      N   N   N   N    N    | MTC      | OK   | OK   | XX   | OK   | OK  
+study_7         64    F   R525W    1    N          0.2      N   N   N   N    N    | No_MTC   | OK   | XX   | XX   | XX   | XX  
 study_9         77    F   C630G    2    Y          404.0    N   N   N   N    N    | MTC      | OK   | OK   | OK   | OK   | OK  
 study_6         32    M   K666N    1    Y          16.0     N   N   Y   N    N    | No_MTC   | XX   | XX   | XX   | XX   | XX  
 study_4         24    F   V804M    1    N          0.0      N   N   N   N    N    | No_MTC   | OK   | OK   | OK   | OK   | XX  
 study_5         40    F   K666N    1    Y          16.8     N   N   N   Y    Y    | MTC      | OK   | OK   | OK   | OK   | OK  
 study_3         61    F   K666N    1    Y          67.4     N   N   N   N    N    | MTC      | OK   | OK   | OK   | OK   | OK  
 study_4         38    M   C634Y    3    N          0.0      N   N   Y   N    N    | No_MTC   | XX   | XX   | XX   | XX   | XX  
-study_3         39    F   K666N    1    N          0.2      N   N   Y   N    N    | No_MTC   | XX   | OK   | OK   | XX   | XX  
+study_3         39    F   K666N    1    N          0.2      N   N   Y   N    N    | No_MTC   | XX   | XX   | OK   | XX   | XX  
 study_4         31    M   C634R    3    Y          43.6     N   N   N   N    N    | MTC      | OK   | OK   | OK   | OK   | OK  
 study_7         44    F   S891A    1    N          0.0      N   N   N   N    N    | No_MTC   | XX   | OK   | OK   | OK   | XX  
 study_17        43    F   C634G    3    N          0.0      N   N   Y   Y    N    | MTC      | OK   | OK   | OK   | OK   | OK  
-study_1         84    F   K666N    1    Y          37.0     Y   N   Y   N    N    | No_MTC   | OK   | XX   | XX   | XX   | XX  
+study_1         84    F   K666N    1    Y          37.0     Y   N   Y   N    N    | No_MTC   | XX   | XX   | XX   | XX   | XX  
 study_19        44    F   S891A    1    Y          447.0    N   N   Y   N    N    | MTC      | OK   | OK   | OK   | OK   | OK  
-study_1         60    M   K666N    1    Y          13.0     Y   Y   Y   N    N    | MTC      | OK   | OK   | XX   | OK   | OK  
+study_1         60    M   K666N    1    Y          13.0     Y   Y   Y   N    N    | MTC      | OK   | XX   | XX   | OK   | OK  
 study_7         10    F   S891A    1    N          0.0      N   N   N   N    N    | No_MTC   | OK   | OK   | OK   | OK   | OK  
 study_9         59    M   M918T    3    N          0.0      N   N   N   N    N    | MTC      | OK   | OK   | OK   | OK   | OK  
 study_12        27    F   Y791F    1    N          5.0      N   N   N   Y    N    | No_MTC   | OK   | OK   | OK   | XX   | XX  
 study_4         49    M   C634W    3    N          0.0      N   N   N   Y    N    | MTC      | OK   | OK   | OK   | OK   | OK  
 study_9         61    F   C630R    2    Y          7838.0   N   N   N   N    N    | MTC      | OK   | OK   | OK   | OK   | OK  
-study_3         65    F   K666N    1    N          0.2      N   N   N   N    N    | MTC      | OK   | OK   | OK   | OK   | OK  
-study_6         61    F   K666N    1    N          0.0      N   N   Y   N    N    | No_MTC   | XX   | OK   | OK   | OK   | XX  
-study_7         1     F   R525W    1    N          0.0      N   N   N   N    N    | No_MTC   | OK   | OK   | OK   | OK   | XX  
-study_3         70    F   K666N    1    N          0.2      N   N   Y   N    N    | MTC      | OK   | OK   | OK   | OK   | OK  
-study_4         10    M   Y791F    1    Y          8.0      N   N   N   N    N    | No_MTC   | OK   | OK   | OK   | XX   | XX  
+study_3         65    F   K666N    1    N          0.2      N   N   N   N    N    | MTC      | XX   | OK   | OK   | OK   | OK  
+study_6         61    F   K666N    1    N          0.0      N   N   Y   N    N    | No_MTC   | OK   | OK   | OK   | OK   | XX  
+study_7         1     F   R525W    1    N          0.0      N   N   N   N    N    | No_MTC   | OK   | OK   | OK   | OK   | OK  
+study_3         70    F   K666N    1    N          0.2      N   N   Y   N    N    | MTC      | XX   | OK   | OK   | OK   | OK  
+study_4         10    M   Y791F    1    Y          8.0      N   N   N   N    N    | No_MTC   | XX   | OK   | OK   | XX   | XX  
 study_1         21    F   K666N    1    N          0.2      N   N   Y   N    N    | No_MTC   | OK   | OK   | OK   | OK   | OK  
-study_4         20    F   C634R    3    N          0.0      N   N   Y   N    N    | No_MTC   | XX   | OK   | OK   | OK   | XX  
+study_4         20    F   C634R    3    N          0.0      N   N   Y   N    N    | No_MTC   | OK   | OK   | OK   | OK   | OK  
 ========================================================================================================================================================================================================
 
 MODEL ACCURACY SUMMARY:
 --------------------------------------------------
 LR         | 22/31 correct (71.0%)
-RF         | 26/31 correct (83.9%)
-LGB        | 26/31 correct (83.9%)
+RF         | 25/31 correct (80.6%)
+LGB        | 25/31 correct (80.6%)
 XGB        | 23/31 correct (74.2%)
-SVM        | 17/31 correct (54.8%)
+SVM        | 20/31 correct (64.5%)
 ========================================================================================================================================================================================================

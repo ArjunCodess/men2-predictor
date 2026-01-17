@@ -51,6 +51,7 @@ def prepare_features_target(df, target_column='mtc_diagnosis'):
     feature_columns = [
         'age', 'gender', 'ret_risk_level',
         'calcitonin_elevated', 'calcitonin_level_numeric',
+        'cea_level_numeric',
         'thyroid_nodules_present', 'multiple_nodules', 'family_history_mtc',
         'pheochromocytoma', 'hyperparathyroidism'
     ]
