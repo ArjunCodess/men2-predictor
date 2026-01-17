@@ -84,7 +84,7 @@ LIME vs SHAP agreements: 0, partial: 5, disagree: 5
 
 Counterfactual highlights:
 Patient study_18 (sample 2) - predicted risk 0.707
-  1. To reduce risk, patient would need to resolve thyroid nodules (nodules_present: 1 -> 0)
+  1. To reduce risk, patient would need to bring calcitonin into normal range (calcitonin_elevated: 1 -> 0)
 
 ============================================================
 
