@@ -31,3 +31,27 @@ Case Reports in Medicine (2012) MEN2B & 1 \\
 JCEM (2016) RET Exon 7 Deletion & 1 \\
 \bottomrule
 \end{longtable}
+
+\clearpage
+
+\begin{longtable}{@{}p{0.40\linewidth}ccccc@{}}
+\caption{Ablation study results: LightGBM on expanded dataset (n=1,069). Accuracy change is relative to baseline.} \\
+\toprule
+Configuration & Features & Accuracy & Recall & F1 & $\Delta$ Acc \\
+\midrule
+\endfirsthead
+\toprule
+Configuration & Features & Accuracy & Recall & F1 & $\Delta$ Acc \\
+\midrule
+\endhead
+Baseline (All Features) & 44 & 0.972 & 0.961 & 0.942 & --- \\
+Without ATA Risk Level & 41 & 0.958 & 0.961 & 0.916 & $-$1.4\% \\
+Without Variant Encodings & 20 & 0.967 & 0.941 & 0.932 & $-$0.5\% \\
+Without Any Genetic Features & 17 & 0.949 & 0.961 & 0.899 & $-$2.3\% \\
+Without Calcitonin & 41 & 0.981 & 0.980 & 0.962 & +0.9\% \\
+Without CEA & 43 & 0.967 & 0.961 & 0.933 & $-$0.5\% \\
+Genetics Only (No Biomarkers) & 37 & 0.921 & 0.902 & 0.844 & $-$5.1\% \\
+Biomarkers Only (No Genetics) & 17 & 0.949 & 0.961 & 0.899 & $-$2.3\% \\
+\bottomrule
+\end{longtable}
+

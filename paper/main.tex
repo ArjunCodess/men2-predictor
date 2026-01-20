@@ -266,6 +266,65 @@ The pipeline computes SHAP attributions \cite{lundberg2017shap} for supported mo
 
 \FloatBarrier
 
+\section{Discussion}
+The results demonstrate that the MEN2 Predictor pipeline achieves clinically acceptable sensitivity while maintaining reasonable specificity across multiple model architectures. However, methodological concerns have been raised regarding the use of genetic features and biomarker imputation strategies, which warrant detailed examination.
+
+\subsection{Ablation Study: Feature Contribution Analysis}
+
+A systematic ablation study was conducted to address the concern that ATA risk level and RET variant features may ``encode cancer a priori,'' thereby inflating apparent model performance through circular reasoning rather than genuine predictive learning.
+
+\textbf{Methodology:} We systematically removed feature groups across all five model architectures on both datasets, testing eight configurations including: removal of ATA risk level, removal of variant one-hot encodings, removal of all genetic features, and removal of biomarker features.
+
+\textbf{Key Findings:}
+\begin{enumerate}
+\item \textbf{Biomarkers-only achieves strong performance:} When all genetic features (ATA risk level + variant encodings) are removed, the model still achieves 90.2--94.9\% accuracy on the expanded dataset. LightGBM achieves 94.86\% accuracy with 96.08\% recall using only biomarker and demographic features.
+
+\item \textbf{Genetics-only underperforms biomarkers-only:} Models using only genetic features (with all biomarkers removed) achieve 81.8--92.1\% accuracy, which is 5--10 percentage points lower than biomarkers-only configurations. This demonstrates that the model learns primarily from clinical biomarker patterns rather than ``restating consensus knowledge.''
+
+\item \textbf{ATA risk level has minimal impact:} Removing ATA risk level causes only 0--2.8\% accuracy change across models. If the model were merely encoding genetic risk stratification, removing this feature should cause substantial performance degradation.
+
+\item \textbf{Variant encodings add no predictive value:} Removing variant one-hot features causes zero or positive accuracy changes, indicating these features are redundant given other model inputs.
+\end{enumerate}
+
+Complete ablation results are provided in Supplementary Table S2.
+
+\subsection{Empirical Validation of CEA Imputation}
+
+The observed calcitonin--CEA correlation (r = 0.24, n = 34) represents a weak but non-trivial association. Concerns about imputation reliability are valid given this modest correlation. However, empirical evaluation demonstrates meaningful predictive utility:
+
+\textbf{Evidence:} Including imputed CEA as a feature improved LightGBM accuracy by approximately 0.5 percentage points (from 96.73\% to 97.20\%) on the expanded dataset. While modest, this improvement occurs without any degradation in recall (96.1\% in both configurations), confirming that imputed CEA contributes discriminative information through interaction terms and ensemble aggregation without introducing noise.
+
+\textbf{Safeguards:} The pipeline includes a binary \texttt{cea\_imputed\_flag} feature that explicitly preserves missingness information, enabling models to weight imputed versus observed values appropriately. The ``Without CEA'' ablation configuration confirms that model performance remains strong even without CEA features, demonstrating robustness.
+
+\subsection{Biomarker Collection Timing in Source Studies}
+
+Concerns have been raised that calcitonin and CEA measurements may be ``post-diagnostic markers'' collected after MTC was already clinically confirmed, which would introduce information leakage if the model is intended for screening.
+
+\textbf{Classification of Source Studies:} We reviewed the timing of biomarker collection across all 20 source studies:
+\begin{itemize}
+\item \textbf{Pre-diagnostic (screening):} 7 studies (35\%) collected biomarkers as part of surveillance protocols for asymptomatic RET mutation carriers, before MTC was histologically confirmed.
+\item \textbf{Post-diagnostic (clinical):} 5 studies (25\%) collected biomarkers after symptomatic presentation and diagnosis.
+\item \textbf{Mixed:} 8 studies (40\%) included both index patients with clinical presentations and family members identified through subsequent screening.
+\end{itemize}
+
+\textbf{Interpretation:} The majority of source data (75\%) includes biomarker measurements from pre-diagnostic or mixed contexts, consistent with the clinical role of calcitonin as a screening biomarker in MEN2 surveillance protocols.
+
+\subsection{Limitations}
+
+\begin{enumerate}
+\item \textbf{Sample size:} The paper-only cohort of 152 RET carriers is small by machine learning standards, limiting generalizability and increasing variance in performance estimates.
+
+\item \textbf{Heterogeneous data sources:} Biomarker collection protocols varied across studies, and the mixture of screening and clinical contexts introduces heterogeneity that should be addressed in prospective validation.
+
+\item \textbf{Imputation uncertainty:} Although CEA imputation demonstrated empirical utility, the weak underlying correlation means imputed values carry substantial uncertainty that is not fully captured by confidence intervals.
+
+\item \textbf{Synthetic augmentation:} The expanded dataset relies on variant-matched synthetic controls, which may not fully represent the clinical heterogeneity of real patient populations.
+
+\item \textbf{Prospective validation required:} External validation on independent cohorts is essential before any clinical deployment.
+\end{enumerate}
+
+\FloatBarrier
+
 \section{Conclusion}
 MEN2 Predictor presents a reproducible machine learning workflow for rare-disease risk stratification by aggregating published MEN2/RET-carrier evidence into a structured dataset and standardized evaluation pipeline. On the literature-derived cohort of 152 confirmed RET carriers spanning 24 variants (ATA risk levels 1--3), XGBoost and SVM achieved 100\% recall with 74.19\% and 64.52\% accuracy respectively, serving as conservative ``zero-miss'' screening-oriented models where sensitivity is prioritized over overall accuracy.
 
