@@ -10,7 +10,7 @@
 
 In India, genetic testing for MEN2 costs INR 20,000 (~$225 USD), putting life-saving diagnosis out of reach for most families. This research asks: *can machine learning on routine blood biomarkers (calcitonin, CEA) and clinical features predict MTC risk without expensive genetic sequencing?*
 
-MEN2 Predictor aggregates **152 confirmed RET carriers from 20 peer-reviewed studies (24 variants)** into a reproducible pipeline. On the real clinical data alone, we achieve **100% sensitivity** (70.97% accuracy) - catching every documented cancer case. The expanded synthetic-augmented models push accuracy to 97.20% while maintaining 96-98% recall, potentially offering a cost-effective screening alternative for resource-limited settings.
+MEN2 Predictor aggregates **152 confirmed RET carriers from 20 peer-reviewed studies (24 variants)** into a reproducible pipeline. On the real clinical data alone, we achieve **100% sensitivity** (74.19% accuracy with XGBoost) - catching every documented cancer case. The expanded synthetic-augmented models push accuracy to 97.20% while maintaining 96-98% recall, potentially offering a cost-effective screening alternative for resource-limited settings.
 
 ## Table of Contents
 - [Key Findings](#key-findings)
@@ -456,7 +456,7 @@ The [create_datasets.py](src/create_datasets.py) script:
 - **Automated Model Comparison:** Every test run generates comprehensive comparison of all 5 models with complete patient data, enabling pattern identification and clinical validation
 - **Data Leakage Prevention:** SMOTE applied after train/test split to ensure realistic evaluation
 - **Feature Engineering:** Polynomial features (age²) and interactions (calcitonin×age, risk×age, nodule_severity)
-- **Variant-Aware Modeling:** One-hot encoding of 22 RET variants + risk level stratification
+- **Variant-Aware Modeling:** One-hot encoding of 24 RET variants + risk level stratification
 - **Constant Feature Removal:** Automatic detection and removal of non-informative features
 - **Risk Stratification:** 4-tier system for clinical decision support instead of binary classification
 - **Comprehensive Metrics:** ROC-AUC, F1-Score, Average Precision Score, ROC curves, confusion matrices, and automatic 95% bootstrap confidence intervals
@@ -536,7 +536,7 @@ This executes all stages: data preparation, analysis, expansion, training, and t
 
 Choose which model to train:
 
-- `l` or `logistic`: Logistic Regression (default, zero-miss option)
+- `l` or `logistic`: Logistic Regression (baseline)
 - `r` or `random_forest`: Random Forest (research comparison)
 - `x` or `xgboost`: XGBoost
 - `g` or `lightgbm`: LightGBM (research comparison)
@@ -793,7 +793,7 @@ Patients with source_id (e.g., "33_control", "mtc_s0_control") are synthetic con
 
 **Supported Models:**
 
-- Logistic Regression (baseline, linear, zero-miss option)
+- Logistic Regression (baseline, linear)
 - Random Forest (ensemble)
 - XGBoost (gradient boosting)
 - LightGBM (gradient boosting)
@@ -822,7 +822,7 @@ Patients with source_id (e.g., "33_control", "mtc_s0_control") are synthetic con
 **Original Dataset:**
 
 - 152 confirmed RET germline mutation carriers from 20 peer-reviewed studies
-- 22 RET variants (K666N, L790F, Y791F, V804M, S891A, R525W, M918T, E505_G506del, A883F, C618S, C620Y, C620W, C630R, C630G, C634R/Y/W/S, E632_C634del, E632_L633del, D898_E901del, V899_E902del)
+- 24 RET variants (K666N, L790F, Y791F, V804M, S891A, R525W, M918T, E505_G506del, A883F, C618S, C620Y, C620W, C630R, C630G, C634R, C634Y, C634W, C634S, C634G, E632_C634del, E632_L633del, D898_E901del, V899_E902del, D631_L633delinsE)
 - Age range: 1-90 years
 - Gender distribution (F/M): 107/45
 - ATA risk levels: Level 1 (Moderate), Level 2 (High), Level 3 (Highest)
