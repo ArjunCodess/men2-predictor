@@ -290,11 +290,15 @@ Complete ablation results are provided in Supplementary Table S2.
 
 \subsection{Empirical Validation of CEA Imputation}
 
-The observed calcitonin--CEA correlation (r = 0.24, n = 34) represents a weak but non-trivial association. Concerns about imputation reliability are valid given this modest correlation. However, empirical evaluation demonstrates meaningful predictive utility:
+The observed calcitonin--CEA correlation (r = 0.24, n = 34) represents a weak association. Concerns about imputation reliability are valid given this modest correlation. A comprehensive sensitivity analysis was conducted comparing model performance with and without CEA features, and across five different imputation methods.
 
-\textbf{Evidence:} Including imputed CEA as a feature improved LightGBM accuracy by approximately 0.5 percentage points (from 96.73\% to 97.20\%) on the expanded dataset. While modest, this improvement occurs without any degradation in recall (96.1\% in both configurations), confirming that imputed CEA contributes discriminative information through interaction terms and ensemble aggregation without introducing noise.
+\textbf{CEA Contribution Analysis:} LightGBM achieves 97.20\% accuracy with CEA features and 96.73\% without CEA features on the expanded dataset, a difference of only 0.47 percentage points. This finding demonstrates that CEA provides minimal predictive benefit for initial MTC detection.
 
-\textbf{Safeguards:} The pipeline includes a binary \texttt{cea\_imputed\_flag} feature that explicitly preserves missingness information, enabling models to weight imputed versus observed values appropriately. The ``Without CEA'' ablation configuration confirms that model performance remains strong even without CEA features, demonstrating robustness.
+\textbf{Imputation Method Robustness:} Testing four imputation strategies (MICE+PMM, mean, median, zero) showed accuracy variation of less than 1 percentage point (96.26\%--97.20\%). The current MICE+PMM approach achieves the highest accuracy (97.20\%), while even naive zero imputation achieved 96.26\% accuracy, only 0.93\% below baseline.
+
+\textbf{Clinical Rationale for CEA Inclusion:} Despite minimal predictive benefit, CEA was included for clinical reasons. Calcitonin alone has specificity limitations---elevated levels can occur in hypergastrinemia, kidney insufficiency, other neuroendocrine tumors, and with certain medications (omeprazole, beta-blockers). Clinical guidelines recommend combined calcitonin-CEA assessment because CEA adds complementary prognostic value: CEA doubling time indicates disease aggressiveness, and rising CEA without calcitonin change may signal poorly differentiated (more aggressive) MTC. Including both markers aligns with standard clinical practice for MEN2 management.
+
+\textbf{Safeguards:} The pipeline includes a binary \texttt{cea\_imputed\_flag} feature that explicitly preserves missingness information. Complete validation results across all five model architectures are available in the project repository under \texttt{results/cea\_validation/}.
 
 \subsection{Biomarker Collection Timing in Source Studies}
 
