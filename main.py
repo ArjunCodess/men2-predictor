@@ -57,7 +57,7 @@ def run_module(module_name, description, args=None, log_file=None, dataset_type=
 
 def extract_model_metrics(model_type, dataset_type='expanded'):
     """Extract metrics from test results file"""
-    results_file = Path('results') / f'{model_type}_{dataset_type}_test_results.txt'
+    results_file = Path('results') / 'test_results' / f'{model_type}_{dataset_type}_test_results.txt'
 
     if not results_file.exists():
         return None
@@ -231,7 +231,7 @@ def run_all_models(dataset_type='expanded'):
 
     # Create results directory for logs
     os.makedirs('results/logs', exist_ok=True)
-    summary_path = Path("results") / "explainability_summary.txt"
+    summary_path = Path("results") / "explainability" / "explainability_summary.txt"
     summary_path.parent.mkdir(parents=True, exist_ok=True)
     with open(summary_path, "w", encoding="utf-8") as f:
         f.write("")
@@ -354,7 +354,9 @@ def run_all_models(dataset_type='expanded'):
     print("- data/processed/ret_multivariant_case_control_dataset.csv")
     print("- saved_models/*_{expanded|original}_model.pkl")
     print("\nTest results:")
-    print("- results/*_test_results.txt")
+    print("- results/test_results/*_test_results.txt")
+    print("\nConfidence intervals:")
+    print("- results/confidence_intervals/*_confidence_intervals.txt")
     print("\nDetailed logs:")
     print("- results/logs/data_preparation_step1.log")
     print("- results/logs/data_preparation_step2.log")
@@ -367,7 +369,7 @@ def run_all_models(dataset_type='expanded'):
     print("- charts/shap/<model>/*")
     print("- results/lime/<model>/*")
     print("- charts/lime/<model>/*")
-    print("- results/explainability_summary.txt")
+    print("- results/explainability/explainability_summary.txt")
     print()
 
     return True
@@ -443,7 +445,7 @@ def main(model_type='logistic', dataset_type='expanded'):
     print(f"- charts/shap/{model_type}")
     print(f"- results/lime/{model_type}")
     print(f"- charts/lime/{model_type}")
-    print("- results/explainability_summary.txt")
+    print("- results/explainability/explainability_summary.txt")
 
     return True
 
