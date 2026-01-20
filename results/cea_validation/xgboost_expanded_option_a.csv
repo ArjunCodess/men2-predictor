@@ -1,0 +1,3 @@
+experiment,sample_size,train_size,test_size,features_used,accuracy,precision,recall,f1_score,roc_auc,avg_precision,config_name,description,confusion_matrix
+With CEA Features,1069,855,214,44,0.8738317757009346,0.6578947368421053,0.9803921568627451,0.7874015748031497,0.989414170576206,0.975774948552168,with_cea,Full model including CEA features,
+Without CEA Features,1069,855,214,43,0.8785046728971962,0.6666666666666666,0.9803921568627451,0.7936507936507936,0.9884518224467701,0.9716107261085546,without_cea,Model without any CEA features,"[[138, 25], [1, 50]]"
