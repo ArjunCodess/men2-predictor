@@ -129,12 +129,6 @@ Including CEA aligns with clinical practice and ensures the model captures the c
 
 ---
 
-### Recommended Paper Language:
-
-> "CEA imputation validation demonstrates minimal model dependence on CEA features. LightGBM achieves 97.20% accuracy with CEA and 96.73% without (-0.47%), and accuracy varies by less than 1 percentage point across four imputation methods. While CEA provides minimal predictive benefit for initial MTC detection, its inclusion aligns with clinical guidelines recommending combined calcitonin-CEA assessment, as CEA adds complementary prognostic value for disease monitoring and detecting aggressive MTC variants."
-
----
-
 ## Study Files
 
 - **Script:** `src/cea_validation_study.py`
