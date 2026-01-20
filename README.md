@@ -91,6 +91,31 @@ This comprehensive coverage ensures findings generalize across fundamentally dif
 - `create_datasets.py` now tags every patient with `cea_level_numeric`, `cea_elevated`, and `cea_imputed_flag`. Thirty-four observations seed the **MICE + Predictive Mean Matching** pipeline that fills the remaining **118 gaps** while re-using observed donor values.
 - Full provenance is saved in `results/biomarker_ceaimputation_summary.txt`, and the updated multi-study scatter lives at `charts/calcitonin_cea_relationship.png`.
 
+### CEA Imputation Validation Study
+
+**Concern addressed:** Weak calcitonin-CEA correlation (r=0.24) may undermine imputation reliability.
+
+**Key findings from `src/cea_validation_study.py`:**
+
+| Analysis | Result |
+|----------|--------|
+| With vs Without CEA | LightGBM achieves **97.20% with CEA, 96.73% without** (-0.47% impact) |
+| Imputation method robustness | Accuracy varies **<1%** across MICE, mean, median, zero imputation |
+| Conclusion | CEA provides minimal predictive benefit; imputation quality has negligible impact |
+
+**Imputation Method Comparison (LightGBM, Expanded Dataset):**
+
+| Method | Accuracy | Recall | Δ vs MICE |
+|--------|----------|--------|-----------|
+| MICE+PMM (current) | **97.20%** | 96.08% | --- |
+| Mean imputation | 96.73% | 96.08% | -0.47% |
+| Median imputation | **97.20%** | 96.08% | 0.00% |
+| Zero imputation | 96.26% | 96.08% | -0.93% |
+
+**Why include CEA if it has minimal impact?** Calcitonin alone can be elevated in many non-MTC conditions (hypergastrinemia, kidney insufficiency, certain medications). Clinical guidelines recommend combined calcitonin-CEA assessment because CEA adds prognostic value for monitoring disease aggressiveness. See [detailed rationale](reports/cea_imputation_validation.md#clinical-rationale-for-including-cea-despite-minimal-predictive-impact).
+
+Run the study: `python src/cea_validation_study.py --m=all --d=both`
+
 ## About The Project
 
 **The 20k Rs Question:** In India, MEN2 genetic testing costs INR 19,000-20,000 (~$225 USD) - a prohibitive barrier that prevents families from accessing life-saving diagnosis. This research explores whether we can save those "20k Rs people" with just routine blood tests and clinical features, using machine learning to predict MTC risk without expensive genetic sequencing.

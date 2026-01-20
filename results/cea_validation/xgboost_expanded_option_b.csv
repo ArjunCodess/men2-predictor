@@ -1,0 +1,6 @@
+experiment,sample_size,train_size,test_size,features_used,accuracy,precision,recall,f1_score,roc_auc,avg_precision,config_name,description,imputation_method,confusion_matrix
+MICE+PMM (Current),1069,855,214,44,0.8738317757009346,0.6578947368421053,0.9803921568627451,0.7874015748031497,0.989414170576206,0.975774948552168,mice_pmm,Multiple Imputation by Chained Equations with Predictive Mean Matching,mice,
+Mean Imputation,1069,855,214,44,0.8691588785046729,0.6493506493506493,0.9803921568627451,0.78125,0.9878503548658727,0.9702821124438188,mean,Replace missing CEA with mean of observed values,mean,"[[136, 27], [1, 50]]"
+Median Imputation,1069,855,214,44,0.8785046728971962,0.6666666666666666,0.9803921568627451,0.7936507936507936,0.9882112354144111,0.9708712301021832,median,Replace missing CEA with median of observed values,median,"[[138, 25], [1, 50]]"
+Zero Imputation,1069,855,214,44,0.8785046728971962,0.6666666666666666,0.9803921568627451,0.7936507936507936,0.988932996511488,0.9712568261929327,zero,Replace missing CEA with zero (conservative lower bound),zero,"[[138, 25], [1, 50]]"
+Complete Case (Observed Only),149,119,30,34,0.9,0.8695652173913043,1.0,0.9302325581395349,0.995,0.9976190476190478,complete_case,Use only patients with observed CEA values (n=34),complete_case,"[[7, 3], [0, 20]]"
