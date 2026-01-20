@@ -220,8 +220,8 @@ def print_test_metrics(model, X_test, y_test, model_type='logistic', dataset_typ
     print("=" * 60)
 
     # Save results to file
-    os.makedirs('results', exist_ok=True)
-    results_file = f'results/{model_type}_{dataset_type}_test_results.txt'
+    os.makedirs('results/test_results', exist_ok=True)
+    results_file = f'results/test_results/{model_type}_{dataset_type}_test_results.txt'
 
     print("\n" + "=" * 60)
     print("CONFIDENCE INTERVALS (Bootstrap Method)")
@@ -399,9 +399,9 @@ def compare_all_models_with_patient_data(dataset_type='expanded'):
     print("=" * 160)
 
     # save detailed comparison to file
-    os.makedirs('results', exist_ok=True)
+    os.makedirs('results/model_comparison', exist_ok=True)
     dataset_label = "expanded" if dataset_type == 'expanded' else "original"
-    results_file = f'results/model_comparison_{dataset_label}_detailed_results.txt'
+    results_file = f'results/model_comparison/model_comparison_{dataset_label}_detailed_results.txt'
 
     with open(results_file, 'w') as f:
         f.write("MODEL COMPARISON - COMPLETE PATIENT DATA WITH PREDICTIONS\n")

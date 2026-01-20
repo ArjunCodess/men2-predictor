@@ -219,8 +219,8 @@ def main():
         print("=" * 70)
 
         # Save results to file
-        os.makedirs('results', exist_ok=True)
-        ci_file = f'results/{model_type}_{dataset_type}_confidence_intervals.txt'
+        os.makedirs('results/confidence_intervals', exist_ok=True)
+        ci_file = f'results/confidence_intervals/{model_type}_{dataset_type}_confidence_intervals.txt'
 
         dataset_label = "EXPANDED" if dataset_type == 'expanded' else "ORIGINAL"
         with open(ci_file, 'w') as f:

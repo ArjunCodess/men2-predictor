@@ -1296,7 +1296,7 @@ def create_paper_dataset():
     df, imputation_info = run_mice_pmm_imputation(df, biomarker_pairs_df)
     df['cea_elevated'] = (df['cea_level_numeric'].fillna(0) > 5).astype(int)
 
-    summary_path = Path('results') / 'biomarker_ceaimputation_summary.txt'
+    summary_path = Path('results') / 'biomarker_summary' / 'biomarker_ceaimputation_summary.txt'
     save_biomarker_summary(summary_path, correlation_value, biomarker_pairs_df, imputation_info, regression_params)
     save_biomarker_plot(biomarker_pairs_df, df)
 

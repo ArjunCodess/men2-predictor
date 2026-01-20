@@ -68,7 +68,7 @@ def parse_prediction_table(dataset_type: str) -> List[DatasetEntry]:
     """
 
     file_path = (
-        Path("results") / f"model_comparison_{dataset_type}_detailed_results.txt"
+        Path("results") / "model_comparison" / f"model_comparison_{dataset_type}_detailed_results.txt"
     )
     if not file_path.exists():
         raise FileNotFoundError(
@@ -499,7 +499,7 @@ def main() -> None:
     parser.add_argument(
         "--output",
         type=Path,
-        default=Path("results/statistical_significance_tests.txt"),
+        default=Path("results/statistical_tests/statistical_significance_tests.txt"),
         help="Output path for the textual summary.",
     )
 

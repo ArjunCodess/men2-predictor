@@ -256,8 +256,8 @@ def train_evaluate_model(model_type='logistic', dataset_type='expanded'):
     print("=" * 70)
 
     # Save CI results to file
-    os.makedirs('results', exist_ok=True)
-    ci_file = f'results/{model_type}_{dataset_type}_confidence_intervals.txt'
+    os.makedirs('results/confidence_intervals', exist_ok=True)
+    ci_file = f'results/confidence_intervals/{model_type}_{dataset_type}_confidence_intervals.txt'
     with open(ci_file, 'w') as f:
         f.write(f"{model.model_name.upper()} - 95% CONFIDENCE INTERVALS ({dataset_label})\n")
         f.write("=" * 70 + "\n")

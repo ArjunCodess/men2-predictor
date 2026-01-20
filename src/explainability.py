@@ -693,7 +693,7 @@ def run_lime_explainability(model, X_test_scaled, y_test, test_patients, model_t
 
         print(f"Counterfactual analysis saved to: {counterfactual_path}")
 
-    summary_path = Path("results") / "explainability_summary.txt"
+    summary_path = Path("results") / "explainability" / "explainability_summary.txt"\n    summary_path.parent.mkdir(parents=True, exist_ok=True)
     with open(summary_path, "a") as f:
         f.write("EXPLAINABILITY SUMMARY\n")
         f.write("=" * 60 + "\n")
