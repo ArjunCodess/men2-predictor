@@ -861,31 +861,35 @@ This study has several limitations that should be considered:
 
 This project is licensed under the MIT License.
 
-## Participants
-
-This project was not built in isolation, and I want to acknowledge the people who contributed meaningfully to it.
-
-### Arjun Vijay Prakash
-**Developer**  
-*Class 10 Student, City Montessori School, Kanpur Road Branch*  
-*E-mail: arjunv.prakash12345@gmail.com*
-
-I conceived the project, implemented the machine learning pipeline, conducted the statistical analysis, and wrote the research paper. I also managed the technical infrastructure, including the Hugging Face Space deployment and reproducible codebase.
+## Authors & Contributions
 
 ### Harnoor Kaur
-**Research Lead**  
-*Class 12 Student, City Montessori School, Kanpur Road Branch*  
+*City Montessori School, Kanpur Road, Lucknow, India*  
 *E-mail: har.nooor16@gmail.com*
 
-Harnoor helped extensively with the research side of this project, including locating and compiling relevant peer-reviewed studies and assisting in sourcing and organizing the clinical data used for model development.
+**Contributions:** Literature search, study identification, data curation, and biological interpretation.
 
-### Shashwat Misra
-**Project Mentor**  
+### Arjun Vijay Prakash
+*City Montessori School, Kanpur Road, Lucknow, India*  
+*E-mail: arjunv.prakash12345@gmail.com*
+
+**Contributions:** Designed and implemented the machine learning pipeline, trained models, performed computational analysis, developed the Hugging Face Space deployment, and maintained the reproducible codebase.
+
+### Shashwat Mishra (Corresponding Author)
+*City Montessori School, Kanpur Road, Lucknow, India*  
 *E-mail: mishra.shashwat4002@gmail.com*
 
-Shashwat provided guidance throughout the development process, helped review the approach, and offered feedback on both the technical and research decisions that shaped the final pipeline.
+**Contributions:** Mentorship, advised on methodological decisions including the MICE+PMM imputation strategy, and oversaw project direction.
 
-Their support played an important role in turning this from an idea into a working, validated project.
+---
+
+**Conflict of Interest:** The authors declare no conflicts of interest.
+
+**Funding:** This research received no specific funding from any funding agency in the public, commercial, or not-for-profit sectors.
+
+## Data Availability
+
+All data and source code are publicly available in this repository. While pre-trained models are not included, the repository contains a fully reproducible pipeline to train and evaluate the models locally.
 
 ## Acknowledgements
 

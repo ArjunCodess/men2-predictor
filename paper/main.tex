@@ -187,7 +187,7 @@ The pipeline computes SHAP attributions \cite{lundberg2017shap} for supported mo
 \node[box, right=of feat] (split) {Train/test split\\(80/20 stratified)};
 \node[box, below=of split] (train) {Train models\\(5 families)};
 \node[box, left=of train] (orig) {Original dataset\\n=152};
-\node[box, left=of orig] (exp) {Expanded dataset\\n=216\\(synthetic + SMOTE)};
+\node[box, left=of orig] (exp) {Case-control dataset\\n=1{,}069\\(synthetic + SMOTE)};
 \node[box, below=of train] (eval) {Evaluation\\metrics + CIs\\permutation tests};
 
 \draw[arrow] (lit) -- (json);
@@ -343,10 +343,21 @@ Key limitations include the cohort size, heterogeneity across published sources,
 \section*{Acknowledgements}
 We thank the authors of the contributing studies for publishing detailed clinical reports that enable secondary analyses in rare-disease research.
 
-
 We also thank Ms Unnati Saxena for mentoring support and for coordinating and facilitating the project work.
 
 We acknowledge the open-source community and software ecosystem that supported this work, including scikit-learn, numpy, and visualization libraries used to support reproducible analysis.
+
+\section*{Author Contributions}
+H.K. contributed to literature search, study identification, data curation, and biological interpretation. A.V.P. designed and implemented the machine learning pipeline, trained the models, and performed the computational analysis. S.M. provided mentorship, advised on methodological decisions including the MICE+PMM imputation strategy, and oversaw the project direction. All authors reviewed and approved the final manuscript.
+
+\section*{Conflict of Interest}
+The authors declare no conflicts of interest.
+
+\section*{Funding}
+This research received no specific funding from any funding agency in the public, commercial, or not-for-profit sectors.
+
+\section*{Data Availability}
+All data and source code are publicly available in the GitHub repository at \url{https://github.com/arjuncodess/men2-predictor}. While pre-trained models are not included, the repository contains a fully reproducible pipeline to train and evaluate the models locally. The repository includes the curated patient-level dataset derived from published studies, the complete machine learning pipeline, and figure-generation scripts for full reproducibility.
 
 \clearpage
 \FloatBarrier
