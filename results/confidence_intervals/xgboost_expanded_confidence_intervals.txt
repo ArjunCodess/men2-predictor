@@ -1,0 +1,20 @@
+XGBOOST - 95% CONFIDENCE INTERVALS (EXPANDED)
+======================================================================
+Method: Bootstrap resampling (n=1000 iterations)
+Confidence Level: 95%
+CI Method: Percentile bootstrap
+Test set size: 214 patients
+
+Metric          Mean       Std Dev    Median     95% CI                   
+----------------------------------------------------------------------
+ACCURACY        0.8729     0.0229     0.8738     [0.8271, 0.9113]         
+PRECISION       0.6565     0.0533     0.6573     [0.5555, 0.7537]         
+RECALL          0.9799     0.0194     0.9811     [0.9348, 1.0000]         
+F1              0.7849     0.0395     0.7879     [0.7048, 0.8522]         
+ROC_AUC         0.9891     0.0071     0.9902     [0.9732, 0.9995]         
+AVG_PRECISION   0.9752     0.0148     0.9771     [0.9399, 0.9983]         
+======================================================================
+Notes:
+- Std Dev: Bootstrap standard deviation (sample)
+- CI: Percentile-based confidence interval
+- All metrics calculated on test set using bootstrap resampling

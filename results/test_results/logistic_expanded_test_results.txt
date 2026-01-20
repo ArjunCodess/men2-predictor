@@ -1,0 +1,11 @@
+LOGISTIC_REGRESSION TEST RESULTS (EXPANDED)
+============================================================
+Accuracy: 0.7944 (95% CI: [0.8785, 0.9533])
+Precision: 0.5376 (95% CI: [0.6557, 0.8571])
+Recall: 0.9804 (95% CI: [0.8704, 1.0000])
+F1 Score: 0.6944 (95% CI: [0.7619, 0.9063])
+ROC AUC: 0.9824 (95% CI: [0.9649, 0.9951])
+Average Precision: 0.9542 (95% CI: [0.9080, 0.9871])
+============================================================
+
+Bootstrap method: 1000 iterations, 95% confidence level

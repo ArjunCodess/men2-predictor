@@ -1,0 +1,57 @@
+STATISTICAL SIGNIFICANCE TESTS: ORIGINAL VS EXPANDED DATASETS
+=============================================================
+
+Model: Logistic Regression
+- Original Recall: 86.7% (n=15)
+- Expanded Recall: 98.0% (n=51)
+- Recall Drop (original - expanded): -11.4%
+- Bootstrap Mean Drop: -11.2% (Std: 0.086, 95% CI: [-27.5%, 3.9%])
+- McNemar's Test: None
+- Permutation Test p-value: 0.1318
+- Significance (alpha=0.05/0.01/0.001): 0.050:No/0.010:No/0.001:No
+- Effect Size (Cohen's h): -0.467
+
+Model: Random Forest
+- Original Recall: 93.3% (n=15)
+- Expanded Recall: 96.1% (n=51)
+- Recall Drop (original - expanded): -2.7%
+- Bootstrap Mean Drop: -3.0% (Std: 0.072, 95% CI: [-18.0%, 7.8%])
+- McNemar's Test: None
+- Permutation Test p-value: 1
+- Significance (alpha=0.05/0.01/0.001): 0.050:No/0.010:No/0.001:No
+- Effect Size (Cohen's h): -0.124
+
+Model: LightGBM
+- Original Recall: 86.7% (n=15)
+- Expanded Recall: 96.1% (n=51)
+- Recall Drop (original - expanded): -9.4%
+- Bootstrap Mean Drop: -9.5% (Std: 0.091, 95% CI: [-27.5%, 5.9%])
+- McNemar's Test: None
+- Permutation Test p-value: 0.2238
+- Significance (alpha=0.05/0.01/0.001): 0.050:No/0.010:No/0.001:No
+- Effect Size (Cohen's h): -0.349
+
+Model: XGBoost
+- Original Recall: 100.0% (n=15)
+- Expanded Recall: 98.0% (n=51)
+- Recall Drop (original - expanded): 2.0%
+- Bootstrap Mean Drop: 1.9% (Std: 0.020, 95% CI: [0.0%, 5.9%])
+- McNemar's Test: None
+- Permutation Test p-value: 1
+- Significance (alpha=0.05/0.01/0.001): 0.050:No/0.010:No/0.001:No
+- Effect Size (Cohen's h): 0.281
+
+Model: Support Vector Machine
+- Original Recall: 100.0% (n=15)
+- Expanded Recall: 98.0% (n=51)
+- Recall Drop (original - expanded): 2.0%
+- Bootstrap Mean Drop: 2.0% (Std: 0.019, 95% CI: [0.0%, 5.9%])
+- McNemar's Test: None
+- Permutation Test p-value: 1
+- Significance (alpha=0.05/0.01/0.001): 0.050:No/0.010:No/0.001:No
+- Effect Size (Cohen's h): 0.281
+
+Overall Conclusion:
+Permutation testing did not flag any recall drops as statistically significant.
+
+McNemar's test could not be applied because the original and expanded test sets share no overlapping positive patients; therefore, we rely on permutation and bootstrap analyses to quantify uncertainty.

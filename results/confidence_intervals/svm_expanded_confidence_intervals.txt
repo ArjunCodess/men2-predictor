@@ -1,0 +1,20 @@
+SUPPORT_VECTOR_MACHINE - 95% CONFIDENCE INTERVALS (EXPANDED)
+======================================================================
+Method: Bootstrap resampling (n=1000 iterations)
+Confidence Level: 95%
+CI Method: Percentile bootstrap
+Test set size: 214 patients
+
+Metric          Mean       Std Dev    Median     95% CI                   
+----------------------------------------------------------------------
+ACCURACY        0.9163     0.0187     0.9159     [0.8785, 0.9486]         
+PRECISION       0.7804     0.0524     0.7818     [0.6715, 0.8806]         
+RECALL          0.9027     0.0411     0.9057     [0.8140, 0.9750]         
+F1              0.8359     0.0375     0.8393     [0.7568, 0.9032]         
+ROC_AUC         0.9747     0.0097     0.9758     [0.9515, 0.9903]         
+AVG_PRECISION   0.9278     0.0285     0.9303     [0.8608, 0.9733]         
+======================================================================
+Notes:
+- Std Dev: Bootstrap standard deviation (sample)
+- CI: Percentile-based confidence interval
+- All metrics calculated on test set using bootstrap resampling
