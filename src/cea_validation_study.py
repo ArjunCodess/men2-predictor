@@ -588,8 +588,7 @@ def save_results(all_results):
         f.write("CEA IMPUTATION VALIDATION STUDY RESULTS\n")
         f.write("=" * 80 + "\n")
         f.write(f"Model: {model_type.upper()}\n")
-        f.write(f"Dataset: {dataset_type.upper()}\n")
-        f.write(f"Timestamp: {datetime.now().isoformat()}\n\n")
+        f.write(f"Dataset: {dataset_type.upper()}\n\n")
         
         f.write("PURPOSE:\n")
         f.write("This study addresses reviewer concern about weak CEA correlation (r=0.24)\n")

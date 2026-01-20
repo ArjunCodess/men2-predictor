@@ -3,7 +3,6 @@ CEA IMPUTATION VALIDATION STUDY RESULTS
 ================================================================================
 Model: LOGISTIC
 Dataset: EXPANDED
-Timestamp: 2026-01-20T20:34:28.791993
 
 PURPOSE:
 This study addresses reviewer concern about weak CEA correlation (r=0.24)

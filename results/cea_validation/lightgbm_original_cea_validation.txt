@@ -3,7 +3,6 @@ CEA IMPUTATION VALIDATION STUDY RESULTS
 ================================================================================
 Model: LIGHTGBM
 Dataset: ORIGINAL
-Timestamp: 2026-01-20T20:34:24.888186
 
 PURPOSE:
 This study addresses reviewer concern about weak CEA correlation (r=0.24)

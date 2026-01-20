@@ -3,7 +3,6 @@ CEA IMPUTATION VALIDATION STUDY RESULTS
 ================================================================================
 Model: XGBOOST
 Dataset: EXPANDED
-Timestamp: 2026-01-20T20:34:29.570826
 
 PURPOSE:
 This study addresses reviewer concern about weak CEA correlation (r=0.24)

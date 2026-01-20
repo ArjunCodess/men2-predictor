@@ -3,7 +3,6 @@ CEA IMPUTATION VALIDATION STUDY RESULTS
 ================================================================================
 Model: RANDOM_FOREST
 Dataset: EXPANDED
-Timestamp: 2026-01-20T20:34:29.316907
 
 PURPOSE:
 This study addresses reviewer concern about weak CEA correlation (r=0.24)
