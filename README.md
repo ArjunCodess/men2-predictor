@@ -13,6 +13,7 @@ In India, genetic testing for MEN2 costs INR 20,000 (~$225 USD), putting life-sa
 MEN2 Predictor aggregates **152 confirmed RET carriers from 20 peer-reviewed studies (24 variants)** into a reproducible pipeline. On the real clinical data alone, we achieve **100% sensitivity** (74.19% accuracy with XGBoost) - catching every documented cancer case. The expanded synthetic-augmented models push accuracy to 97.20% while maintaining 96-98% recall, potentially offering a cost-effective screening alternative for resource-limited settings.
 
 ## Table of Contents
+- [Awards & Recognition](#awards--recognition)
 - [Key Findings](#key-findings)
 - [About The Project](#about-the-project)
 - [Clinical Performance](#clinical-performance)
@@ -25,6 +26,23 @@ MEN2 Predictor aggregates **152 confirmed RET carriers from 20 peer-reviewed stu
 - [License](#license)
 - [Authors](#authors)
 - [Acknowledgements](#acknowledgements)
+
+## Awards & Recognition
+
+🏆 **INSEF Regional Fair (Online) 2025-26 — Bronze Prize**
+
+This project was selected for the [INSEF Regional Fair (Online) 2025](https://sciencesociety.in/insef/Online_INSEF_Selection_2025.htm) and was awarded the **Bronze Prize** at the competition held from January 3-11, 2026.
+
+📜 [View Results](https://insef.org/insef/INSEF_Regional_Fair_Online_2025_26_Results.htm)
+
+### Team Certificates
+
+| Arjun Vijay Prakash | Harnoor Kaur |
+|:-------------------:|:------------:|
+| ![Arjun's Certificate](assets/ArjunVijayPrakash_38.jpg) | ![Harnoor's Certificate](assets/HarnoorKaur_39.jpg) |
+| 📄 [Certificate (PDF)](assets/ArjunVijayPrakash_38.pdf) | 📄 [Certificate (PDF)](assets/HarnoorKaur_39.pdf) |
+
+---
 
 ## Key Findings
 
