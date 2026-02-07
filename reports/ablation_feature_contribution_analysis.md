@@ -221,17 +221,7 @@ The comparison between datasets reveals the true nature of this finding:
 
 1. **On real patient data:** Calcitonin has no effect on accuracy. This suggests that while calcitonin is clinically important for MTC surveillance, it may be redundant with other features in our model (ATA risk level, age, nodules).
 
-2. **On synthetic data:** Removing calcitonin *improves* performance. This is a **known issue with synthetic data generation** — when synthetic features don't accurately capture real-world biomarker distributions, they introduce noise rather than signal.
-
-### Is This a Novel Finding?
-
-**No.** The observation that poorly-modeled synthetic features degrade model performance is well-documented in machine learning literature. Common known issues include:
-
-- Synthetic data "sterility" — lacking the noise characteristics of real data
-- Difficulty capturing complex multi-dimensional correlations
-- Feature noise as irrelevant information that impedes learning
-
-What our ablation study demonstrates is a **practical example** of this known issue in the rare disease context, not a novel discovery.
+2. **On synthetic data:** Removing calcitonin *improves* performance. This is consistent with known challenges in synthetic data generation — when synthetic features don't accurately capture real-world biomarker distributions, they introduce noise rather than signal.
 
 ### Clinical Implications
 
