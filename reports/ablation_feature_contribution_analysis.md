@@ -189,6 +189,67 @@ The findings are consistent across all five machine learning paradigms:
 
 ---
 
+## Finding 6: Calcitonin Feature Behavior Differs Between Real and Synthetic Data
+
+### Observation
+
+Removing calcitonin features has **different effects** depending on the dataset:
+
+**On Expanded (86% Synthetic) Data — Accuracy Improves:**
+
+| Model | Baseline | No Calcitonin | Change |
+|-------|----------|---------------|--------|
+| **LightGBM** | 96.73% | **98.13%** | **+1.40%** |
+| **Logistic Regression** | 91.59% | **94.39%** | **+2.80%** |
+| **SVM** | 92.52% | **94.86%** | **+2.34%** |
+| **Random Forest** | 93.93% | **95.79%** | **+1.86%** |
+| XGBoost | 88.79% | 86.45% | -2.34% |
+
+**On Original (100% Real) Data — No Change:**
+
+| Model | Baseline | No Calcitonin | Change |
+|-------|----------|---------------|--------|
+| **LightGBM** | 80.65% | 80.65% | **0.00%** |
+| Logistic Regression | 70.97% | 70.97% | 0.00% |
+| SVM | 64.52% | 64.52% | 0.00% |
+| Random Forest | 80.65% | 80.65% | 0.00% |
+| XGBoost | 74.19% | 74.19% | 0.00% |
+
+### Interpretation: This Is a Synthetic Data Quality Issue
+
+The comparison between datasets reveals the true nature of this finding:
+
+1. **On real patient data:** Calcitonin has no effect on accuracy. This suggests that while calcitonin is clinically important for MTC surveillance, it may be redundant with other features in our model (ATA risk level, age, nodules).
+
+2. **On synthetic data:** Removing calcitonin *improves* performance. This is a **known issue with synthetic data generation** — when synthetic features don't accurately capture real-world biomarker distributions, they introduce noise rather than signal.
+
+### Is This a Novel Finding?
+
+**No.** The observation that poorly-modeled synthetic features degrade model performance is well-documented in machine learning literature. Common known issues include:
+
+- Synthetic data "sterility" — lacking the noise characteristics of real data
+- Difficulty capturing complex multi-dimensional correlations
+- Feature noise as irrelevant information that impedes learning
+
+What our ablation study demonstrates is a **practical example** of this known issue in the rare disease context, not a novel discovery.
+
+### Clinical Implications
+
+This finding does **not** diminish calcitonin's clinical value:
+
+1. Calcitonin remains the gold-standard biomarker for MTC surveillance per ATA guidelines
+2. The lack of improvement on real data suggests our other features (genetics, age, nodules) already capture the predictive signal
+3. For synthetic-augmented models, practitioners should validate each feature's contribution carefully
+
+### Methodological Takeaway
+
+When using synthetic data augmentation:
+- **Always compare feature contributions** on real vs synthetic datasets
+- **Ablation studies are essential** to identify features that become noise after synthetic generation
+- **Do not assume** feature importance rankings from synthetic-trained models reflect clinical reality
+
+---
+
 ## Appendix: Raw Results by Model
 
 ### LightGBM (Expanded Dataset)

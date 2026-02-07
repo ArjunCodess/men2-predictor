@@ -657,6 +657,8 @@ python src/ablation_study.py --m=random_forest --d=both
 
 **Key Finding:** With all genetic features removed, the model still achieves 94.9% accuracy using only biomarkers - proving it learns beyond "restating consensus knowledge."
 
+**Calcitonin Feature Behavior:** On the expanded (synthetic) dataset, removing calcitonin *improves* accuracy (LightGBM: 96.7% → 98.1%). On the original (real) dataset, removing calcitonin has *zero effect*. This is a synthetic data quality issue, not a clinical insight — synthetic calcitonin values don't accurately model real biomarker patterns. Full analysis in [ablation_feature_contribution_analysis.md](reports/ablation_feature_contribution_analysis.md).
+
 ### Explainability (SHAP + LIME)
 
 - Explainability runs automatically during testing (including `python main.py --m=all --d=both`). Use `python src/test_model.py --no-explain ...` to skip.

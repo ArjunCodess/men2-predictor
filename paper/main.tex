@@ -288,6 +288,16 @@ A systematic ablation study was conducted to address the concern that ATA risk l
 
 Complete ablation results are provided in Supplementary Table S2.
 
+\subsection{Calcitonin Feature Behavior: Real vs Synthetic Data}
+
+An important observation emerged from the ablation study: removing calcitonin features has \textbf{different effects} depending on the dataset. On the expanded dataset (86\% synthetic records), removing calcitonin improves LightGBM accuracy from 96.73\% to 98.13\% (+1.40\%), with similar improvements for Random Forest (+1.86\%), SVM (+2.34\%), and Logistic Regression (+2.80\%).
+
+However, on the original paper-only dataset (100\% real patients), removing calcitonin has \textbf{zero effect} on any model's accuracy. This contrast reveals the true nature of the finding: it is a synthetic data quality issue, not a clinical insight about calcitonin.
+
+\textbf{Interpretation:} When synthetic records dominate the dataset, features that are poorly modeled in the generation process can introduce noise rather than signal. The synthetic calcitonin values likely do not accurately capture real-world biomarker distributions. This observation is consistent with known challenges in synthetic data generation, including difficulty capturing complex multi-dimensional correlations and the risk of ``sterile'' synthetic features that lack realistic noise characteristics.
+
+\textbf{Clinical implications:} This finding does not diminish calcitonin's established clinical value for MTC surveillance. Rather, it demonstrates that ablation studies comparing real and synthetic datasets are essential when evaluating synthetic-augmented models. Feature importance rankings derived from synthetic-trained models may not reflect clinical reality.
+
 \subsection{Empirical Validation of CEA Imputation}
 
 The observed calcitonin--CEA correlation (r = 0.24, n = 34) represents a weak association. Concerns about imputation reliability are valid given this modest correlation. A comprehensive sensitivity analysis was conducted comparing model performance with and without CEA features, and across five different imputation methods.
