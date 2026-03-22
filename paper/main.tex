@@ -73,11 +73,11 @@ Multiple Endocrine Neoplasia syndrome type 2 (MEN2) is a rare hereditary endocri
 
 A key barrier in resource-limited settings is access to confirmatory RET genetic testing, which can be cost-prohibitive for many families. We address this gap by developing a reproducible machine learning workflow for screening-oriented risk stratification using routinely reported clinical features and biomarkers. The prediction task is binary classification of MTC status (MTC vs.\ no MTC) in literature-derived MEN2/RET-carrier cohorts, intended to support prioritization and follow-up rather than replace genetic diagnosis.
 
-Patient-level data were curated from published case reports and cohorts, yielding 152 confirmed RET carriers across 20 peer-reviewed studies spanning 24 RET variants across ATA risk categories (Moderate, High, and Highest risk per the 2015 revised guidelines \cite{doi_10_1089_thy_2014_0335}). Key inputs include demographic and presentation variables, RET variant and risk level (when known), and biomarkers including calcitonin and CEA.
+Patient-level data were curated from published case reports and cohorts, yielding 149 confirmed RET carriers across 10 peer-reviewed studies spanning 14 RET variants across ATA risk categories (Moderate, High, and Highest risk per the 2015 revised guidelines \cite{doi_10_1089_thy_2014_0335}). Key inputs include demographic and presentation variables, RET variant and risk level (when known), and biomarkers including calcitonin and CEA.
 
 We implemented a pipeline that harmonizes heterogeneous sources, imputes missing CEA values using Multiple Imputation by Chained Equations with Predictive Mean Matching (MICE+PMM), engineers variant-aware interactions, benchmarks five model families (logistic regression, random forest, LightGBM, XGBoost, and linear SVM) under stratified validation with Synthetic Minority Over-sampling Technique (SMOTE) applied to training folds, and automatically quantifies uncertainty through bootstrap confidence intervals (1,000 iterations).
 
-On the original paper-only cohort, XGBoost and SVM achieved 100\% recall---100\% sensitivity with no false negatives---achieving 74.19\% and 64.52\% accuracy respectively. In the case-control setting (n = 1{,}069 total records), LightGBM achieved the highest accuracy (97.20\%) with 96.08\% recall. These results support MEN2 Predictor as a screening and risk-stratification aid to complement genetic testing and clinical guidelines, with prospective validation required prior to clinical deployment.
+On the original paper-only cohort, logistic regression and XGBoost achieved 100\% recall---100\% sensitivity with no false negatives---with XGBoost providing the strongest zero-miss balance at 83.33\% accuracy. In the case-control setting (n = 1{,}047 total records), LightGBM achieved the highest accuracy (96.19\%) with 90.20\% recall. These results support MEN2 Predictor as a screening and risk-stratification aid to complement genetic testing and clinical guidelines, with prospective validation required prior to clinical deployment.
 
 \section*{Keywords}
 MEN2; RET; Medullary thyroid carcinoma; Calcitonin; Carcinoembryonic antigen; Rare disease; Machine learning; Screening; Risk stratification; Reproducibility
@@ -98,7 +98,7 @@ Rare-disease modeling introduces several challenges: small sample size, heteroge
 \section{Materials and Methods}
 
 \subsection{Data Sources}
-This study is a retrospective secondary analysis of published, de-identified, patient-level data extracted from twenty peer-reviewed studies \cite{doi_10_1210_jcemcr_luaf002,doi_10_3390_genes13050864,doi_10_1186_s12887_020_02224_4,doi_10_1016_j_ando_2015_10_007,doi_10_1007_s00595_013_0826_8,doi_10_1097_MS9_0000000000002923,doi_10_1155_2012_491054,doi_10_1155_2020_4147097,doi_10_3390_clinpract14060179,doi_10_1530_EDM_24_0009,doi_10_4103_ijc_IJC_639_19,doi_10_1210_jc_2015_2948,doi_10_12998_wjcc_v12_i15_2627,doi_10_1089_thy_2016_0374,doi_10_1530_eje_1_02216,doi_10_1210_jc_2017_02402,doi_10_18632_oncotarget_4992,doi_10_12659_AJCR_935207,doi_10_1210_clinem_dgac222}. The paper-only dataset contains 152 confirmed RET carriers across 24 variants with the binary target label MTC vs. no MTC.
+This study is a retrospective secondary analysis of published, de-identified, patient-level data extracted from ten peer-reviewed studies retained after raw-data filtering. The paper-only dataset contains 149 confirmed RET carriers across 14 variants with the binary target label MTC vs. no MTC.
 
 \subsection{Ethical Considerations}
 No new human participants were recruited and no animal experiments were conducted. The analysis uses only secondary data derived from published studies without additional identifiable patient information. Institutional review board approval was not required for analysis of published, de-identified secondary data. Informed consent was not obtained because the analysis did not involve direct interaction with participants; consent and ethics approvals (where applicable) were handled by the original studies.
@@ -107,7 +107,7 @@ No new human participants were recruited and no animal experiments were conducte
 The pipeline constructs demographic, genetic, biomarker, and clinical features including age, sex, RET variant (one-hot encoded), ATA-aligned variant risk level (Moderate/High/Highest per 2015 ATA guidelines), calcitonin and CEA measurements (with missingness indicators), thyroid ultrasound nodule features, family history of MTC, pheochromocytoma, and hyperparathyroidism.
 
 \subsection{Biomarker Integration and Imputation}
-CEA missingness is handled using multivariate imputation by chained equations with predictive mean matching \cite{doi_10_18637_jss_v045_i03}. The imputation model is informed by 34 observed paired calcitonin--CEA measurements across twelve cohorts (including a ctDNA cohort contributing 16 pairs). The observed calcitonin--CEA Pearson correlation is 0.2425 (n = 34), and the imputation strategy is applied after cohort assembly to preserve reproducibility.
+CEA missingness is handled using multivariate imputation by chained equations with predictive mean matching \cite{doi_10_18637_jss_v045_i03}. The imputation model is informed by 12 observed paired calcitonin--CEA measurements across six cohorts. The observed calcitonin--CEA Pearson correlation is 0.1158 (n = 12), and the imputation strategy is applied after cohort assembly to preserve reproducibility.
 
 MICE+PMM was selected specifically for its suitability in small biomedical datasets. Unlike simple mean or median imputation, MICE models each variable with missing data as a function of other observed variables, preserving inter-variable correlations. Predictive Mean Matching further enhances biological plausibility by selecting imputed values from observed donor cases rather than generating potentially impossible predicted values (e.g., negative biomarker concentrations). This approach has been validated for datasets of similar size (n $\approx$ 150) in rare disease contexts.
 
@@ -115,8 +115,8 @@ MICE+PMM was selected specifically for its suitability in small biomedical datas
 
 \subsection{Datasets: Paper-Only and Expanded Case-Control}
 Two datasets are evaluated:
-(i) \textbf{Original (paper-only)}: the 152-carrier cohort.
-(ii) \textbf{Case-control}: the original cohort augmented with variant-matched synthetic controls and trained with SMOTE class balancing applied only to the training split \cite{doi_10_1613_jair_953}. The case-control dataset comprises 1{,}069 total records.
+(i) \textbf{Original (paper-only)}: the 149-carrier cohort.
+(ii) \textbf{Case-control}: the original cohort augmented with variant-matched synthetic controls and trained with SMOTE class balancing applied only to the training split \cite{doi_10_1613_jair_953}. The case-control dataset comprises 1{,}047 total records.
 
 \subsection{Models}
 Five models are benchmarked: logistic regression, random forest, linear support vector machine (SVM), XGBoost \cite{doi_10_1145_2939672_2939785}, and LightGBM \cite{ke2017lightgbm}. Model training and evaluation follow a standardized pipeline implemented with scikit-learn \cite{pedregosa2011scikit}.
@@ -131,13 +131,13 @@ Each dataset is split using an 80/20 stratified train/test partition with fixed 
 \section{Results}
 
 \subsection{Cohort Summary}
-The paper-only cohort includes 152 RET carriers across 20 studies and 24 RET variants, with 72 MTC cases and 107 females / 45 males. Mean age is 35.44 years (median 34.0; range 1--90). The imputation model is informed by 34 observed paired calcitonin--CEA measurements across twelve cohorts.
+The paper-only cohort includes 149 RET carriers across 10 studies and 14 RET variants, with 73 MTC cases and 99 females / 50 males. Mean age is 34.27 years (median 31.5; range 0.17--90). The imputation model is informed by 12 observed paired calcitonin--CEA measurements across six cohorts.
 
 \subsection{Screening-Safe Baseline on Paper-Only Data}
-On the paper-only test split (31 patients), XGBoost and SVM achieve 100\% recall (sensitivity) with 74.19\% and 64.52\% accuracy respectively. In safety-critical screening, sensitivity is prioritized because each missed case corresponds to a potentially undetected cancer.
+On the paper-only test split (30 patients), logistic regression and XGBoost achieve 100\% recall (sensitivity), with XGBoost reaching 83.33\% accuracy and logistic regression reaching 80.00\% accuracy. In safety-critical screening, sensitivity is prioritized because each missed case corresponds to a potentially undetected cancer.
 
 \subsection{Effect of Synthetic Augmentation}
-Synthetic expansion increases accuracy substantially for ensemble models, with LightGBM achieving 97.20\% accuracy and 96.08\% recall on the expanded test split (44 patients). Relative to the paper-only baseline, augmentation can reduce recall for some models; permutation testing did not detect statistically significant recall drops under the study's test-set structure.
+Synthetic expansion increases accuracy substantially for ensemble models, with LightGBM achieving 96.19\% accuracy and 90.20\% recall on the expanded test split (210 patients). Relative to the paper-only baseline, augmentation changes recall in a model-dependent way; permutation testing identified a significant recall improvement only for LightGBM under the study's test-set structure.
 
 \begin{table}[ht]
 \centering
@@ -146,11 +146,11 @@ Synthetic expansion increases accuracy substantially for ensemble models, with L
 \toprule
 Model & Acc (Original) & Recall (Original) & Acc (Expanded) & Recall (Expanded) \\
 \midrule
-Logistic Regression & 0.7097 & 0.8667 & 0.7944 & 0.9804 \\
-Random Forest & 0.8065 & 0.9333 & 0.9346 & 0.9608 \\
-LightGBM & 0.8065 & 0.8667 & 0.9720 & 0.9608 \\
-XGBoost & 0.7419 & 1.0000 & 0.8738 & 0.9804 \\
-SVM (Linear) & 0.6452 & 1.0000 & 0.4626 & 0.9804 \\
+Logistic Regression & 0.8000 & 1.0000 & 0.7333 & 0.9804 \\
+Random Forest & 0.8333 & 0.7333 & 0.9286 & 0.8431 \\
+LightGBM & 0.7667 & 0.6000 & 0.9619 & 0.9020 \\
+XGBoost & 0.8333 & 1.0000 & 0.8905 & 0.9608 \\
+SVM (Linear) & 0.6667 & 0.7333 & 0.8238 & 0.6078 \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -165,13 +165,13 @@ The pipeline computes SHAP attributions \cite{lundberg2017shap} for supported mo
   box/.style={draw, rounded corners, align=center, inner sep=5pt, minimum width=36mm},
   arrow/.style={-{Latex[length=2.5mm]}, thick}
 ]
-\node[box] (lit) {Published studies\\(20 sources)};
+\node[box] (lit) {Published studies\\(10 sources)};
 \node[box, right=of lit] (json) {Structured extraction\\to JSON};
 \node[box, right=of json] (feat) {Feature engineering\\+ imputation};
 \node[box, right=of feat] (split) {Train/test split\\(80/20 stratified)};
 \node[box, below=of split] (train) {Train models\\(5 families)};
-\node[box, left=of train] (orig) {Original dataset\\n=152};
-\node[box, left=of orig] (exp) {Case-control dataset\\n=1{,}069\\(synthetic + SMOTE)};
+\node[box, left=of train] (orig) {Original dataset\\n=149};
+\node[box, left=of orig] (exp) {Case-control dataset\\n=1{,}047\\(synthetic + SMOTE)};
 \node[box, below=of train] (eval) {Evaluation\\metrics + CIs\\permutation tests};
 
 \draw[arrow] (lit) -- (json);
@@ -188,7 +188,7 @@ The pipeline computes SHAP attributions \cite{lundberg2017shap} for supported mo
 \begin{figure}[ht]
 \centering
 \includegraphics[width=\linewidth]{../charts/variant_distribution.png}
-\caption{Distribution of RET variants in the paper-only cohort (n = 152).}
+\caption{Distribution of RET variants in the paper-only cohort (n = 149).}
 \end{figure}
 
 \begin{figure}[ht]
@@ -200,7 +200,7 @@ The pipeline computes SHAP attributions \cite{lundberg2017shap} for supported mo
 \begin{figure}[ht]
 \centering
 \includegraphics[width=\linewidth]{../charts/calcitonin_cea_relationship.png}
-\caption{Observed calcitonin--CEA relationship across cohorts with paired measurements (n = 34).}
+\caption{Observed calcitonin--CEA relationship across cohorts with paired measurements (n = 12).}
 \end{figure}
 
 \begin{figure}[ht]
@@ -215,7 +215,7 @@ The pipeline computes SHAP attributions \cite{lundberg2017shap} for supported mo
 \includegraphics[width=\linewidth]{../charts/roc_curves/lightgbm_expanded.png}
 \caption{LightGBM (Expanded)}
 \end{subfigure}
-\caption{Representative ROC curves: XGBoost on original data (100\% recall, zero-miss screening baseline) and LightGBM on expanded data (highest accuracy, 97.20\%).}
+\caption{Representative ROC curves: XGBoost on original data (100\% recall, zero-miss screening baseline) and LightGBM on expanded data (highest accuracy, 96.19\%).}
 \end{figure}
 
 \begin{figure}[ht]
@@ -261,7 +261,7 @@ A systematic ablation study was conducted to address the concern that ATA risk l
 
 \textbf{Key Findings:}
 \begin{enumerate}
-\item \textbf{Biomarkers-only achieves strong performance:} When all genetic features (ATA risk level + variant encodings) are removed, the model still achieves 90.2--94.9\% accuracy on the expanded dataset. LightGBM achieves 94.86\% accuracy with 96.08\% recall using only biomarker and demographic features.
+\item \textbf{Biomarkers-only achieves strong performance:} When all genetic features (ATA risk level + variant encodings) are removed, the model still achieves 93.33\% accuracy on the expanded dataset. LightGBM achieves 93.33\% accuracy with 82.35\% recall using only biomarker and demographic features.
 
 \item \textbf{Genetics-only underperforms biomarkers-only:} Models using only genetic features (with all biomarkers removed) achieve 81.8--92.1\% accuracy, which is 5--10 percentage points lower than biomarkers-only configurations. This demonstrates that the model learns primarily from clinical biomarker patterns rather than ``restating consensus knowledge.'' Biologically, this finding reflects the distinction between genotype (inherited risk potential) and phenotype (current disease state): a patient may carry a High-Risk RET mutation yet remain cancer-free at a young age, whereas elevated calcitonin indicates active C-cell pathology. Biomarkers thus capture disease activity that genotype alone cannot predict.
 
@@ -274,21 +274,21 @@ Complete ablation results are provided in Supplementary Table S2.
 
 \subsection{Calcitonin Feature Behavior: Real vs Synthetic Data}
 
-An important observation emerged from the ablation study: removing calcitonin features has \textbf{different effects} depending on the dataset. On the expanded dataset (86\% synthetic records), removing calcitonin improves LightGBM accuracy from 96.73\% to 98.13\% (+1.40\%), with similar improvements for Random Forest (+1.86\%), SVM (+2.34\%), and Logistic Regression (+2.80\%).
+An important observation emerged from the refreshed ablation study: removing calcitonin features now \textbf{reduces} LightGBM accuracy on the expanded dataset from 96.19\% to 95.24\% ($-$0.95\%). The drop is modest but directionally consistent with calcitonin remaining a clinically meaningful feature even after the cohort was filtered toward surveillance-heavy family studies.
 
-However, on the original paper-only dataset (100\% real patients), removing calcitonin has \textbf{zero effect} on any model's accuracy. This discrepancy indicates a synthetic data quality issue rather than a clinical insight about calcitonin.
+On the filtered original paper-only dataset, zero-miss performance is still achievable without relying exclusively on calcitonin, but the best-performing screening model (XGBoost) continues to benefit from the full biomarker feature set.
 
-\textbf{Interpretation:} When synthetic records dominate the dataset, features that are poorly modeled in the generation process can introduce noise rather than signal. The synthetic calcitonin values likely do not accurately capture real-world biomarker distributions. This observation is consistent with known challenges in synthetic data generation, including difficulty capturing complex multi-dimensional correlations and the risk of ``sterile'' synthetic features that lack realistic noise characteristics.
+\textbf{Interpretation:} In the current filtered cohort, calcitonin behaves more consistently with its expected clinical role. Rather than acting like a noisy synthetic artifact, it contributes useful signal alongside genotype and family-history features.
 
 \textbf{Clinical implications:} This finding does not diminish calcitonin's established clinical value for MTC surveillance. Rather, it demonstrates that ablation studies comparing real and synthetic datasets are essential when evaluating synthetic-augmented models. Feature importance rankings derived from synthetic-trained models may not reflect clinical reality.
 
 \subsection{Empirical Validation of CEA Imputation}
 
-The observed calcitonin--CEA correlation (r = 0.24, n = 34) represents a weak association. Concerns about imputation reliability are valid given this modest correlation. A comprehensive sensitivity analysis was conducted comparing model performance with and without CEA features, and across five different imputation methods.
+The observed calcitonin--CEA correlation (r = 0.12, n = 12) represents a weak association. Concerns about imputation reliability remain valid given this modest correlation and the much smaller paired-lab subset. A comprehensive sensitivity analysis was conducted comparing model performance with and without CEA features, and across five different imputation methods.
 
-\textbf{CEA Contribution Analysis:} LightGBM achieves 97.20\% accuracy with CEA features and 96.73\% without CEA features on the expanded dataset, a difference of only 0.47 percentage points. This finding demonstrates that CEA provides minimal predictive benefit for initial MTC detection.
+\textbf{CEA Contribution Analysis:} LightGBM achieves 96.19\% accuracy with CEA features and 92.86\% without CEA features on the expanded dataset, a difference of 3.33 percentage points. This finding suggests that CEA retains modest predictive value in the filtered cohort.
 
-\textbf{Imputation Method Robustness:} Testing four imputation strategies (MICE+PMM, mean, median, zero) showed accuracy variation of less than 1 percentage point (96.26\%--97.20\%). The current MICE+PMM approach achieves the highest accuracy (97.20\%), while even naive zero imputation achieved 96.26\% accuracy, only 0.93\% below baseline.
+\textbf{Imputation Method Robustness:} Testing four imputation strategies (MICE+PMM, mean, median, zero) showed accuracy variation of 92.86\%--96.19\%. The current MICE+PMM approach achieves the highest accuracy (96.19\%), while mean and zero imputation each reached 93.81\%.
 
 \textbf{Clinical Rationale for CEA Inclusion:} Despite minimal predictive benefit, CEA was included for clinical reasons. Calcitonin alone has specificity limitations---elevated levels can occur in hypergastrinemia, kidney insufficiency, other neuroendocrine tumors, and with certain medications (omeprazole, beta-blockers). More critically, CEA serves as a safety marker for dedifferentiated MTC: as tumors become more aggressive, they may lose calcitonin-producing capacity while continuing to secrete CEA. Rising CEA with stable or declining calcitonin is a recognized sign of tumor dedifferentiation and poor prognosis \cite{doi_10_12659_AJCR_935207}. Clinical guidelines therefore recommend combined calcitonin--CEA assessment, and including both markers aligns with standard practice for MEN2 management.
 
@@ -297,15 +297,6 @@ The observed calcitonin--CEA correlation (r = 0.24, n = 34) represents a weak as
 \subsection{Biomarker Collection Timing in Source Studies}
 
 Concerns have been raised that calcitonin and CEA measurements may be ``post-diagnostic markers'' collected after MTC was already clinically confirmed, which would introduce information leakage if the model is intended for screening.
-
-\textbf{Classification of Source Studies:} We reviewed the timing of biomarker collection across all 20 source studies:
-\begin{itemize}
-\item \textbf{Pre-diagnostic (screening):} 7 studies (35\%) collected biomarkers as part of surveillance protocols for asymptomatic RET mutation carriers, before MTC was histologically confirmed.
-\item \textbf{Post-diagnostic (clinical):} 5 studies (25\%) collected biomarkers after symptomatic presentation and diagnosis.
-\item \textbf{Mixed:} 8 studies (40\%) included both index patients with clinical presentations and family members identified through subsequent screening.
-\end{itemize}
-
-\textbf{Interpretation:} The majority of source data (75\%) includes biomarker measurements from pre-diagnostic or mixed contexts, consistent with the clinical role of calcitonin as a screening biomarker in MEN2 surveillance protocols.
 
 \subsection{Genotype-Phenotype Correlations and RET Variant Complexity}
 
@@ -330,7 +321,7 @@ For High-Risk (ATA-H) mutations such as C634Y, current guidelines recommend prop
 \subsection{Limitations}
 
 \begin{enumerate}
-\item \textbf{Sample size:} The paper-only cohort of 152 RET carriers is small by machine learning standards, limiting generalizability and increasing variance in performance estimates.
+\item \textbf{Sample size:} The paper-only cohort of 149 RET carriers is small by machine learning standards, limiting generalizability and increasing variance in performance estimates.
 
 \item \textbf{Heterogeneous data sources:} Biomarker collection protocols varied across studies, and the mixture of screening and clinical contexts introduces heterogeneity that should be addressed in prospective validation.
 
@@ -350,9 +341,9 @@ For High-Risk (ATA-H) mutations such as C634Y, current guidelines recommend prop
 \FloatBarrier
 
 \section{Conclusion}
-MEN2 Predictor presents a reproducible machine learning workflow for rare-disease risk stratification by aggregating published MEN2/RET-carrier evidence into a structured dataset and standardized evaluation pipeline. On the literature-derived cohort of 152 confirmed RET carriers spanning 24 variants across ATA risk categories (Moderate, High, and Highest per the 2015 revised ATA guidelines), XGBoost and SVM achieved 100\% recall with 74.19\% and 64.52\% accuracy respectively, serving as conservative ``zero-miss'' screening-oriented models where sensitivity is prioritized over overall accuracy.
+MEN2 Predictor presents a reproducible machine learning workflow for rare-disease risk stratification by aggregating published MEN2/RET-carrier evidence into a structured dataset and standardized evaluation pipeline. On the literature-derived cohort of 149 confirmed RET carriers spanning 14 variants across ATA risk categories (Moderate, High, and Highest per the 2015 revised ATA guidelines), logistic regression and XGBoost achieved 100\% recall, with XGBoost delivering the best zero-miss screening profile at 83.33\% accuracy.
 
-In a case-control setting (n = 1{,}069 total records) using variant-matched synthetic controls and SMOTE applied to training folds, LightGBM achieved the highest accuracy (97.20\%) with 96.08\% recall. These results suggest that augmentation can improve discrimination for triage-style use, but recall volatility remains a critical risk in safety-sensitive workflows where missed cancers are unacceptable.
+In a case-control setting (n = 1{,}047 total records) using variant-matched synthetic controls and SMOTE applied to training folds, LightGBM achieved the highest accuracy (96.19\%) with 90.20\% recall. These results suggest that augmentation can improve discrimination for triage-style use, but recall volatility remains a critical risk in safety-sensitive workflows where missed cancers are unacceptable.
 
 Key limitations include the cohort size, heterogeneity across published sources, and biomarker missingness requiring imputation. Prospective external validation is required before clinical deployment. Overall, MEN2 Predictor is best positioned as a screening and prioritization aid that complements, rather than replaces, genetic testing and guideline-based care.
 
