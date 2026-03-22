@@ -5,8 +5,7 @@ Model: XGBOOST
 Dataset: EXPANDED
 
 PURPOSE:
-This study addresses reviewer concern about weak CEA correlation
-in the retained-study cohort (r = 0.1158 from 12 paired observations)
+This study addresses reviewer concern about weak CEA correlation (r = 0.1158 from 12 paired observations)
 by demonstrating model robustness to imputation method choice.
 
 ================================================================================
