@@ -2,7 +2,6 @@
 
 ![Accuracy](https://img.shields.io/badge/Accuracy-96.19%25-brightgreen)
 ![Recall](https://img.shields.io/badge/Recall%20(Original)-100%25-success)
-![Recall (Expanded)](https://img.shields.io/badge/Recall%20(Expanded)-90--98%25-informational)
 ![Models](https://img.shields.io/badge/Models-5-blue)
 ![Variants](https://img.shields.io/badge/RET%20Variants-14-blue)
 
