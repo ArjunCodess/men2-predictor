@@ -1,148 +1,450 @@
 {
   "study_id": "study_8",
   "study_info": {
-    "title": "A Rare Case of Negative Serum Calcitonin in Metastatic Medullary Thyroid Carcinoma: Diagnosis, Treatment, and Follow-Up Strategy",
-    "journal": "American Journal of Case Reports",
-    "authors": "Lorena Licata, Cristina A. Di Fidio, Marco Vacante, Francesco Basile, Antonio Biondi, Pierina Richiusa, Alessandra Gurrera, Roberto Ciuni",
-    "publication_year": 2022,
-    "doi": "10.12659/AJCR.935207",
-    "country": "Italy",
+    "title": "Medullary thyroid cancer in a 9-week-old infant with familial MEN 2B: Implications for timing of prophylactic thyroidectomy",
+    "journal": "International Journal of Pediatric Endocrinology",
+    "publication_year": 2012,
+    "volume_issue": "2012(1)",
+    "pages": "25",
+    "doi": "10.1186/1687-9856-2012-25",
+    "country": "Unknown",
     "study_type": "Case report",
+    "authors": [
+      "Roopa Kanakatti Shankar",
+      "Michael J Rutter",
+      "Steven D Chernausek",
+      "Paul J Samuels",
+      "Jun Qin Mo",
+      "Meilan M Rutter"
+    ],
+    "institutions": [
+      "Unknown"
+    ],
+    "funding": "Not stated",
+    "ethics_approval": "Not stated; written informed consent was obtained from the patient’s mother for publication",
     "keywords": [
-      "Calcitonin",
-      "procalcitonin",
-      "Thyroid Cancer",
-      "Medullary",
-      "RET Protein",
-      "Human",
-      "Carcinoma",
-      "Neuroendocrine",
-      "Follow-Up Studies",
-      "Humans",
-      "Male",
-      "Thyroid Neoplasms"
+      "Medullary thyroid cancer (MTC)",
+      "Multiple endocrine neoplasia",
+      "Infant",
+      "Hereditary cancer",
+      "Thyroidectomy"
     ]
   },
+  "cohort_info": null,
   "variant_info": {
-    "ret_variant": {
-      "cDNA": "c.2410G>A",
-      "protein": "p.Val804Met",
-      "exon": 14,
-      "zygosity": "heterozygous",
-      "confirmation_method": "sequencing on 2 independent samples"
+    "reported_variants": [
+      {
+        "gene": "RET",
+        "exon": "16",
+        "cDNA_notation": null,
+        "protein_notation": "M918T",
+        "mutation_type": "Missense",
+        "zygosity": null,
+        "germline_vs_somatic": "Germline",
+        "inheritance": "Familial",
+        "domain_affected": null,
+        "clinical_classification": "ATA-D (level 1, highest risk category for aggressive MTC)",
+        "presence_in_controls": null,
+        "databases_checked": []
+      },
+      {
+        "gene": "RET",
+        "exon": null,
+        "cDNA_notation": null,
+        "protein_notation": "A883F",
+        "mutation_type": "Missense",
+        "zygosity": null,
+        "germline_vs_somatic": "Germline",
+        "inheritance": null,
+        "domain_affected": null,
+        "clinical_classification": "ATA-D (level 1, highest risk category for aggressive MTC)",
+        "presence_in_controls": null,
+        "databases_checked": []
+      }
+    ]
+  },
+  "patients": [
+    {
+      "id": "proband_infant",
+      "relation_to_family": "Son of a mother with known MEN 2B and metastatic MTC",
+      "age_at_presentation_weeks": 0,
+      "age_at_presentation_description": "Newborn (delivered at term)",
+      "age_at_genetic_testing_weeks": 4,
+      "age_at_surgery_weeks": 9,
+      "sex": "Male",
+      "ethnicity": null,
+      "family_history": {
+        "MEN2_status": "Familial MEN 2B",
+        "details": "Mother with known MEN 2B due to an M918T RET proto-oncogene mutation, with MTC and metastatic disease",
+        "other_family_members": null
+      },
+      "presenting_symptoms": [
+        "No symptoms or signs of MEN 2B at birth"
+      ],
+      "vitals": {
+        "birth_weight": {
+          "value": 3.26,
+          "unit": "kg"
+        }
+      },
+      "labs": [
+        {
+          "name": "Serum calcitonin",
+          "age_at_measurement": "4 weeks",
+          "value": 81,
+          "unit": "pg/mL",
+          "reference_or_comment": "41 pg/mL is the 95th percentile for age less than 6 months"
+        },
+        {
+          "name": "Serum calcitonin",
+          "age_at_measurement": "Post-operative (exact time not specified)",
+          "value": 8,
+          "unit": "pg/mL",
+          "reference_or_comment": "Declined to 8 pg/mL post-operatively and has remained in this range"
+        },
+        {
+          "name": "Carcinoembryonic antigen",
+          "age_at_measurement": "2 years of age",
+          "value": 2.1,
+          "unit": "ng/mL",
+          "reference_or_comment": "Normal <5 ng/mL"
+        },
+        {
+          "name": "Thyroglobulin",
+          "age_at_measurement": "2 years of age",
+          "value": null,
+          "unit": null,
+          "reference_or_comment": "Undetectable (consistent with no residual thyroid tissue)"
+        }
+      ],
+      "genetic_testing": {
+        "gene": "RET",
+        "mutation": "M918T",
+        "exon": "16",
+        "testing_age": "4 weeks",
+        "result": "Pathogenic mutation confirmed; same mutation as mother",
+        "testing_method": null
+      },
+      "imaging": [
+        {
+          "modality": "Ultrasound",
+          "region": "Neck",
+          "age": "2 years of age",
+          "findings": "No residual thyroid tissue or lymph node enlargement"
+        }
+      ],
+      "pathology": {
+        "surgical_specimen": "Thyroidectomy specimen",
+        "tumor_size_mm": 2.5,
+        "tumor_description": "2.5 mm nodular lesion with infiltrative borders",
+        "histology_details": "Tumor cells relatively uniform with moderately eosinophilic cytoplasm and round to slightly irregular nuclei with open chromatin",
+        "immunohistochemistry": [
+          {
+            "marker": "Calcitonin",
+            "result": "Strongly positive"
+          }
+        ],
+        "diagnosis": "Microscopic medullary thyroid carcinoma (MTC)",
+        "vascular_invasion": "Absent",
+        "C_cell_hyperplasia_vs_MTC_comment": "Histology with infiltrating borders distinguished microscopic MTC from C-cell hyperplasia"
+      },
+      "surgeries": [
+        {
+          "type": "Total thyroidectomy (prophylactic)",
+          "extent": "Total thyroidectomy; parathyroid glands visualized and left in situ; no lymph node dissection",
+          "age_at_surgery": "9 weeks of age",
+          "indication": "Prophylactic thyroidectomy in asymptomatic infant with familial MEN 2B and confirmed M918T RET mutation",
+          "intraoperative_findings": "Parathyroid glands visualized and left in situ; no visible or palpable lymph nodes at time of surgery",
+          "postoperative_course": "Perioperative course unremarkable; recovered without complication"
+        }
+      ],
+      "lymph_nodes": {
+        "visible_or_palpable_nodes_at_surgery": "None",
+        "lymph_node_dissection_performed": false,
+        "histology": null
+      },
+      "staging": {
+        "TNM": null,
+        "metastatic_status": "No evidence of metastatic disease reported"
+      },
+      "follow_up": {
+        "duration": "Up to 2 years of age",
+        "clinical_status": "Normal growth and development",
+        "MEN2B_manifestations": [
+          "Chronic constipation due to biopsy-proven intestinal ganglioneuromatosis",
+          "Absent tearing",
+          "Tongue nodule, likely a mucosal neuroma"
+        ]
+      },
+      "outcomes": {
+        "MTC_status": "Biochemical remission with low calcitonin (8 pg/mL) and no residual thyroid tissue on ultrasound",
+        "overall_outcome": "Alive and well at 2 years of age with manifestations of MEN 2B but no evidence of residual thyroid carcinoma",
+        "survival_status": "Alive"
+      },
+      "medications": [
+        {
+          "name": "Levothyroxine",
+          "indication": "Iatrogenic hypothyroidism after thyroidectomy (standard replacement; dose not specified)",
+          "dose": null
+        }
+      ]
+    },
+    {
+      "id": "mother",
+      "relation_to_family": "Mother of proband; known MEN 2B gene carrier",
+      "age_at_first_presentation_years": 13,
+      "sex": "Female",
+      "ethnicity": null,
+      "family_history": {
+        "MEN2_status": "MEN 2B",
+        "details": "Known MEN 2B due to M918T RET proto-oncogene mutation",
+        "other_family_members": null
+      },
+      "presenting_symptoms": [
+        "Mucosal neuromas",
+        "Typical Marfanoid habitus",
+        "Medullary thyroid carcinoma (MTC)"
+      ],
+      "vitals": null,
+      "labs": [
+        {
+          "name": "Serum calcitonin",
+          "age_at_measurement": "27 years of age",
+          "value": 2000,
+          "unit": "pg/mL",
+          "reference_or_comment": "Persistent MTC with serum calcitonin concentration over 2000 pg/mL"
+        }
+      ],
+      "genetic_testing": {
+        "gene": "RET",
+        "mutation": "M918T",
+        "exon": null,
+        "testing_age": null,
+        "result": "MEN 2B due to an M918T RET proto-oncogene mutation",
+        "testing_method": null
+      },
+      "imaging": [],
+      "pathology": {
+        "surgical_specimen": "Total thyroidectomy and lymph node dissection specimen",
+        "tumor_size_mm": null,
+        "tumor_description": "Multifocal medullary thyroid carcinoma",
+        "histology_details": null,
+        "immunohistochemistry": [],
+        "diagnosis": "Medullary thyroid carcinoma with lymph node metastases",
+        "vascular_invasion": null,
+        "C_cell_hyperplasia_vs_MTC_comment": null
+      },
+      "surgeries": [
+        {
+          "type": "Total thyroidectomy and lymph node dissection",
+          "extent": "Total thyroidectomy with lymph node dissection",
+          "age_at_surgery": "13 years of age",
+          "indication": "Medullary thyroid carcinoma associated with MEN 2B",
+          "intraoperative_findings": null,
+          "postoperative_course": null
+        },
+        {
+          "type": "Pheochromocytoma resection",
+          "extent": "Resection of a pheochromocytoma",
+          "age_at_surgery": "25 years of age",
+          "indication": "Pheochromocytoma associated with MEN 2B",
+          "intraoperative_findings": null,
+          "postoperative_course": null
+        }
+      ],
+      "lymph_nodes": {
+        "visible_or_palpable_nodes_at_surgery": null,
+        "lymph_node_dissection_performed": true,
+        "histology": "Multiple lymph node metastases from MTC"
+      },
+      "staging": {
+        "TNM": null,
+        "metastatic_status": "Hepatic and pulmonary metastases"
+      },
+      "follow_up": {
+        "duration": "From 13 years to at least 27 years of age",
+        "clinical_status": "Alive and well at 27 years of age, but with persistent MTC and hepatic and pulmonary metastases"
+      },
+      "outcomes": {
+        "MTC_status": "Persistent metastatic medullary thyroid carcinoma",
+        "overall_outcome": "Alive with disease",
+        "survival_status": "Alive"
+      },
+      "medications": [],
+      "MEN2B_manifestations": [
+        "Mucosal neuromas",
+        "Marfanoid habitus",
+        "Medullary thyroid carcinoma",
+        "Pheochromocytoma",
+        "Hepatic metastases",
+        "Pulmonary metastases"
+      ]
+    }
+  ],
+  "case_data": [
+    {
+      "case_id": "proband_infant",
+      "diagnosis": "Microscopic medullary thyroid carcinoma due to familial MEN 2B",
+      "mutation": "RET M918T",
+      "age_at_MTC_detection_weeks": 9,
+      "tumor_size_mm": 2.5,
+      "metastases": "None reported",
+      "calcitonin_preop_pg_per_mL": 81,
+      "calcitonin_postop_pg_per_mL": 8
+    }
+  ],
+  "mutation_summary": {
+    "MEN2_subtypes_discussed": [
+      "MEN 2A",
+      "MEN 2B",
+      "Familial medullary thyroid cancer (FMTC)"
+    ],
+    "MEN2B_key_mutations": [
+      {
+        "mutation": "M918T",
+        "gene": "RET",
+        "exon": "16",
+        "frequency_in_MEN2B": ">95% of cases with MEN 2B have an M918T mutation in exon 16 of the RET proto-oncogene"
+      },
+      {
+        "mutation": "A883F",
+        "gene": "RET",
+        "exon": null,
+        "frequency_in_MEN2B": "2–3% of cases with MEN 2B have an A883F mutation"
+      }
+    ],
+    "ATA_risk_categories": [
+      {
+        "category": "ATA-D (level 1)",
+        "description": "Highest risk category for aggressive MTC",
+        "applies_to": [
+          "M918T",
+          "A883F"
+        ]
+      }
+    ],
+    "genotype_phenotype_notes": [
+      "Multiple Endocrine Neoplasia type 2 (MEN 2) is an autosomal dominant hereditary cancer syndrome with a prevalence of about 1 in 30,000.",
+      "Germline mutations in the RET proto-oncogene account for MEN 2A, MEN 2B and familial medullary thyroid cancer.",
+      "All MEN 2 syndromes are associated with medullary thyroid carcinoma, which frequently metastasizes and is the primary MEN-related cause of death.",
+      "MEN 2B is the rarest and most aggressive form of MEN 2, associated with early-onset MTC, pheochromocytoma, mucosal neuromas, intestinal ganglioneuromatosis and a Marfanoid habitus.",
+      "Strong genotype-phenotype correlations enable risk stratification and recommendations for timing of prophylactic thyroidectomy."
+    ]
+  },
+  "methods": {
+    "DNA_source": null,
+    "sequencing_methods": null,
+    "primers": null,
+    "genetic_assays": [
+      "RET proto-oncogene mutation analysis for M918T"
+    ],
+    "biochemical_assays": [
+      "Serum calcitonin measurement",
+      "Carcinoembryonic antigen measurement",
+      "Thyroglobulin measurement"
+    ],
+    "pathology_methods": [
+      "Histopathological examination of thyroidectomy specimen",
+      "Immunohistochemical staining for calcitonin"
+    ],
+    "imaging_modalities": [
+      "Ultrasound examination of the neck"
+    ],
+    "statistical_tests": [],
+    "software_or_tools": [],
+    "guidelines_referenced": [
+      "American Thyroid Association medullary thyroid cancer management guidelines (2009)",
+      "Guidelines for diagnosis and therapy of MEN type 1 and type 2"
+    ]
+  },
+  "results": {
+    "clinical_findings": [
+      "A full-term male infant with familial MEN 2B had an M918T RET proto-oncogene mutation confirmed at 4 weeks of age.",
+      "He underwent prophylactic total thyroidectomy at 9 weeks of age; pathology showed a 2.5 mm calcitonin-positive nodule consistent with microscopic MTC.",
+      "There was no vascular invasion and no visible or palpable lymph nodes at surgery.",
+      "Post-operatively, serum calcitonin declined from 81 pg/mL at 4 weeks to 8 pg/mL and has remained in this range.",
+      "At 2 years of age, carcinoembryonic antigen was 2.1 ng/mL (normal <5 ng/mL) and thyroglobulin was undetectable, with no residual thyroid tissue or lymph node enlargement on ultrasound.",
+      "The child has normal growth and development but has chronic constipation due to biopsy-proven intestinal ganglioneuromatosis, absent tearing, and a tongue nodule likely representing a mucosal neuroma.",
+      "The mother presented at 13 years of age with mucosal neuromas, a typical Marfanoid habitus and MTC, underwent total thyroidectomy and lymph node dissection with multifocal MTC and multiple lymph node metastases.",
+      "The mother later developed hepatic and pulmonary metastases and underwent resection of a pheochromocytoma at age 25 years.",
+      "At 27 years of age, the mother is alive and well but has persistent MTC with serum calcitonin concentration over 2000 pg/mL."
+    ],
+    "guideline_related_results": [
+      "Current ATA guidelines state that infants with ATA-D mutations (MEN 2B) should undergo prophylactic thyroidectomy as soon as possible and within the first year of life in an experienced tertiary care setting.",
+      "Former consensus guidelines recommended thyroidectomy within the first six months and preferably within the first month of life.",
+      "The reported case and prior reports show that MTC can present as early as 2–3 months of age, supporting early prophylactic surgery during infancy.",
+      "The authors suggest that in familial cases, when the diagnosis is anticipated, thyroidectomy soon after the first month of life could be considered."
+    ]
+  },
+  "functional_data": null,
+  "tables": {},
+  "figures": {
+    "Figure_1": {
+      "figure_id": "Figure 1",
+      "title_or_caption": "A thyroidectomy specimen of the patient reveals a 2.5 mm, poorly defined tumor nodule with focal infiltrative borders. The tumor cells are relatively uniform with moderately eosinophilic cytoplasm, and round to slightly irregular nuclei with open chromatin (1A and inset). The tumor cells show strong reactivity to calcitonin immunohistochemical staining (1B).",
+      "description": "Histologic images of the infant’s thyroidectomy specimen showing microscopic medullary thyroid carcinoma with calcitonin-positive tumor cells.",
+      "numeric_values_present": false
+    },
+    "Figure_2": {
+      "figure_id": "Figure 2",
+      "title_or_caption": "Suggested algorithm to facilitate early thyroidectomy during infancy.",
+      "description": "Schematic algorithm proposing prenatal counseling, early genetic testing, prenatal surgical referral and scheduling, and thyroidectomy soon after 30 days of age in familial MEN 2B.",
+      "numeric_values_present": false
     }
   },
-  "patient_data": {
-    "patient_id": "Proband",
-    "sex": "Male",
-    "age": 39,
-    "clinical_presentation": "Slightly painful 2.5-cm left laterocervical mass at level III, normal thyroid function, normal Ab TPO and Ab Tg. Ultrasound: hypoechoic nodule 0.7×0.38 cm left middle lobe. Initial diagnosis compatible with schwannoma.",
-    "comorbidities": ["bilateral congenital neurosensory deafness"],
-    "biochemical_results": [
-      {
-        "test": "calcitonin",
-        "value": 4,
-        "unit": "pg/L",
-        "reference_range": "<8 pg/L"
-      },
-      {
-        "test": "CEA",
-        "value": 3.7,
-        "unit": "ng/mL",
-        "reference_range": "0-5"
-      },
-      {
-        "test": "Pro-CT",
-        "value": "normal",
-        "unit": null,
-        "reference_range": "Unknown"
-      },
-      {
-        "test": "Chromogranin A",
-        "value": "Unknown",
-        "unit": "ng/mL",
-        "reference_range": "Unknown"
-      },
-      {
-        "test": "NSE",
-        "value": "slightly above normal",
-        "unit": "mcg/L",
-        "reference_range": "Unknown"
-      },
-      {
-        "test": "Parathyroid hormone",
-        "value": 44.6,
-        "unit": "pg/mL",
-        "reference_range": "Unknown"
-      }
-    ],
-    "imaging": [
-      {
-        "modality": "Ultrasound",
-        "finding": "hypoechoic nodule 0.7 × 0.38 cm left middle lobe. Preoperative: 0.4 cm right lobe nodule; 0.7 × 0.38 cm left lobe nodule."
-      },
-      {
-        "modality": "CT/MRI",
-        "finding": "lateral cervical mass compatible with schwannoma"
-      },
-      { "modality": "18F-DOPA PET", "finding": "no distant metastases" }
-    ],
-    "biopsy": {
-      "site": "lateral cervical mass",
-      "diagnosis": "metastatic medullary thyroid carcinoma",
-      "ihc": {
-        "calcitonin": "positive",
-        "CEA": "positive",
-        "Chromogranin A": "positive",
-        "Synaptophysin": "positive",
-        "CK7": "positive",
-        "Vimentin": "positive",
-        "Thyroglobulin": "negative"
-      }
+  "discussion_notes": [
+    "Multiple Endocrine Neoplasia type 2 (MEN 2) has a prevalence of about 1 in 30,000.",
+    "Prophylactic thyroidectomy is recommended in asymptomatic patients with pathogenic RET mutations before development of medullary thyroid carcinoma.",
+    "MEN 2B is the rarest and most aggressive form of MEN 2 and is associated with early-onset MTC, pheochromocytoma, mucosal neuromas, intestinal ganglioneuromas and a Marfanoid habitus.",
+    "More than 95% of MEN 2B cases have an M918T RET mutation in exon 16, and 2–3% have an A883F mutation; both are classified as ATA-D, the highest risk category for aggressive MTC.",
+    "The reported infant represents one of the youngest patients with biopsy-proven MTC at 9 weeks of age associated with familial MEN 2B.",
+    "Microscopic MTC in this infant was confirmed by a 2.5 mm tumor with infiltrating borders and calcitonin reactivity, distinguishing it from C-cell hyperplasia.",
+    "Other early MTC reports in MEN 2B include microscopic MTC in a 9-week-old with a de novo mutation and metastatic MTC in a 3-month-old infant with familial MEN 2B.",
+    "The benefit of prophylactic thyroidectomy before onset of metastatic MTC is well accepted.",
+    "ATA guidelines state that prophylactic thyroidectomy for ATA-D mutations must be undertaken as soon as possible and within the first year of life.",
+    "The case raises the question of whether intervention should occur as soon as possible in earlier infancy rather than waiting up to 1 year.",
+    "In familial MEN 2B, where diagnosis is anticipated, thyroidectomy soon after the first month of life could be considered.",
+    "Current barriers to early prophylactic thyroidectomy include delays in genetic diagnosis and surgical scheduling, concerns about surgical and anesthetic risks in early infancy, and concerns about iatrogenic hypothyroidism.",
+    "Early genetic testing of at-risk infants soon after birth or prenatally is recommended to avoid treatment delays.",
+    "ATA guidelines recommend prenatal genetic counseling for all patients with MEN 2B of child-bearing age, including discussion of pre-implantation genetic testing, chorionic villus sampling and amniocentesis.",
+    "Prenatal referral and anticipatory scheduling of thyroidectomy in familial cases could make postnatal genetic confirmation the only rate-limiting step.",
+    "Pre-operative calcitonin measurement is recommended, but in infants under 6 months values should be interpreted with caution and should not dictate surgical decisions.",
+    "Children younger than six years have the highest complication rate after thyroidectomy compared with adults, but outcomes may improve with high-volume surgeons.",
+    "Significant delay of prophylactic thyroidectomy is not an option in MEN 2B, where surgery has to be undertaken by 1 year of age and possibly earlier.",
+    "There are no formal studies of thyroidectomy outcomes in infants under 1 year; the authors opine that surgical risk at 1 month is not much greater than at 6 months when performed by experienced pediatric thyroid surgeons with appropriate resources.",
+    "Post-operative hypoparathyroidism in children with MEN does not appear related to age at surgery, while both hypoparathyroidism and recurrent laryngeal nerve injury risks are increased by lymph node dissection.",
+    "Thyroidectomy before lymph node metastases obviates the need for central compartment lymph node dissection, which is associated with higher rates of hypoparathyroidism and vocal cord paralysis.",
+    "General anesthesia risk is greater in children under 1 year of age, but can be attenuated by screening for prematurity, congenital heart disease and other congenital abnormalities.",
+    "The authors typically wait until a full-term infant is 1 month of age before elective anesthesia to minimize postoperative apnea, and suggest thyroid surgery after 30 days of age in MEN 2B.",
+    "Concerns about undertreating iatrogenic hypothyroidism should not delay thyroidectomy; instead, intensive monitoring and careful levothyroxine replacement are essential.",
+    "The authors propose a practical algorithm to facilitate timely prophylactic thyroidectomy in early infancy for familial MEN 2B, including prenatal counseling, prenatal surgical referral and scheduling, and postnatal surgery soon after 1 month if RET testing is positive.",
+    "Ideally, surgery should be performed at a tertiary care center by an experienced pediatric thyroid surgeon with pediatric anesthesiology support and skilled postoperative pediatric nursing.",
+    "Although prophylactic thyroidectomy in inherited MEN 2B is a pediatric problem, adult endocrinologists and obstetricians often serve as gatekeepers for referral and timely intervention.",
+    "Early collaboration between adult and pediatric specialists is key to optimizing management of infants with familial MEN 2B."
+  ],
+  "statistics": {
+    "MEN2_prevalence": {
+      "value": 1,
+      "unit": "in 30,000",
+      "description": "Prevalence of Multiple Endocrine Neoplasia type 2"
     },
-    "surgery": {
-      "procedure": "total thyroidectomy + bilateral central neck dissection + left lateral dissection",
-      "indication": "metastatic MTC",
-      "date_relative": null
+    "MEN2B_M918T_frequency": {
+      "value": 95,
+      "unit": "% (more than 95%)",
+      "description": "Proportion of MEN 2B cases with M918T RET mutation in exon 16"
     },
-    "pathology": {
-      "diagnosis": "bilateral medullary thyroid carcinoma",
-      "tumor_sizes_cm": [0.3, 0.3],
-      "features": {
-        "amyloid_stroma": true,
-        "c_cell_hyperplasia": true,
-        "venous_vascular_invasion": true,
-        "extrathyroidal_extension": false
-      },
-      "lymph_nodes": {
-        "central_nodes_positive": 2,
-        "lateral_nodes_positive": 1
-      },
-      "staging_final": "pT1a(m) N1b stage IVa"
+    "MEN2B_A883F_frequency": {
+      "value_range": "2–3",
+      "unit": "%",
+      "description": "Proportion of MEN 2B cases with A883F RET mutation"
     },
-    "postoperative_labs": [
-      { "timepoint": "1.5 months", "calcitonin": 1.8, "unit": "pg/mL" },
-      { "timepoint": "3 months", "chromogranin_A": 96.2, "nse": 9.4 }
+    "calcitonin_95th_percentile_under_6_months_pg_per_mL": 41,
+    "early_MTC_reported_ages_months": [
+      2,
+      3
     ],
-    "family_genetics": [
-      { "relation": "mother", "ret_status": "heterozygous p.Val804Met" },
-      { "relation": "son", "ret_status": "heterozygous p.Val804Met" }
-    ],
-    "follow_up": {
-      "duration_years": 3,
-      "recurrence": "none",
-      "imaging_followup": "neck US, liver US, chest X-ray all negative"
-    },
-    "notes": "Diagnosis difficult due to CT-negative and imaging initially compatible with schwannoma. Multiple hypotheses for CT-negativity discussed (dedifferentiation, protein-misfolding, hook effect). To prevent hook effect error, 1:10 and 1:100 dilutions of serum performed; findings were normal. Patient classified as double-negative (serum CT and markers negative), challenging diagnosis. Relapse follow-up relied on imaging and 18F-DOPA PET; all negative for metastases."
-  },
-  "figures": {
-    "Figure1_caption": "Intense immunohistochemical staining of tumor cells for calcitonin. IHC of a histologic section of Ct-negative medullary thyroid carcinoma stained with anti-calcitonin antibody.",
-    "Figure2_caption": "Transection of MTC. Histologic section of medullary thyroid carcinoma characterized by dense bands of fibrous tissue (black arrow) and trabecular or sheetlike growth pattern (red arrow). Cells appear round, polygonal, or spindle-shaped. The cytoplasm is eosinophilic and finely granular (blue circle)."
-  },
-  "tables": {
-    "Table1": "Cases of CT- negative MTC reported in the literature, with their time of diagnosis and surgical specimen characteristics.",
-    "Table2": "CT-negative patients' outcome in relation to preoperative and postoperative tumor marker concentrations.",
-    "Table3": "Histologic characteristics and RET mutation in CT-negative and CT-positive patients."
+    "surgical_complication_notes": "Children younger than six years have the highest rate of complications following thyroidectomy compared with adults; specific percentages not provided.",
+    "anesthesia_risk_note": "Risk of general anesthesia is greater in children under one year; exact rates not provided."
   },
   "validation_checks": {
     "all_values_from_text": true,
