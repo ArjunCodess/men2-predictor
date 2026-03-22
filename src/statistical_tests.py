@@ -249,7 +249,7 @@ def run_mcnemar_test(
         "table": tuple(tuple(row) for row in contingency.tolist()),
         "p_value": p_value,
         "effect_size": odds_effect,
-        "note": None,
+        "note": "No discordant overlapping positive pairs; McNemar's test is not informative." if p_value is None else None,
     }
 
 
@@ -471,9 +471,9 @@ def write_report(results: Dict[str, Dict[str, object]], output_path: Path) -> No
     lines.append(conclusion)
     lines.append("")
     lines.append(
-        "McNemar's test could not be applied because the original and expanded test sets "
-        "share no overlapping positive patients; therefore, we rely on permutation and "
-        "bootstrap analyses to quantify uncertainty."
+        "McNemar's test was generally uninformative because overlapping positive patients "
+        "were absent for most models and extremely sparse when present, so permutation and "
+        "bootstrap analyses remain the primary uncertainty estimates."
     )
 
     output_path.parent.mkdir(parents=True, exist_ok=True)

@@ -33,6 +33,9 @@ STUDY_NAME_MAP = {
     "study_18": "Endocrinol. Diabetes Metab. Case Reports (2024) RET K666N",
     "study_19": "Indian Journal of Cancer (2021) RET S891A Family",
     "study_20": "World Journal of Clinical Cases (2024) RET C634Y Family",
+    "study_21": "Int. J. Pediatr. Endocrinol. (2012) Familial MEN2B Infant",
+    "study_22": "JCEM (2010) RET S891A MEN2A Spectrum",
+    "study_23": "Journal of Biosciences (2014) RET S891A Chinese FMTC Family",
 }
 
 AMINO_ACID_MAP = {
@@ -209,6 +212,64 @@ def select_biomarker_entry(entries, keyword, preferred_terms=None):
             return entry
     return matches[0]
 
+def sort_study_file_key(study_path):
+    """sort study json files numerically by study index"""
+    match = re.search(r"study_(\d+)\.json$", Path(study_path).name)
+    return int(match.group(1)) if match else 0
+
+
+def list_study_files(dataset_dir):
+    """list all study json files from the raw data directory"""
+    return sorted(Path(dataset_dir).glob("study_*.json"), key=sort_study_file_key)
+
+
+def normalize_gender_value(value):
+    """normalize gender labels to Male/Female when possible"""
+    cleaned = str(value or "").strip().lower()
+    if cleaned in {"female", "f"}:
+        return "Female"
+    if cleaned in {"male", "m"}:
+        return "Male"
+    return value
+
+
+def is_truthy_label(value, truthy_tokens=None):
+    """interpret textual yes/present labels used across study extracts"""
+    if value is None:
+        return False
+    truthy_tokens = truthy_tokens or ("yes", "present", "positive", "true", "carrier")
+    lowered = str(value).strip().lower()
+    return any(lowered.startswith(token) for token in truthy_tokens)
+
+
+def join_text_fields(raw_value):
+    """flatten imaging or narrative dictionaries/lists into a readable string"""
+    parts = []
+    if isinstance(raw_value, dict):
+        for value in raw_value.values():
+            text = join_text_fields(value)
+            if text:
+                parts.append(text)
+    elif isinstance(raw_value, list):
+        for value in raw_value:
+            text = join_text_fields(value)
+            if text:
+                parts.append(text)
+    elif raw_value not in {None, ""}:
+        text = str(raw_value).strip()
+        if text and text.lower() not in {"unknown", "none", "not reported", "np", "nid"}:
+            parts.append(text)
+    return "; ".join(dict.fromkeys(parts))
+
+
+def weeks_to_years(weeks):
+    """convert infant ages expressed in weeks into years"""
+    if weeks is None:
+        return None
+    try:
+        return round(float(weeks) / 52.0, 2)
+    except (TypeError, ValueError):
+        return None
 
 def build_study2_patients(study):
     """convert RET exon 7 deletion case report"""
@@ -740,6 +801,149 @@ def build_study20_patients(study):
         patients.append(patient)
     return patients
 
+def build_study21_patients(study):
+    """convert familial MEN2B infant case report"""
+    patients = []
+    for record in study.get("patients", []):
+        lab_entries = []
+        for entry in record.get("labs", []):
+            if not isinstance(entry, dict):
+                continue
+            lab_entries.append({
+                "test": entry.get("name"),
+                "value": entry.get("value"),
+                "unit": entry.get("unit"),
+                "reference_range": entry.get("reference_or_comment"),
+                "timing": entry.get("age_at_measurement"),
+            })
+
+        calcitonin_entry = select_biomarker_entry(lab_entries, "calcitonin")
+        cea_entry = select_biomarker_entry(lab_entries, "cea")
+        pathology = record.get("pathology") or {}
+        family_history = record.get("family_history") or {}
+        relation = str(record.get("relation_to_family", "")).lower()
+
+        age = (
+            record.get("age_at_first_presentation_years")
+            or weeks_to_years(record.get("age_at_surgery_weeks"))
+            or weeks_to_years(record.get("age_at_genetic_testing_weeks"))
+            or weeks_to_years(record.get("age_at_presentation_weeks"))
+        )
+        relationship = "Mother" if "mother" in relation else "Proband"
+        mtc = "medullary thyroid carcinoma" in str(pathology.get("diagnosis", "")).lower()
+        pheo = any("pheochromocytoma" in str(item.get("type", "")).lower() for item in record.get("surgeries", []))
+
+        patient = {
+            "patient_id": f"{study.get('study_id', 'study_21')}_{record.get('id', len(patients) + 1)}",
+            "age": age,
+            "gender": normalize_gender_value(record.get("sex")),
+            "relationship": relationship,
+            "ret_variant": parse_ret_variant_string((record.get("genetic_testing") or {}).get("mutation")) or "M918T",
+            "men2_syndrome": "Yes",
+            "mtc_diagnosis": "Yes" if mtc else "No",
+            "pheochromocytoma": "Yes" if pheo else "No",
+            "hyperparathyroidism": "No",
+            "family_history_mtc": "Yes" if family_history else "No",
+            "calcitonin_level": calcitonin_entry.get("value") if calcitonin_entry else None,
+            "calcitonin_normal_range": calcitonin_entry.get("reference_range") if calcitonin_entry else None,
+            "cea_level": cea_entry.get("value") if cea_entry else None,
+            "thyroid_ultrasound": join_text_fields(record.get("imaging")),
+            "biochemical_data": lab_entries,
+        }
+        patients.append(patient)
+    return patients
+
+
+def build_study22_patients(study):
+    """convert multicenter RET S891A MEN2A case series"""
+    patients = []
+    for record in study.get("patients", []):
+        pathology = record.get("pathology") or {}
+        labs = record.get("labs") or {}
+
+        calcitonin_multiple = labs.get("preoperative_calcitonin_times_upper_normal_limit")
+        cea_value = labs.get("carcinoembryonic_antigen")
+        thyroid_ultrasound = ""
+        imaging = record.get("imaging")
+        if isinstance(imaging, dict):
+            thyroid_ultrasound = str(imaging.get("thyroid_ultrasound") or join_text_fields(imaging))
+
+        patient = {
+            "patient_id": f"{study.get('study_id', 'study_22')}_{record.get('id', len(patients) + 1)}",
+            "age": record.get("age_at_diagnosis_years"),
+            "gender": normalize_gender_value(record.get("sex")),
+            "relationship": "Relative",
+            "ret_variant": "S891A",
+            "men2_syndrome": "Yes",
+            "mtc_diagnosis": "Yes" if is_truthy_label(pathology.get("medullary_thyroid_cancer")) else "No",
+            "pheochromocytoma": "Yes" if is_truthy_label(pathology.get("pheochromocytoma")) else "No",
+            "hyperparathyroidism": (
+                "Yes" if "hyperplasia" in str(pathology.get("parathyroid_pathology", "")).lower() else "No"
+            ),
+            "family_history_mtc": "Yes",
+            "c_cell_hyperplasia": "Yes" if is_truthy_label(pathology.get("C_cell_hyperplasia")) else "No",
+            "calcitonin_level": calcitonin_multiple,
+            "calcitonin_normal_range": "1 x upper normal limit" if calcitonin_multiple is not None else None,
+            "cea_level": cea_value if str(cea_value).strip().lower() not in {"unknown", ""} else None,
+            "thyroid_ultrasound": thyroid_ultrasound,
+        }
+        patients.append(patient)
+    return patients
+
+
+def build_study23_patients(study):
+    """convert RET S891A Chinese FMTC pedigree"""
+    patients = []
+    for record in study.get("patients", []):
+        mutation_status = record.get("RET_mutation_status") or {}
+        if str(mutation_status.get("p.S891A", "")).strip().lower() != "carrier":
+            continue
+
+        pathology = record.get("pathology") or {}
+        labs = record.get("labs") or {}
+        calcitonin_value = (
+            labs.get("preoperative_Ct_before_2013_surgery_ng_per_L")
+            or labs.get("preoperative_Ct_2012_ng_per_L")
+            or labs.get("preoperative_Ct_ng_per_L")
+            or labs.get("Ct_ng_per_L_range")
+            or labs.get("Ct")
+        )
+        cea_value = (
+            labs.get("CEA_preoperative_ng_per_mL")
+            or labs.get("CEA_ng_per_mL")
+            or labs.get("CEA")
+        )
+        pathology_text = " ".join(str(value) for value in pathology.values())
+        mtc_confirmed = "medullary thyroid carcinoma" in pathology_text.lower() or "mtc" in pathology_text.lower()
+        calcitonin_values = parse_numeric_measurements(calcitonin_value)
+        calcitonin_suspected = bool(calcitonin_values and max(calcitonin_values) > 5.0)
+
+        patient = {
+            "patient_id": f"{study.get('study_id', 'study_23')}_{record.get('id', len(patients) + 1)}",
+            "age": (
+                record.get("age_at_diagnosis_years")
+                or record.get("age_at_first_thyroid_surgery_years")
+                or record.get("age_at_last_evaluation_years")
+            ),
+            "gender": normalize_gender_value(record.get("sex")),
+            "relationship": record.get("relationship_in_pedigree", "Relative"),
+            "ret_variant": "S891A",
+            "men2_syndrome": "Yes",
+            "mtc_diagnosis": "Yes" if mtc_confirmed else ("Suspected (elevated calcitonin)" if calcitonin_suspected else "No"),
+            "pheochromocytoma": "No",
+            "hyperparathyroidism": "No",
+            "family_history_mtc": "Yes",
+            "calcitonin_level": calcitonin_value,
+            "calcitonin_normal_range": (
+                study.get("cohort_info", {}).get("Ct_reference_ranges", {}).get("male")
+                if normalize_gender_value(record.get("sex")) == "Male"
+                else study.get("cohort_info", {}).get("Ct_reference_ranges", {}).get("female")
+            ),
+            "cea_level": cea_value if str(cea_value).strip().lower() not in {"not individually reported.", "normal", ""} else None,
+            "thyroid_ultrasound": join_text_fields(record.get("imaging")),
+        }
+        patients.append(patient)
+    return patients
 
 def extract_patients_from_study(study):
     """extract patient objects regardless of original study schema"""
@@ -772,6 +976,12 @@ def extract_patients_from_study(study):
         return build_study19_patients(study)
     if study_id == "study_20":
         return build_study20_patients(study)
+    if study_id == "study_21":
+        return build_study21_patients(study)
+    if study_id == "study_22":
+        return build_study22_patients(study)
+    if study_id == "study_23":
+        return build_study23_patients(study)
     raw_patients = study.get("patient_data")
     if isinstance(raw_patients, dict):
         patient_copy = raw_patients.copy()
@@ -1098,6 +1308,81 @@ def save_biomarker_plot(observed_pairs_df, df):
     fig.savefig(os.path.join('charts', 'calcitonin_cea_relationship.png'), dpi=200)
     plt.close(fig)
 
+def build_literature_summary(df):
+    """build aggregate literature statistics from the current paper dataset"""
+    study_counts = (
+        df["study_id"]
+        .map(get_study_display_name)
+        .value_counts()
+        .to_dict()
+    )
+    variant_counts = df["ret_variant"].value_counts().to_dict()
+    gender_counts = {
+        "female": int((df["gender"] == 0).sum()),
+        "male": int((df["gender"] == 1).sum()),
+    }
+    mtc_ages = sorted(round(float(age), 4) for age in df.loc[df["mtc_diagnosis"] == 1, "age"].dropna())
+
+    return {
+        "total_studies": int(df["study_id"].nunique()),
+        "total_patients": int(len(df)),
+        "study_patient_counts": {str(key): int(value) for key, value in study_counts.items()},
+        "ret_variant_counts": {str(key): int(value) for key, value in variant_counts.items()},
+        "gender_counts": gender_counts,
+        "mtc_cases_total": int(df["mtc_diagnosis"].sum()),
+        "c_cell_disease_cases": int(df["c_cell_disease"].sum()),
+        "men2_cases": int(df["men2_syndrome"].sum()),
+        "pheochromocytoma_cases": int(df["pheochromocytoma"].sum()),
+        "hyperparathyroidism_cases": int(df["hyperparathyroidism"].sum()),
+        "calcitonin_elevated_rate": float(df["calcitonin_elevated"].mean()),
+        "thyroid_nodules_rate": float(df["thyroid_nodules_present"].mean()),
+        "mtc_diagnosis_ages": mtc_ages,
+        "age_summary": {
+            "mean": float(df["age"].mean()),
+            "median": float(df["age"].median()),
+            "min": float(df["age"].min()),
+            "max": float(df["age"].max()),
+        },
+    }
+
+
+def build_mutation_characteristics_summary(df):
+    """build aggregate mutation statistics from the current paper dataset"""
+    variant_summary = []
+    variant_counts = df["ret_variant"].value_counts()
+
+    for variant, count in variant_counts.items():
+        subset = df[df["ret_variant"] == variant]
+        variant_summary.append({
+            "ret_variant": variant,
+            "patient_count": int(count),
+            "risk_level": int(subset["ret_risk_level"].iloc[0]),
+            "studies": sorted(subset["study_id"].dropna().unique().tolist()),
+            "mtc_rate": float(subset["mtc_diagnosis"].mean()),
+            "pheochromocytoma_cases": int(subset["pheochromocytoma"].sum()),
+        })
+
+    risk_level_counts = (
+        df["ret_risk_level"]
+        .value_counts()
+        .sort_index()
+        .to_dict()
+    )
+
+    return {
+        "total_variants": int(df["ret_variant"].nunique()),
+        "risk_level_counts": {str(key): int(value) for key, value in risk_level_counts.items()},
+        "variant_summary": variant_summary,
+    }
+
+
+def save_aggregate_metadata(dataset_dir, literature_data, mutation_characteristics):
+    """persist refreshed aggregate raw metadata files"""
+    literature_path = Path(dataset_dir) / "literature_data.json"
+    mutation_path = Path(dataset_dir) / "mutation_characteristics.json"
+    literature_path.write_text(json.dumps(literature_data, indent=2), encoding="utf-8")
+    mutation_path.write_text(json.dumps(mutation_characteristics, indent=2), encoding="utf-8")
+
 def create_paper_dataset():
     """extract key data points from research paper and convert to structured dataframe"""
 
@@ -1106,45 +1391,16 @@ def create_paper_dataset():
 
     # load study data
     studies = []
-    study_files = [
-        'study_1.json',
-        'study_2.json',
-        'study_3.json',
-        'study_4.json',
-        'study_5.json',
-        'study_6.json',
-        'study_7.json',
-        'study_8.json',
-        'study_9.json',
-        'study_10.json',
-        'study_11.json',
-        'study_12.json',
-        'study_13.json',
-        'study_14.json',
-        'study_15.json',
-        'study_16.json',
-        'study_17.json',
-        'study_18.json',
-        'study_19.json',
-        'study_20.json'
-    ]
+    study_files = list_study_files(dataset_dir)
     for study_file in study_files:
-        with open(os.path.join(dataset_dir, study_file), 'r', encoding='utf-8') as f:
+        with open(study_file, 'r', encoding='utf-8') as f:
             studies.append(json.load(f))
-
-    # load literature data
-    with open(os.path.join(dataset_dir, 'literature_data.json'), 'r', encoding='utf-8') as f:
-        literature_data = json.load(f)
-
-    # load mutation characteristics
-    with open(os.path.join(dataset_dir, 'mutation_characteristics.json'), 'r', encoding='utf-8') as f:
-        mutation_characteristics = json.load(f)
 
     # combine into paper_data structure
     paper_data = {
         "studies": studies,
-        "literature_data": literature_data,
-        "mutation_characteristics": mutation_characteristics
+        "literature_data": {},
+        "mutation_characteristics": {}
     }
     # combine patient data from all studies
     all_patients = []
@@ -1413,6 +1669,12 @@ def create_paper_dataset():
     # save paper-only dataset
     df_final.to_csv('data/processed/ret_multivariant_training_data.csv', index=False)
 
+    literature_data = build_literature_summary(df_final)
+    mutation_characteristics = build_mutation_characteristics_summary(df_final)
+    save_aggregate_metadata(dataset_dir, literature_data, mutation_characteristics)
+    paper_data["literature_data"] = literature_data
+    paper_data["mutation_characteristics"] = mutation_characteristics
+
     # create expanded dataset with literature cases
     expanded_df = create_expanded_dataset(df_final, paper_data, regression_params)
 
@@ -1442,8 +1704,6 @@ def create_expanded_dataset(paper_df, paper_data, regression_params=None):
 
     # Get variant distribution from paper_df to create realistic synthetic cases
     variant_distribution = paper_df['ret_variant'].value_counts(normalize=True).to_dict()
-    risk_level_distribution = paper_df['ret_risk_level'].value_counts(normalize=True).to_dict()
-
     synthetic_cases = []
     for age in lit_ages:
         # Sample variant based on distribution in real data

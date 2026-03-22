@@ -10,13 +10,12 @@ Purpose: Address reviewer critique that "ATA Risk Level Encodes Cancer A Priori"
 by demonstrating the model learns meaningful clinical patterns beyond consensus knowledge.
 """
 
-import pandas as pd
-import numpy as np
+import argparse
 import os
 import sys
-import argparse
-from datetime import datetime
-from pathlib import Path
+from collections import Counter
+
+import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import (
@@ -24,7 +23,6 @@ from sklearn.metrics import (
     roc_auc_score, average_precision_score, confusion_matrix
 )
 from imblearn.over_sampling import SMOTE
-from collections import Counter
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'models'))
 from logistic_regression_model import LogisticRegressionModel
@@ -253,7 +251,7 @@ def run_ablation_study(model_type='lightgbm', dataset_type='expanded', configs=N
         result = run_single_ablation(features, target, config_name, model_type)
         results.append(result)
 
-        print(f"  → Accuracy: {result['accuracy']:.4f} | "
+        print(f"  -> Accuracy: {result['accuracy']:.4f} | "
               f"Recall: {result['recall']:.4f} | "
               f"F1: {result['f1_score']:.4f} | "
               f"Features: {result['features_used']}")
@@ -347,27 +345,27 @@ def save_ablation_results(results, model_type, dataset_type):
 
         if baseline and no_genetics:
             diff = no_genetics['accuracy'] - baseline['accuracy']
-            f.write(f"1. Removing ALL genetic features (ATA risk + variants):\n")
+            f.write("1. Removing ALL genetic features (ATA risk + variants):\n")
             f.write(f"   Accuracy drops {abs(diff):.1%} ({baseline['accuracy']:.1%} -> {no_genetics['accuracy']:.1%})\n")
             if no_genetics['accuracy'] >= 0.80:
                 f.write(f"   -> Model STILL achieves {no_genetics['accuracy']:.1%} using ONLY biomarkers\n")
-                f.write(f"   -> Demonstrates learning beyond 'restating consensus knowledge'\n")
+                f.write("   -> Demonstrates learning beyond 'restating consensus knowledge'\n")
             f.write("\n")
 
         if baseline and no_calcitonin:
             diff = no_calcitonin['accuracy'] - baseline['accuracy']
             change_word = 'drops' if diff < 0 else 'increases'
-            f.write(f"2. Removing calcitonin features:\n")
+            f.write("2. Removing calcitonin features:\n")
             f.write(f"   Accuracy {change_word} {abs(diff):.1%} ({baseline['accuracy']:.1%} -> {no_calcitonin['accuracy']:.1%})\n")
-            f.write(f"   -> Calcitonin is the PRIMARY signal, not ATA risk level\n")
+            f.write("   -> Calcitonin is the PRIMARY signal, not ATA risk level\n")
             f.write("\n")
 
         if genetics_only:
-            f.write(f"3. Using ONLY genetic features (no biomarkers):\n")
+            f.write("3. Using ONLY genetic features (no biomarkers):\n")
             f.write(f"   Accuracy: {genetics_only['accuracy']:.1%}\n")
             if genetics_only['accuracy'] < 0.80:
-                f.write(f"   -> Pure genetic encoding is INSUFFICIENT for prediction\n")
-                f.write(f"   -> Model requires biomarker data, not just 'consensus knowledge'\n")
+                f.write("   -> Pure genetic encoding is INSUFFICIENT for prediction\n")
+                f.write("   -> Model requires biomarker data, not just 'consensus knowledge'\n")
             f.write("\n")
 
     print(f"\nResults saved to: {filename}")
