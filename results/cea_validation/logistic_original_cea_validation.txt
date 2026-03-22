@@ -5,7 +5,8 @@ Model: LOGISTIC
 Dataset: ORIGINAL
 
 PURPOSE:
-This study addresses reviewer concern about weak CEA correlation (r=0.24)
+This study addresses reviewer concern about weak CEA correlation
+in the retained-study cohort (r = 0.1158 from 12 paired observations)
 by demonstrating model robustness to imputation method choice.
 
 ================================================================================
@@ -14,23 +15,23 @@ OPTION A: CEA PRESENCE/ABSENCE COMPARISON
 
 Configuration: With CEA Features
   Description: Full model including CEA features
-  Sample Size: 152
-  Features: 44
-  Accuracy:  0.8065
-  Precision: 0.8462
-  Recall:    0.7333
-  F1 Score:  0.7857
-  ROC AUC:   0.8667
+  Sample Size: 149
+  Features: 33
+  Accuracy:  0.6667
+  Precision: 0.6923
+  Recall:    0.6000
+  F1 Score:  0.6429
+  ROC AUC:   0.8178
 
 Configuration: Without CEA Features
   Description: Model without any CEA features
-  Sample Size: 152
-  Features: 43
-  Accuracy:  0.8387
-  Precision: 0.8571
-  Recall:    0.8000
-  F1 Score:  0.8276
-  ROC AUC:   0.9375
+  Sample Size: 149
+  Features: 32
+  Accuracy:  0.7333
+  Precision: 0.7692
+  Recall:    0.6667
+  F1 Score:  0.7143
+  ROC AUC:   0.8222
 
 ================================================================================
 OPTION B: IMPUTATION METHOD COMPARISON
@@ -38,66 +39,66 @@ OPTION B: IMPUTATION METHOD COMPARISON
 
 Method: MICE+PMM (Current)
   Description: Multiple Imputation by Chained Equations with Predictive Mean Matching
-  Sample Size: 152
-  Accuracy:  0.8065
-  Precision: 0.8462
-  Recall:    0.7333
-  F1 Score:  0.7857
-  ROC AUC:   0.8667
+  Sample Size: 149
+  Accuracy:  0.6667
+  Precision: 0.6923
+  Recall:    0.6000
+  F1 Score:  0.6429
+  ROC AUC:   0.8178
 
 Method: Mean Imputation
   Description: Replace missing CEA with mean of observed values
-  Sample Size: 152
-  Accuracy:  0.8065
-  Precision: 0.8462
-  Recall:    0.7333
-  F1 Score:  0.7857
-  ROC AUC:   0.9292
+  Sample Size: 149
+  Accuracy:  0.7333
+  Precision: 0.8182
+  Recall:    0.6000
+  F1 Score:  0.6923
+  ROC AUC:   0.8400
 
 Method: Median Imputation
   Description: Replace missing CEA with median of observed values
-  Sample Size: 152
-  Accuracy:  0.8710
-  Precision: 0.8667
-  Recall:    0.8667
-  F1 Score:  0.8667
-  ROC AUC:   0.9375
+  Sample Size: 149
+  Accuracy:  0.7333
+  Precision: 0.7692
+  Recall:    0.6667
+  F1 Score:  0.7143
+  ROC AUC:   0.8044
 
 Method: Zero Imputation
   Description: Replace missing CEA with zero (conservative lower bound)
-  Sample Size: 152
-  Accuracy:  0.8387
-  Precision: 0.8571
-  Recall:    0.8000
-  F1 Score:  0.8276
-  ROC AUC:   0.9375
+  Sample Size: 149
+  Accuracy:  0.7333
+  Precision: 0.7692
+  Recall:    0.6667
+  F1 Score:  0.7143
+  ROC AUC:   0.8089
 
 Method: Complete Case (Observed Only)
   Description: Use only patients with observed CEA values (n=34)
-  Sample Size: 34
-  Accuracy:  0.7143
-  Precision: 1.0000
-  Recall:    0.6667
-  F1 Score:  0.8000
-  ROC AUC:   1.0000
+  Sample Size: 12
+  Accuracy:  0.3333
+  Precision: 0.5000
+  Recall:    0.5000
+  F1 Score:  0.5000
+  ROC AUC:   0.5000
 
 ================================================================================
 KEY FINDINGS
 ================================================================================
 
 1. CEA CONTRIBUTION:
-   With CEA:    80.65% accuracy
-   Without CEA: 83.87% accuracy
-   Difference:  -3.23%
-   -> CEA adds 3.2% accuracy improvement
-   -> Recall unchanged: 73.3% vs 80.0%
+   With CEA:    66.67% accuracy
+   Without CEA: 73.33% accuracy
+   Difference:  -6.67%
+   -> Removing CEA improves accuracy by 6.7%
+   -> Recall improves without CEA: 66.7% vs 60.0%
 
 2. IMPUTATION METHOD ROBUSTNESS:
-   Accuracy range across methods: 71.43% - 87.10%
-   Maximum variation: 15.67%
+   Accuracy range across methods: 33.33% - 73.33%
+   Maximum variation: 40.00%
    -> Some sensitivity to imputation method detected
 
 CONCLUSION:
-The model's strong performance without CEA and robustness to imputation
-method demonstrates that the weak CEA correlation does not undermine
-the validity of the model's predictions.
+CEA effects are model-dependent in the retained-study cohort.
+Use the with-vs-without-CEA comparison and the imputation summary above
+to interpret whether CEA is beneficial for the selected model.

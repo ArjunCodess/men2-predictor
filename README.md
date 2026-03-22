@@ -1,16 +1,15 @@
 # MEN2 Predictor: Rare Disease Machine Learning Pipeline
 
-![Accuracy](https://img.shields.io/badge/Accuracy-97.20%25-brightgreen)
+![Accuracy](https://img.shields.io/badge/Accuracy-96.19%25-brightgreen)
 ![Recall](https://img.shields.io/badge/Recall%20(Original)-100%25-success)
-![Recall (Expanded)](https://img.shields.io/badge/Recall%20(Expanded)-96--98%25-informational)
 ![Models](https://img.shields.io/badge/Models-5-blue)
-![Variants](https://img.shields.io/badge/RET%20Variants-24-blue)
+![Variants](https://img.shields.io/badge/RET%20Variants-14-blue)
 
 **Can we save those 20k Rs people with just a simple blood test?**
 
 In India, genetic testing for MEN2 costs INR 20,000 (~$225 USD), putting life-saving diagnosis out of reach for most families. This research asks: *can machine learning on routine blood biomarkers (calcitonin, CEA) and clinical features predict MTC risk without expensive genetic sequencing?*
 
-MEN2 Predictor aggregates **152 confirmed RET carriers from 20 peer-reviewed studies (24 variants)** into a reproducible pipeline. On the real clinical data alone, we achieve **100% sensitivity** (74.19% accuracy with XGBoost) - catching every documented cancer case. The expanded synthetic-augmented models push accuracy to 97.20% while maintaining 96-98% recall, potentially offering a cost-effective screening alternative for resource-limited settings.
+MEN2 Predictor now aggregates **149 confirmed RET carriers from 10 peer-reviewed studies (14 variants)** into a reproducible pipeline. On the real clinical data alone, **XGBoost achieves 100% sensitivity** with the strongest zero-miss balance at **83.33% accuracy**. The expanded case-control workflow reaches **96.19% accuracy with LightGBM**.
 
 ## Table of Contents
 - [Awards & Recognition](#awards--recognition)
@@ -46,44 +45,44 @@ This project was selected for the [INSEF Regional Fair (Online) 2025](https://sc
 
 ## Key Findings
 
-### Real-Patient Cohort (152 carriers across 20 studies)
+### Real-Patient Cohort (149 carriers across 10 studies)
 
-The paper-only dataset now contains **152 confirmed carriers** across 24 variants (including non-hotspot deletions and the new C634G kindred). On this purely clinical cohort, **XGBoost and SVM achieve 100% recall** (74.19% and 64.52% accuracy respectively), making them the recommended screening-safe models. For triage, **LightGBM on expanded data achieves 97.20% accuracy** with 96.08% recall.
+The paper-only dataset now contains **149 confirmed carriers** across **14 RET variants**. On this filtered cohort, **XGBoost** is the screening-safe model because it achieves **100% recall** with **83.33% accuracy**. For triage, **LightGBM on expanded data achieves 96.19% accuracy** with **90.20% recall**.
 
 ### Synthetic Augmentation Impact
 
-Synthetic controls + SMOTE expand the training pool to 1,069 records (case-control dataset). The ctDNA cohort contributes 16 paired calcitonin/CEA observations. Expanded models improve accuracy for triage use; XGBoost and SVM on the original dataset remain the zero-miss options for screening (100% recall).
+Synthetic controls + SMOTE expand the case-control dataset to **1,047 records**. After filtering out the post-diagnostic and mixed-heavy papers, the biomarker coupling analysis is based on **12 paired calcitonin/CEA observations from 6 studies**. Expanded models improve discrimination for triage use, while the original-data XGBoost model remains the zero-miss screening choice.
 
 | Model                | Dataset      | Accuracy   | Precision  | Avg Precision   | Recall     | F1 Score  | ROC AUC  |
 | ---------------------- | ------------ | ---------- | ---------- | --------------- | ---------- | ---------- | -------- |
-| **Logistic Regression**| Original     | 70.97%     | 65.00%     | 88.18%          | 86.67%     | 74.29%     | 0.8667   |
-| **Logistic Regression**| Expanded     | 79.44%     | 53.76%     | 95.42%          | 98.04%     | 69.44%     | 0.9824   |
-| **Random Forest**      | Original     | 80.65%     | 73.68%     | 85.38%          | 93.33%     | 82.35%     | 0.8750   |
-| **Random Forest**      | Expanded     | 93.46%     | 80.33%     | 97.42%          | 96.08%     | 87.50%     | 0.9871   |
-| **LightGBM**           | Original     | 80.65%     | 76.47%     | 82.66%          | 86.67%     | 81.25%     | 0.8583   |
-| **LightGBM**           | Expanded     | **97.20%** | **92.45%** | **98.21%**      | **96.08%** | **94.23%** | **0.9922** |
-| **XGBoost**            | Original     | 74.19%     | 65.22%     | 81.63%          | **100%**   | 78.95%     | 0.8125   |
-| **XGBoost**            | Expanded     | 87.38%     | 65.79%     | 97.58%          | 98.04%     | 78.74%     | 0.9894   |
-| **SVM (Linear)**       | Original     | 64.52%     | 57.69%     | 89.78%          | **100%**   | 73.17%     | 0.9083   |
-| **SVM (Linear)**       | Expanded     | 46.26%     | 30.49%     | 68.95%          | 98.04%     | 46.51%     | 0.8684   |
+| **Logistic Regression**| Original     | 80.00%     | 71.43%     | 79.22%          | **100%**   | 83.33%     | 0.8178   |
+| **Logistic Regression**| Expanded     | 73.33%     | 47.62%     | 84.83%          | **98.04%** | 64.10%     | 0.9457   |
+| **Random Forest**      | Original     | 83.33%     | 91.67%     | 90.68%          | 73.33%     | 81.48%     | 0.9156   |
+| **Random Forest**      | Expanded     | 92.86%     | 86.00%     | 91.90%          | 84.31%     | 85.15%     | 0.9676   |
+| **LightGBM**           | Original     | 76.67%     | 90.00%     | 90.63%          | 60.00%     | 72.00%     | 0.9067   |
+| **LightGBM**           | Expanded     | **96.19%** | **93.88%** | **97.22%**      | 90.20%     | **92.00%** | **0.9908** |
+| **XGBoost**            | Original     | **83.33%** | 75.00%     | **91.65%**      | **100%**   | **85.71%** | 0.9111   |
+| **XGBoost**            | Expanded     | 89.05%     | 70.00%     | 93.93%          | 96.08%     | 80.99%     | 0.9794   |
+| **SVM (Linear)**       | Original     | 66.67%     | 64.71%     | 74.21%          | 73.33%     | 68.75%     | 0.7600   |
+| **SVM (Linear)**       | Expanded     | 82.38%     | 64.58%     | 61.56%          | 60.78%     | 62.63%     | 0.7509   |
 
 ### Clinical Interpretation
 
-- **Zero-miss option:** XGBoost and SVM on the paper-only cohort maintain **100% sensitivity** (0/15 cancers missed in hold-out testing across all 20 studies).
-- **Highest accuracy:** LightGBM on expanded data achieves **97.20% accuracy** with 96.08% recall, ideal for triage workflows.
-- **Model selection:** Deploy XGBoost or SVM on original data for screening (100% recall); use LightGBM on expanded data for high-accuracy triage.
+- **Zero-miss option:** XGBoost on the paper-only cohort maintains **100% sensitivity** (0/15 cancers missed in hold-out testing) with **83.33% accuracy**.
+- **Highest accuracy:** LightGBM on expanded data achieves **96.19% accuracy** with **90.20% recall**, ideal for triage workflows.
+- **Model selection:** Deploy XGBoost on original data for screening; use LightGBM on expanded data for high-accuracy triage.
 
 ### Statistical Tests on Recall Drops
 
-- Permutation tests (10,000 shuffles) show **no statistically significant recall drop** for any model (`p = 1` for all models). Logistic and XGBoost drop 2.0 percentage points; Random Forest and LightGBM increase recall by 2.7 points; SVM remains flat.
-- McNemar's test cannot be applied because the original and expanded test sets share no overlapping positive patients; all positives are unique to each cohort.
+- Permutation tests show **no significant recall loss** for Logistic Regression, Random Forest, XGBoost, or SVM. LightGBM shows a significant **recall gain** on the expanded dataset (`p = 0.0127`), improving from 60.0% to 90.2%.
+- McNemar's test remains mostly uninformative because overlapping positive patients are sparse across original and expanded test sets.
 - Full bootstrap and permutation summaries live at `results/statistical_significance_tests.txt` (generated automatically when running both datasets together via `python main.py --m=all --d=both`; statistical tests run only in the both-datasets workflow).
 
 ### Why This Matters
 
-**Saving the 20k Rs People:** Every documented carrier in these studies represents a family that faced the 20k Rs barrier to genetic testing. Each percentage point of recall lost means another family denied access to early intervention. Our highest sensitivity models (XGBoost/SVM with 100% recall on real data) show it's possible to catch every cancer case using just blood tests and clinical features - potentially democratizing MEN2 screening for resource-limited settings.
+**Saving the 20k Rs People:** Every documented carrier in these studies represents a family that faced the 20k Rs barrier to genetic testing. Each percentage point of recall lost means another family denied access to early intervention. **XGBoost on original data** shows that zero-miss screening is possible with routine biomarkers and clinical features, potentially democratizing MEN2 triage in resource-limited settings.
 
-Even as the real dataset grows to **152 patients with 34 calcitonin/CEA pairs**, synthetic augmentation remains volatile. Accuracy climbs into the 96% band, but every percentage point of recall lost now maps directly to a real carrier in these studies. Preserving perfect sensitivity is still the only safe deployment strategy until we gather real-world validation labels.
+Even with the filtered cohort at **149 patients and 12 paired calcitonin/CEA observations**, synthetic augmentation remains model-dependent. Accuracy climbs into the 96% band, but zero-miss screening still comes from the original-data XGBoost model rather than the expanded workflow.
 
 ### Learning Paradigm Coverage
 
@@ -104,43 +103,43 @@ This comprehensive coverage ensures findings generalize across fundamentally dif
 
 ### Calcitonin vs CEA Biomarker Coupling (Multi-study)
 
-- Integrated **12 cohorts with paired calcitonin/CEA labs** yielding **34 observed pairs** (ctDNA + legacy MEN2 series plus new MEN2B/C634R/S891A additions).
-- Pearson correlation now sits at **r = 0.243** with the expanded cohort, confirming that CEA still tracks calcitonin when labs are collected together but with larger variance.
-- `create_datasets.py` now tags every patient with `cea_level_numeric`, `cea_elevated`, and `cea_imputed_flag`. Thirty-four observations seed the **MICE + Predictive Mean Matching** pipeline that fills the remaining **118 gaps** while re-using observed donor values.
+- Integrated **6 cohorts with paired calcitonin/CEA labs** yielding **12 observed pairs** in the filtered dataset.
+- Pearson correlation is now **r = 0.116**, reflecting a much weaker but still measurable coupling after removing post-diagnostic-heavy studies.
+- `create_datasets.py` tags every patient with `cea_level_numeric`, `cea_elevated`, and `cea_imputed_flag`. Those 12 observed pairs seed the **MICE + Predictive Mean Matching** pipeline that fills the remaining **137 gaps**.
 - Full provenance is saved in `results/biomarker_ceaimputation_summary.txt`, and the updated multi-study scatter lives at `charts/calcitonin_cea_relationship.png`.
 
 ### CEA Imputation Validation Study
 
-**Concern addressed:** Weak calcitonin-CEA correlation (r=0.24) may undermine imputation reliability.
+**Concern addressed:** Weak calcitonin-CEA correlation (**r = 0.1158** from **12 paired observations**) may undermine imputation reliability.
 
 **Key findings from `src/cea_validation_study.py`:**
 
 | Analysis | Result |
 |----------|--------|
-| With vs Without CEA | LightGBM achieves **97.20% with CEA, 96.73% without** (-0.47% impact) |
-| Imputation method robustness | Accuracy varies **<1%** across MICE, mean, median, zero imputation |
-| Conclusion | CEA provides minimal predictive benefit; imputation quality has negligible impact |
+| Best recall model | **XGBoost-original** keeps **100% recall** with or without CEA, and reaches **90.00% accuracy without CEA** |
+| Best accuracy model | **LightGBM-expanded** improves from **92.86% without CEA** to **96.19% with CEA** |
+| Conclusion | CEA is **model-dependent**: optional for XGBoost-original, helpful for LightGBM-expanded |
 
 **Imputation Method Comparison (LightGBM, Expanded Dataset):**
 
 | Method | Accuracy | Recall | Δ vs MICE |
 |--------|----------|--------|-----------|
-| MICE+PMM (current) | **97.20%** | 96.08% | --- |
-| Mean imputation | 96.73% | 96.08% | -0.47% |
-| Median imputation | **97.20%** | 96.08% | 0.00% |
-| Zero imputation | 96.26% | 96.08% | -0.93% |
+| MICE+PMM | **96.19%** | 90.20% | --- |
+| Mean imputation | 93.81% | 86.27% | -2.38% |
+| Median imputation | 92.86% | 90.20% | -3.33% |
+| Zero imputation | 93.81% | 86.27% | -2.38% |
 
-**Why include CEA if it has minimal impact?** Calcitonin alone can be elevated in many non-MTC conditions (hypergastrinemia, kidney insufficiency, certain medications). Clinical guidelines recommend combined calcitonin-CEA assessment because CEA adds prognostic value for monitoring disease aggressiveness. See [detailed rationale](reports/cea_imputation_validation.md#clinical-rationale-for-including-cea-despite-minimal-predictive-impact).
+**Why include CEA?** Because the highest-accuracy model benefits from it. Removing CEA lowers LightGBM-expanded accuracy from **96.19%** to **92.86%**, while XGBoost-original keeps its screening-safe **100% recall** either way. See [detailed rationale](reports/cea_imputation_validation.md).
 
-Run the study: `python src/cea_validation_study.py --m=all --d=both`
+Run the study: `python src/cea_validation_study.py --m=lightgbm --d=expanded`
 
 ## About The Project
 
 **The 20k Rs Question:** In India, MEN2 genetic testing costs INR 19,000-20,000 (~$225 USD) - a prohibitive barrier that prevents families from accessing life-saving diagnosis. This research explores whether we can save those "20k Rs people" with just routine blood tests and clinical features, using machine learning to predict MTC risk without expensive genetic sequencing.
 
-MEN2 (Multiple Endocrine Neoplasia type 2) is a rare hereditary cancer syndrome caused by RET gene mutations. This project developed machine learning models to predict MTC (medullary thyroid carcinoma) risk across **24 different RET variants** using clinical and genetic features from **152 confirmed carriers** across 20 peer-reviewed research studies.
+MEN2 (Multiple Endocrine Neoplasia type 2) is a rare hereditary cancer syndrome caused by RET gene mutations. This project developed machine learning models to predict MTC (medullary thyroid carcinoma) risk across **14 RET variants** using clinical and genetic features from **149 confirmed carriers** across 10 peer-reviewed research studies.
 
-**Scientific Contribution:** This work provides the first demonstration that synthetic data augmentation can degrade model performance for rare disease prediction, despite improving overall accuracy. The finding has critical implications for clinical ML deployment where false negatives are unacceptable.
+**Scientific Contribution:** This work provides a reproducible rare-disease ML benchmark showing that synthetic augmentation changes performance in a strongly model-dependent way. Augmentation improves triage-style accuracy substantially, while the safest zero-miss screening behavior comes from **XGBoost on original data**.
 
 ## Clinical Performance
 
@@ -150,11 +149,11 @@ MEN2 (Multiple Endocrine Neoplasia type 2) is a rare hereditary cancer syndrome 
 
 | Metric                   | Value     |
 | ------------------------ | --------- |
-| **Accuracy**             | 74.19%    |
+| **Accuracy**             | 83.33%    |
 | **Recall (Sensitivity)** | **100%**  |
-| **Precision**            | 65.22%    |
-| **F1 Score**             | 78.95%    |
-| **ROC AUC**              | 0.8125    |
+| **Precision**            | 75.00%    |
+| **F1 Score**             | 85.71%    |
+| **ROC AUC**              | 0.9111    |
 
 ### Recommended Model for Triage
 
@@ -162,30 +161,30 @@ MEN2 (Multiple Endocrine Neoplasia type 2) is a rare hereditary cancer syndrome 
 
 | Metric                   | Value     |
 | ------------------------ | --------- |
-| **Accuracy**             | **97.20%**|
-| **Recall (Sensitivity)** | 96.08%    |
-| **Precision**            | 92.45%    |
-| **F1 Score**             | 94.23%    |
-| **ROC AUC**              | 0.9922    |
+| **Accuracy**             | **96.19%**|
+| **Recall (Sensitivity)** | 90.20%    |
+| **Precision**            | 93.88%    |
+| **F1 Score**             | 92.00%    |
+| **ROC AUC**              | 0.9908    |
 
 ### Performance Comparison
 
 | Model              | Dataset   | Accuracy   | Recall     | Use Case                        |
 | ------------------ | --------- | ---------- | ---------- | ------------------------------- |
-| **XGBoost**        | Original  | 74.19%     | **100%**   | Screening (zero missed cancers) |
-| **LightGBM**       | Expanded  | **97.20%** | 96.08%     | Triage (highest accuracy)       |
+| **XGBoost**        | Original  | **83.33%** | **100%**   | Screening (zero missed cancers) |
+| **LightGBM**       | Expanded  | **96.19%** | 90.20%     | Triage (highest accuracy)       |
 
-> **⚠️ CRITICAL:** For screening workflows where missing a cancer is unacceptable, use XGBoost on original data (100% recall). For high-accuracy triage after initial screening, use LightGBM on expanded data (97.20% accuracy).
+> **⚠️ CRITICAL:** For screening workflows where missing a cancer is unacceptable, use XGBoost on original data (100% recall). For high-accuracy triage after initial screening, use LightGBM on expanded data (96.19% accuracy).
 
 ## Scientific Contribution
 
-This project makes three critical contributions to medical machine learning:
+This project makes three main contributions to rare-disease machine learning:
 
-### 1. First Demonstration of Synthetic Data Volatility in Rare Diseases
+### 1. Model-Dependent Evaluation of Synthetic Augmentation
 
-- Shows that SMOTE and rule-based synthetic controls shift recall by **0-2.7 percentage points** even after adding 23 new real patients.
-- Demonstrates that higher accuracy (96.7% vs 70.9%) can mask recall variability (96-100% vs 100%).
-- Provides evidence that synthetic augmentation must be validated with real patients before clinical deployment.
+- Shows that synthetic controls plus SMOTE can improve discrimination while affecting recall differently across algorithms.
+- **LightGBM improves from 76.67% to 96.19% accuracy** and from **60.0% to 90.2% recall** when moving from original to expanded data.
+- At the same time, the safest zero-miss screening behavior remains with **XGBoost on original data**, which preserves **100% recall**.
 
 ### 2. Methodological Framework for Rare Disease ML
 
@@ -193,11 +192,11 @@ This project makes three critical contributions to medical machine learning:
 - Emphasis on recall over accuracy for screening applications
 - Validation on real held-out data, not synthetic test sets
 
-### 3. Clinical Deployment Guidelines
+### 3. Clinical Deployment Framing
 
-- Recommends original dataset models for deployment (100% recall)
-- Quantifies clinical risk: "missing even 1/50 cases" is more impactful than "79% accuracy"
-- Provides template for rare disease ML with limited data
+- Recommends **XGBoost on original data** for screening workflows where false negatives are least acceptable.
+- Recommends **LightGBM on expanded data** for triage workflows where overall discrimination is prioritized.
+- Provides a reproducible template for comparing screening-safe and triage-oriented models in small rare-disease cohorts.
 
 ### Publication Status
 
@@ -207,7 +206,7 @@ This project makes three critical contributions to medical machine learning:
 - Scientific Reports (Nature) - Accepts negative results
 - Journal of Biomedical Informatics - Clinical ML focus
 
-**Estimated impact**: High. Negative results are under-published but critical for preventing clinical failures.
+**Estimated impact**: Moderate to high. The project combines reproducible rare-disease data curation, model benchmarking, explainability, and ablation analysis in a clinically interpretable workflow.
 
 ### Future Work
 
@@ -226,102 +225,62 @@ This project makes three critical contributions to medical machine learning:
 **Long-term (6-12 months)**:
 
 - Multi-center validation study
-- Investigate why synthetic augmentation specifically degrades recall
+- Investigate how synthetic augmentation changes recall and calibration across model families
 - Explore transfer learning from general thyroid cancer datasets
 
 ## Data Sources
 
-Clinical data extracted from twenty peer-reviewed research studies:
+Clinical data extracted from ten peer-reviewed research studies:
 
 | Study No. | Citation & Year | Key Variant(s) / Description | Patients (n) |
 |-----------|-----------------|------------------------------|--------------|
-| 1 | JCEM Case Reports (2025) | RET K666N carriers | 4 |
-| 2 | JCEM (2016) RET Exon 7 Deletion | E505_G506del carrier | 1 |
-| 3 | Thyroid Journal (2016) | 8 K666N families | 24 |
-| 4 | Eur. J. Endocrinol. (2006) | 10 variants | 46 |
-| 5 | Laryngoscope (2021) MEN2A penetrance | RET K666N with calcitonin/CEA labs | 4 |
-| 6 | JCEM (2018) Homozygous K666N | Homozygous/heterozygous K666N | 6 |
-| 7 | Oncotarget (2015) RET S891A | RET S891A, FMTC/CA | 15 |
-| 8 | AJCR (2022) | Calcitonin-negative V804M metastatic | 1 |
-| 9 | JCEM (2022) ctDNA cohort | Sporadic MTC cases (ctDNA-pos) | 21 |
-| 10 | Genes (2022) RET c.1901G>A | RET C634Y carriers | 2 |
-| 11 | BMC Pediatr (2020) MEN2B | Pediatric RET M918T | 1 |
-| 12 | Annales d'Endocrinologie (2015) | RET Y791F pheochromocytoma | 1 |
-| 13 | Surgery Today (2014) RET S891A | Pheochromocytoma-first MEN2A | 2 |
-| 14 | Annals of Medicine & Surgery (2025) | RET C634R MEN2A case | 2 |
-| 15 | Case Reports in Medicine (2012) | MEN2B (RET M918T) | 1 |
-| 16 | Case Reports in Endocrinology (2020) | RET exon 11 delins | 1 |
-| 17 | Clinics and Practice (2024) | RET C634G kindred | 6 |
-| 18 | Endocrinol. Diabetes Metab. Case Reports (2024) | RET K666N family | 4 |
-| 19 | Indian Journal of Cancer (2021) | RET S891A family | 7 |
-| 20 | World Journal of Clinical Cases (2024) | RET C634Y family | 3 |
+| 1 | Thyroid Journal (2016) | 8 K666N families | 24 |
+| 2 | Eur. J. Endocrinol. (2006) | 10 variants after prophylactic thyroidectomy | 46 |
+| 3 | Oncotarget (2015) RET S891A | RET S891A FMTC / cutaneous amyloidosis pedigree | 15 |
+| 4 | Clinics and Practice (2024) | RET C634G kindred | 6 |
+| 5 | Endocrinol. Diabetes Metab. Case Reports (2024) | RET K666N family | 4 |
+| 6 | Indian Journal of Cancer (2021) | RET S891A family | 7 |
+| 7 | World Journal of Clinical Cases (2024) | RET C634Y family | 3 |
+| 8 | Int. J. Pediatr. Endocrinol. (2012) | Familial MEN2B infant | 2 |
+| 9 | JCEM (2010) RET S891A MEN2A Spectrum | Multicenter S891A cohort | 36 |
+| 10 | Journal of Biosciences (2014) | Chinese Han FMTC family | 6 |
 
-**Multi-Variant Dataset:** 152 confirmed RET germline mutation carriers across 24 variants (K666N, L790F, Y791F, V804M, S891A, R525W, M918T, E505_G506del, C634R, C634Y, C634W, C634S, C634G, C618S, C630R, C630G, C620Y, C620W, A883F, E632_C634del, E632_L633del, D898_E901del, V899_E902del, D631_L633delinsE) with ATA risk stratification.
+**Multi-Variant Dataset:** 149 confirmed RET germline mutation carriers across 14 variants (S891A, K666N, C634Y, C634R, R525W, C634G, C630R, C634W, L790F, V804M, Y791F, C618S, C620Y, M918T) with ATA risk stratification.
 
-**Key Feature:** Dataset spans calcitonin-negative FMTC, pediatric MEN2B, ctDNA-positive metastatic disease, and presymptomatic carriers, enabling cross-paradigm learning with paired calcitonin/CEA labs in twelve cohorts.
+**Key Feature:** The filtered dataset is centered on family-based surveillance and prophylactic-thyroidectomy cohorts, while still retaining pediatric MEN2B, C634-family MEN2A kindreds, and paired calcitonin/CEA observations in six cohorts.
 
 <details>
 <summary><b>Detailed Study Information</b></summary>
 
-1. **Study 1 - JCEM Case Reports (2025)**
-   - Medullary thyroid carcinoma outcomes in heterozygous RET K666N carriers.
+1. **Study 1 - Thyroid Journal (2016)**
+   - Eight RET K666N families used for penetrance profiling in a family-screening context.
 
-2. **Study 2 - JCEM (2016) RET Exon 7 Deletion**
-   - First MEN2A case with the E505_G506del in-frame deletion (pheochromocytoma-first timeline, micro-MTC at age 37).
+2. **Study 2 - European Journal of Endocrinology (2006)**
+   - Prospective prophylactic-thyroidectomy cohort across 10 RET variants.
 
-3. **Study 3 - Thyroid Journal (2016)**
-   - Eight RET K666N families with MTC penetrance profiling.
+3. **Study 3 - Oncotarget (2015) RET S891A FMTC**
+   - Four-generation pedigree linking RET S891A to familial MTC and cutaneous amyloidosis.
 
-4. **Study 4 - European Journal of Endocrinology (2006)**
-   - Prospective prophylactic thyroidectomy outcomes in 46 gene carriers across 10 variants.
+4. **Study 4 - Clinics and Practice (2024) RET C634G**
+   - RET C634G family kindred with cutaneous lichen amyloidosis.
 
-5. **Study 5 - Laryngoscope (2021) MEN2A penetrance**
-   - Serial calcitonin + CEA monitoring of RET K666N carriers to quantify penetrance.
+5. **Study 5 - Endocrinol. Diabetes Metab. Case Reports (2024) RET K666N**
+   - Familial MEN2 phenotype in K666N carriers.
 
-6. **Study 6 - JCEM (2018) Homozygous RET K666N**
-   - First documented homozygous K666N case with metastatic disease and bilateral pheochromocytomas.
+6. **Study 6 - Indian Journal of Cancer (2021) RET S891A**
+   - FMTC pedigree with multiple S891A-positive relatives.
 
-7. **Study 7 - Oncotarget (2015) RET S891A FMTC/CA**
-   - Four-generation pedigree linking RET S891A + OSMR G513D to FMTC with cutaneous amyloidosis.
+7. **Study 7 - World Journal of Clinical Cases (2024) RET C634Y**
+   - MEN2A family case report across two generations.
 
-8. **Study 8 - AJCR (2022) Calcitonin-negative V804M**
-   - Imaging and immunohistochemistry guided total thyroidectomy when serum markers were falsely negative.
+8. **Study 8 - International Journal of Pediatric Endocrinology (2012)**
+   - Familial MEN2B infant-focused cohort.
 
-9. **Study 9 - JCEM (2022) ctDNA cohort**
-   - 21-patient prospective ctDNA study with matched calcitonin/CEA, tissue sequencing, and TKI status.
+9. **Study 9 - JCEM (2010) RET S891A MEN2A Spectrum**
+   - Multicenter S891A cohort spanning MEN2A and FMTC phenotypes.
 
-10. **Study 10 - Genes (2022) RET c.1901G>A family**
-    - Familial MEN2A with RET C634Y and a novel SLC12A3 frameshift causing early bilateral pheochromocytomas.
-
-11. **Study 11 - BMC Pediatrics (2020) MEN2B**
-    - Pediatric RET M918T case linking severe constipation, Hirschsprung disease, and MEN2B progression.
-
-12. **Study 12 - Annales d'Endocrinologie (2015) RET Y791F**
-    - Questioning Y791F pathogenicity via pheochromocytoma presentation with normal calcitonin and refused thyroidectomy.
-
-13. **Study 13 - Surgery Today (2014) RET S891A**
-    - Pheochromocytoma-first MEN2A presentation plus presymptomatic RET-positive son with normal ultrasound/calcitonin.
-
-14. **Study 14 - Annals of Medicine & Surgery (2025) RET C634R**
-    - MEN2A case report with persistent biochemical disease and a RET-positive child carrier.
-
-15. **Study 15 - Case Reports in Medicine (2012) MEN2B**
-    - RET M918T MEN2B case with metastatic MTC and gastrointestinal ganglioneuromatosis.
-
-16. **Study 16 - Case Reports in Endocrinology (2020) RET delins**
-    - Novel exon 11 deletion (Asp631_Leu633delinsGlu) with MEN2A/B features and hyperparathyroidism.
-
-17. **Study 17 - Clinics and Practice (2024) RET C634G**
-    - Single-family MEN2 kindred with cutaneous lichen amyloidosis and RET C634G carriers.
-
-18. **Study 18 - Endocrinol. Diabetes Metab. Case Reports (2024) RET K666N**
-    - Familial MEN2 phenotype in K666N carriers with PHEO and micro-MTC.
-
-19. **Study 19 - Indian Journal of Cancer (2021) RET S891A**
-    - FMTC kindred with multiple S891A carriers and postoperative monitoring.
-
-20. **Study 20 - World Journal of Clinical Cases (2024) RET C634Y**
-    - MEN2A family case report with C634Y carriers across two generations.
+10. **Study 10 - Journal of Biosciences (2014)**
+    - Chinese Han familial MTC kindred with RET S891A.
 
 
 </details>
@@ -329,29 +288,21 @@ Clinical data extracted from twenty peer-reviewed research studies:
 
 ### Dataset Characteristics
 
-**Multi-Variant Dataset:** 152 confirmed RET germline mutation carriers spanning 20 cohorts
+**Multi-Variant Dataset:** 149 confirmed RET germline mutation carriers spanning 10 cohorts
 
-- **Studies 1-3 (RET K666N families + exon 7 deletion):** 29 patients.
-- **Study 4 (European Journal 2006):** 46 prophylactic thyroidectomy cases across 10 variants.
-- **Study 5 (Laryngoscope MEN2A):** 4 RET K666N relatives with serial calcitonin/CEA.
-- **Study 6 (JCEM Homozygous K666N):** 6 family members (one homozygote).
-- **Study 7 (Oncotarget S891A FMTC/CA):** 15 four-generation carriers.
-- **Study 8 (AJCR Calcitonin-negative V804M):** 1 metastatic case.
-- **Study 9 (JCEM ctDNA):** 21 sporadic MTC cases with pre/post biomarkers.
-- **Study 10 (Genes RET c.1901G>A):** 2 RET C634Y/SLC12A3 carriers.
-- **Study 11 (BMC Pediatrics MEN2B):** 1 pediatric RET M918T patient.
-- **Study 12 (Annales RET Y791F Pheo):** 1 pheochromocytoma with normal calcitonin.
-- **Study 13 (Surgery Today RET S891A):** 2 pheochromocytoma-first MEN2A carriers.
-- **Study 14 (Annals of Medicine & Surgery C634R):** 2 MEN2A carriers.
-- **Study 15 (Case Reports in Medicine MEN2B):** 1 RET M918T case.
-- **Study 16 (Case Reports in Endocrinology delins):** 1 RET exon 11 deletion case.
-- **Study 17 (Clinics and Practice C634G):** 6 RET C634G carriers.
-- **Study 18 (EDM Case Reports K666N):** 4 RET K666N carriers.
-- **Study 19 (Indian Journal of Cancer S891A):** 7 RET S891A carriers.
-- **Study 20 (World Journal of Clinical Cases C634Y):** 3 RET C634Y carriers.
-- **Age range:** 1-90 years.
-- **Gender distribution (F/M):** 107/45.
-- **RET Variants Included:** 24 total (K666N, L790F, Y791F, V804M, S891A, R525W, M918T, E505_G506del, A883F, C618S, C620Y, C620W, C630R, C630G, C634R, C634Y, C634W, C634S, C634G, E632_C634del, E632_L633del, D898_E901del, V899_E902del, D631_L633delinsE).
+- **Study 1 (Thyroid Journal 2016):** 24 RET K666N family carriers.
+- **Study 2 (European Journal of Endocrinology 2006):** 46 prophylactic thyroidectomy cases across 10 variants.
+- **Study 3 (Oncotarget 2015):** 15 RET S891A/R525W FMTC-family carriers.
+- **Study 4 (Clinics and Practice 2024):** 6 RET C634G family carriers.
+- **Study 5 (EDM Case Reports 2024):** 4 RET K666N family carriers.
+- **Study 6 (Indian Journal of Cancer 2021):** 7 RET S891A pedigree members.
+- **Study 7 (World Journal of Clinical Cases 2024):** 3 RET C634Y family carriers.
+- **Study 8 (International Journal of Pediatric Endocrinology 2012):** 2 familial MEN2B carriers.
+- **Study 9 (JCEM 2010):** 36 RET S891A multicenter carriers.
+- **Study 10 (Journal of Biosciences 2014):** 6 RET S891A family carriers.
+- **Age range:** 0.17-90 years.
+- **Gender distribution (F/M):** 99/50.
+- **RET Variants Included:** 14 total (S891A, K666N, C634Y, C634R, R525W, C634G, C630R, C634W, L790F, V804M, Y791F, C618S, C620Y, M918T).
 
 **ATA Risk Level Distribution:**
 
@@ -361,12 +312,12 @@ Clinical data extracted from twenty peer-reviewed research studies:
 
 **Clinical Outcomes:**
 
-- MTC diagnosis now documented in **72/152 (47.4%)** real patients.
-- C-cell disease (MTC + C-cell hyperplasia) observed in **76/152 (50.0%)** across all risk levels.
-- Pheochromocytoma captured in 14 real patients (plus presymptomatic carriers) enabling MEN2A/MEN2B phenotyping.
-- Hyperparathyroidism captured in 6 real patients across multiple risk tiers.
+- MTC diagnosis is documented in **73/149 (49.0%)** real patients.
+- C-cell disease (MTC + C-cell hyperplasia) is observed in **84/149 (56.4%)** patients.
+- Pheochromocytoma is captured in **9/149 (6.0%)** real patients.
+- Hyperparathyroidism is captured in **5/149 (3.4%)** real patients.
 
-**Expanded Dataset:** Original 152 patients + synthetic variant-matched controls (1,069 rows total)
+**Expanded Dataset:** Original 149 patients + synthetic variant-matched controls (**1,047 rows total**)
 
 - Includes literature-based synthetic cases with variant-specific distributions.
 - SMOTE augmentation applied inside the training loop for class balance.
@@ -410,7 +361,7 @@ The dataset includes the following structured clinical and genetic features:
 
 The raw clinical data is stored in the [`data/raw`](data/raw) folder as structured json files:
 
-- **[study_1.json](data/raw/study_1.json) ... [study_20.json](data/raw/study_20.json)**: Individual study extracts covering 20 included cohorts (see Data Sources table)
+- **[study_1.json](data/raw/study_1.json) ... [study_10.json](data/raw/study_10.json)**: Individual study extracts covering the 10 retained cohorts (see Data Sources table)
 - **[literature_data.json](data/raw/literature_data.json)**: Aggregated statistics and meta-data
 - **[mutation_characteristics.json](data/raw/mutation_characteristics.json)**: RET variant characteristics
 
@@ -425,20 +376,20 @@ This modular structure allows for:
 
 The [create_datasets.py](src/create_datasets.py) script:
 
-1. Loads patient data from JSON files in the [`data/raw`](data/raw) folder (20 studies)
-2. Extracts and combines data from multiple research studies (152 patients, 24 variants across 20 sources)
+1. Loads patient data from JSON files in the [`data/raw`](data/raw) folder (10 studies)
+2. Extracts and combines data from multiple research studies (149 patients, 14 variants across 10 sources)
 3. Maps each variant to ATA risk level (1=Moderate, 2=High, 3=Highest)
 4. Converts qualitative measurements to structured numeric features
 5. Handles multiple reference ranges for calcitonin levels across studies
 6. Engineers derived features (age groups, nodule presence, variant-specific interactions)
 7. Generates two datasets:
-   - `data/processed/ret_multivariant_training_data.csv`: Original 152 patients from literature
+   - `data/processed/ret_multivariant_training_data.csv`: Original 149 patients from literature
    - `data/processed/ret_multivariant_expanded_training_data.csv`: Expanded with synthetic controls
    - `data/processed/ret_multivariant_case_control_dataset.csv`: Further expanded with variant-matched controls
 
 ### Important Notes on Data Quality
 
-- **Multi-Variant Dataset:** Includes 24 different RET variants with varying penetrance and risk profiles
+- **Multi-Variant Dataset:** Includes 14 RET variants with varying penetrance and risk profiles
 - **Risk Stratification:** Variants classified by ATA guidelines (Level 1/2/3)
 - **Incomplete Penetrance:** Not all carriers develop MTC; penetrance varies by variant
 - **Variable Follow-up:** Some carriers elected surveillance over prophylactic surgery
@@ -474,7 +425,7 @@ The [create_datasets.py](src/create_datasets.py) script:
 - **Automated Model Comparison:** Every test run generates comprehensive comparison of all 5 models with complete patient data, enabling pattern identification and clinical validation
 - **Data Leakage Prevention:** SMOTE applied after train/test split to ensure realistic evaluation
 - **Feature Engineering:** Polynomial features (age²) and interactions (calcitonin×age, risk×age, nodule_severity)
-- **Variant-Aware Modeling:** One-hot encoding of 24 RET variants + risk level stratification
+- **Variant-Aware Modeling:** One-hot encoding of 14 RET variants + risk level stratification
 - **Constant Feature Removal:** Automatic detection and removal of non-informative features
 - **Risk Stratification:** 4-tier system for clinical decision support instead of binary classification
 - **Comprehensive Metrics:** ROC-AUC, F1-Score, Average Precision Score, ROC curves, confusion matrices, and automatic 95% bootstrap confidence intervals
@@ -525,11 +476,11 @@ The [create_datasets.py](src/create_datasets.py) script:
 ### Project Structure
 
 - data/processed/ (processed CSVs)
-  - ret_multivariant_training_data.csv - Original 152 patients
+  - ret_multivariant_training_data.csv - Original 149 patients
   - ret_multivariant_expanded_training_data.csv - Expanded with synthetic controls
   - ret_multivariant_case_control_dataset.csv - Additional control augmentation
 - data/raw/ (study JSON files)
-  - study_1.json ... study_7.json
+  - study_1.json ... study_10.json
   - literature_data.json
   - mutation_characteristics.json
 - models/ - reusable model classes (base_model.py, random_forest_model.py, lightgbm_model.py, xgboost_model.py, logistic_regression_model.py)
@@ -565,7 +516,7 @@ Choose which model to train:
 
 Choose which dataset to use:
 
-- `o` or `original`: Original 152 patients (no synthetic data) ⭐ **Recommended for clinical use**
+- `o` or `original`: Original 149 patients (no synthetic data) ⭐ **Recommended for clinical use**
 - `e` or `expanded`: Expanded with synthetic controls + SMOTE (default)
 - `b` or `both`: Run on both datasets for comparison
 
@@ -573,8 +524,8 @@ Choose which dataset to use:
 ### Examples
 
 ```sh
-# ✅ RECOMMENDED FOR CLINICAL USE: Logistic Regression on original data
-python main.py --m=logistic --d=original
+# Recommended screening-safe run: XGBoost on original data
+python main.py --m=xgboost --d=original
 
 # Research comparison: LightGBM on original data
 python main.py --m=lightgbm --d=original
@@ -585,11 +536,11 @@ python main.py --m=svm --d=original
 # Compare all models on original dataset (identify best performer)
 python main.py --m=all --d=original
 
-# Demonstrate recall drop from synthetic augmentation (research use)
-python main.py --m=random_forest --d=both
+# Compare the full benchmark across both datasets
+python main.py --m=all --d=both
 
-# ⚠️ NOT RECOMMENDED: Expanded dataset (lower recall for safest models)
-python main.py --m=random_forest --d=expanded  # Only for research comparison
+# Triage-oriented high-accuracy run
+python main.py --m=lightgbm --d=expanded
 ```
 
 
@@ -611,7 +562,7 @@ When using `--d=both`, the pipeline:
 3. Generates separate results files
 4. Displays a comparison table showing performance differences
 
-This mode clearly demonstrates the recall degradation from synthetic augmentation.
+This mode compares how each model behaves on the paper-only cohort versus the expanded case-control workflow.
 
 Statistical significance tests are triggered automatically only when running both datasets together (e.g., `python main.py --m=all --d=both`).
 
@@ -655,9 +606,9 @@ python src/ablation_study.py --m=random_forest --d=both
 - `{model}_{dataset}_ablation_results.txt` - Detailed findings
 - `{model}_{dataset}_ablation_results.csv` - For analysis
 
-**Key Finding:** With all genetic features removed, the model still achieves 94.9% accuracy using only biomarkers - proving it learns beyond "restating consensus knowledge."
+**Key Finding:** In the highest-accuracy model, LightGBM-expanded still reaches **93.33% accuracy** after removing all genetic features. In the screening-safe model, XGBoost-original preserves **100% recall** even after removing CEA and variant one-hot encodings.
 
-**Calcitonin Feature Behavior:** On the expanded (synthetic) dataset, removing calcitonin *improves* accuracy (LightGBM: 96.7% → 98.1%). On the original (real) dataset, removing calcitonin has *zero effect*. This is a synthetic data quality issue, not a clinical insight — synthetic calcitonin values don't accurately model real biomarker patterns. Full analysis in [ablation_feature_contribution_analysis.md](reports/ablation_feature_contribution_analysis.md).
+**Calcitonin Feature Behavior:** In the highest-accuracy model, removing calcitonin lowers LightGBM-expanded accuracy from **96.19% to 95.24%**. In the screening-safe model, XGBoost-original retains **100% recall** even without calcitonin. Full analysis in [ablation_feature_contribution_analysis.md](reports/ablation_feature_contribution_analysis.md).
 
 ### Explainability (SHAP + LIME)
 
@@ -769,7 +720,7 @@ Patients with source_id (e.g., "33_control", "mtc_s0_control") are synthetic con
 
 **Genetic Features:**
 
-- RET variant (one-hot encoded across 24 variants)
+- RET variant (one-hot encoded across 14 variants)
 - ATA risk level (ordinal: 1=Moderate, 2=High, 3=Highest)
 
 **Biomarker Features:**
@@ -799,7 +750,7 @@ Patients with source_id (e.g., "33_control", "mtc_s0_control") are synthetic con
 <details>
 <summary><b>Pipeline Steps</b></summary>
 
-1. **create_datasets.py:** Loads patient data from JSON (all 20 studies), performs calcitonin<->CEA correlation plus MICE+PMM imputation, and writes enriched CSVs
+1. **create_datasets.py:** Loads patient data from JSON (all 10 retained studies), performs calcitonin<->CEA correlation plus MICE+PMM imputation, and writes enriched CSVs
 2. **data_analysis.py:** Computes descriptive statistics, generates visualizations
 3. **data_expansion.py:** Produces variant-matched synthetic control samples (optional)
 4. **train_model.py:** Trains models with cross-validation, SMOTE balancing, threshold optimization
@@ -841,15 +792,15 @@ Patients with source_id (e.g., "33_control", "mtc_s0_control") are synthetic con
 
 **Original Dataset:**
 
-- 152 confirmed RET germline mutation carriers from 20 peer-reviewed studies
-- 24 RET variants (K666N, L790F, Y791F, V804M, S891A, R525W, M918T, E505_G506del, A883F, C618S, C620Y, C620W, C630R, C630G, C634R, C634Y, C634W, C634S, C634G, E632_C634del, E632_L633del, D898_E901del, V899_E902del, D631_L633delinsE)
-- Age range: 1-90 years
-- Gender distribution (F/M): 107/45
+- 149 confirmed RET germline mutation carriers from 10 peer-reviewed studies
+- 14 RET variants (S891A, K666N, C634Y, C634R, R525W, C634G, C630R, C634W, L790F, V804M, Y791F, C618S, C620Y, M918T)
+- Age range: 0.17-90 years
+- Gender distribution (F/M): 99/50
 - ATA risk levels: Level 1 (Moderate), Level 2 (High), Level 3 (Highest)
 
 - **Expanded Dataset:**
 
-- Original 152 patients + synthetic variant-matched controls (total rows: 216)
+- Original 149 patients + synthetic variant-matched controls (total rows: 1,047)
 - Literature-based synthetic cases for improved balance
 - SMOTE applied during training
 
@@ -867,13 +818,13 @@ Patients with source_id (e.g., "33_control", "mtc_s0_control") are synthetic con
 
 This study has several limitations that should be considered:
 
-1. **Small sample size**: 152 patients is still typical for rare genetic conditions but limits statistical power
+1. **Small sample size**: 149 patients is still typical for rare genetic conditions but limits statistical power
 2. **Retrospective data**: Extracted from published case series, not prospective validation
-3. **Study heterogeneity**: Different calcitonin reference ranges and protocols across 20 studies
+3. **Study heterogeneity**: Different calcitonin reference ranges and protocols across 10 studies
 4. **Limited diversity**: Primarily European descent patients; generalizability to other populations unknown
 5. **No external validation**: Performance validated on held-out data from same studies, not independent cohorts
 
-**However**: These limitations are representative of rare disease ML challenges. Our finding (synthetic data harm) is strengthened by the fact that it persists across models and datasets.
+**However**: These limitations are representative of rare disease ML challenges. The results show that augmentation can help some models substantially while leaving screening safety concentrated in the original-data models, which is exactly why explicit cross-dataset comparison matters.
 
 **Next steps**: Prospective validation in clinical setting with multi-center collaboration.
 
@@ -917,7 +868,13 @@ Thanks to open source communities and packages including scikit-learn, pandas, n
 
 Special thanks to the authors of the research studies that provided clinical data:
 
-- JCEM Case Reports (2025) - RET K666N carriers
-- JCEM (2016) RET exon 7 deletion case
-- Xu et al. Thyroid (2016) - RET K666N carriers
-- European Journal of Endocrinology (2006) - Multi-variant RET carriers
+- Thyroid Journal (2016) - RET K666N family cohort
+- European Journal of Endocrinology (2006) - multi-variant prophylactic-thyroidectomy cohort
+- Oncotarget (2015) - RET S891A familial MTC pedigree
+- Clinics and Practice (2024) - RET C634G kindred
+- Endocrinology, Diabetes & Metabolism Case Reports (2024) - RET K666N family
+- Indian Journal of Cancer (2021) - RET S891A family cohort
+- World Journal of Clinical Cases (2024) - RET C634Y family
+- International Journal of Pediatric Endocrinology (2012) - familial MEN2B cohort
+- JCEM (2010) - RET S891A MEN2A spectrum cohort
+- Journal of Biosciences (2014) - Chinese familial MTC kindred

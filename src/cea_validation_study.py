@@ -39,6 +39,14 @@ from xgboost_model import XGBoostModel
 from lightgbm_model import LightGBMModel
 from svm_model import SVMModel
 
+BASE_FEATURE_COLUMNS = [
+    'age', 'gender', 'ret_risk_level',
+    'calcitonin_elevated', 'calcitonin_level_numeric',
+    'cea_level_numeric',
+    'thyroid_nodules_present', 'multiple_nodules', 'family_history_mtc',
+    'pheochromocytoma', 'hyperparathyroidism'
+]
+
 
 # CEA Imputation configurations
 IMPUTATION_CONFIGS = {
@@ -116,7 +124,7 @@ def load_processed_dataset(dataset_type='expanded'):
 def evaluate_with_saved_model(model_type='lightgbm', dataset_type='expanded', experiment_name=''):
     """Evaluate using the saved trained model for consistent results with main metrics.
     
-    This ensures MICE+PMM baseline matches the 97.20% accuracy reported in README.
+    This ensures saved-model baselines match the current reported pipeline metrics.
     """
     # Get model class
     if model_type == 'random_forest':
@@ -156,14 +164,7 @@ def evaluate_with_saved_model(model_type='lightgbm', dataset_type='expanded', ex
     if 'gender' in df.columns and df['gender'].dtype == 'object':
         df['gender'] = df['gender'].map({'Female': 0, 'Male': 1}).fillna(0)
     
-    feature_cols = [
-        'age', 'gender', 'ret_risk_level',
-        'calcitonin_elevated', 'calcitonin_level_numeric',
-        'cea_level_numeric',
-        'thyroid_nodules_present', 'multiple_nodules', 'family_history_mtc',
-        'pheochromocytoma', 'hyperparathyroidism'
-    ]
-    
+    feature_cols = [col for col in BASE_FEATURE_COLUMNS if col in df.columns]
     features = df[feature_cols].copy()
     
     if 'ret_variant' in df.columns:
@@ -176,7 +177,9 @@ def evaluate_with_saved_model(model_type='lightgbm', dataset_type='expanded', ex
     
     features['age_squared'] = df['age'] ** 2
     features['calcitonin_age_interaction'] = df['calcitonin_level_numeric'] * df['age']
-    features['nodule_severity'] = df['thyroid_nodules_present'] * df['multiple_nodules']
+    thyroid_nodules = df.get('thyroid_nodules_present', pd.Series(0, index=df.index))
+    multiple_nodules = df.get('multiple_nodules', pd.Series(0, index=df.index))
+    features['nodule_severity'] = thyroid_nodules * multiple_nodules
     
     if 'ret_risk_level' in features.columns:
         features['risk_calcitonin_interaction'] = features['ret_risk_level'] * df['calcitonin_level_numeric']
@@ -272,20 +275,14 @@ def prepare_features(df, include_cea=True, target_column='mtc_diagnosis'):
         df['gender'] = df['gender'].map({'Female': 0, 'Male': 1}).fillna(0)
     
     # Base features
-    feature_columns = [
-        'age', 'gender', 'ret_risk_level',
-        'calcitonin_elevated', 'calcitonin_level_numeric',
-        'thyroid_nodules_present', 'multiple_nodules', 'family_history_mtc',
-        'pheochromocytoma', 'hyperparathyroidism'
-    ]
+    feature_columns = [col for col in BASE_FEATURE_COLUMNS if col in df.columns and col != 'cea_level_numeric']
     
     # Add CEA if requested
-    if include_cea:
+    if include_cea and 'cea_level_numeric' in df.columns:
         feature_columns.append('cea_level_numeric')
     
     # Validate columns exist
-    available_columns = [c for c in feature_columns if c in df.columns]
-    features = df[available_columns].copy()
+    features = df[feature_columns].copy()
     
     # One-hot encode ret_variant
     if 'ret_variant' in df.columns:
@@ -300,7 +297,9 @@ def prepare_features(df, include_cea=True, target_column='mtc_diagnosis'):
     # Derived features
     features['age_squared'] = df['age'] ** 2
     features['calcitonin_age_interaction'] = df['calcitonin_level_numeric'] * df['age']
-    features['nodule_severity'] = df['thyroid_nodules_present'] * df['multiple_nodules']
+    thyroid_nodules = df.get('thyroid_nodules_present', pd.Series(0, index=df.index))
+    multiple_nodules = df.get('multiple_nodules', pd.Series(0, index=df.index))
+    features['nodule_severity'] = thyroid_nodules * multiple_nodules
     
     if 'ret_risk_level' in features.columns:
         features['risk_calcitonin_interaction'] = features['ret_risk_level'] * df['calcitonin_level_numeric']
@@ -591,7 +590,7 @@ def save_results(all_results):
         f.write(f"Dataset: {dataset_type.upper()}\n\n")
         
         f.write("PURPOSE:\n")
-        f.write("This study addresses reviewer concern about weak CEA correlation (r=0.24)\n")
+        f.write("This study addresses reviewer concern about weak CEA correlation (r = 0.1158 from 12 paired observations)\n")
         f.write("by demonstrating model robustness to imputation method choice.\n\n")
         
         # Option A
@@ -649,8 +648,19 @@ def save_results(all_results):
             f.write(f"   With CEA:    {with_cea['accuracy']:.2%} accuracy\n")
             f.write(f"   Without CEA: {without_cea['accuracy']:.2%} accuracy\n")
             f.write(f"   Difference:  {diff:+.2%}\n")
-            f.write(f"   -> CEA adds {abs(diff):.1%} accuracy improvement\n")
-            f.write(f"   -> Recall unchanged: {with_cea['recall']:.1%} vs {without_cea['recall']:.1%}\n\n")
+            if diff > 0:
+                f.write(f"   -> CEA improves accuracy by {diff:.1%}\n")
+            elif diff < 0:
+                f.write(f"   -> Removing CEA improves accuracy by {abs(diff):.1%}\n")
+            else:
+                f.write("   -> Accuracy is unchanged with or without CEA\n")
+            recall_diff = with_cea['recall'] - without_cea['recall']
+            if recall_diff > 0:
+                f.write(f"   -> Recall improves with CEA: {with_cea['recall']:.1%} vs {without_cea['recall']:.1%}\n\n")
+            elif recall_diff < 0:
+                f.write(f"   -> Recall improves without CEA: {without_cea['recall']:.1%} vs {with_cea['recall']:.1%}\n\n")
+            else:
+                f.write(f"   -> Recall unchanged: {with_cea['recall']:.1%} vs {without_cea['recall']:.1%}\n\n")
         
         option_b = all_results['option_b']
         valid_results = [r for r in option_b if 'accuracy' in r]
@@ -667,9 +677,9 @@ def save_results(all_results):
             f.write("\n")
         
         f.write("CONCLUSION:\n")
-        f.write("The model's strong performance without CEA and robustness to imputation\n")
-        f.write("method demonstrates that the weak CEA correlation does not undermine\n")
-        f.write("the validity of the model's predictions.\n")
+        f.write("CEA effects are model-dependent in the retained-study cohort.\n")
+        f.write("Use the with-vs-without-CEA comparison and the imputation summary above\n")
+        f.write("to interpret whether CEA is beneficial for the selected model.\n")
     
     print(f"\nResults saved to: {txt_filename}")
     

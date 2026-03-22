@@ -16,105 +16,103 @@ RESULTS SUMMARY
 
 Configuration: Baseline (All Features)
   Description: Full model with all features including ATA risk and variants
-  Features Used: 44
+  Features Used: 34
   Removed: None
-  Accuracy:  0.8879
-  Precision: 0.6849
-  Recall:    0.9804
-  F1 Score:  0.8065
-  ROC AUC:   0.9892
-  Avg Prec:  0.9729
+  Accuracy:  0.8952
+  Precision: 0.7101
+  Recall:    0.9608
+  F1 Score:  0.8167
+  ROC AUC:   0.9784
+  Avg Prec:  0.9363
 
 Configuration: Without ATA Risk Level (Delta = +0.00% from baseline)
   Description: Removes ret_risk_level and its interaction terms
-  Features Used: 41
+  Features Used: 31
   Removed: ['ret_risk_level', 'risk_calcitonin_interaction', 'risk_age_interaction']
-  Accuracy:  0.8879
-  Precision: 0.6849
-  Recall:    0.9804
-  F1 Score:  0.8065
-  ROC AUC:   0.9883
-  Avg Prec:  0.9764
+  Accuracy:  0.8952
+  Precision: 0.7101
+  Recall:    0.9608
+  F1 Score:  0.8167
+  ROC AUC:   0.9761
+  Avg Prec:  0.9313
 
-Configuration: Without Variant Encodings (Delta = -1.87% from baseline)
+Configuration: Without Variant Encodings (Delta = -10.00% from baseline)
   Description: Removes all one-hot encoded RET variant features
   Features Used: 20
   Removed: ['variant_']
-  Accuracy:  0.8692
-  Precision: 0.6494
-  Recall:    0.9804
-  F1 Score:  0.7812
-  ROC AUC:   0.9880
-  Avg Prec:  0.9748
+  Accuracy:  0.7952
+  Precision: 0.5465
+  Recall:    0.9216
+  F1 Score:  0.6861
+  ROC AUC:   0.9483
+  Avg Prec:  0.8888
 
-Configuration: Without Any Genetic Features (Delta = -3.27% from baseline)
+Configuration: Without Any Genetic Features (Delta = -12.86% from baseline)
   Description: Removes all genetic-derived features (risk level + variants) - tests pure biomarker prediction
   Features Used: 17
   Removed: ['ret_risk_level', 'risk_calcitonin_interaction', 'risk_age_interaction', 'variant_']
-  Accuracy:  0.8551
-  Precision: 0.6250
-  Recall:    0.9804
-  F1 Score:  0.7634
-  ROC AUC:   0.9789
-  Avg Prec:  0.9599
+  Accuracy:  0.7667
+  Precision: 0.5109
+  Recall:    0.9216
+  F1 Score:  0.6573
+  ROC AUC:   0.9517
+  Avg Prec:  0.8918
 
-Configuration: Without Calcitonin (Delta = -2.34% from baseline)
+Configuration: Without Calcitonin (Delta = -1.90% from baseline)
   Description: Removes calcitonin features - tests genetic-only prediction
-  Features Used: 41
+  Features Used: 31
   Removed: ['calcitonin_elevated', 'calcitonin_level_numeric', 'calcitonin_age_interaction']
-  Accuracy:  0.8645
-  Precision: 0.6410
-  Recall:    0.9804
-  F1 Score:  0.7752
-  ROC AUC:   0.9892
-  Avg Prec:  0.9759
+  Accuracy:  0.8762
+  Precision: 0.6712
+  Recall:    0.9608
+  F1 Score:  0.7903
+  ROC AUC:   0.9729
+  Avg Prec:  0.9171
 
-Configuration: Without CEA (Delta = -0.93% from baseline)
+Configuration: Without CEA (Delta = -1.90% from baseline)
   Description: Removes CEA to address reviewer concern about weak imputation
-  Features Used: 43
+  Features Used: 33
   Removed: ['cea_level_numeric']
-  Accuracy:  0.8785
-  Precision: 0.6667
-  Recall:    0.9804
-  F1 Score:  0.7937
-  ROC AUC:   0.9885
-  Avg Prec:  0.9716
+  Accuracy:  0.8762
+  Precision: 0.6761
+  Recall:    0.9412
+  F1 Score:  0.7869
+  ROC AUC:   0.9681
+  Avg Prec:  0.9042
 
-Configuration: Genetics Only (No Biomarkers) (Delta = -5.61% from baseline)
+Configuration: Genetics Only (No Biomarkers) (Delta = -4.76% from baseline)
   Description: Only genetic features + demographics - tests if prediction is "just consensus"
-  Features Used: 37
+  Features Used: 27
   Removed: ['calcitonin_elevated', 'calcitonin_level_numeric', 'calcitonin_age_interaction', 'cea_level_numeric', 'thyroid_nodules_present', 'multiple_nodules', 'nodule_severity']
-  Accuracy:  0.8318
-  Precision: 0.5882
-  Recall:    0.9804
-  F1 Score:  0.7353
-  ROC AUC:   0.9792
-  Avg Prec:  0.9464
+  Accuracy:  0.8476
+  Precision: 0.6145
+  Recall:    1.0000
+  F1 Score:  0.7612
+  ROC AUC:   0.9596
+  Avg Prec:  0.8846
 
-Configuration: Biomarkers Only (No Genetics) (Delta = -3.27% from baseline)
+Configuration: Biomarkers Only (No Genetics) (Delta = -12.86% from baseline)
   Description: Only biomarker features - tests clinical utility without genetic encoding
   Features Used: 17
   Removed: ['ret_risk_level', 'risk_calcitonin_interaction', 'risk_age_interaction', 'variant_']
-  Accuracy:  0.8551
-  Precision: 0.6250
-  Recall:    0.9804
-  F1 Score:  0.7634
-  ROC AUC:   0.9789
-  Avg Prec:  0.9599
+  Accuracy:  0.7667
+  Precision: 0.5109
+  Recall:    0.9216
+  F1 Score:  0.6573
+  ROC AUC:   0.9517
+  Avg Prec:  0.8918
 
 ================================================================================
 KEY FINDINGS FOR REVIEWER RESPONSE
 ================================================================================
 
 1. Removing ALL genetic features (ATA risk + variants):
-   Accuracy drops 3.3% (88.8% -> 85.5%)
-   -> Model STILL achieves 85.5% using ONLY biomarkers
-   -> Demonstrates learning beyond 'restating consensus knowledge'
+   Accuracy drops 12.9% (89.5% -> 76.7%)
 
 2. Removing calcitonin features:
-   Accuracy drops 2.3% (88.8% -> 86.4%)
+   Accuracy drops 1.9% (89.5% -> 87.6%)
    -> Calcitonin is the PRIMARY signal, not ATA risk level
 
 3. Using ONLY genetic features (no biomarkers):
-   Accuracy: 83.2%
+   Accuracy: 84.8%
 

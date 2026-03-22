@@ -18,6 +18,15 @@ from svm_model import SVMModel
 warnings.filterwarnings('ignore')
 
 
+BASE_FEATURE_COLUMNS = [
+    'age', 'gender', 'ret_risk_level',
+    'calcitonin_elevated', 'calcitonin_level_numeric',
+    'cea_level_numeric',
+    'thyroid_nodules_present', 'multiple_nodules', 'family_history_mtc',
+    'pheochromocytoma', 'hyperparathyroidism'
+]
+
+
 def load_expanded_dataset(dataset_type='expanded'):
     """load the dataset based on type"""
     if dataset_type == 'original':
@@ -47,14 +56,8 @@ def prepare_features_target(df, target_column='mtc_diagnosis'):
         if df['gender'].dtype == 'object':
             df['gender'] = df['gender'].map({'Female': 0, 'Male': 1}).fillna(0)
 
-    # select base features (exclude non-numeric columns and target)
-    feature_columns = [
-        'age', 'gender', 'ret_risk_level',
-        'calcitonin_elevated', 'calcitonin_level_numeric',
-        'cea_level_numeric',
-        'thyroid_nodules_present', 'multiple_nodules', 'family_history_mtc',
-        'pheochromocytoma', 'hyperparathyroidism'
-    ]
+    # Keep feature selection aligned with any constant-column pruning above.
+    feature_columns = [col for col in BASE_FEATURE_COLUMNS if col in df.columns]
 
     # Start with base features
     features = df[feature_columns].copy()
@@ -72,7 +75,9 @@ def prepare_features_target(df, target_column='mtc_diagnosis'):
     # ADD MEANINGFUL FEATURES
     features['age_squared'] = df['age'] ** 2
     features['calcitonin_age_interaction'] = df['calcitonin_level_numeric'] * df['age']
-    features['nodule_severity'] = df['thyroid_nodules_present'] * df['multiple_nodules']
+    thyroid_nodules = df.get('thyroid_nodules_present', pd.Series(0, index=df.index))
+    multiple_nodules = df.get('multiple_nodules', pd.Series(0, index=df.index))
+    features['nodule_severity'] = thyroid_nodules * multiple_nodules
 
     # Add variant-specific interaction features
     if 'ret_risk_level' in features.columns:

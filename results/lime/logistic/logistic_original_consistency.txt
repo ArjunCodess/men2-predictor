@@ -3,6 +3,6 @@ LIME vs SHAP CONSISTENCY SUMMARY
 Model: logistic
 Dataset: original
 Samples compared: 10
-Agree: 0
-Partial: 5
-Disagree: 5
+Agree: 4
+Partial: 6
+Disagree: 0

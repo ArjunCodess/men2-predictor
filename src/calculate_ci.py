@@ -13,6 +13,14 @@ from lightgbm_model import LightGBMModel
 from xgboost_model import XGBoostModel
 from svm_model import SVMModel
 
+BASE_FEATURE_COLUMNS = [
+    'age', 'gender', 'ret_risk_level',
+    'calcitonin_elevated', 'calcitonin_level_numeric',
+    'cea_level_numeric',
+    'thyroid_nodules_present', 'multiple_nodules', 'family_history_mtc',
+    'pheochromocytoma', 'hyperparathyroidism'
+]
+
 def calculate_bootstrap_ci(model, X, y, n_iterations=1000, confidence=0.95):
     """Calculate bootstrap confidence intervals for model performance metrics.
 
@@ -114,14 +122,7 @@ def load_model_and_test_data(model_type='logistic', dataset_type='expanded'):
         if df['gender'].dtype == 'object':
             df['gender'] = df['gender'].map({'Female': 0, 'Male': 1}).fillna(0)
 
-    # Select base features (exclude non-numeric columns and target)
-    feature_cols = [
-        'age', 'gender', 'ret_risk_level',
-        'calcitonin_elevated', 'calcitonin_level_numeric',
-        'cea_level_numeric',
-        'thyroid_nodules_present', 'multiple_nodules', 'family_history_mtc',
-        'pheochromocytoma', 'hyperparathyroidism'
-    ]
+    feature_cols = [col for col in BASE_FEATURE_COLUMNS if col in df.columns]
 
     # Start with base features
     features = df[feature_cols].copy()
@@ -139,7 +140,9 @@ def load_model_and_test_data(model_type='logistic', dataset_type='expanded'):
     # ADD MEANINGFUL FEATURES (same as training)
     features['age_squared'] = df['age'] ** 2
     features['calcitonin_age_interaction'] = df['calcitonin_level_numeric'] * df['age']
-    features['nodule_severity'] = df['thyroid_nodules_present'] * df['multiple_nodules']
+    thyroid_nodules = df.get('thyroid_nodules_present', pd.Series(0, index=df.index))
+    multiple_nodules = df.get('multiple_nodules', pd.Series(0, index=df.index))
+    features['nodule_severity'] = thyroid_nodules * multiple_nodules
 
     # Add variant-specific interaction features (same as training)
     if 'ret_risk_level' in features.columns:

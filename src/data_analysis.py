@@ -1,5 +1,4 @@
 import pandas as pd
-import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 import os
@@ -169,7 +168,7 @@ def generate_plots(paper_df, expanded_df):
     variants = paper_df['ret_variant'].unique()
     data_by_variant = [paper_df[paper_df['ret_variant'] == v]['calcitonin_level_numeric'].values for v in variants]
 
-    bp = ax.boxplot(data_by_variant, labels=variants, patch_artist=True)
+    bp = ax.boxplot(data_by_variant, tick_labels=variants, patch_artist=True)
     for patch, color in zip(bp['boxes'], colors[:len(variants)]):
         patch.set_facecolor(color)
 
@@ -215,25 +214,27 @@ def print_insights(paper_df, expanded_df):
     print("=" * 60)
 
     print("PAPER DATASET INSIGHTS:")
-    print(f"- Total patients: {len(paper_df)}")
-    print(f"- MTC cases: {paper_df['mtc_diagnosis'].sum()}/4 ({paper_df['mtc_diagnosis'].mean():.1%})")
-    print(f"- C-cell disease cases: {paper_df['c_cell_disease'].sum()}/4 ({paper_df['c_cell_disease'].mean():.1%})")
-    print(f"- MEN2 syndrome cases: {paper_df['men2_syndrome'].sum()}/4 ({paper_df['men2_syndrome'].mean():.1%})")
+    paper_total = len(paper_df)
+    expanded_total = len(expanded_df)
+    print(f"- Total patients: {paper_total}")
+    print(f"- MTC cases: {paper_df['mtc_diagnosis'].sum()}/{paper_total} ({paper_df['mtc_diagnosis'].mean():.1%})")
+    print(f"- C-cell disease cases: {paper_df['c_cell_disease'].sum()}/{paper_total} ({paper_df['c_cell_disease'].mean():.1%})")
+    print(f"- MEN2 syndrome cases: {paper_df['men2_syndrome'].sum()}/{paper_total} ({paper_df['men2_syndrome'].mean():.1%})")
     print(f"- Average age: {paper_df['age'].mean():.1f} years")
     print(f"- Gender distribution: {paper_df['gender'].value_counts().to_dict()}")
-    print(f"- Calcitonin elevated: {paper_df['calcitonin_elevated'].sum()}/4 ({paper_df['calcitonin_elevated'].mean():.1%})")
-    print(f"- Thyroid nodules present: {paper_df['thyroid_nodules_present'].sum()}/4 ({paper_df['thyroid_nodules_present'].mean():.1%})")
+    print(f"- Calcitonin elevated: {paper_df['calcitonin_elevated'].sum()}/{paper_total} ({paper_df['calcitonin_elevated'].mean():.1%})")
+    print(f"- Thyroid nodules present: {paper_df['thyroid_nodules_present'].sum()}/{paper_total} ({paper_df['thyroid_nodules_present'].mean():.1%})")
     print()
 
     print("EXPANDED DATASET INSIGHTS:")
-    print(f"- Total patients: {len(expanded_df)}")
-    print(f"- MTC cases: {expanded_df['mtc_diagnosis'].sum()}/{len(expanded_df)} ({expanded_df['mtc_diagnosis'].mean():.1%})")
-    print(f"- C-cell disease cases: {expanded_df['c_cell_disease'].sum()}/{len(expanded_df)} ({expanded_df['c_cell_disease'].mean():.1%})")
-    print(f"- MEN2 syndrome cases: {expanded_df['men2_syndrome'].sum()}/{len(expanded_df)} ({expanded_df['men2_syndrome'].mean():.1%})")
+    print(f"- Total patients: {expanded_total}")
+    print(f"- MTC cases: {expanded_df['mtc_diagnosis'].sum()}/{expanded_total} ({expanded_df['mtc_diagnosis'].mean():.1%})")
+    print(f"- C-cell disease cases: {expanded_df['c_cell_disease'].sum()}/{expanded_total} ({expanded_df['c_cell_disease'].mean():.1%})")
+    print(f"- MEN2 syndrome cases: {expanded_df['men2_syndrome'].sum()}/{expanded_total} ({expanded_df['men2_syndrome'].mean():.1%})")
     print(f"- Average age: {expanded_df['age'].mean():.1f} years")
     print(f"- Gender distribution: {expanded_df['gender'].value_counts().to_dict()}")
-    print(f"- Calcitonin elevated: {expanded_df['calcitonin_elevated'].sum()}/{len(expanded_df)} ({expanded_df['calcitonin_elevated'].mean():.1%})")
-    print(f"- Thyroid nodules present: {expanded_df['thyroid_nodules_present'].sum()}/{len(expanded_df)} ({expanded_df['thyroid_nodules_present'].mean():.1%})")
+    print(f"- Calcitonin elevated: {expanded_df['calcitonin_elevated'].sum()}/{expanded_total} ({expanded_df['calcitonin_elevated'].mean():.1%})")
+    print(f"- Thyroid nodules present: {expanded_df['thyroid_nodules_present'].sum()}/{expanded_total} ({expanded_df['thyroid_nodules_present'].mean():.1%})")
     print()
 
     print("RET VARIANT INSIGHTS:")
@@ -265,9 +266,9 @@ def print_insights(paper_df, expanded_df):
     print()
 
     print("CLASS IMBALANCE OBSERVATIONS:")
-    print("- MTC diagnosis shows significant class imbalance (25% in paper, ~50% in expanded)")
-    print("- C-cell disease is more balanced but still shows some imbalance")
-    print("- MEN2 syndrome is extremely imbalanced (0% in paper dataset)")
+    print(f"- MTC diagnosis remains imbalanced ({paper_df['mtc_diagnosis'].mean():.1%} in paper, {expanded_df['mtc_diagnosis'].mean():.1%} in expanded)")
+    print(f"- C-cell disease is moderately represented ({paper_df['c_cell_disease'].mean():.1%} in paper, {expanded_df['c_cell_disease'].mean():.1%} in expanded)")
+    print(f"- MEN2 syndrome prevalence is {paper_df['men2_syndrome'].mean():.1%} in paper data and {expanded_df['men2_syndrome'].mean():.1%} after expansion")
     print("- Age and calcitonin levels show clear differentiation between MTC+ and MTC- groups")
     print("- Gender distribution appears relatively balanced")
     print("- Thyroid nodules strongly associated with MTC diagnosis")

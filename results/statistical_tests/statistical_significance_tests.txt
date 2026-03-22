@@ -2,56 +2,56 @@ STATISTICAL SIGNIFICANCE TESTS: ORIGINAL VS EXPANDED DATASETS
 =============================================================
 
 Model: Logistic Regression
-- Original Recall: 86.7% (n=15)
+- Original Recall: 100.0% (n=15)
 - Expanded Recall: 98.0% (n=51)
-- Recall Drop (original - expanded): -11.4%
-- Bootstrap Mean Drop: -11.2% (Std: 0.086, 95% CI: [-27.5%, 3.9%])
-- McNemar's Test: None
-- Permutation Test p-value: 0.1318
-- Significance (alpha=0.05/0.01/0.001): 0.050:No/0.010:No/0.001:No
-- Effect Size (Cohen's h): -0.467
-
-Model: Random Forest
-- Original Recall: 93.3% (n=15)
-- Expanded Recall: 96.1% (n=51)
-- Recall Drop (original - expanded): -2.7%
-- Bootstrap Mean Drop: -3.0% (Std: 0.072, 95% CI: [-18.0%, 7.8%])
-- McNemar's Test: None
+- Recall Drop (original - expanded): 2.0%
+- Bootstrap Mean Drop: 2.1% (Std: 0.021, 95% CI: [0.0%, 7.8%])
+- McNemar's Test: No discordant overlapping positive pairs; McNemar's test is not informative.
 - Permutation Test p-value: 1
 - Significance (alpha=0.05/0.01/0.001): 0.050:No/0.010:No/0.001:No
-- Effect Size (Cohen's h): -0.124
+- Effect Size (Cohen's h): 0.281
+
+Model: Random Forest
+- Original Recall: 73.3% (n=15)
+- Expanded Recall: 84.3% (n=51)
+- Recall Drop (original - expanded): -11.0%
+- Bootstrap Mean Drop: -10.5% (Std: 0.121, 95% CI: [-34.9%, 12.9%])
+- McNemar's Test: No discordant overlapping positive pairs; McNemar's test is not informative.
+- Permutation Test p-value: 0.4551
+- Significance (alpha=0.05/0.01/0.001): 0.050:No/0.010:No/0.001:No
+- Effect Size (Cohen's h): -0.271
 
 Model: LightGBM
-- Original Recall: 86.7% (n=15)
-- Expanded Recall: 96.1% (n=51)
-- Recall Drop (original - expanded): -9.4%
-- Bootstrap Mean Drop: -9.5% (Std: 0.091, 95% CI: [-27.5%, 5.9%])
-- McNemar's Test: None
-- Permutation Test p-value: 0.2238
-- Significance (alpha=0.05/0.01/0.001): 0.050:No/0.010:No/0.001:No
-- Effect Size (Cohen's h): -0.349
+- Original Recall: 60.0% (n=15)
+- Expanded Recall: 90.2% (n=51)
+- Recall Drop (original - expanded): -30.2%
+- Bootstrap Mean Drop: -29.6% (Std: 0.130, 95% CI: [-56.1%, -6.3%])
+- McNemar's Test: No discordant overlapping positive pairs; McNemar's test is not informative.
+- Permutation Test p-value: 0.0127
+- Significance (alpha=0.05/0.01/0.001): 0.050:Yes/0.010:No/0.001:No
+- Effect Size (Cohen's h): -0.733
 
 Model: XGBoost
 - Original Recall: 100.0% (n=15)
-- Expanded Recall: 98.0% (n=51)
-- Recall Drop (original - expanded): 2.0%
-- Bootstrap Mean Drop: 1.9% (Std: 0.020, 95% CI: [0.0%, 5.9%])
-- McNemar's Test: None
+- Expanded Recall: 96.1% (n=51)
+- Recall Drop (original - expanded): 3.9%
+- Bootstrap Mean Drop: 4.1% (Std: 0.028, 95% CI: [0.0%, 9.8%])
+- McNemar's Test: No discordant overlapping positive pairs; McNemar's test is not informative.
 - Permutation Test p-value: 1
 - Significance (alpha=0.05/0.01/0.001): 0.050:No/0.010:No/0.001:No
-- Effect Size (Cohen's h): 0.281
+- Effect Size (Cohen's h): 0.399
 
 Model: Support Vector Machine
-- Original Recall: 100.0% (n=15)
-- Expanded Recall: 98.0% (n=51)
-- Recall Drop (original - expanded): 2.0%
-- Bootstrap Mean Drop: 2.0% (Std: 0.019, 95% CI: [0.0%, 5.9%])
-- McNemar's Test: None
-- Permutation Test p-value: 1
+- Original Recall: 73.3% (n=15)
+- Expanded Recall: 60.8% (n=51)
+- Recall Drop (original - expanded): 12.5%
+- Bootstrap Mean Drop: 12.8% (Std: 0.135, 95% CI: [-14.1%, 36.5%])
+- McNemar's Test p-value: 0.5 (pairs=3, effect=1.000)
+- Permutation Test p-value: 0.547
 - Significance (alpha=0.05/0.01/0.001): 0.050:No/0.010:No/0.001:No
-- Effect Size (Cohen's h): 0.281
+- Effect Size (Cohen's h): 0.268
 
 Overall Conclusion:
-Permutation testing did not flag any recall drops as statistically significant.
+Permutation testing indicates statistically significant recall drops for: LightGBM.
 
-McNemar's test could not be applied because the original and expanded test sets share no overlapping positive patients; therefore, we rely on permutation and bootstrap analyses to quantify uncertainty.
+McNemar's test was generally uninformative because overlapping positive patients were absent for most models and extremely sparse when present, so permutation and bootstrap analyses remain the primary uncertainty estimates.

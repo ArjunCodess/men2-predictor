@@ -1,439 +1,438 @@
 {
   "study_id": "study_6",
   "study_info": {
-    "title": "A Homozygous RET K666N Genotype With an MEN2A Phenotype",
-    "authors": "Tania Jaber, Samuel M. Hyde, Gilbert J. Cote, Elizabeth G. Grubbs, Wesley H. Giles, Cathy A. Stevens, Ramona Dadu",
-    "journal": "The Journal of Clinical Endocrinology & Metabolism",
-    "publication_date": "2018",
-    "volume_issue": "103(4)",
-    "pages": "1269-1272",
-    "doi": "10.1210/jc.2017-02402",
-    "pmid": null,
-    "country": "USA",
-    "study_type": "Case report with family cascade",
-    "consent_obtained": true
+    "title": "A rare RET mutation in an Indian pedigree with familial medullary thyroid carcinoma",
+    "journal": "Indian Journal of Cancer",
+    "year": 2021,
+    "volume_issue": "58(1):98-100",
+    "doi": "10.4103/ijc.IJC_639_19",
+    "country": "India",
+    "study_type": "Case report / familial case series",
+    "authors": ["Roopa Vijayan", "Vasantha Nair", "Usha Menon", "Harish Kumar"],
+    "keywords": [
+      "Familial medullary thyroid carcinoma",
+      "genetic counseling",
+      "rare RET gene mutation"
+    ]
   },
-  "variant_info": {
-    "variant_cDNA": "c.1998G>T",
-    "protein_change": "p.K666N",
-    "location": "RET exon 11",
-    "zygosity_reported": {
-      "proband": "homozygous",
-      "family_carriers": "heterozygous"
+  "cohort_info": {
+    "total_patients": 7,
+    "sex_distribution": {
+      "male": 1,
+      "female": 6
     },
-    "clinvar_classification": "pathogenic RET mutation with low disease penetrance for medullary thyroid cancer without other features of MEN2A",
-    "functional_data_summary": null,
-    "notes": "Additional studies confirmed two mutated RET alleles within a 5.246-Mb region with centromeric loss of heterozygosity (LOH) on chromosome 10q, including the RET gene. The possibility of segmental uniparental disomy was noted, though not confirmed due to absence of parental carrier data. SNP analyses for the family were not available (potential role mentioned)."
-  },
-  "patient_data": [
-    {
-      "patient_id": "Proband",
-      "generation_code": "II-1",
-      "relationship": "Proband",
-      "age": 59,
-      "sex": "Female",
-      "genotype": "K666N/K666N",
-      "presenting_features": "MTC (medullary thyroid cancer), bilateral pheochromocytoma, stable hepatic metastases at last follow-up",
-      "biochemical_data": [
-        {
-          "test": "calcitonin",
-          "value": 1675,
-          "unit": "pg/mL",
-          "reference_range": "0.0-8.4"
-        },
-        {
-          "test": "CEA",
-          "value": 101.3,
-          "unit": "ng/mL",
-          "reference_range": "0.0-3.0"
-        },
-        {
-          "test": "free metanephrine",
-          "value": 2.09,
-          "unit": "nmol/L",
-          "reference_range": "<0.50"
-        },
-        {
-          "test": "free normetanephrine",
-          "value": 1.14,
-          "unit": "nmol/L",
-          "reference_range": "<0.90"
-        }
-      ],
-      "imaging": [
-        {
-          "modality": "Ultrasound",
-          "findings": "bilateral thyroid nodules, 1.5cm (L), 2cm (R)"
-        },
-        {
-          "modality": "Staging scans",
-          "findings": "hepatic cysts, bilateral adrenal masses"
-        }
-      ],
-      "pathology": {
-        "thyroid": {
-          "right_mtc_size_cm": 1.1,
-          "left_mtc_size_cm": 1.6,
-          "multifocal": true,
-          "lymphovascular_invasion": "focal",
-          "capsular_invasion": "minimal",
-          "extrathyroidal_extension": "present",
-          "margins": "positive",
-          "lymph_nodes_examined": 9,
-          "nodes_positive": 4
-        },
-        "pheochromocytoma": {
-          "right_size_cm": 5.0,
-          "left_size_cm": 4.5,
-          "stage": "T3N1aMX"
-        }
-      },
-      "surgical_history": [
-        {
-          "procedure": "laparoscopic bilateral adrenalectomy",
-          "date_relative": "March 2016"
-        },
-        {
-          "procedure": "total thyroidectomy + bilateral central neck dissection",
-          "date_relative": "within 2 weeks after adrenalectomy"
-        }
-      ],
-      "follow_up": {
-        "duration_months": 9,
-        "metastatic_disease": "stable hepatic metastases",
-        "pheo_recurrence": "none",
-        "phpt_status": "normal"
-      },
-      "notes": "No evidence of PHPT. SNP array hybridization studies confirmed two alleles and two regions of centromeric LOH on chromosome 10q (including RET); segmental uniparental disomy possible."
+    "age_stats": {
+      "mean": 47.1,
+      "median": null,
+      "range": "20-63"
     },
-    {
-      "patient_id": "Sister",
-      "generation_code": "II-2",
-      "relationship": "Sister",
-      "age": 61,
-      "sex": null,
-      "genotype": "K666N/wt",
-      "presenting_features": "None reported",
-      "biochemical_data": [
-        {
-          "test": "calcitonin",
-          "value": null,
-          "unit": null,
-          "reference_range": null,
-          "note": "normal"
-        },
-        {
-          "test": "free metanephrine",
-          "value": null,
-          "unit": null,
-          "reference_range": null,
-          "note": "normal"
-        },
-        {
-          "test": "free normetanephrine",
-          "value": null,
-          "unit": null,
-          "reference_range": null,
-          "note": "normal"
-        }
-      ],
-      "imaging": [],
-      "pathology": {},
-      "surgical_history": [],
-      "follow_up": {},
-      "notes": ""
+    "sporadic_definition_criteria": null,
+    "tumor_staging_distribution": {
+      "stage_I": null,
+      "stage_II": null,
+      "stage_III": null,
+      "stage_IV": null
     },
-    {
-      "patient_id": "Son",
-      "generation_code": "III-1",
-      "relationship": "Son",
-      "age": 32,
-      "sex": "Male",
-      "genotype": "K666N/wt",
-      "presenting_features": "MTC at 32, 3-mm unifocal, no lymph node involvement",
-      "biochemical_data": [
-        {
-          "test": "calcitonin",
-          "value": 16,
-          "unit": "pg/mL",
-          "reference_range": null
-        }
-      ],
-      "imaging": [],
-      "pathology": {
-        "thyroid": {
-          "right_mtc_size_cm": 0.3,
-          "multifocal": false,
-          "lymph_nodes_examined": null,
-          "nodes_positive": 0
-        }
-      },
-      "surgical_history": [
-        {
-          "procedure": "total thyroidectomy and central neck dissection",
-          "date_relative": null
-        }
-      ],
-      "follow_up": {
-        "duration_months": 6,
-        "metastatic_disease": null,
-        "pheo_recurrence": "none",
-        "phpt_status": "normal"
-      },
-      "notes": "Biochemical testing for PHEO and PHPT negative after surgery."
-    },
-    {
-      "patient_id": "Daughter",
-      "generation_code": "III-2",
-      "relationship": "Daughter",
-      "age": 30,
-      "sex": "Female",
-      "genotype": "K666N/wt",
-      "presenting_features": "C-cell hyperplasia (CCH) after prophylactic thyroidectomy",
-      "biochemical_data": [
-        {
-          "test": "calcitonin",
-          "value": null,
-          "unit": null,
-          "reference_range": null,
-          "note": "normal"
-        }
-      ],
-      "imaging": [],
-      "pathology": {
-        "thyroid": {
-          "c-cell_hyperplasia": true
-        }
-      },
-      "surgical_history": [
-        {
-          "procedure": "prophylactic thyroidectomy",
-          "date_relative": null
-        }
-      ],
-      "follow_up": {
-        "metastatic_disease": null,
-        "pheo_recurrence": "none",
-        "phpt_status": "normal"
-      },
-      "notes": "No evidence of MTC. Biochemical testing for PHEO/PHPT negative."
-    },
-    {
-      "patient_id": "Niece",
-      "generation_code": "III-4",
-      "relationship": "Niece",
-      "age": 43,
-      "sex": null,
-      "genotype": "K666N/wt",
-      "presenting_features": "None reported",
-      "biochemical_data": [
-        {
-          "test": "calcitonin",
-          "value": null,
-          "unit": null,
-          "reference_range": null,
-          "note": "normal"
-        }
-      ],
-      "imaging": [],
-      "pathology": {},
-      "surgical_history": [],
-      "follow_up": {},
-      "notes": "No evidence of MTC, PHEO, PHPT."
-    },
-    {
-      "patient_id": "Niece_Son",
-      "generation_code": "IV-1",
-      "relationship": "Niece's son",
-      "age": 25,
-      "sex": null,
-      "genotype": "K666N/wt",
-      "presenting_features": "None reported",
-      "biochemical_data": [
-        {
-          "test": "calcitonin",
-          "value": null,
-          "unit": null,
-          "reference_range": null,
-          "note": "normal"
-        }
-      ],
-      "imaging": [],
-      "pathology": {},
-      "surgical_history": [],
-      "follow_up": {},
-      "notes": "No evidence of MTC, PHEO, PHPT."
-    },
-    {
-      "patient_id": "Mother",
-      "generation_code": null,
-      "relationship": "Mother",
-      "age": 82,
-      "sex": "Female",
-      "genotype": "untested",
-      "presenting_features": null,
-      "biochemical_data": [],
-      "imaging": [],
-      "pathology": {},
-      "surgical_history": [],
-      "follow_up": {},
-      "notes": "Deferred genetic testing"
+    "followup_groups": {
+      "disease_free": null,
+      "biochemical_persistent": null,
+      "structural_disease": null
     }
-  ],
-  "tables_extracted": {
-    "Table1": [
+  },
+  "mutation_summary": {
+    "ret_mutated_cases": 7,
+    "ras_mutated_cases": null,
+    "mutation_negative_cases": 7,
+    "mutations": [
       {
-        "generation_code": "II-1",
-        "genotype": "K666N/K666N",
-        "age_at_diagnosis": 58,
-        "MTC": "MTC",
-        "PHEO": "Bilateral",
-        "PHPT": "NID",
-        "calcitonin": 1675,
-        "free_metanephrine": 2.09,
-        "free_normetanephrine": 1.14
-      },
-      {
-        "generation_code": "II-2",
-        "genotype": "K666N/wt",
-        "age_at_diagnosis": 61,
-        "MTC": "NID",
-        "PHEO": "NID",
-        "PHPT": "NID",
-        "calcitonin": "normal",
-        "free_metanephrine": "normal",
-        "free_normetanephrine": "normal"
-      },
-      {
-        "generation_code": "III-1",
-        "genotype": "K666N/wt",
-        "age_at_diagnosis": 32,
-        "MTC": "MTC",
-        "PHEO": "NID",
-        "PHPT": "NID",
-        "calcitonin": 16,
-        "free_metanephrine": "normal",
-        "free_normetanephrine": "normal"
-      },
-      {
-        "generation_code": "III-2",
-        "genotype": "K666N/wt",
-        "age_at_diagnosis": 30,
-        "MTC": "CCH",
-        "PHEO": "NID",
-        "PHPT": "NID",
-        "calcitonin": "normal",
-        "free_metanephrine": "normal",
-        "free_normetanephrine": "normal"
-      },
-      {
-        "generation_code": "III-4",
-        "genotype": "K666N/wt",
-        "age_at_diagnosis": 43,
-        "MTC": "NID",
-        "PHEO": "NID",
-        "PHPT": "NID",
-        "calcitonin": "normal",
-        "free_metanephrine": "normal",
-        "free_normetanephrine": "normal"
-      },
-      {
-        "generation_code": "IV-1",
-        "genotype": "K666N/wt",
-        "age_at_diagnosis": 25,
-        "MTC": "NID",
-        "PHEO": "NID",
-        "PHPT": "NID",
-        "calcitonin": "normal",
-        "free_metanephrine": "normal",
-        "free_normetanephrine": "normal"
-      }
-    ],
-    "Table2": [
-      {
-        "RET_Variant": "K666N",
-        "Carriers_n": 26,
-        "MTC_n": 11,
-        "CCH_n": 1,
-        "PHEO_n": 0,
-        "PHPT_n": 1
-      },
-      {
-        "RET_Variant": "K666E",
-        "Carriers_n": 15,
-        "MTC_n": 5,
-        "CCH_n": 2,
-        "PHEO_n": 1,
-        "PHPT_n": 0
-      },
-      {
-        "RET_Variant": "K666delinNS",
-        "Carriers_n": 6,
-        "MTC_n": 3,
-        "CCH_n": 1,
-        "PHEO_n": 0,
-        "PHPT_n": 0
-      },
-      {
-        "RET_Variant": "K666M",
-        "Carriers_n": 8,
-        "MTC_n": 2,
-        "CCH_n": 3,
-        "PHEO_n": 0,
-        "PHPT_n": 3
-      },
-      {
-        "RET_Variant": "K666R",
-        "Carriers_n": 1,
-        "MTC_n": 1,
-        "CCH_n": 0,
-        "PHEO_n": 0,
-        "PHPT_n": 0
-      }
-    ],
-    "Table3": [
-      {
-        "Homozygous_RET": "K666N",
-        "n": 1,
-        "MTC": 1,
-        "PHEO": 1,
-        "PHPT": 0
-      },
-      {
-        "Homozygous_RET": "V804M",
-        "n": 4,
-        "MTC": 4,
-        "PHEO": 0,
-        "PHPT": 0
-      },
-      {
-        "Homozygous_RET": "V804L",
-        "n": 3,
-        "MTC": 3,
-        "PHEO": 3,
-        "PHPT": 0
+        "gene": "RET",
+        "variant": "S891A",
+        "count": 7
       }
     ]
   },
-  "figures": {
-    "Figure1_caption": "Four-generation pedigree. The proband is indicated by an arrow. “K666N/K666N” denotes homozygous status, and “K666N/wt” denotes heterozygote status.",
-    "Figure1_pedigree_description": "Generation II-1 is the proband, II-2 sister, III-1 son, III-2 daughter, III-4 niece, IV-1 niece's son; pedigree annotated with variant status."
+  "case_data": [
+    {
+      "case_id": 1,
+      "mutation": "RET S891A",
+      "tissue_vaf": null,
+      "preop_ctdna_vaf": null,
+      "postop_ctdna_vaf": null,
+      "preop_ct": 447,
+      "preop_cea": 91.79,
+      "postop_ct": 3,
+      "postop_cea": null,
+      "postop_timing_months": 3,
+      "tki": "No",
+      "outcome": "Biochemical",
+      "ctdna_positive_preop": null,
+      "ctdna_positive_postop": null
+    }
+  ],
+  "patients": [
+    {
+      "id": "index_case",
+      "age": 44,
+      "sex": "Female",
+      "relationship": "Proband",
+      "ret_variant": "S891A",
+      "biochemical_data": [
+        {
+          "analyte": "calcitonin",
+          "value": 447,
+          "unit": "pg/mL",
+          "reference_range": "≤5 pg/mL",
+          "timing": "preoperative",
+          "elevated": true
+        },
+        {
+          "analyte": "CEA",
+          "value": 91.79,
+          "unit": "ng/mL",
+          "reference_range": "≤5 ng/mL",
+          "timing": "preoperative",
+          "elevated": true
+        },
+        {
+          "analyte": "calcitonin",
+          "value": 3,
+          "unit": "pg/mL",
+          "reference_range": "≤5 pg/mL",
+          "timing": "3_months_postoperative",
+          "elevated": false
+        },
+        {
+          "analyte": "calcitonin",
+          "value": 2,
+          "unit": "pg/mL",
+          "reference_range": "≤5 pg/mL",
+          "timing": "6_months_postoperative",
+          "elevated": false
+        }
+      ],
+      "diagnoses": ["medullary thyroid carcinoma"],
+      "imaging": [
+        "Ultrasound of thyroid: hypoechoic nodule with calcifications",
+        "CT chest: no evidence of metastasis"
+      ],
+      "pathology": [
+        "Multifocal medullary thyroid carcinoma involving both lobes",
+        "Tumor size 3.2 × 1.7 × 1.5 cm",
+        "Extrathyroid extension present",
+        "Lymphovascular emboli present",
+        "No perineural invasion",
+        "Three of six lymph node levels I–VI with tumor deposits",
+        "Largest involved lymph node 1.0 cm",
+        "Extra-nodal spread present"
+      ],
+      "genetics": {
+        "ret_S891A": "present",
+        "variant_cDNA": "c.2671T>G",
+        "exon": 15,
+        "zygosity": null,
+        "inheritance_pattern": "autosomal_dominant_familial",
+        "classification": "moderate_risk_pathogenic"
+      },
+      "family_history": {
+        "mtc": true,
+        "pheochromocytoma": false,
+        "hyperparathyroidism": false
+      },
+      "surgery": [
+        "Total thyroidectomy",
+        "Central compartment neck dissection",
+        "Postoperative thyroxine and calcium supplements"
+      ],
+      "follow_up": [
+        "Calcitonin 3 pg/mL at 3 months postoperative",
+        "Calcitonin 2 pg/mL at 6 months postoperative"
+      ]
+    },
+    {
+      "id": "sister_1",
+      "age": null,
+      "sex": "Female",
+      "relationship": "Sibling",
+      "ret_variant": "S891A",
+      "biochemical_data": [
+        {
+          "analyte": "calcitonin",
+          "value": null,
+          "unit": "pg/mL",
+          "reference_range": "≤5 pg/mL",
+          "timing": "preoperative",
+          "elevated": true
+        },
+        {
+          "analyte": "calcitonin",
+          "value": 2,
+          "unit": "pg/mL",
+          "reference_range": "≤5 pg/mL",
+          "timing": "3_months_postoperative",
+          "elevated": false
+        }
+      ],
+      "diagnoses": ["medullary thyroid carcinoma"],
+      "imaging": [],
+      "pathology": [
+        "Medullary thyroid carcinoma confirmed by immunohistochemistry for calcitonin"
+      ],
+      "genetics": {
+        "ret_S891A": "present",
+        "variant_cDNA": "c.2671T>G",
+        "exon": 15,
+        "zygosity": null,
+        "inheritance_pattern": "autosomal_dominant_familial",
+        "classification": "moderate_risk_pathogenic"
+      },
+      "family_history": {
+        "mtc": true,
+        "pheochromocytoma": false,
+        "hyperparathyroidism": false
+      },
+      "surgery": [
+        "Total thyroidectomy after ruling out pheochromocytoma and PHPT"
+      ],
+      "follow_up": ["Postoperative calcitonin <2 pg/mL at 3 months"]
+    },
+    {
+      "id": "sister_2",
+      "age": null,
+      "sex": "Female",
+      "relationship": "Sibling",
+      "ret_variant": "S891A",
+      "biochemical_data": [
+        {
+          "analyte": "calcitonin",
+          "value": null,
+          "unit": "pg/mL",
+          "reference_range": "≤5 pg/mL",
+          "timing": "preoperative",
+          "elevated": true
+        },
+        {
+          "analyte": "calcitonin",
+          "value": 2,
+          "unit": "pg/mL",
+          "reference_range": "≤5 pg/mL",
+          "timing": "3_months_postoperative",
+          "elevated": false
+        }
+      ],
+      "diagnoses": ["medullary thyroid carcinoma"],
+      "imaging": [],
+      "pathology": [
+        "Medullary thyroid carcinoma confirmed by immunohistochemistry for calcitonin"
+      ],
+      "genetics": {
+        "ret_S891A": "present",
+        "variant_cDNA": "c.2671T>G",
+        "exon": 15,
+        "zygosity": null,
+        "inheritance_pattern": "autosomal_dominant_familial",
+        "classification": "moderate_risk_pathogenic"
+      },
+      "family_history": {
+        "mtc": true,
+        "pheochromocytoma": false,
+        "hyperparathyroidism": false
+      },
+      "surgery": [
+        "Total thyroidectomy after ruling out pheochromocytoma and PHPT"
+      ],
+      "follow_up": ["Postoperative calcitonin <2 pg/mL at 3 months"]
+    },
+    {
+      "id": "sister_3",
+      "age": null,
+      "sex": "Female",
+      "relationship": "Sibling",
+      "ret_variant": "S891A",
+      "biochemical_data": [
+        {
+          "analyte": "calcitonin",
+          "value": null,
+          "unit": "pg/mL",
+          "reference_range": "≤5 pg/mL",
+          "timing": "preoperative",
+          "elevated": true
+        },
+        {
+          "analyte": "calcitonin",
+          "value": 2,
+          "unit": "pg/mL",
+          "reference_range": "≤5 pg/mL",
+          "timing": "3_months_postoperative",
+          "elevated": false
+        }
+      ],
+      "diagnoses": ["medullary thyroid carcinoma"],
+      "imaging": [],
+      "pathology": [
+        "Medullary thyroid carcinoma confirmed by immunohistochemistry for calcitonin"
+      ],
+      "genetics": {
+        "ret_S891A": "present",
+        "variant_cDNA": "c.2671T>G",
+        "exon": 15,
+        "zygosity": null,
+        "inheritance_pattern": "autosomal_dominant_familial",
+        "classification": "moderate_risk_pathogenic"
+      },
+      "family_history": {
+        "mtc": true,
+        "pheochromocytoma": false,
+        "hyperparathyroidism": false
+      },
+      "surgery": [
+        "Total thyroidectomy after ruling out pheochromocytoma and PHPT"
+      ],
+      "follow_up": ["Postoperative calcitonin <2 pg/mL at 3 months"]
+    },
+    {
+      "id": "sister_4",
+      "age": null,
+      "sex": "Female",
+      "relationship": "Sibling",
+      "ret_variant": "S891A",
+      "biochemical_data": [
+        {
+          "analyte": "calcitonin",
+          "value": null,
+          "unit": "pg/mL",
+          "reference_range": "≤5 pg/mL",
+          "timing": "preoperative",
+          "elevated": true
+        },
+        {
+          "analyte": "calcitonin",
+          "value": 2,
+          "unit": "pg/mL",
+          "reference_range": "≤5 pg/mL",
+          "timing": "3_months_postoperative",
+          "elevated": false
+        }
+      ],
+      "diagnoses": ["medullary thyroid carcinoma"],
+      "imaging": [],
+      "pathology": [
+        "Medullary thyroid carcinoma confirmed by immunohistochemistry for calcitonin"
+      ],
+      "genetics": {
+        "ret_S891A": "present",
+        "variant_cDNA": "c.2671T>G",
+        "exon": 15,
+        "zygosity": null,
+        "inheritance_pattern": "autosomal_dominant_familial",
+        "classification": "moderate_risk_pathogenic"
+      },
+      "family_history": {
+        "mtc": true,
+        "pheochromocytoma": false,
+        "hyperparathyroidism": false
+      },
+      "surgery": [
+        "Total thyroidectomy after ruling out pheochromocytoma and PHPT"
+      ],
+      "follow_up": ["Postoperative calcitonin <2 pg/mL at 3 months"]
+    },
+    {
+      "id": "younger_carrier_1",
+      "age": 20,
+      "sex": null,
+      "relationship": "Next_generation",
+      "ret_variant": "S891A",
+      "biochemical_data": [
+        {
+          "analyte": "calcitonin",
+          "value": null,
+          "unit": "pg/mL",
+          "reference_range": "≤5 pg/mL",
+          "timing": "baseline_followup",
+          "elevated": false
+        }
+      ],
+      "diagnoses": [],
+      "imaging": ["Serial ultrasound (details not specified)"],
+      "pathology": [],
+      "genetics": {
+        "ret_S891A": "present",
+        "variant_cDNA": "c.2671T>G",
+        "exon": 15,
+        "zygosity": null,
+        "inheritance_pattern": "autosomal_dominant_familial",
+        "classification": "moderate_risk_pathogenic"
+      },
+      "family_history": {
+        "mtc": true,
+        "pheochromocytoma": false,
+        "hyperparathyroidism": false
+      },
+      "surgery": [],
+      "follow_up": [
+        "On follow-up with serial ultrasound and tumor markers; calcitonin not yet raised"
+      ]
+    },
+    {
+      "id": "younger_carrier_2",
+      "age": null,
+      "sex": null,
+      "relationship": "Next_generation",
+      "ret_variant": "S891A",
+      "biochemical_data": [
+        {
+          "analyte": "calcitonin",
+          "value": null,
+          "unit": "pg/mL",
+          "reference_range": "≤5 pg/mL",
+          "timing": "baseline_followup",
+          "elevated": false
+        }
+      ],
+      "diagnoses": [],
+      "imaging": ["Serial ultrasound (details not specified)"],
+      "pathology": [],
+      "genetics": {
+        "ret_S891A": "present",
+        "variant_cDNA": "c.2671T>G",
+        "exon": 15,
+        "zygosity": null,
+        "inheritance_pattern": "autosomal_dominant_familial",
+        "classification": "moderate_risk_pathogenic"
+      },
+      "family_history": {
+        "mtc": true,
+        "pheochromocytoma": false,
+        "hyperparathyroidism": false
+      },
+      "surgery": [],
+      "follow_up": [
+        "On follow-up with serial ultrasound and tumor markers; calcitonin not yet raised"
+      ]
+    }
+  ],
+  "statistics": {
+    "preop_ctdna_positive_count": null,
+    "postop_ctdna_positive_count": null,
+    "p_values": {
+      "biomarker_correlations": null,
+      "survival_associations": null
+    },
+    "correlation_coefficients": {
+      "calcitonin_cea": null,
+      "vaf_outcome": null
+    }
   },
-  "family_summary": {
-    "total_family_members_mentioned": 7,
-    "tested_members_count": 6,
-    "positive_members_count": 6,
-    "carrier_distribution": "1 proband (homozygous); 5 heterozygote carriers; several untested",
-    "notes": "No biochemical evidence of PHEO or PHPT in any heterozygotes. Some family members untested, including mother (age 82, deferred testing)."
-  },
-  "follow_up_and_outcomes": {
-    "proband_outcome": "Stable hepatic metastases, alive at 9 months, no PHEO or PHPT recurrence.",
-    "heterozygote_outcomes": "No evidence of PHEO or PHPT. One son with small MTC, one daughter with CCH but no MTC.",
-    "pheo_risk_summary": "PHEO seen only in proband. No evidence for PHEO in any known heterozygote carriers.",
-    "mtc_risk_summary": "Isolated MTC in some heterozygotes but much lower penetrance. CCH observed in one."
-  },
-  "validation_checks": {
-    "all_values_directly_from_text": true,
-    "no_inferred_values": true
+  "methods": {
+    "sequencing_panel": "RET genetic screening by DNA PCR sequencing of exons 8, 10, 11, 13, 14, 15, and 16 in a central molecular laboratory offering RET mutational testing",
+    "biomarker_assays": "Calcitonin and CEA measured by unspecified immunoassays; reference ranges calcitonin ≤5 pg/mL, CEA ≤5 ng/mL",
+    "coverage_depth": {
+      "tissue_mean": null,
+      "ctdna_mean": null
+    },
+    "normal_ranges": {
+      "calcitonin": "≤5 pg/mL",
+      "cea": "≤5 ng/mL"
+    }
   }
 }

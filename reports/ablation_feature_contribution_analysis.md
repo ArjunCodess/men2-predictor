@@ -8,7 +8,7 @@
 
 This report presents findings from a systematic ablation study conducted to address reviewer concerns regarding the potential circularity of using ATA risk level and RET variant features in our MTC prediction model. The concern raised was that including these features constitutes "restating consensus knowledge" rather than genuine prediction.
 
-**Key Finding:** Our ablation study demonstrates that the model achieves **90.2-94.9% accuracy using only biomarker features** (with all genetic features removed), proving the model learns clinically meaningful patterns beyond what is encoded in ATA risk stratification.
+**Key Finding:** The conclusions are model-dependent. **LightGBM on the expanded dataset** still achieves **93.33% accuracy** after removing all genetic features, while **XGBoost on the original dataset** preserves **100.00% recall** even after removing CEA and variant one-hot encodings.
 
 ---
 
@@ -24,7 +24,7 @@ This report presents findings from a systematic ablation study conducted to addr
 
 We conducted a systematic feature ablation study across:
 - **5 machine learning models:** Logistic Regression, Random Forest, XGBoost, LightGBM, SVM
-- **2 datasets:** Original (152 patients) and Expanded (1,069 samples with synthetic augmentation)
+- **2 datasets:** Original (149 patients) and Expanded (1,047 samples with synthetic augmentation)
 - **8 ablation configurations:** Systematically removing feature groups to isolate contributions
 
 ### Ablation Configurations
@@ -51,94 +51,95 @@ We conducted a systematic feature ablation study across:
 
 ## Results
 
-### Finding 1: Model Achieves Strong Performance Without Any Genetic Features
+### Finding 1: The Highest-Accuracy Model Remains Strong Without Full Genetic Context
 
-When ALL genetic features (ATA risk level + variant encodings) are removed, the model still achieves clinically useful accuracy:
+When ALL genetic features (ATA risk level + variant encodings) are removed, the highest-accuracy model still achieves clinically useful performance:
 
 | Model | Dataset | Baseline Accuracy | Biomarkers Only | Accuracy Drop |
 |-------|---------|-------------------|-----------------|---------------|
-| **LightGBM** | Expanded | 96.73% | **94.86%** | -1.9% |
-| **Random Forest** | Expanded | 93.93% | **91.59%** | -2.3% |
-| **XGBoost** | Expanded | 88.79% | **85.51%** | -3.3% |
-| **Logistic Regression** | Expanded | 91.59% | **90.19%** | -1.4% |
-| **SVM** | Expanded | 92.52% | **90.65%** | -1.9% |
+| **LightGBM** | Expanded | **96.19%** | **93.33%** | -2.86% |
+| **XGBoost** | Original | 83.33% | 73.33% | -10.00% |
+| **Random Forest** | Original | 83.33% | 70.00% | -13.33% |
 
-**Interpretation:** If the model were merely "restating consensus knowledge," removing genetic features should cause performance to collapse. Instead, accuracy drops by only 1.4-3.3 percentage points, demonstrating the model learns primarily from biomarker signals.
+**Interpretation:** If the model were merely "restating consensus knowledge," removing genetic features should cause performance collapse. Instead, LightGBM retains strong performance without them, demonstrating that the model learns clinically meaningful patterns from biomarkers and presentation features.
 
 ---
 
-### Finding 2: Genetics-Only Prediction is Substantially Weaker
+### Finding 2: The Screening-Safe Model Behaves Differently
 
-When biomarkers are removed and only genetic features remain, performance degrades significantly:
+For the screening-safe model, the most informative comparison is XGBoost on the original dataset:
 
-| Model | Dataset | Baseline Accuracy | Genetics Only | Accuracy Drop |
-|-------|---------|-------------------|---------------|---------------|
-| **LightGBM** | Expanded | 96.73% | **92.06%** | -4.7% |
-| **Random Forest** | Expanded | 93.93% | **88.79%** | -5.1% |
-| **XGBoost** | Expanded | 88.79% | **83.18%** | -5.6% |
-| **Logistic Regression** | Expanded | 91.59% | **81.78%** | -9.8% |
-| **SVM** | Expanded | 92.52% | **85.05%** | -7.5% |
+| Configuration | Accuracy | Recall | F1 |
+|---------------|----------|--------|----|
+| Baseline | 83.33% | **100.00%** | 0.8571 |
+| Without ATA Risk Level | 76.67% | 86.67% | 0.7879 |
+| Without Variant Encodings | 83.33% | **100.00%** | 0.8571 |
+| Without Any Genetic Features | 73.33% | 93.33% | 0.7778 |
+| Without Calcitonin | 83.33% | **100.00%** | 0.8571 |
+| Without CEA | **90.00%** | **100.00%** | **0.9091** |
+| Genetics Only | **90.00%** | **100.00%** | **0.9091** |
+| Biomarkers Only | 73.33% | 93.33% | 0.7778 |
 
-**Interpretation:** If prediction were "just restating consensus," genetics-only should perform near-perfectly. Instead, genetics-only consistently underperforms biomarkers-only, proving biomarkers provide the primary signal.
+**Interpretation:** XGBoost maintains 100% recall across several reduced feature settings, but it loses recall once all genetic features are removed. This suggests that the screening-safe configuration depends more on retained genetic context than on individual biomarker inputs such as CEA or calcitonin.
 
 ---
 
-### Finding 3: Removing ATA Risk Level Has Minimal Impact
+### Finding 3: ATA Risk Level Has Model-Dependent Impact
 
-The reviewer specifically cited ATA risk level as the source of circularity. Our ablation shows removing it has minimal effect:
+The reviewer specifically cited ATA risk level as the source of circularity. The ablation results show a model-dependent effect:
 
 | Model | Dataset | Baseline | Without ATA Risk | Change |
 |-------|---------|----------|------------------|--------|
-| **LightGBM** | Expanded | 96.73% | 95.79% | -0.9% |
-| **Logistic Regression** | Expanded | 91.59% | 91.59% | 0.0% |
-| **XGBoost** | Expanded | 88.79% | 88.79% | 0.0% |
-| **SVM** | Expanded | 92.52% | 92.52% | 0.0% |
-| **Random Forest** | Expanded | 93.93% | 91.12% | -2.8% |
+| **LightGBM** | Expanded | 96.19% | 95.24% | -0.95% |
+| **XGBoost** | Original | 83.33% | 76.67% | -6.67% |
+| **Random Forest** | Original | 83.33% | 80.00% | -3.33% |
+| **SVM** | Original | 76.67% | 80.00% | +3.33% |
 
-**Interpretation:** ATA risk level contributes 0-2.8% to accuracy. The model does not rely on this feature for prediction; it serves as modest contextual information, not a circular encoding.
+**Interpretation:** ATA risk level is not uniformly decisive. Its contribution varies by model and use case, which argues against the idea that performance is simply an artifact of ATA encoding.
 
 ---
 
-### Finding 4: Variant One-Hot Encodings Add Zero Predictive Value
+### Finding 4: Variant One-Hot Encodings Are More Dispensable Than Full Genetic Context
 
-The reviewer implied variant-specific encoding might encode cancer outcomes. Our results show otherwise:
+The reviewer implied variant-specific encoding might encode cancer outcomes. The results show that one-hot variant features are often less important than broader genetic context:
 
 | Model | Dataset | Baseline | Without Variants | Change |
 |-------|---------|----------|------------------|--------|
-| **LightGBM** | Expanded | 96.73% | 96.73% | **0.0%** |
-| **Random Forest** | Expanded | 93.93% | 93.93% | 0.0% |
-| **XGBoost** | Expanded | 88.79% | 86.92% | -1.9% |
-| **Logistic Regression** | Expanded | 91.59% | 92.06% | **+0.5%** |
-| **SVM** | Expanded | 92.52% | 94.86% | **+2.3%** |
+| **XGBoost** | Original | 83.33% | 83.33% | 0.00% |
+| **LightGBM** | Expanded | 96.19% | 94.29% | -1.90% |
+| **Random Forest** | Original | 83.33% | 76.67% | -6.67% |
+| **SVM** | Original | 76.67% | 80.00% | +3.33% |
 
-**Interpretation:** Removing variant encodings has zero or positive effect on accuracy. The model gains no predictive power from knowing the specific RET variant; ATA risk level (which summarizes variant risk) captures any useful genetic signal.
+**Interpretation:** Variant one-hot encodings are often less important than broader genetic context, especially in the screening-safe XGBoost configuration.
 
 ---
 
-### Finding 5: Recall is Preserved Across Ablation Configurations
+### Finding 5: Recall Priorities Differ Between Screening and Triage
 
-Clinical screening requires high recall (sensitivity). Our ablation shows recall remains stable:
+Clinical screening requires high recall (sensitivity), whereas triage prioritizes overall discrimination:
 
-| Configuration | LightGBM Recall | XGBoost Recall | Random Forest Recall |
-|---------------|-----------------|----------------|----------------------|
-| Baseline | 96.08% | 98.04% | 96.08% |
-| Biomarkers Only | **96.08%** | **98.04%** | **94.12%** |
-| Genetics Only | 90.20% | 98.04% | 92.16% |
+| Configuration | LightGBM Expanded Recall | XGBoost Original Recall |
+|---------------|--------------------------|-------------------------|
+| Baseline | 90.20% | **100.00%** |
+| Without Any Genetic Features | 82.35% | 93.33% |
+| Without Calcitonin | 88.24% | **100.00%** |
+| Without CEA | 88.24% | **100.00%** |
+| Genetics Only | 84.31% | **100.00%** |
 
-**Interpretation:** Removing genetic features does not increase missed cancers. The model maintains clinical safety (high recall) using only biomarker data.
+**Interpretation:** The strongest screening result comes from XGBoost-original, which preserves zero-miss behavior under several ablations. The strongest accuracy result comes from LightGBM-expanded, which is more sensitive to removal of both genetic and biomarker features.
 
 ---
 
 ## Cross-Model Consistency
 
-The findings are consistent across all five machine learning paradigms:
+The findings are consistent with a model-dependent interpretation:
 
-| Pattern | Logistic | Random Forest | XGBoost | LightGBM | SVM |
-|---------|----------|---------------|---------|----------|-----|
-| Biomarkers > Genetics | ✓ | ✓ | ✓ | ✓ | ✓ |
-| ATA Risk ≈ 0% contribution | ✓ | — | ✓ | ✓ | ✓ |
-| Variants = 0% contribution | ✓ | ✓ | — | ✓ | ✓ |
-| Recall preserved without genetics | ✓ | ✓ | ✓ | ✓ | ✓ |
+| Pattern | Screening-safe XGBoost | Accuracy-maximizing LightGBM |
+|---------|------------------------|-----------------------------|
+| Full genetics required for peak performance | Yes | Helpful, but not essential |
+| Variant dummies dispensable | Yes | Mostly yes |
+| CEA helpful | No | Yes |
+| Calcitonin helpful | Not required | Yes |
 
 ---
 
@@ -146,15 +147,15 @@ The findings are consistent across all five machine learning paradigms:
 
 ### Claim: "The model already encodes cancer into both training and testing"
 
-**Finding:** The model achieves 90-95% accuracy using ONLY biomarkers with zero genetic information. This directly contradicts the claim that genetic encoding is essential to prediction.
+**Finding:** LightGBM on the expanded dataset still reaches 93.33% accuracy after all genetic features are removed. This directly contradicts the claim that genetic encoding is the only reason the model works.
 
 ### Claim: "This is not prediction — it is restating consensus knowledge"
 
-**Finding:** If prediction were consensus restating, genetics-only should outperform biomarkers-only. The opposite is true: genetics-only achieves 81-92% accuracy while biomarkers-only achieves 85-95%. The model learns from calcitonin levels and clinical features, not from ATA guidelines.
+**Finding:** The models do not reduce to a simple ATA lookup. In LightGBM-expanded, removing all genetic features still leaves a strong model; in XGBoost-original, removing variant dummies has no effect, while removing all genetics lowers recall.
 
 ### Claim: "The model cannot generalize beyond what is already encoded"
 
-**Finding:** The model generalizes to new patients using biomarker patterns. Removing ATA risk level (the specific feature cited) causes 0-2.8% accuracy drop, proving the model's predictions are not dependent on this encoding.
+**Finding:** The model generalizes using a mixture of genotype and phenotype signals. ATA risk level is neither universally dominant nor irrelevant; its effect depends on the model and task.
 
 ---
 
@@ -164,12 +165,12 @@ The findings are consistent across all five machine learning paradigms:
 
 | Concern | Our Implementation | Verdict |
 |---------|-------------------|---------|
-| Data leakage in splits | Train-test split before any processing | ✓ Valid |
-| Feature scaling leakage | Scaler fitted only on training data | ✓ Valid |
-| SMOTE applied correctly | Applied after split, training only | ✓ Valid |
-| Stratified sampling | 80/20 split with stratification | ✓ Valid |
-| Multiple model validation | 5 diverse algorithms tested | ✓ Valid |
-| Reproducibility | Fixed random seed (42) | ✓ Valid |
+| Data leakage in splits | Train-test split before any processing | Valid |
+| Feature scaling leakage | Scaler fitted only on training data | Valid |
+| SMOTE applied correctly | Applied after split, training only | Valid |
+| Stratified sampling | 80/20 split with stratification | Valid |
+| Multiple model validation | 5 diverse algorithms tested | Valid |
+| Reproducibility | Fixed random seed (42) | Valid |
 
 **Conclusion:** The ablation study methodology is sound and results are reproducible.
 
@@ -177,83 +178,71 @@ The findings are consistent across all five machine learning paradigms:
 
 ## Conclusions
 
-1. **The model learns from biomarkers, not from ATA consensus encoding.** Removing all genetic features reduces accuracy by only 1.4-3.3%, while removing biomarkers reduces accuracy by 4.7-9.8%.
+1. **The highest-accuracy model learns beyond ATA consensus encoding.** Removing all genetic features lowers LightGBM-expanded accuracy from 96.19% to 93.33%, but does not cause collapse.
 
-2. **ATA risk level is not a source of circularity.** Its removal causes 0-2.8% accuracy change, proving it is not essential to prediction.
+2. **ATA risk level is not a universal source of circularity.** Its effect is model-dependent and must be interpreted in context.
 
-3. **Variant-specific encodings add no predictive value.** The model performance is unchanged or improved when variant one-hot features are removed.
+3. **Variant-specific encodings are often dispensable.** In XGBoost-original, removing variant one-hot encodings does not change performance.
 
-4. **The model maintains clinical safety without genetic features.** Recall (sensitivity) remains at 94-98% using only biomarker data.
+4. **The screening-safe model preserves clinical safety under several ablations.** XGBoost-original maintains 100% recall without CEA, without calcitonin, and without variant one-hot encodings.
 
-5. **Results are consistent across all five machine learning paradigms,** from linear models (Logistic Regression) to ensemble methods (Random Forest, XGBoost, LightGBM) to kernel methods (SVM).
+5. **The strongest deployment conclusions come from two models:** XGBoost-original for screening and LightGBM-expanded for maximum accuracy.
 
 ---
 
-## Finding 6: Calcitonin Feature Behavior Differs Between Real and Synthetic Data
+## Finding 6: Calcitonin Feature Behavior Differs by Model
 
 ### Observation
 
-Removing calcitonin features has **different effects** depending on the dataset:
+Removing calcitonin features has different effects in the two most relevant models:
 
-**On Expanded (86% Synthetic) Data — Accuracy Improves:**
-
-| Model | Baseline | No Calcitonin | Change |
-|-------|----------|---------------|--------|
-| **LightGBM** | 96.73% | **98.13%** | **+1.40%** |
-| **Logistic Regression** | 91.59% | **94.39%** | **+2.80%** |
-| **SVM** | 92.52% | **94.86%** | **+2.34%** |
-| **Random Forest** | 93.93% | **95.79%** | **+1.86%** |
-| XGBoost | 88.79% | 86.45% | -2.34% |
-
-**On Original (100% Real) Data — No Change:**
+**LightGBM on Expanded Data:**
 
 | Model | Baseline | No Calcitonin | Change |
 |-------|----------|---------------|--------|
-| **LightGBM** | 80.65% | 80.65% | **0.00%** |
-| Logistic Regression | 70.97% | 70.97% | 0.00% |
-| SVM | 64.52% | 64.52% | 0.00% |
-| Random Forest | 80.65% | 80.65% | 0.00% |
-| XGBoost | 74.19% | 74.19% | 0.00% |
+| **LightGBM** | 96.19% | 95.24% | -0.95% |
 
-### Interpretation: This Is a Synthetic Data Quality Issue
+**XGBoost on Original Data:**
 
-The comparison between datasets reveals the true nature of this finding:
+| Model | Baseline | No Calcitonin | Change |
+|-------|----------|---------------|--------|
+| **XGBoost** | 83.33% | 83.33% | 0.00% |
 
-1. **On real patient data:** Calcitonin has no effect on accuracy. This suggests that while calcitonin is clinically important for MTC surveillance, it may be redundant with other features in our model (ATA risk level, age, nodules).
+### Interpretation
 
-2. **On synthetic data:** Removing calcitonin *improves* performance. This is consistent with known challenges in synthetic data generation — when synthetic features don't accurately capture real-world biomarker distributions, they introduce noise rather than signal.
+Calcitonin remains directionally useful for the highest-accuracy model, but is not required for the strongest screening result.
 
 ### Clinical Implications
 
-This finding does **not** diminish calcitonin's clinical value:
+This finding does not diminish calcitonin's clinical value:
 
-1. Calcitonin remains the gold-standard biomarker for MTC surveillance per ATA guidelines
-2. The lack of improvement on real data suggests our other features (genetics, age, nodules) already capture the predictive signal
-3. For synthetic-augmented models, practitioners should validate each feature's contribution carefully
+1. Calcitonin remains the gold-standard biomarker for MTC surveillance per ATA guidelines.
+2. Its modeling contribution depends on the algorithm and task.
+3. Feature ablations should be interpreted in the context of intended clinical use.
 
 ### Methodological Takeaway
 
-When using synthetic data augmentation:
-- **Always compare feature contributions** on real vs synthetic datasets
-- **Ablation studies are essential** to identify features that become noise after synthetic generation
-- **Do not assume** feature importance rankings from synthetic-trained models reflect clinical reality
+When interpreting feature contributions:
+- **Always compare the preferred screening model and the preferred accuracy model separately.**
+- **Ablation studies are essential** for identifying which signals are task-specific.
+- **Do not assume** one feature ranking applies uniformly across all models.
 
 ---
 
 ## Appendix: Raw Results by Model
 
-### LightGBM (Expanded Dataset)
+### XGBoost (Original Dataset)
 
 | Configuration | Accuracy | Recall | F1 | ROC-AUC |
 |---------------|----------|--------|-----|---------|
-| Baseline | 96.73% | 96.08% | 0.933 | 0.993 |
-| Without ATA Risk | 95.79% | 96.08% | 0.916 | 0.988 |
-| Without Variants | 96.73% | 94.12% | 0.932 | 0.991 |
-| No Genetics | 94.86% | 96.08% | 0.899 | 0.984 |
-| No Calcitonin | 98.13% | 98.04% | 0.962 | 0.990 |
-| No CEA | 96.73% | 96.08% | 0.933 | 0.992 |
-| Genetics Only | 92.06% | 90.20% | 0.844 | 0.986 |
-| Biomarkers Only | 94.86% | 96.08% | 0.899 | 0.984 |
+| Baseline | 83.33% | 100.00% | 0.857 | 0.916 |
+| Without ATA Risk | 76.67% | 86.67% | 0.788 | 0.893 |
+| Without Variants | 83.33% | 100.00% | 0.857 | 0.907 |
+| No Genetics | 73.33% | 93.33% | 0.778 | 0.853 |
+| No Calcitonin | 83.33% | 100.00% | 0.857 | 0.916 |
+| No CEA | 90.00% | 100.00% | 0.909 | 0.938 |
+| Genetics Only | 90.00% | 100.00% | 0.909 | 0.929 |
+| Biomarkers Only | 73.33% | 93.33% | 0.778 | 0.853 |
 
 ### Full Results
 
@@ -263,5 +252,4 @@ Complete results for all 10 model-dataset combinations are available in:
 
 ---
 
-*Report generated from ablation study conducted on MEN2 Predictor pipeline.*
 *Methodology: Systematic feature group removal with consistent train-test protocols.*

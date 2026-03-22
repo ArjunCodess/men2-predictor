@@ -3,6 +3,6 @@ LIME vs SHAP CONSISTENCY SUMMARY
 Model: xgboost
 Dataset: original
 Samples compared: 10
-Agree: 10
-Partial: 0
+Agree: 7
+Partial: 3
 Disagree: 0
