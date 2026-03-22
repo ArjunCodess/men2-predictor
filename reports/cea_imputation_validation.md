@@ -6,9 +6,9 @@
 
 ## Executive Summary
 
-This report presents findings from a comprehensive sensitivity analysis conducted to address reviewer concerns that the weak calcitonin-CEA correlation (r=0.24) may undermine the reliability of CEA imputation in our MEN2 prediction model.
+This report presents findings from a comprehensive sensitivity analysis conducted to address reviewer concerns that the weak calcitonin-CEA correlation (r=0.1158, n=12) may undermine the reliability of CEA imputation in our MEN2 prediction model.
 
-**Key Finding:** Our validation study demonstrates that the model achieves **96.73-97.20% accuracy regardless of CEA imputation method**, with accuracy varying by less than 1 percentage point across MICE, mean, median, and zero imputation strategies.
+**Key Finding:** CEA contribution is model-dependent. For **LightGBM on the expanded dataset**, CEA improves accuracy from **92.86%** to **96.19%**, and **MICE+PMM** is the strongest imputation strategy. For **XGBoost on the original dataset**, removing CEA improves accuracy from **83.33%** to **90.00%** while preserving **100.00% recall**.
 
 ---
 
@@ -24,7 +24,7 @@ This report presents findings from a comprehensive sensitivity analysis conducte
 
 We conducted a two-part sensitivity analysis across:
 - **5 machine learning models:** Logistic Regression, Random Forest, XGBoost, LightGBM, SVM
-- **2 datasets:** Original (152 patients) and Expanded (1,069 samples with synthetic augmentation)
+- **2 datasets:** Original (149 patients) and Expanded (1,047 samples with synthetic augmentation)
 - **2 study options:** CEA presence/absence and imputation method comparison
 
 ### Option A: CEA Presence/Absence Comparison
@@ -37,11 +37,11 @@ Test 5 different imputation strategies to assess robustness:
 
 | Method | Description |
 |--------|-------------|
-| MICE+PMM | Multiple Imputation by Chained Equations with Predictive Mean Matching (current) |
+| MICE+PMM | Multiple Imputation by Chained Equations with Predictive Mean Matching |
 | Mean Imputation | Replace missing CEA with mean of observed values |
 | Median Imputation | Replace missing CEA with median of observed values |
 | Zero Imputation | Replace missing CEA with zero (conservative lower bound) |
-| Complete Case | Use only patients with observed CEA (n=34) |
+| Complete Case | Use only patients with observed CEA values |
 
 ### Statistical Approach
 
@@ -54,72 +54,68 @@ Test 5 different imputation strategies to assess robustness:
 
 ## Results
 
-### Finding 1: CEA Features Provide Minimal Predictive Benefit
+### Finding 1: CEA Effects Depend on the Model
 
-When CEA features are removed entirely, performance drops by less than 1%:
+The effect of CEA differs in the most relevant screening and triage configurations:
 
 | Model | Dataset | With CEA | Without CEA | Accuracy Change |
 |-------|---------|----------|-------------|-----------------|
-| **LightGBM** | Expanded | 97.20% | 96.73% | **-0.47%** |
-| **Random Forest** | Expanded | 93.46% | 93.93% | +0.47% |
-| **XGBoost** | Expanded | 87.38% | 87.85% | +0.47% |
-| **Logistic Regression** | Expanded | 91.59% | 91.59% | 0.00% |
-| **SVM** | Expanded | 91.59% | 94.39% | +2.80% |
+| **XGBoost** | Original | 83.33% | **90.00%** | **+6.67% without CEA** |
+| **LightGBM** | Expanded | **96.19%** | 92.86% | **-3.33% without CEA** |
 
-**Interpretation:** If CEA imputation quality were critical, removing CEA should cause significant performance degradation. Instead, accuracy changes are negligible (often improving), proving imputation quality is irrelevant to model validity.
+**Interpretation:** CEA is not universally beneficial or universally unnecessary. It is dispensable for the screening-safe XGBoost model, but helpful for the highest-accuracy LightGBM model.
 
 ---
 
-### Finding 2: Results Are Robust to Imputation Method Choice
+### Finding 2: Imputation Method Choice Affects Accuracy-Recall Tradeoffs
 
-Testing four imputation strategies shows accuracy variation of less than 1 percentage point:
+The two most relevant models respond differently to imputation:
 
-| Method | LightGBM Accuracy | vs MICE Baseline |
-|--------|-------------------|------------------|
-| MICE+PMM (Current) | **97.20%** | --- |
-| Mean Imputation | 96.73% | -0.47% |
-| Median Imputation | **97.20%** | 0.00% |
-| Zero Imputation | 96.26% | -0.93% |
-| Complete Case (n=149) | 90.00% | -7.20% |
+| Method | XGBoost Original Accuracy / Recall | LightGBM Expanded Accuracy / Recall |
+|--------|------------------------------------|-------------------------------------|
+| MICE+PMM (Current) | 83.33% / **100.00%** | **96.19% / 90.20%** |
+| Mean Imputation | 86.67% / 93.33% | 93.81% / 86.27% |
+| Median Imputation | 86.67% / 93.33% | 92.86% / 90.20% |
+| Zero Imputation | 86.67% / 93.33% | 93.81% / 86.27% |
+| Complete Case | 33.33% / 50.00% | 69.23% / 66.67% |
 
-**Interpretation:** Excluding complete-case analysis (which has fewer samples), accuracy varies by only **0.94 percentage points** (96.26% to 97.20%). The weak correlation does not translate to meaningful performance differences.
+**Interpretation:** For LightGBM on the expanded dataset, MICE+PMM is the best overall option. For XGBoost on the original dataset, MICE+PMM preserves perfect recall, while simpler imputations raise accuracy slightly at the cost of sensitivity.
 
 ---
 
-### Finding 3: Recall Is Preserved Across All Imputation Methods
+### Finding 3: Screening and Triage Favor Different CEA Strategies
 
-Clinical screening requires high recall (sensitivity). Our study shows recall remains stable:
+Clinical screening prioritizes recall, while triage prioritizes overall discrimination:
 
-| Imputation Method | LightGBM Recall | F1 Score |
+| Model | Best Recall Setting | Best Accuracy Setting |
 |-------------------|-----------------|----------|
-| MICE+PMM (Current) | **96.08%** | 0.9423 |
-| Mean Imputation | 96.08% | 0.9333 |
-| Median Imputation | 96.08% | 0.9423 |
-| Zero Imputation | 96.08% | 0.9245 |
+| **XGBoost (Original)** | 100.00% recall with CEA or without CEA | 90.00% accuracy without CEA |
+| **LightGBM (Expanded)** | 90.20% recall with CEA or median imputation | 96.19% accuracy with MICE+PMM |
 
-**Interpretation:** All imputation methods maintain identical recall. No imputation strategy increases missed cancers.
+**Interpretation:** The preferred CEA strategy depends on the intended use case. For screening, CEA is not required in the best-performing XGBoost model. For highest-accuracy triage, CEA should be retained in LightGBM.
 
 ---
 
 ## Cross-Model Consistency
 
-The findings are consistent across all five machine learning paradigms:
+The findings are directionally consistent across the broader benchmark in showing that CEA effects are modest relative to the main predictive structure, but the sign of the effect is not identical:
 
-| Model | With CEA | Without CEA | Δ Accuracy |
-|-------|----------|-------------|------------|
-| Logistic Regression | 91.59% | 91.59% | 0.00% |
-| Random Forest | 93.46% | 93.93% | +0.47% |
-| **LightGBM** | **97.20%** | **96.73%** | **-0.47%** |
-| XGBoost | 87.38% | 87.85% | +0.47% |
-| SVM | 91.59% | 94.39% | +2.80% |
+| Model | Dataset | With CEA | Without CEA | Delta Accuracy |
+|-------|---------|----------|-------------|----------------|
+| Logistic Regression | Original | 66.67% | 73.33% | +6.67% |
+| Random Forest | Original | 83.33% | 73.33% | -10.00% |
+| **XGBoost** | Original | 83.33% | **90.00%** | +6.67% |
+| **LightGBM** | Expanded | **96.19%** | 92.86% | -3.33% |
+| SVM | Expanded | 85.71% | 89.52% | +3.81% |
 
 **Pattern Summary:**
 
-| Finding | Logistic | Random Forest | XGBoost | LightGBM | SVM |
-|---------|----------|---------------|---------|----------|-----|
-| CEA impact < 1% | ✓ | ✓ | ✓ | ✓ | — |
-| Robust to imputation | ✓ | ✓ | ✓ | ✓ | ✓ |
-| Recall preserved | ✓ | ✓ | ✓ | ✓ | ✓ |
+| Finding | XGBoost Original | LightGBM Expanded |
+|---------|------------------|-------------------|
+| Best use case | Screening / recall | Accuracy / triage |
+| CEA required? | No | Yes, helpful |
+| Best imputation by accuracy | No CEA | MICE+PMM |
+| Best imputation by recall | With or without CEA | MICE+PMM or median |
 
 ---
 
@@ -127,15 +123,15 @@ The findings are consistent across all five machine learning paradigms:
 
 ### Claim: "Weak CEA correlation undermines imputation reliability"
 
-**Finding:** Imputation reliability is irrelevant because CEA provides minimal predictive benefit. LightGBM achieves 96.73% accuracy without ANY CEA features. The model does not depend on CEA, so imputation quality cannot affect validity.
+**Finding:** The weak correlation does not invalidate the model. Instead, it means CEA must be interpreted in a model-specific way. In XGBoost on the original dataset, CEA can be omitted without harming recall. In LightGBM on the expanded dataset, CEA improves overall performance and MICE+PMM is the preferred strategy.
 
 ### Claim: "MICE+PMM may introduce noise or bias"
 
-**Finding:** Testing four different imputation strategies (including naive zero imputation) produces accuracy variation of <1%. Even deliberately poor imputation barely affects results, proving the model is robust to any imputation artifacts.
+**Finding:** Imputation effects are measurable but not catastrophic. For LightGBM-expanded, MICE+PMM gives the best overall result. For XGBoost-original, simpler imputations trade a small gain in accuracy for lower recall.
 
-### Clinical Rationale for Including CEA Despite Minimal Predictive Benefit
+### Clinical Rationale for Including CEA
 
-Despite minimal predictive benefit (0.47%), CEA was included for important clinical reasons:
+CEA remains clinically relevant even when not required for the strongest screening configuration:
 
 **1. Calcitonin Has Specificity Limitations**
 
@@ -163,12 +159,12 @@ Clinical guidelines recommend measuring both serum calcitonin AND CEA together b
 
 | Concern | Our Implementation | Verdict |
 |---------|-------------------|---------| 
-| Data leakage in splits | Train-test split before any processing | ✓ Valid |
-| Feature scaling leakage | Scaler fitted only on training data | ✓ Valid |
-| SMOTE applied correctly | Applied after split, training only | ✓ Valid |
-| Multiple imputation methods | 5 strategies tested systematically | ✓ Valid |
-| Multiple model validation | 5 diverse algorithms tested | ✓ Valid |
-| Reproducibility | Fixed random seed (42) | ✓ Valid |
+| Data leakage in splits | Train-test split before any processing | Valid |
+| Feature scaling leakage | Scaler fitted only on training data | Valid |
+| SMOTE applied correctly | Applied after split, training only | Valid |
+| Multiple imputation methods | 5 strategies tested systematically | Valid |
+| Multiple model validation | 5 diverse algorithms tested | Valid |
+| Reproducibility | Fixed random seed (42) | Valid |
 
 **Conclusion:** The validation study methodology is sound and results are reproducible.
 
@@ -176,38 +172,38 @@ Clinical guidelines recommend measuring both serum calcitonin AND CEA together b
 
 ## Conclusions
 
-1. **CEA imputation method has negligible impact on prediction.** Accuracy varies by <1% across MICE, mean, median, and zero imputation methods.
+1. **CEA effects are model-dependent.** CEA improves the highest-accuracy LightGBM model but is not required for the screening-safe XGBoost model.
 
-2. **The model achieves strong performance without CEA.** Removing CEA entirely causes only -0.47% to +2.80% accuracy change across models.
+2. **MICE+PMM remains the preferred imputation strategy for LightGBM on the expanded dataset.** It delivers the strongest overall accuracy and F1 performance.
 
-3. **The weak calcitonin-CEA correlation does not compromise validity.** Because CEA provides minimal predictive benefit, imputation quality is irrelevant to model performance.
+3. **The weak calcitonin-CEA correlation does not compromise validity.** It changes how CEA should be interpreted, but does not invalidate the models.
 
-4. **Clinical safety is maintained.** Recall remains at 96% regardless of imputation method used.
+4. **Clinical safety is maintained in the preferred screening model.** XGBoost on the original dataset preserves 100% recall with or without CEA.
 
-5. **Results are consistent across all five machine learning paradigms,** from linear models (Logistic Regression) to ensemble methods (Random Forest, XGBoost, LightGBM) to kernel methods (SVM).
+5. **Results remain clinically interpretable across algorithms,** but the strongest deployment conclusions come from XGBoost-original for screening and LightGBM-expanded for accuracy.
 
-6. **CEA inclusion is clinically justified** despite minimal predictive benefit, as calcitonin alone has specificity limitations and combined assessment is clinical standard of care.
+6. **CEA inclusion remains clinically justified** because calcitonin alone has specificity limitations and combined assessment is clinical standard of care.
 
 ---
 
 ## Appendix: Detailed Results
 
-### LightGBM (Expanded Dataset) - Option A
+### XGBoost (Original Dataset) - Option A
 
 | Configuration | Accuracy | Recall | F1 Score | ROC-AUC |
 |---------------|----------|--------|----------|---------|
-| With CEA Features | 97.20% | 96.08% | 0.9423 | 0.9922 |
-| Without CEA Features | 96.73% | 96.08% | 0.9333 | 0.9917 |
+| With CEA Features | 83.33% | 100.00% | 0.8571 | 0.9111 |
+| Without CEA Features | 90.00% | 100.00% | 0.9091 | 0.9378 |
 
 ### LightGBM (Expanded Dataset) - Option B
 
 | Imputation Method | Accuracy | Recall | F1 Score | ROC-AUC |
 |-------------------|----------|--------|----------|---------|
-| MICE+PMM (Current) | 97.20% | 96.08% | 0.9423 | 0.9922 |
-| Mean Imputation | 96.73% | 96.08% | 0.9333 | 0.9913 |
-| Median Imputation | 97.20% | 96.08% | 0.9423 | 0.9925 |
-| Zero Imputation | 96.26% | 96.08% | 0.9245 | 0.9922 |
-| Complete Case | 90.00% | 90.00% | 0.9231 | 0.9850 |
+| MICE+PMM (Current) | 96.19% | 90.20% | 0.9200 | 0.9908 |
+| Mean Imputation | 93.81% | 86.27% | 0.8713 | 0.9819 |
+| Median Imputation | 92.86% | 90.20% | 0.8598 | 0.9817 |
+| Zero Imputation | 93.81% | 86.27% | 0.8713 | 0.9801 |
+| Complete Case | 69.23% | 66.67% | 0.6667 | 0.7857 |
 
 ### Study Files
 
@@ -218,5 +214,4 @@ Complete results for all 10 model-dataset combinations are available in:
 
 ---
 
-*Report generated from CEA imputation validation study conducted on MEN2 Predictor pipeline.*
 *Methodology: Systematic imputation method comparison with consistent train-test protocols.*

@@ -25,7 +25,30 @@ Int. J. Pediatr. Endocrinol. (2012) Familial MEN2B Infant & 2 \\
 \clearpage
 
 \begin{longtable}{@{}p{0.40\linewidth}ccccc@{}}
-\caption{Ablation study results: LightGBM on expanded dataset (n=1,047). Accuracy change is relative to baseline.} \\
+\caption{Ablation study results: XGBoost on the original paper-only dataset (n=149). Accuracy change is relative to baseline.} \\
+\toprule
+Configuration & Features & Accuracy & Recall & F1 & $\Delta$ Acc \\
+\midrule
+\endfirsthead
+\toprule
+Configuration & Features & Accuracy & Recall & F1 & $\Delta$ Acc \\
+\midrule
+\endhead
+Baseline (All Features) & 33 & 0.833 & 1.000 & 0.857 & --- \\
+Without ATA Risk Level & 30 & 0.767 & 0.867 & 0.788 & $-$6.7\% \\
+Without Variant Encodings & 19 & 0.833 & 1.000 & 0.857 & 0.0\% \\
+Without Any Genetic Features & 16 & 0.733 & 0.933 & 0.778 & $-$10.0\% \\
+Without Calcitonin & 30 & 0.833 & 1.000 & 0.857 & 0.0\% \\
+Without CEA & 32 & 0.900 & 1.000 & 0.909 & +6.7\% \\
+Genetics Only (No Biomarkers) & 27 & 0.900 & 1.000 & 0.909 & +6.7\% \\
+Biomarkers Only (No Genetics) & 16 & 0.733 & 0.933 & 0.778 & $-$10.0\% \\
+\bottomrule
+\end{longtable}
+
+\clearpage
+
+\begin{longtable}{@{}p{0.40\linewidth}ccccc@{}}
+\caption{Ablation study results: LightGBM on the expanded dataset (n=1,047). Accuracy change is relative to baseline.} \\
 \toprule
 Configuration & Features & Accuracy & Recall & F1 & $\Delta$ Acc \\
 \midrule
