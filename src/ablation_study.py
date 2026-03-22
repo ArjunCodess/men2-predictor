@@ -31,6 +31,14 @@ from xgboost_model import XGBoostModel
 from lightgbm_model import LightGBMModel
 from svm_model import SVMModel
 
+BASE_FEATURE_COLUMNS = [
+    'age', 'gender', 'ret_risk_level',
+    'calcitonin_elevated', 'calcitonin_level_numeric',
+    'cea_level_numeric',
+    'thyroid_nodules_present', 'multiple_nodules', 'family_history_mtc',
+    'pheochromocytoma', 'hyperparathyroidism'
+]
+
 
 # Ablation configurations: each defines which feature patterns to REMOVE
 ABLATION_CONFIGS = {
@@ -100,16 +108,8 @@ def prepare_features(df, target_column='mtc_diagnosis'):
         df['gender'] = df['gender'].map({'Female': 0, 'Male': 1}).fillna(0)
 
     # Base features
-    feature_columns = [
-        'age', 'gender', 'ret_risk_level',
-        'calcitonin_elevated', 'calcitonin_level_numeric',
-        'cea_level_numeric',
-        'thyroid_nodules_present', 'multiple_nodules', 'family_history_mtc',
-        'pheochromocytoma', 'hyperparathyroidism'
-    ]
-
     # Validate columns exist
-    available_columns = [c for c in feature_columns if c in df.columns]
+    available_columns = [c for c in BASE_FEATURE_COLUMNS if c in df.columns]
     features = df[available_columns].copy()
 
     # One-hot encode ret_variant
@@ -125,7 +125,9 @@ def prepare_features(df, target_column='mtc_diagnosis'):
     # Derived features
     features['age_squared'] = df['age'] ** 2
     features['calcitonin_age_interaction'] = df['calcitonin_level_numeric'] * df['age']
-    features['nodule_severity'] = df['thyroid_nodules_present'] * df['multiple_nodules']
+    thyroid_nodules = df.get('thyroid_nodules_present', pd.Series(0, index=df.index))
+    multiple_nodules = df.get('multiple_nodules', pd.Series(0, index=df.index))
+    features['nodule_severity'] = thyroid_nodules * multiple_nodules
 
     if 'ret_risk_level' in features.columns:
         features['risk_calcitonin_interaction'] = features['ret_risk_level'] * df['calcitonin_level_numeric']
