@@ -19,6 +19,14 @@ from lightgbm_model import LightGBMModel
 from xgboost_model import XGBoostModel
 from svm_model import SVMModel
 
+BASE_FEATURE_COLUMNS = [
+    'age', 'gender', 'ret_risk_level',
+    'calcitonin_elevated', 'calcitonin_level_numeric',
+    'cea_level_numeric',
+    'thyroid_nodules_present', 'multiple_nodules', 'family_history_mtc',
+    'pheochromocytoma', 'hyperparathyroidism'
+]
+
 def calculate_bootstrap_ci(model, X, y, n_iterations=1000, confidence=0.95):
     """Calculate bootstrap confidence intervals for model performance metrics.
 
@@ -120,14 +128,7 @@ def load_model_and_test_data(model_type='logistic', dataset_type='expanded'):
         if df['gender'].dtype == 'object':
             df['gender'] = df['gender'].map({'Female': 0, 'Male': 1}).fillna(0)
 
-    # Select base features (exclude non-numeric columns and target)
-    feature_cols = [
-        'age', 'gender', 'ret_risk_level',
-        'calcitonin_elevated', 'calcitonin_level_numeric',
-        'cea_level_numeric',
-        'thyroid_nodules_present', 'multiple_nodules', 'family_history_mtc',
-        'pheochromocytoma', 'hyperparathyroidism'
-    ]
+    feature_cols = [col for col in BASE_FEATURE_COLUMNS if col in df.columns]
 
     # Start with base features
     features = df[feature_cols].copy()
@@ -145,7 +146,9 @@ def load_model_and_test_data(model_type='logistic', dataset_type='expanded'):
     # ADD MEANINGFUL FEATURES (same as training)
     features['age_squared'] = df['age'] ** 2
     features['calcitonin_age_interaction'] = df['calcitonin_level_numeric'] * df['age']
-    features['nodule_severity'] = df['thyroid_nodules_present'] * df['multiple_nodules']
+    thyroid_nodules = df.get('thyroid_nodules_present', pd.Series(0, index=df.index))
+    multiple_nodules = df.get('multiple_nodules', pd.Series(0, index=df.index))
+    features['nodule_severity'] = thyroid_nodules * multiple_nodules
 
     # Add variant-specific interaction features (same as training)
     if 'ret_risk_level' in features.columns:
@@ -489,7 +492,9 @@ def print_individual_predictions(model, test_patients, y_test):
     # Add meaningful features (same as training)
     features['age_squared'] = test_patients['age'] ** 2
     features['calcitonin_age_interaction'] = test_patients['calcitonin_level_numeric'] * test_patients['age']
-    features['nodule_severity'] = test_patients['thyroid_nodules_present'] * test_patients['multiple_nodules']
+    thyroid_nodules = test_patients.get('thyroid_nodules_present', pd.Series(0, index=test_patients.index))
+    multiple_nodules = test_patients.get('multiple_nodules', pd.Series(0, index=test_patients.index))
+    features['nodule_severity'] = thyroid_nodules * multiple_nodules
 
     # Add variant-specific interaction features (same as training)
     if 'ret_risk_level' in features.columns:
@@ -615,7 +620,9 @@ def generate_correlation_matrix(model, test_patients, model_type='logistic', dat
     # Add meaningful features (same as training)
     features['age_squared'] = test_patients['age'] ** 2
     features['calcitonin_age_interaction'] = test_patients['calcitonin_level_numeric'] * test_patients['age']
-    features['nodule_severity'] = test_patients['thyroid_nodules_present'] * test_patients['multiple_nodules']
+    thyroid_nodules = test_patients.get('thyroid_nodules_present', pd.Series(0, index=test_patients.index))
+    multiple_nodules = test_patients.get('multiple_nodules', pd.Series(0, index=test_patients.index))
+    features['nodule_severity'] = thyroid_nodules * multiple_nodules
 
     # Add variant-specific interaction features (same as training)
     if 'ret_risk_level' in features.columns:

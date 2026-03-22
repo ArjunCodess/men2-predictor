@@ -13,29 +13,16 @@ from sklearn.impute import IterativeImputer
 from sklearn.linear_model import LinearRegression
 
 STUDY_NAME_MAP = {
-    "study_1": "JCEM Case Reports (2025)",
-    "study_2": "JCEM (2016) RET Exon 7 Deletion",
-    "study_3": "Thyroid Journal (2016)",
-    "study_4": "European Journal of Endocrinology (2006)",
-    "study_5": "Laryngoscope (2021) MEN2A Penetrance",
-    "study_6": "JCEM (2018) Homozygous RET K666N",
-    "study_7": "Oncotarget (2015) RET S891A FMTC",
-    "study_8": "AJCR (2022) Calcitonin-Negative MTC",
-    "study_9": "JCEM (2022) ctDNA Cohort",
-    "study_10": "Genes (2022) RET c.1901G>A Family",
-    "study_11": "BMC Pediatrics (2020) MEN2B Case",
-    "study_12": "Annales d'Endocrinologie (2015) RET Y791F",
-    "study_13": "Surgery Today (2014) RET S891A Pheo",
-    "study_14": "Annals of Medicine & Surgery (2025) RET C634R Case",
-    "study_15": "Case Reports in Medicine (2012) MEN2B",
-    "study_16": "Case Reports in Endocrinology (2020) RET Exon 11 delins",
-    "study_17": "Clinics and Practice (2024) RET C634G Kindred",
-    "study_18": "Endocrinol. Diabetes Metab. Case Reports (2024) RET K666N",
-    "study_19": "Indian Journal of Cancer (2021) RET S891A Family",
-    "study_20": "World Journal of Clinical Cases (2024) RET C634Y Family",
-    "study_21": "Int. J. Pediatr. Endocrinol. (2012) Familial MEN2B Infant",
-    "study_22": "JCEM (2010) RET S891A MEN2A Spectrum",
-    "study_23": "Journal of Biosciences (2014) RET S891A Chinese FMTC Family",
+    "study_1": "Thyroid Journal (2016)",
+    "study_2": "European Journal of Endocrinology (2006)",
+    "study_3": "Oncotarget (2015) RET S891A FMTC",
+    "study_4": "Clinics and Practice (2024) RET C634G Kindred",
+    "study_5": "Endocrinol. Diabetes Metab. Case Reports (2024) RET K666N",
+    "study_6": "Indian Journal of Cancer (2021) RET S891A Family",
+    "study_7": "World Journal of Clinical Cases (2024) RET C634Y Family",
+    "study_8": "Int. J. Pediatr. Endocrinol. (2012) Familial MEN2B Infant",
+    "study_9": "JCEM (2010) RET S891A MEN2A Spectrum",
+    "study_10": "Journal of Biosciences (2014) RET S891A Chinese FMTC Family",
 }
 
 AMINO_ACID_MAP = {
@@ -948,39 +935,19 @@ def build_study23_patients(study):
 def extract_patients_from_study(study):
     """extract patient objects regardless of original study schema"""
     study_id = study.get("study_id")
-    if study_id == "study_2":
-        return build_study2_patients(study)
-    if study_id == "study_8":
-        return prepare_study8_patients(study)
-    if study_id == "study_9":
-        return build_study9_patients(study)
-    if study_id == "study_10":
-        return build_study10_patients(study)
-    if study_id == "study_11":
-        return build_study11_patients(study)
-    if study_id == "study_12":
-        return build_study12_patients(study)
-    if study_id == "study_13":
-        return build_study13_patients(study)
-    if study_id == "study_14":
-        return build_study14_patients(study)
-    if study_id == "study_15":
-        return build_study15_patients(study)
-    if study_id == "study_16":
-        return build_study16_patients(study)
-    if study_id == "study_17":
+    if study_id == "study_4":
         return build_study17_patients(study)
-    if study_id == "study_18":
+    if study_id == "study_5":
         return build_study18_patients(study)
-    if study_id == "study_19":
+    if study_id == "study_6":
         return build_study19_patients(study)
-    if study_id == "study_20":
+    if study_id == "study_7":
         return build_study20_patients(study)
-    if study_id == "study_21":
+    if study_id == "study_8":
         return build_study21_patients(study)
-    if study_id == "study_22":
+    if study_id == "study_9":
         return build_study22_patients(study)
-    if study_id == "study_23":
+    if study_id == "study_10":
         return build_study23_patients(study)
     raw_patients = study.get("patient_data")
     if isinstance(raw_patients, dict):
@@ -1462,10 +1429,9 @@ def create_paper_dataset():
     # feature engineering
 
     # Extract RET variant from ret_variant field
-    # Studies 1-3 patients are all K666N carriers (variant not explicitly stored in JSON)
+    # Study 1 patients are all K666N carriers (variant not explicitly stored in JSON)
     default_variant_by_study = {
         'study_1': 'K666N',
-        'study_3': 'K666N'
     }
     df['ret_variant'] = df['ret_variant'].fillna(df['study_id'].map(default_variant_by_study))
     df = df[df['ret_variant'].notna()].copy()
