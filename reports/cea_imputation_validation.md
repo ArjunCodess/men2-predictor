@@ -8,6 +8,8 @@
 
 This report presents findings from a comprehensive sensitivity analysis conducted to address reviewer concerns that the weak calcitonin-CEA correlation (r=0.1158, n=12) may undermine the reliability of CEA imputation in our MEN2 prediction model.
 
+The main human framing is: **Can we save those 20k Rs people with just a simple blood test?** In India, genetic testing for MEN2 costs INR 20,000 (~$225 USD), putting life-saving diagnosis out of reach for most families. This validation study tests the biomarker part of that question by asking whether CEA meaningfully helps routine blood-marker modeling.
+
 **Key Finding:** CEA contribution is model-dependent. For **LightGBM on the expanded dataset**, CEA improves accuracy from **92.86%** to **96.19%**, and **MICE+PMM** is the strongest imputation strategy. For **XGBoost on the original dataset**, removing CEA improves accuracy from **83.33%** to **90.00%** while preserving **100.00% recall**.
 
 ---
@@ -56,14 +58,14 @@ Test 5 different imputation strategies to assess robustness:
 
 ### Finding 1: CEA Effects Depend on the Model
 
-The effect of CEA differs in the most relevant screening and triage configurations:
+The effect of CEA differs in the most relevant original-data and expanded-data configurations:
 
 | Model | Dataset | With CEA | Without CEA | Accuracy Change |
 |-------|---------|----------|-------------|-----------------|
 | **XGBoost** | Original | 83.33% | **90.00%** | **+6.67% without CEA** |
 | **LightGBM** | Expanded | **96.19%** | 92.86% | **-3.33% without CEA** |
 
-**Interpretation:** CEA is not universally beneficial or universally unnecessary. It is dispensable for the screening-safe XGBoost model, but helpful for the highest-accuracy LightGBM model.
+**Interpretation:** CEA is not universally beneficial or universally unnecessary. It is dispensable for the primary original-data XGBoost model, but helpful for the highest-accuracy LightGBM model.
 
 ---
 
@@ -83,16 +85,16 @@ The two most relevant models respond differently to imputation:
 
 ---
 
-### Finding 3: Screening and Triage Favor Different CEA Strategies
+### Finding 3: Sensitivity and Accuracy Favor Different CEA Strategies
 
-Clinical screening prioritizes recall, while triage prioritizes overall discrimination:
+The original-data sensitivity benchmark prioritizes recall, while the expanded simulation emphasizes overall discrimination:
 
 | Model | Best Recall Setting | Best Accuracy Setting |
 |-------------------|-----------------|----------|
 | **XGBoost (Original)** | 100.00% recall with CEA or without CEA | 90.00% accuracy without CEA |
 | **LightGBM (Expanded)** | 90.20% recall with CEA or median imputation | 96.19% accuracy with MICE+PMM |
 
-**Interpretation:** The preferred CEA strategy depends on the intended use case. For screening, CEA is not required in the best-performing XGBoost model. For highest-accuracy triage, CEA should be retained in LightGBM.
+**Interpretation:** The preferred CEA strategy depends on the analysis goal. For the primary original-data XGBoost model, CEA is not required. For the highest-accuracy expanded LightGBM model, CEA is helpful.
 
 ---
 
@@ -112,7 +114,7 @@ The findings are directionally consistent across the broader benchmark in showin
 
 | Finding | XGBoost Original | LightGBM Expanded |
 |---------|------------------|-------------------|
-| Best use case | Screening / recall | Accuracy / triage |
+| Best use case | Original-data sensitivity | Expanded-data accuracy |
 | CEA required? | No | Yes, helpful |
 | Best imputation by accuracy | No CEA | MICE+PMM |
 | Best imputation by recall | With or without CEA | MICE+PMM or median |
@@ -131,7 +133,7 @@ The findings are directionally consistent across the broader benchmark in showin
 
 ### Clinical Rationale for Including CEA
 
-CEA remains clinically relevant even when not required for the strongest screening configuration:
+CEA remains clinically relevant even when not required for the strongest original-data sensitivity configuration:
 
 **1. Calcitonin Has Specificity Limitations**
 
@@ -172,15 +174,15 @@ Clinical guidelines recommend measuring both serum calcitonin AND CEA together b
 
 ## Conclusions
 
-1. **CEA effects are model-dependent.** CEA improves the highest-accuracy LightGBM model but is not required for the screening-safe XGBoost model.
+1. **CEA effects are model-dependent.** CEA improves the highest-accuracy LightGBM model but is not required for the primary original-data XGBoost model.
 
 2. **MICE+PMM remains the preferred imputation strategy for LightGBM on the expanded dataset.** It delivers the strongest overall accuracy and F1 performance.
 
 3. **The weak calcitonin-CEA correlation does not compromise validity.** It changes how CEA should be interpreted, but does not invalidate the models.
 
-4. **Clinical safety is maintained in the preferred screening model.** XGBoost on the original dataset preserves 100% recall with or without CEA.
+4. **Original-data sensitivity is maintained in the preferred benchmark model.** XGBoost on the original dataset preserves 100% recall with or without CEA.
 
-5. **Results remain clinically interpretable across algorithms,** but the strongest deployment conclusions come from XGBoost-original for screening and LightGBM-expanded for accuracy.
+5. **Results remain biologically interpretable across algorithms,** but the strongest benchmark conclusions come from XGBoost-original for original-data sensitivity and LightGBM-expanded for simulated accuracy.
 
 6. **CEA inclusion remains clinically justified** because calcitonin alone has specificity limitations and combined assessment is clinical standard of care.
 

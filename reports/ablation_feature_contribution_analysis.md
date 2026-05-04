@@ -8,6 +8,8 @@
 
 This report presents findings from a systematic ablation study conducted to address reviewer concerns regarding the potential circularity of using ATA risk level and RET variant features in our MTC prediction model. The concern raised was that including these features constitutes "restating consensus knowledge" rather than genuine prediction.
 
+The main human framing is: **Can we save those 20k Rs people with just a simple blood test?** In India, genetic testing for MEN2 costs INR 20,000 (~$225 USD), putting life-saving diagnosis out of reach for most families. This ablation study tests the scientific version of that question by asking how much signal remains when RET variant and ATA risk features are removed.
+
 **Key Finding:** The conclusions are model-dependent. **LightGBM on the expanded dataset** still achieves **93.33% accuracy** after removing all genetic features, while **XGBoost on the original dataset** preserves **100.00% recall** even after removing CEA and variant one-hot encodings.
 
 ---
@@ -65,9 +67,9 @@ When ALL genetic features (ATA risk level + variant encodings) are removed, the 
 
 ---
 
-### Finding 2: The Screening-Safe Model Behaves Differently
+### Finding 2: The Primary Original-Data Model Behaves Differently
 
-For the screening-safe model, the most informative comparison is XGBoost on the original dataset:
+For the primary original-data benchmark, the most informative comparison is XGBoost on the original dataset:
 
 | Configuration | Accuracy | Recall | F1 |
 |---------------|----------|--------|----|
@@ -80,7 +82,7 @@ For the screening-safe model, the most informative comparison is XGBoost on the 
 | Genetics Only | **90.00%** | **100.00%** | **0.9091** |
 | Biomarkers Only | 73.33% | 93.33% | 0.7778 |
 
-**Interpretation:** XGBoost maintains 100% recall across several reduced feature settings, but it loses recall once all genetic features are removed. This suggests that the screening-safe configuration depends more on retained genetic context than on individual biomarker inputs such as CEA or calcitonin.
+**Interpretation:** XGBoost maintains 100% recall across several reduced feature settings, but it loses recall once all genetic features are removed. This suggests that the primary configuration depends more on retained genetic context than on individual biomarker inputs such as CEA or calcitonin.
 
 ---
 
@@ -110,13 +112,13 @@ The reviewer implied variant-specific encoding might encode cancer outcomes. The
 | **Random Forest** | Original | 83.33% | 76.67% | -6.67% |
 | **SVM** | Original | 76.67% | 80.00% | +3.33% |
 
-**Interpretation:** Variant one-hot encodings are often less important than broader genetic context, especially in the screening-safe XGBoost configuration.
+**Interpretation:** Variant one-hot encodings are often less important than broader genetic context, especially in the primary XGBoost configuration.
 
 ---
 
-### Finding 5: Recall Priorities Differ Between Screening and Triage
+### Finding 5: Recall and Accuracy Priorities Differ
 
-Clinical screening requires high recall (sensitivity), whereas triage prioritizes overall discrimination:
+The original-data benchmark emphasizes sensitivity because false negatives are important in exploratory rare-cancer modeling, whereas the expanded simulation emphasizes overall discrimination:
 
 | Configuration | LightGBM Expanded Recall | XGBoost Original Recall |
 |---------------|--------------------------|-------------------------|
@@ -126,7 +128,7 @@ Clinical screening requires high recall (sensitivity), whereas triage prioritize
 | Without CEA | 88.24% | **100.00%** |
 | Genetics Only | 84.31% | **100.00%** |
 
-**Interpretation:** The strongest screening result comes from XGBoost-original, which preserves zero-miss behavior under several ablations. The strongest accuracy result comes from LightGBM-expanded, which is more sensitive to removal of both genetic and biomarker features.
+**Interpretation:** The strongest original-data sensitivity result comes from XGBoost-original, which preserves 15/15 sensitivity under several ablations. The strongest accuracy result comes from LightGBM-expanded, which is more sensitive to removal of both genetic and biomarker features.
 
 ---
 
@@ -184,9 +186,9 @@ The findings are consistent with a model-dependent interpretation:
 
 3. **Variant-specific encodings are often dispensable.** In XGBoost-original, removing variant one-hot encodings does not change performance.
 
-4. **The screening-safe model preserves clinical safety under several ablations.** XGBoost-original maintains 100% recall without CEA, without calcitonin, and without variant one-hot encodings.
+4. **The primary original-data model preserves sensitivity under several ablations.** XGBoost-original maintains 100% recall without CEA, without calcitonin, and without variant one-hot encodings.
 
-5. **The strongest deployment conclusions come from two models:** XGBoost-original for screening and LightGBM-expanded for maximum accuracy.
+5. **The clearest benchmark conclusions come from two models:** XGBoost-original for the original-data sensitivity result and LightGBM-expanded for maximum simulated accuracy.
 
 ---
 
@@ -210,7 +212,7 @@ Removing calcitonin features has different effects in the two most relevant mode
 
 ### Interpretation
 
-Calcitonin remains directionally useful for the highest-accuracy model, but is not required for the strongest screening result.
+Calcitonin remains directionally useful for the highest-accuracy model, but is not required for the strongest original-data sensitivity result.
 
 ### Clinical Implications
 
@@ -223,7 +225,7 @@ This finding does not diminish calcitonin's clinical value:
 ### Methodological Takeaway
 
 When interpreting feature contributions:
-- **Always compare the preferred screening model and the preferred accuracy model separately.**
+- **Always compare the primary original-data model and the highest-accuracy expanded model separately.**
 - **Ablation studies are essential** for identifying which signals are task-specific.
 - **Do not assume** one feature ranking applies uniformly across all models.
 
