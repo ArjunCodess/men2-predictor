@@ -162,14 +162,14 @@ def train_evaluate_model(model_type='logistic', dataset_type='expanded'):
         print(f"WARNING: Found NaN values in features. Filling with column medians.")
         features = features.fillna(features.median())
 
-    # Scale features first
-    scaler = StandardScaler()
-    features_scaled = scaler.fit_transform(features)
-    
-    # SPLIT FIRST (on real data only) - CRITICAL FIX
+    # SPLIT FIRST - fit preprocessing only on training data to avoid leakage.
     X_train, X_test, y_train, y_test = train_test_split(
-        features_scaled, target, test_size=0.2, random_state=42, stratify=target
+        features, target, test_size=0.2, random_state=42, stratify=target
     )
+
+    scaler = StandardScaler()
+    X_train = scaler.fit_transform(X_train)
+    X_test = scaler.transform(X_test)
     
     print(f"Original train: {X_train.shape}, test: {X_test.shape}")
     print(f"Train distribution: {pd.Series(y_train).value_counts().to_dict()}")
