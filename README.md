@@ -9,13 +9,15 @@
 
 In India, genetic testing for MEN2 costs INR 20,000 (~$225 USD), putting life-saving diagnosis out of reach for most families. This research asks: *can machine learning on routine blood biomarkers (calcitonin, CEA) and clinical features predict MTC risk without expensive genetic sequencing?*
 
-MEN2 Predictor now aggregates **149 confirmed RET carriers from 10 peer-reviewed studies (14 variants)** into a reproducible pipeline. On the real clinical data alone, **XGBoost achieves 100% sensitivity** with the strongest zero-miss balance at **83.33% accuracy**. The expanded case-control workflow reaches **96.19% accuracy with LightGBM**.
+MEN2 Predictor evaluates whether published MEN2/RET-carrier records can support a transparent rare-disease machine-learning benchmark for MTC status. The scientific answer must stay modest: this is not a diagnostic, screening, triage, or clinical decision-support system.
+
+MEN2 Predictor now aggregates **149 confirmed RET carriers from 10 peer-reviewed studies (14 variants)** into a reproducible pipeline. On the real literature-derived cohort, **XGBoost reached 100% sensitivity** with **83.33% accuracy**. The expanded case-control workflow reaches **96.19% accuracy with LightGBM**, but those augmented records are not a real clinical cohort.
 
 ## Table of Contents
 - [Awards & Recognition](#awards--recognition)
 - [Key Findings](#key-findings)
 - [About The Project](#about-the-project)
-- [Clinical Performance](#clinical-performance)
+- [Benchmark Performance](#benchmark-performance)
 - [Scientific Contribution](#scientific-contribution)
 - [Data Sources](#data-sources)
 - [Getting Started](#getting-started)
@@ -47,42 +49,48 @@ This project was selected for the [INSEF Regional Fair (Online) 2025](https://sc
 
 ### Real-Patient Cohort (149 carriers across 10 studies)
 
-The paper-only dataset now contains **149 confirmed carriers** across **14 RET variants**. On this filtered cohort, **XGBoost** is the screening-safe model because it achieves **100% recall** with **83.33% accuracy**. For triage, **LightGBM on expanded data achieves 96.19% accuracy** with **90.20% recall**.
+The paper-only dataset now contains **149 confirmed carriers** across **14 RET variants**. On this filtered cohort, **XGBoost** is the primary exploratory model because it reached **100% sensitivity** with **83.33% accuracy**. The expanded synthetic-augmentation analysis is secondary; **LightGBM on expanded data achieves 96.19% accuracy** with **90.20% recall**.
 
 ### Synthetic Augmentation Impact
 
-Synthetic controls + SMOTE expand the case-control dataset to **1,047 records**. After filtering out the post-diagnostic and mixed-heavy papers, the biomarker coupling analysis is based on **12 paired calcitonin/CEA observations from 6 studies**. Expanded models improve discrimination for triage use, while the original-data XGBoost model remains the zero-miss screening choice.
+Synthetic controls + SMOTE expand the case-control dataset to **1,047 records**. After filtering out the post-diagnostic and mixed-heavy papers, the biomarker coupling analysis is based on **12 paired calcitonin/CEA observations from 6 studies**. Expanded models improve discrimination in simulation, while the original-data XGBoost model remains the primary literature-derived benchmark.
 
 | Model                | Dataset      | Accuracy   | Precision  | Avg Precision   | Recall     | F1 Score  | ROC AUC  |
 | ---------------------- | ------------ | ---------- | ---------- | --------------- | ---------- | ---------- | -------- |
-| **Logistic Regression**| Original     | 80.00%     | 71.43%     | 79.22%          | **100%**   | 83.33%     | 0.8178   |
-| **Logistic Regression**| Expanded     | 73.33%     | 47.62%     | 84.83%          | **98.04%** | 64.10%     | 0.9457   |
+| **Logistic Regression**| Original     | 80.00%     | 71.43%     | 79.93%          | **100%**   | 83.33%     | 0.8267   |
+| **Logistic Regression**| Expanded     | 73.33%     | 47.62%     | 85.01%          | **98.04%** | 64.10%     | 0.9457   |
 | **Random Forest**      | Original     | 83.33%     | 91.67%     | 90.68%          | 73.33%     | 81.48%     | 0.9156   |
-| **Random Forest**      | Expanded     | 92.86%     | 86.00%     | 91.90%          | 84.31%     | 85.15%     | 0.9676   |
-| **LightGBM**           | Original     | 76.67%     | 90.00%     | 90.63%          | 60.00%     | 72.00%     | 0.9067   |
-| **LightGBM**           | Expanded     | **96.19%** | **93.88%** | **97.22%**      | 90.20%     | **92.00%** | **0.9908** |
-| **XGBoost**            | Original     | **83.33%** | 75.00%     | **91.65%**      | **100%**   | **85.71%** | 0.9111   |
-| **XGBoost**            | Expanded     | 89.05%     | 70.00%     | 93.93%          | 96.08%     | 80.99%     | 0.9794   |
-| **SVM (Linear)**       | Original     | 66.67%     | 64.71%     | 74.21%          | 73.33%     | 68.75%     | 0.7600   |
-| **SVM (Linear)**       | Expanded     | 82.38%     | 64.58%     | 61.56%          | 60.78%     | 62.63%     | 0.7509   |
+| **Random Forest**      | Expanded     | 92.86%     | 86.00%     | 92.19%          | 84.31%     | 85.15%     | 0.9686   |
+| **LightGBM**           | Original     | 80.00%     | 90.91%     | 91.39%          | 66.67%     | 76.92%     | 0.9156   |
+| **LightGBM**           | Expanded     | **96.19%** | **93.88%** | **97.40%**      | 90.20%     | **92.00%** | **0.9917** |
+| **XGBoost**            | Original     | **83.33%** | 75.00%     | **92.08%**      | **100%**   | **85.71%** | 0.9156   |
+| **XGBoost**            | Expanded     | 89.52%     | 71.01%     | 93.63%          | 96.08%     | 81.67%     | 0.9784   |
+| **SVM (Linear)**       | Original     | 73.33%     | 70.59%     | 75.26%          | 80.00%     | 75.00%     | 0.7867   |
+| **SVM (Linear)**       | Expanded     | 79.05%     | 55.93%     | 60.62%          | 64.71%     | 60.00%     | 0.7267   |
 
 ### Clinical Interpretation
 
-- **Zero-miss option:** XGBoost on the paper-only cohort maintains **100% sensitivity** (0/15 cancers missed in hold-out testing) with **83.33% accuracy**.
-- **Highest accuracy:** LightGBM on expanded data achieves **96.19% accuracy** with **90.20% recall**, ideal for triage workflows.
-- **Model selection:** Deploy XGBoost on original data for screening; use LightGBM on expanded data for high-accuracy triage.
+- **Primary exploratory result:** XGBoost on the paper-only cohort reached **100% sensitivity** with **83.33% accuracy**.
+- **Highest simulated accuracy:** LightGBM on expanded data achieves **96.19% accuracy** with **90.20% recall**.
+- **Model interpretation:** XGBoost-original is the primary literature-derived benchmark; LightGBM-expanded is a secondary synthetic-augmentation result.
 
 ### Statistical Tests on Recall Drops
 
-- Permutation tests show **no significant recall loss** for Logistic Regression, Random Forest, XGBoost, or SVM. LightGBM shows a significant **recall gain** on the expanded dataset (`p = 0.0127`), improving from 60.0% to 90.2%.
+- Permutation tests show **no significant recall loss** for Logistic Regression, Random Forest, XGBoost, or SVM. LightGBM shows a significant **recall gain** on the expanded dataset (`p = 0.0422`), improving from 66.7% to 90.2%.
 - McNemar's test remains mostly uninformative because overlapping positive patients are sparse across original and expanded test sets.
-- Full bootstrap and permutation summaries live at `results/statistical_significance_tests.txt` (generated automatically when running both datasets together via `python main.py --m=all --d=both`; statistical tests run only in the both-datasets workflow).
+- Full bootstrap and permutation summaries live at `results/statistical_tests/statistical_significance_tests.txt` (generated automatically when running both datasets together via `python main.py --m=all --d=both`; statistical tests run only in the both-datasets workflow).
 
 ### Why This Matters
 
-**Saving the 20k Rs People:** Every documented carrier in these studies represents a family that faced the 20k Rs barrier to genetic testing. Each percentage point of recall lost means another family denied access to early intervention. **XGBoost on original data** shows that zero-miss screening is possible with routine biomarkers and clinical features, potentially democratizing MEN2 triage in resource-limited settings.
+#### 1. Saving the 20k Rs People
 
-Even with the filtered cohort at **149 patients and 12 paired calcitonin/CEA observations**, synthetic augmentation remains model-dependent. Accuracy climbs into the 96% band, but zero-miss screening still comes from the original-data XGBoost model rather than the expanded workflow.
+In India, genetic testing for MEN2 costs INR 20,000 (~$225 USD), putting life-saving diagnosis out of reach for many families. The central question is whether machine learning on routine blood biomarkers like calcitonin and CEA, plus clinical features, can identify useful MTC-risk patterns without immediately depending on expensive genetic sequencing.
+
+#### 2. Why This Matters for Rare-Disease ML
+
+Every documented carrier in these studies represents scarce published evidence, and every delayed answer can matter to a family trying to understand inherited cancer risk. The benchmark makes model assumptions visible, especially whether non-genetic blood biomarkers and clinical features retain signal when RET/ATA features are removed, along with CEA imputation uncertainty, biomarker-timing leakage risk, and the limits of synthetic augmentation.
+
+Even with the filtered cohort at **149 patients and 12 paired calcitonin/CEA observations**, synthetic augmentation remains model-dependent. Accuracy climbs into the 96% band, but the primary evidence remains the original-data benchmark rather than the expanded workflow.
 
 ### Learning Paradigm Coverage
 
@@ -106,7 +114,7 @@ This comprehensive coverage ensures findings generalize across fundamentally dif
 - Integrated **6 cohorts with paired calcitonin/CEA labs** yielding **12 observed pairs** in the filtered dataset.
 - Pearson correlation is now **r = 0.116**, reflecting a much weaker but still measurable coupling after removing post-diagnostic-heavy studies.
 - `create_datasets.py` tags every patient with `cea_level_numeric`, `cea_elevated`, and `cea_imputed_flag`. Those 12 observed pairs seed the **MICE + Predictive Mean Matching** pipeline that fills the remaining **137 gaps**.
-- Full provenance is saved in `results/biomarker_ceaimputation_summary.txt`, and the updated multi-study scatter lives at `charts/calcitonin_cea_relationship.png`.
+- Full provenance is saved in `results/biomarker_summary/biomarker_ceaimputation_summary.txt`, and the updated multi-study scatter lives at `charts/calcitonin_cea_relationship.png`.
 
 ### CEA Imputation Validation Study
 
@@ -129,23 +137,23 @@ This comprehensive coverage ensures findings generalize across fundamentally dif
 | Median imputation | 92.86% | 90.20% | -3.33% |
 | Zero imputation | 93.81% | 86.27% | -2.38% |
 
-**Why include CEA?** Because the highest-accuracy model benefits from it. Removing CEA lowers LightGBM-expanded accuracy from **96.19%** to **92.86%**, while XGBoost-original keeps its screening-safe **100% recall** either way. See [detailed rationale](reports/cea_imputation_validation.md).
+**Why include CEA?** Because the highest-accuracy simulation model benefits from it. Removing CEA lowers LightGBM-expanded accuracy from **96.19%** to **92.86%**, while XGBoost-original keeps **100% recall** either way. See [detailed rationale](reports/cea_imputation_validation.md).
 
 Run the study: `python src/cea_validation_study.py --m=lightgbm --d=expanded`
 
 ## About The Project
 
-**The 20k Rs Question:** In India, MEN2 genetic testing costs INR 19,000-20,000 (~$225 USD) - a prohibitive barrier that prevents families from accessing life-saving diagnosis. This research explores whether we can save those "20k Rs people" with just routine blood tests and clinical features, using machine learning to predict MTC risk without expensive genetic sequencing.
+**Benchmark question:** This research began with a practical, emotionally direct question: **Can we save those 20k Rs people with just a simple blood test?** In India, genetic testing for MEN2 costs INR 20,000 (~$225 USD), putting life-saving diagnosis out of reach for most families. This research asks: *can machine learning on routine blood biomarkers (calcitonin, CEA) and clinical features predict MTC risk without expensive genetic sequencing?* The study answers that question as a reproducible benchmark, while explicitly testing genotype-aware and genotype-blind models, CEA imputation uncertainty, and synthetic-augmentation limits.
 
 MEN2 (Multiple Endocrine Neoplasia type 2) is a rare hereditary cancer syndrome caused by RET gene mutations. This project developed machine learning models to predict MTC (medullary thyroid carcinoma) risk across **14 RET variants** using clinical and genetic features from **149 confirmed carriers** across 10 peer-reviewed research studies.
 
-**Scientific Contribution:** This work provides a reproducible rare-disease ML benchmark showing that synthetic augmentation changes performance in a strongly model-dependent way. Augmentation improves triage-style accuracy substantially, while the safest zero-miss screening behavior comes from **XGBoost on original data**.
+**Scientific Contribution:** This work provides a reproducible rare-disease ML benchmark showing that synthetic augmentation changes performance in a strongly model-dependent way. Augmentation improves simulated accuracy substantially, while the primary literature-derived result comes from **XGBoost on original data**.
 
-## Clinical Performance
+## Benchmark Performance
 
-### Recommended Model for Screening
+### Primary Original-Data Model
 
-**XGBoost on the paper-only dataset** — Zero-miss option for safety-critical workflows.
+**XGBoost on the paper-only dataset** - primary exploratory literature-derived benchmark.
 
 | Metric                   | Value     |
 | ------------------------ | --------- |
@@ -153,11 +161,11 @@ MEN2 (Multiple Endocrine Neoplasia type 2) is a rare hereditary cancer syndrome 
 | **Recall (Sensitivity)** | **100%**  |
 | **Precision**            | 75.00%    |
 | **F1 Score**             | 85.71%    |
-| **ROC AUC**              | 0.9111    |
+| **ROC AUC**              | 0.9156    |
 
-### Recommended Model for Triage
+### Highest-Accuracy Expanded Model
 
-**LightGBM on the expanded dataset** — Highest accuracy with strong recall.
+**LightGBM on the expanded dataset** - highest accuracy in the synthetic-augmentation experiment.
 
 | Metric                   | Value     |
 | ------------------------ | --------- |
@@ -165,16 +173,16 @@ MEN2 (Multiple Endocrine Neoplasia type 2) is a rare hereditary cancer syndrome 
 | **Recall (Sensitivity)** | 90.20%    |
 | **Precision**            | 93.88%    |
 | **F1 Score**             | 92.00%    |
-| **ROC AUC**              | 0.9908    |
+| **ROC AUC**              | 0.9917    |
 
 ### Performance Comparison
 
 | Model              | Dataset   | Accuracy   | Recall     | Use Case                        |
 | ------------------ | --------- | ---------- | ---------- | ------------------------------- |
-| **XGBoost**        | Original  | **83.33%** | **100%**   | Screening (zero missed cancers) |
-| **LightGBM**       | Expanded  | **96.19%** | 90.20%     | Triage (highest accuracy)       |
+| **XGBoost**        | Original  | **83.33%** | **100%**   | Primary original-data benchmark |
+| **LightGBM**       | Expanded  | **96.19%** | 90.20%     | Synthetic-augmentation benchmark |
 
-> **⚠️ CRITICAL:** For screening workflows where missing a cancer is unacceptable, use XGBoost on original data (100% recall). For high-accuracy triage after initial screening, use LightGBM on expanded data (96.19% accuracy).
+> **Important:** These are internal benchmark results only. They should not be used for diagnosis, screening, triage, or treatment decisions.
 
 ## Scientific Contribution
 
@@ -183,28 +191,28 @@ This project makes three main contributions to rare-disease machine learning:
 ### 1. Model-Dependent Evaluation of Synthetic Augmentation
 
 - Shows that synthetic controls plus SMOTE can improve discrimination while affecting recall differently across algorithms.
-- **LightGBM improves from 76.67% to 96.19% accuracy** and from **60.0% to 90.2% recall** when moving from original to expanded data.
-- At the same time, the safest zero-miss screening behavior remains with **XGBoost on original data**, which preserves **100% recall**.
+- **LightGBM improves from 80.00% to 96.19% accuracy** and from **66.7% to 90.2% recall** when moving from original to expanded data.
+- At the same time, the primary original-data benchmark remains with **XGBoost on original data**, which reached **100% sensitivity** in one internal held-out split.
 
 ### 2. Methodological Framework for Rare Disease ML
 
 - Systematic comparison: 5 models × 2 datasets = 10 configurations
-- Emphasis on recall over accuracy for screening applications
+- Emphasis on raw counts, sensitivity, and confidence intervals for small rare-disease benchmarks
 - Validation on real held-out data, not synthetic test sets
 
 ### 3. Clinical Deployment Framing
 
-- Recommends **XGBoost on original data** for screening workflows where false negatives are least acceptable.
-- Recommends **LightGBM on expanded data** for triage workflows where overall discrimination is prioritized.
-- Provides a reproducible template for comparing screening-safe and triage-oriented models in small rare-disease cohorts.
+- Reports **XGBoost on original data** as the primary literature-derived benchmark.
+- Reports **LightGBM on expanded data** as the highest-accuracy synthetic-augmentation benchmark.
+- Provides a reproducible template for comparing genotype-aware, genotype-blind, no-CEA, and augmented analyses in small rare-disease cohorts.
 
 ### Publication Status
 
 **Ready for submission** to:
 
-- Machine Learning for Healthcare (MLHC) - Primary target
-- Scientific Reports (Nature) - Accepts negative results
-- Journal of Biomedical Informatics - Clinical ML focus
+- Journal of High School Science (JHSS) - Current target
+- Framed as an exploratory computational methods / original research paper
+- Prospective external validation is still required before clinical use
 
 **Estimated impact**: Moderate to high. The project combines reproducible rare-disease data curation, model benchmarking, explainability, and ablation analysis in a clinically interpretable workflow.
 
@@ -214,7 +222,7 @@ This project makes three main contributions to rare-disease machine learning:
 
 - ✅ Add SHAP explainability to show models learned real biology, not artifacts
 - ✅ Implement uncertainty quantification (bootstrap confidence intervals on all metrics)
-- Create clinical decision support interface with deployment guidelines
+- Keep hosted demos explicitly educational and non-clinical
 
 **Short-term (3-6 months)**:
 
@@ -407,8 +415,8 @@ The [create_datasets.py](src/create_datasets.py) script:
 - **Automated data creation and expansion:** Scripts extract and structure relevant research data, and generate synthetic control samples to augment the dataset for robust modeling.
 - **Comprehensive statistical analysis:** Automatic generation of descriptive statistics and visualization of the dataset for informed modeling.
 - **Advanced model development:** Cross-validation and adaptive SMOTE balancing to handle class imbalance across all model types.
-- **Clinical risk stratification:** 4-tier risk assessment (Low/Moderate/High/Very High) for actionable clinical decision-making.
-- **Artifacts generated:** Processed datasets, trained model files, ROC curves, confusion matrices, and confidence interval summaries for clinically transparent scoring.
+- **Research risk stratification:** 4-tier exploratory output (Low/Moderate/High/Very High) for transparent model interpretation.
+- **Artifacts generated:** Processed datasets, trained model files, ROC curves, confusion matrices, and confidence interval summaries for transparent benchmark scoring.
 
 **Pipeline steps (as run by `main.py`):**
 
@@ -422,12 +430,12 @@ The [create_datasets.py](src/create_datasets.py) script:
 
 **Advanced features:**
 
-- **Automated Model Comparison:** Every test run generates comprehensive comparison of all 5 models with complete patient data, enabling pattern identification and clinical validation
+- **Automated Model Comparison:** Every test run generates comprehensive comparison of all 5 models with complete patient data, enabling pattern identification and internal benchmark review
 - **Data Leakage Prevention:** SMOTE applied after train/test split to ensure realistic evaluation
 - **Feature Engineering:** Polynomial features (age²) and interactions (calcitonin×age, risk×age, nodule_severity)
 - **Variant-Aware Modeling:** One-hot encoding of 14 RET variants + risk level stratification
 - **Constant Feature Removal:** Automatic detection and removal of non-informative features
-- **Risk Stratification:** 4-tier system for clinical decision support instead of binary classification
+- **Risk Stratification:** 4-tier research output for exploratory interpretation instead of binary-only reporting
 - **Comprehensive Metrics:** ROC-AUC, F1-Score, Average Precision Score, ROC curves, confusion matrices, and automatic 95% bootstrap confidence intervals
 - **Patient-Level Transparency:** See exactly which patients each model predicted correctly/incorrectly with full clinical context
 
@@ -487,6 +495,7 @@ The [create_datasets.py](src/create_datasets.py) script:
 - results/ - metrics, logs, ROC/confusion charts, biomarker summaries
 - src/ - pipeline scripts (create_datasets.py, data_analysis.py, data_expansion.py, train_model.py, test_model.py)
 - main.py - orchestrates dataset creation, analysis, training, testing
+- paper/submission_data/ - anonymized review/submission CSVs generated automatically by main.py from processed data
 - requirements.txt - Python dependencies
 
 ## Usage
@@ -524,7 +533,7 @@ Choose which dataset to use:
 ### Examples
 
 ```sh
-# Recommended screening-safe run: XGBoost on original data
+# Primary original-cohort benchmark run: XGBoost on original data
 python main.py --m=xgboost --d=original
 
 # Research comparison: LightGBM on original data
@@ -606,9 +615,9 @@ python src/ablation_study.py --m=random_forest --d=both
 - `{model}_{dataset}_ablation_results.txt` - Detailed findings
 - `{model}_{dataset}_ablation_results.csv` - For analysis
 
-**Key Finding:** In the highest-accuracy model, LightGBM-expanded still reaches **93.33% accuracy** after removing all genetic features. In the screening-safe model, XGBoost-original preserves **100% recall** even after removing CEA and variant one-hot encodings.
+**Key Finding:** In the highest-accuracy model, LightGBM-expanded still reaches **93.33% accuracy** after removing all genetic features. In the primary original-data benchmark, XGBoost-original preserves **100% recall** even after removing CEA and variant one-hot encodings.
 
-**Calcitonin Feature Behavior:** In the highest-accuracy model, removing calcitonin lowers LightGBM-expanded accuracy from **96.19% to 95.24%**. In the screening-safe model, XGBoost-original retains **100% recall** even without calcitonin. Full analysis in [ablation_feature_contribution_analysis.md](reports/ablation_feature_contribution_analysis.md).
+**Calcitonin Feature Behavior:** In the highest-accuracy model, removing calcitonin lowers LightGBM-expanded accuracy from **96.19% to 95.24%**. In the primary original-data benchmark, XGBoost-original retains **100% recall** even without calcitonin. Full analysis in [ablation_feature_contribution_analysis.md](reports/ablation_feature_contribution_analysis.md).
 
 ### Explainability (SHAP + LIME)
 
@@ -658,7 +667,7 @@ The comparison table includes for each test patient:
 - **Color-coded terminal output**: green for correct predictions, red for incorrect
 - **Accuracy summary**: total correct/incorrect for each model
 
-**Saved file:** `results/model_comparison_{dataset_type}_detailed_results.txt`
+**Saved file:** `results/model_comparison/model_comparison_{dataset_type}_detailed_results.txt`
 
 This file includes:
 - Complete legend explaining all abbreviations
@@ -694,9 +703,9 @@ Patients with source_id (e.g., "33_control", "mtc_s0_control") are synthetic con
 
 **Results:**
 
-- `results/{model_type}_{dataset_type}_test_results.txt` - individual model performance summaries with embedded 95% confidence intervals
-- `results/model_comparison_{dataset_type}_detailed_results.txt` - comprehensive comparison of all models with complete patient data
-- `results/{model_type}_{dataset_type}_confidence_intervals.txt` - standalone bootstrap confidence intervals (automatically calculated for all models)
+- `results/test_results/{model_type}_{dataset_type}_test_results.txt` - individual model performance summaries with embedded 95% confidence intervals
+- `results/model_comparison/model_comparison_{dataset_type}_detailed_results.txt` - comprehensive comparison of all models with complete patient data
+- `results/confidence_intervals/{model_type}_{dataset_type}_confidence_intervals.txt` - standalone bootstrap confidence intervals (automatically calculated for all models)
 - `charts/roc_curves/{model_type}_{dataset_type}.png` - ROC curves with area under the curve and optimal-threshold marker
 - `charts/confusion_matrices/{model_type}_{dataset_type}.png` - paired raw-count and normalized confusion matrices
 - `charts/correlation_matrices/{model_type}_{dataset_type}.png` - feature correlation matrix for LightGBM (expanded dataset)
@@ -824,7 +833,7 @@ This study has several limitations that should be considered:
 4. **Limited diversity**: Primarily European descent patients; generalizability to other populations unknown
 5. **No external validation**: Performance validated on held-out data from same studies, not independent cohorts
 
-**However**: These limitations are representative of rare disease ML challenges. The results show that augmentation can help some models substantially while leaving screening safety concentrated in the original-data models, which is exactly why explicit cross-dataset comparison matters.
+**However**: These limitations are representative of rare disease ML challenges. The results show that augmentation can help some models substantially while leaving the strongest literature-derived sensitivity result in the original-data benchmark, which is exactly why explicit cross-dataset comparison matters.
 
 **Next steps**: Prospective validation in clinical setting with multi-center collaboration.
 
