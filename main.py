@@ -4,6 +4,19 @@ import os
 import argparse
 from pathlib import Path
 
+ANONYMIZED_DATASETS = [
+    (
+        Path("data/processed/ret_multivariant_training_data.csv"),
+        Path("paper/submission_data/ret_multivariant_training_data_anonymized.csv"),
+        "SUBJ",
+    ),
+    (
+        Path("data/processed/ret_multivariant_case_control_dataset.csv"),
+        Path("paper/submission_data/ret_multivariant_case_control_dataset_anonymized.csv"),
+        "ROW",
+    ),
+]
+
 def run_module(module_name, description, args=None, log_file=None, dataset_type=None):
     """run a python module and handle errors"""
     print(f"\n{'='*60}")
@@ -54,6 +67,47 @@ def run_module(module_name, description, args=None, log_file=None, dataset_type=
     except Exception as e:
         print(f"ERROR: Failed to execute {module_name}: {str(e)}")
         return False
+
+def generate_anonymized_submission_data():
+    """Generate reviewer-facing anonymized CSVs from processed datasets."""
+    try:
+        import pandas as pd
+    except ImportError as exc:
+        print(f"ERROR: pandas is required to generate anonymized submission data: {exc}")
+        return False
+
+    output_dir = Path("paper/submission_data")
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    generated = []
+    for source_path, output_path, prefix in ANONYMIZED_DATASETS:
+        if not source_path.exists():
+            print(f"Warning: Cannot anonymize missing dataset: {source_path}")
+            continue
+
+        df = pd.read_csv(source_path)
+
+        # Do not expose row-level source identifiers such as original patient
+        # counters or synthetic-control source IDs in submission supplements.
+        anonymized = df.drop(columns=["source_id", "patient_id"], errors="ignore").copy()
+        anonymized.insert(
+            0,
+            "submission_row_id",
+            [f"{prefix}-{idx:04d}" for idx in range(1, len(anonymized) + 1)],
+        )
+
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        anonymized.to_csv(output_path, index=False)
+        generated.append((output_path, anonymized.shape))
+
+    if generated:
+        print("\nGenerated anonymized submission datasets:")
+        for output_path, shape in generated:
+            print(f"- {output_path} ({shape[0]} rows, {shape[1]} columns)")
+        return True
+
+    print("Warning: No anonymized submission datasets were generated.")
+    return False
 
 def extract_model_metrics(model_type, dataset_type='expanded'):
     """Extract metrics from test results file"""
@@ -257,6 +311,9 @@ def run_all_models(dataset_type='expanded'):
             print(f"{'!'*60}")
             return False
 
+    if not generate_anonymized_submission_data():
+        return False
+
     # Run each model type on each dataset type
     print("\n" + "=" * 80)
     print("STEP 2: TRAINING AND TESTING ALL MODELS")
@@ -417,6 +474,10 @@ def main(model_type='logistic', dataset_type='expanded'):
             print(f"{'!'*60}")
             return False
 
+        if module_name == "src/data_expansion.py":
+            if not generate_anonymized_submission_data():
+                return False
+
     # pipeline completed successfully
     print(f"\n{'='*80}")
     print("PIPELINE COMPLETED SUCCESSFULLY!")
@@ -426,6 +487,7 @@ def main(model_type='logistic', dataset_type='expanded'):
     print("- data/processed/ret_multivariant_training_data.csv")
     print("- data/processed/ret_multivariant_expanded_training_data.csv")
     print("- data/processed/ret_multivariant_case_control_dataset.csv")
+    print("- paper/submission_data/*_anonymized.csv")
     if model_type == 'random_forest':
         print(f"- saved_models/random_forest_{dataset_type}_model.pkl")
     elif model_type == 'xgboost':
@@ -472,6 +534,8 @@ if __name__ == "__main__":
         prep_success = run_module("src/create_datasets.py", "Dataset Creation", None)
         if prep_success:
             prep_success = run_module("src/data_expansion.py", "Data Expansion", None)
+        if prep_success:
+            prep_success = generate_anonymized_submission_data()
         if prep_success:
             # Run ablation study
             ablation_success = run_module(
