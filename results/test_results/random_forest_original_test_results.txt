@@ -5,7 +5,7 @@ Precision: 0.9167 (95% CI: [0.7273, 1.0000])
 Recall: 0.7333 (95% CI: [0.4667, 0.9334])
 F1 Score: 0.8148 (95% CI: [0.6000, 0.9413])
 ROC AUC: 0.9156 (95% CI: [0.7866, 0.9954])
-Average Precision: 0.9068 (95% CI: [0.7572, 0.9971])
+Average Precision: 0.9068 (95% CI: [0.7567, 0.9971])
 ============================================================
 
 Bootstrap method: 1000 iterations, 95% confidence level

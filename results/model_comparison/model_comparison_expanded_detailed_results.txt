@@ -34,7 +34,7 @@ study_1         82    F   K666N    1    N          2.2      N   N   Y   N    N  
 73_control      33    F   S891A    1    N          6.9      N   N   N   N    N    | No_MTC   | OK   | OK   | OK   | OK   | OK  
 study_1         35    F   K666N    1    N          0.0      N   N   Y   N    N    | No_MTC   | XX   | OK   | OK   | OK   | OK  
 study_3         65    F   S891A    1    N          0.0      N   N   N   N    N    | No_MTC   | XX   | OK   | OK   | OK   | OK  
-study_9         22    F   S891A    1    N          0.7      N   N   Y   N    N    | No_MTC   | XX   | OK   | OK   | XX   | OK  
+study_9         22    F   S891A    1    N          0.7      N   N   Y   N    N    | No_MTC   | XX   | OK   | OK   | XX   | XX  
 mtc_s2          49    F   C634G    3    N          1.3      Y   Y   N   N    N    | MTC      | OK   | OK   | OK   | OK   | OK  
 mtc_s2_control  38    F   C634G    3    N          6.9      N   N   N   N    N    | No_MTC   | XX   | OK   | OK   | OK   | XX  
 73_control      33    F   S891A    1    N          6.9      N   N   N   N    N    | No_MTC   | OK   | OK   | OK   | OK   | OK  
@@ -50,13 +50,13 @@ study_3         8     F   S891A    1    N          0.0      N   N   N   N    N  
 73_control      33    F   S891A    1    N          6.9      N   N   N   N    N    | No_MTC   | OK   | OK   | OK   | OK   | OK  
 73_control      33    F   S891A    1    N          6.9      N   N   N   N    N    | No_MTC   | OK   | OK   | OK   | OK   | OK  
 study_2         42    F   C634R    3    N          0.0      N   N   Y   N    N    | MTC      | OK   | OK   | OK   | OK   | OK  
-study_2         38    F   C630R    2    Y          12.0     N   N   Y   N    N    | MTC      | OK   | OK   | OK   | OK   | XX  
+study_2         38    F   C630R    2    Y          12.0     N   N   Y   N    N    | MTC      | OK   | OK   | OK   | OK   | OK  
 study_1         69    F   K666N    1    N          3.6      Y   N   Y   N    N    | MTC      | OK   | OK   | OK   | OK   | XX  
 study_9         34    F   S891A    1    N          2.5      Y   N   Y   N    N    | MTC      | OK   | OK   | OK   | OK   | OK  
 73_control      33    F   S891A    1    N          6.9      N   N   N   N    N    | No_MTC   | OK   | OK   | OK   | OK   | OK  
 73_control      33    F   S891A    1    N          6.9      N   N   N   N    N    | No_MTC   | OK   | OK   | OK   | OK   | OK  
 study_2         18    F   C634R    3    N          0.0      N   N   Y   N    N    | No_MTC   | XX   | OK   | OK   | OK   | XX  
-study_9         18    F   S891A    1    N          4.7      N   N   Y   N    N    | No_MTC   | XX   | OK   | OK   | XX   | OK  
+study_9         18    F   S891A    1    N          4.7      N   N   Y   N    N    | No_MTC   | XX   | OK   | OK   | XX   | XX  
 study_1         18    F   K666N    1    N          6.5      Y   N   Y   N    N    | No_MTC   | OK   | OK   | OK   | OK   | OK  
 study_2         31    F   V804M    1    N          0.0      N   N   N   N    N    | No_MTC   | OK   | OK   | OK   | OK   | OK  
 73_control      33    F   S891A    1    N          6.9      N   N   N   N    N    | No_MTC   | OK   | OK   | OK   | OK   | OK  
@@ -66,15 +66,15 @@ study_6         39    F   S891A    1    N          0.0      Y   Y   Y   N    N  
 study_2         43    F   C620Y    2    Y          16.9     Y   N   N   N    N    | MTC      | OK   | OK   | OK   | OK   | XX  
 study_2         30    F   C634Y    3    N          0.0      N   N   Y   N    N    | No_MTC   | XX   | OK   | OK   | OK   | OK  
 study_9         52    F   S891A    1    Y          1.7      N   N   Y   N    N    | No_MTC   | XX   | XX   | OK   | XX   | OK  
-study_9         26    F   S891A    1    N          1.5      N   N   Y   N    N    | No_MTC   | XX   | OK   | XX   | XX   | OK  
+study_9         26    F   S891A    1    N          1.5      N   N   Y   N    N    | No_MTC   | XX   | OK   | XX   | XX   | XX  
 study_1         27    F   K666N    1    N          0.9      N   N   Y   N    N    | No_MTC   | OK   | OK   | OK   | OK   | OK  
 study_1         20    F   K666N    1    N          0.2      N   N   Y   N    N    | No_MTC   | OK   | OK   | OK   | OK   | OK  
-study_9         4     F   S891A    1    N          1.0      N   N   Y   N    N    | No_MTC   | OK   | OK   | OK   | XX   | OK  
+study_9         4     F   S891A    1    N          1.0      N   N   Y   N    N    | No_MTC   | OK   | OK   | OK   | XX   | XX  
 study_3         44    F   S891A    1    N          0.0      N   N   N   N    N    | No_MTC   | XX   | OK   | OK   | XX   | OK  
 study_1         30    F   K666N    1    N          0.0      N   N   Y   N    N    | No_MTC   | OK   | OK   | OK   | OK   | OK  
-study_9         18    F   S891A    1    N          5.6      N   N   Y   N    N    | No_MTC   | XX   | OK   | OK   | XX   | OK  
+study_9         18    F   S891A    1    N          5.6      N   N   Y   N    N    | No_MTC   | XX   | OK   | OK   | XX   | XX  
 study_7         18    F   C634Y    3    Y          16.6     Y   N   Y   N    N    | MTC      | OK   | OK   | OK   | OK   | OK  
-study_9         30    F   S891A    1    N          0.0      N   N   Y   N    N    | No_MTC   | XX   | OK   | OK   | OK   | OK  
+study_9         30    F   S891A    1    N          0.0      N   N   Y   N    N    | No_MTC   | XX   | OK   | OK   | OK   | XX  
 study_3         64    F   R525W    1    N          0.2      N   N   N   N    N    | No_MTC   | OK   | OK   | OK   | OK   | OK  
 study_9         37    F   S891A    1    N          0.0      Y   Y   Y   N    N    | MTC      | OK   | OK   | OK   | OK   | OK  
 study_1         39    F   K666N    1    N          0.2      N   N   Y   N    N    | No_MTC   | OK   | OK   | OK   | OK   | OK  
@@ -89,9 +89,9 @@ study_1         47    F   K666N    1    N          0.0      N   N   Y   N    N  
 study_2         18    F   C634R    3    N          5.3      N   N   Y   N    N    | No_MTC   | XX   | OK   | OK   | OK   | XX  
 study_10        44    F   S891A    1    Y          6.0      Y   N   Y   N    N    | No_MTC   | XX   | OK   | OK   | XX   | XX  
 study_9         24    F   S891A    1    Y          3.0      N   N   Y   N    N    | MTC      | OK   | XX   | OK   | OK   | OK  
-study_9         18    F   S891A    1    N          0.0      N   N   Y   N    N    | No_MTC   | XX   | OK   | OK   | OK   | OK  
-study_9         51    F   S891A    1    N          0.0      Y   N   Y   N    N    | MTC      | OK   | OK   | OK   | OK   | OK  
-study_9         4     F   S891A    1    N          1.0      N   N   Y   N    N    | No_MTC   | OK   | OK   | OK   | XX   | OK  
+study_9         18    F   S891A    1    N          0.0      N   N   Y   N    N    | No_MTC   | XX   | OK   | OK   | OK   | XX  
+study_9         51    F   S891A    1    N          0.0      Y   N   Y   N    N    | MTC      | OK   | OK   | OK   | OK   | XX  
+study_9         4     F   S891A    1    N          1.0      N   N   Y   N    N    | No_MTC   | OK   | OK   | OK   | XX   | XX  
 73_control      33    F   S891A    1    N          6.9      N   N   N   N    N    | No_MTC   | OK   | OK   | OK   | OK   | OK  
 73_control      33    F   S891A    1    N          6.9      N   N   N   N    N    | No_MTC   | OK   | OK   | OK   | OK   | OK  
 73_control      33    F   S891A    1    N          6.9      N   N   N   N    N    | No_MTC   | OK   | OK   | OK   | OK   | OK  
@@ -107,7 +107,7 @@ study_6         44    F   S891A    1    Y          447.0    N   N   Y   N    N  
 study_1         68    F   K666N    1    N          2.8      Y   N   Y   N    N    | MTC      | OK   | OK   | OK   | OK   | XX  
 study_2         10    F   Y791F    1    Y          8.0      N   N   N   N    N    | No_MTC   | OK   | OK   | OK   | OK   | OK  
 73_control      33    F   S891A    1    N          6.9      N   N   N   N    N    | No_MTC   | OK   | OK   | OK   | OK   | OK  
-study_9         17    F   S891A    1    N          0.0      N   N   Y   N    N    | No_MTC   | XX   | OK   | OK   | OK   | OK  
+study_9         17    F   S891A    1    N          0.0      N   N   Y   N    N    | No_MTC   | XX   | OK   | OK   | OK   | XX  
 study_2         46    F   C634Y    3    Y          80.6     N   N   Y   N    N    | MTC      | OK   | OK   | OK   | OK   | OK  
 study_3         1     F   R525W    1    N          0.0      N   N   N   N    N    | No_MTC   | OK   | OK   | OK   | OK   | OK  
 study_2         32    F   C634R    3    Y          44.0     Y   N   N   N    N    | MTC      | OK   | OK   | OK   | OK   | OK  
@@ -127,7 +127,7 @@ study_1         89    F   K666N    1    Y          13.6     N   N   Y   N    N  
 73_control      33    F   S891A    1    N          6.9      N   N   N   N    N    | No_MTC   | OK   | OK   | OK   | OK   | OK  
 73_control      33    F   S891A    1    N          6.9      N   N   N   N    N    | No_MTC   | OK   | OK   | OK   | OK   | OK  
 73_control      33    F   S891A    1    N          6.9      N   N   N   N    N    | No_MTC   | OK   | OK   | OK   | OK   | OK  
-study_9         6     F   S891A    1    N          0.0      N   N   Y   N    N    | No_MTC   | OK   | OK   | OK   | OK   | OK  
+study_9         6     F   S891A    1    N          0.0      N   N   Y   N    N    | No_MTC   | OK   | OK   | OK   | OK   | XX  
 73_control      33    F   S891A    1    N          6.9      N   N   N   N    N    | No_MTC   | OK   | OK   | OK   | OK   | OK  
 73_control      33    F   S891A    1    N          6.9      N   N   N   N    N    | No_MTC   | OK   | OK   | OK   | OK   | OK  
 study_2         28    F   C634Y    3    N          2.9      N   N   Y   N    N    | No_MTC   | XX   | OK   | OK   | OK   | OK  
@@ -147,7 +147,7 @@ study_2         44    F   C634R    3    N          3.3      Y   N   Y   N    N  
 73_control      33    F   S891A    1    N          6.9      N   N   N   N    N    | No_MTC   | OK   | OK   | OK   | OK   | OK  
 73_control      33    F   S891A    1    N          6.9      N   N   N   N    N    | No_MTC   | OK   | OK   | OK   | OK   | OK  
 study_1         64    F   K666N    1    N          0.2      N   N   N   N    N    | MTC      | OK   | XX   | XX   | XX   | XX  
-study_9         30    F   S891A    1    N          0.0      N   N   Y   N    N    | MTC      | OK   | XX   | XX   | OK   | XX  
+study_9         30    F   S891A    1    N          0.0      N   N   Y   N    N    | MTC      | OK   | XX   | XX   | OK   | OK  
 73_control      33    F   S891A    1    N          6.9      N   N   N   N    N    | No_MTC   | OK   | OK   | OK   | OK   | OK  
 study_10        25    F   S891A    1    Y          12.6     N   N   Y   N    N    | MTC      | OK   | OK   | OK   | OK   | OK  
 73_control      33    F   S891A    1    N          6.9      N   N   N   N    N    | No_MTC   | OK   | OK   | OK   | OK   | OK  
@@ -171,14 +171,14 @@ study_10        44    F   S891A    1    Y          6.0      Y   N   Y   N    N  
 study_1         59    F   K666N    1    N          0.2      N   N   N   N    N    | MTC      | XX   | XX   | XX   | XX   | XX  
 study_5         40    F   K666N    1    Y          18.2     Y   N   N   Y    Y    | MTC      | OK   | OK   | OK   | OK   | OK  
 study_1         55    F   K666N    1    Y          12.2     N   N   N   N    N    | MTC      | OK   | OK   | OK   | OK   | XX  
-study_9         27    F   S891A    1    N          0.0      N   N   Y   N    N    | MTC      | OK   | XX   | XX   | OK   | XX  
+study_9         27    F   S891A    1    N          0.0      N   N   Y   N    N    | MTC      | OK   | XX   | XX   | OK   | OK  
 73_control      33    F   S891A    1    N          6.9      N   N   N   N    N    | No_MTC   | OK   | OK   | OK   | OK   | OK  
 study_1         39    F   K666N    1    N          0.2      N   N   Y   N    N    | No_MTC   | OK   | OK   | OK   | OK   | OK  
 study_1         61    F   K666N    1    N          0.2      N   N   Y   N    N    | No_MTC   | XX   | OK   | OK   | OK   | OK  
 study_3         45    F   S891A    1    N          0.0      N   N   N   N    N    | No_MTC   | XX   | OK   | OK   | XX   | OK  
 study_2         31    F   C634R    3    Y          43.6     N   N   N   N    N    | MTC      | OK   | OK   | OK   | OK   | OK  
-study_2         18    F   C634Y    3    N          2.5      N   N   Y   N    N    | No_MTC   | OK   | OK   | OK   | OK   | XX  
-study_2         22    F   C634Y    3    Y          10.2     N   N   Y   N    N    | No_MTC   | XX   | XX   | OK   | XX   | XX  
+study_2         18    F   C634Y    3    N          2.5      N   N   Y   N    N    | No_MTC   | OK   | OK   | OK   | OK   | OK  
+study_2         22    F   C634Y    3    Y          10.2     N   N   Y   N    N    | No_MTC   | XX   | XX   | OK   | OK   | XX  
 73_control      33    F   S891A    1    N          6.9      N   N   N   N    N    | No_MTC   | OK   | OK   | OK   | OK   | OK  
 study_1         57    F   K666N    1    Y          26.0     N   N   Y   N    N    | No_MTC   | XX   | OK   | OK   | OK   | OK  
 study_1         5     F   K666N    1    N          0.0      N   N   Y   N    N    | No_MTC   | OK   | OK   | OK   | OK   | OK  
@@ -186,7 +186,7 @@ study_3         45    F   S891A    1    N          0.0      N   N   N   N    N  
 study_9         55    F   S891A    1    Y          1.5      N   N   Y   N    N    | MTC      | OK   | OK   | OK   | OK   | XX  
 study_1         71    F   K666N    1    N          1.5      Y   N   Y   N    N    | MTC      | OK   | OK   | OK   | OK   | XX  
 study_1         35    F   K666N    1    N          0.0      N   N   Y   N    N    | No_MTC   | XX   | OK   | OK   | OK   | OK  
-study_6         20    F   S891A    1    N          0.0      N   N   Y   N    N    | No_MTC   | XX   | OK   | OK   | OK   | OK  
+study_6         20    F   S891A    1    N          0.0      N   N   Y   N    N    | No_MTC   | XX   | OK   | OK   | OK   | XX  
 study_9         25    F   S891A    1    N          3.9      Y   Y   Y   N    N    | MTC      | OK   | OK   | OK   | OK   | OK  
 73_control      33    F   S891A    1    N          6.9      N   N   N   N    N    | No_MTC   | OK   | OK   | OK   | OK   | OK  
 study_1         18    F   K666N    1    N          0.0      N   N   Y   N    N    | No_MTC   | OK   | OK   | OK   | OK   | OK  
@@ -203,7 +203,7 @@ study_5         45    F   K666N    1    Y          23.0     Y   Y   Y   N    N  
 study_1         34    F   K666N    1    N          7.0      Y   N   Y   N    N    | No_MTC   | XX   | OK   | OK   | OK   | OK  
 73_control      33    F   S891A    1    N          6.9      N   N   N   N    N    | No_MTC   | OK   | OK   | OK   | OK   | OK  
 study_3         18    F   R525W    1    N          0.0      N   N   N   N    N    | No_MTC   | OK   | OK   | OK   | OK   | OK  
-study_9         45    F   S891A    1    N          2.9      Y   N   Y   N    N    | No_MTC   | XX   | XX   | XX   | XX   | XX  
+study_9         45    F   S891A    1    N          2.9      Y   N   Y   N    N    | No_MTC   | XX   | XX   | XX   | XX   | OK  
 study_2         18    F   Y791F    1    N          2.3      N   N   N   N    N    | No_MTC   | OK   | OK   | OK   | OK   | OK  
 study_2         28    F   C634W    3    N          0.0      N   N   Y   N    N    | No_MTC   | OK   | OK   | OK   | OK   | OK  
 study_9         44    F   S891A    1    Y          188.6    Y   N   Y   Y    Y    | MTC      | OK   | OK   | OK   | OK   | OK  
@@ -211,7 +211,7 @@ study_9         46    F   S891A    1    Y          189.3    N   N   Y   Y    Y  
 study_10        38    F   S891A    1    Y          689.3    Y   Y   Y   N    N    | MTC      | OK   | OK   | OK   | OK   | OK  
 73_control      33    F   S891A    1    N          6.9      N   N   N   N    N    | No_MTC   | OK   | OK   | OK   | OK   | OK  
 study_9         55    F   S891A    1    Y          10.1     Y   N   Y   N    N    | MTC      | OK   | OK   | OK   | OK   | OK  
-study_2         10    F   C630R    2    N          0.0      N   N   Y   N    N    | No_MTC   | OK   | OK   | OK   | OK   | OK  
+study_2         10    F   C630R    2    N          0.0      N   N   Y   N    N    | No_MTC   | OK   | OK   | OK   | OK   | XX  
 study_3         10    F   S891A    1    N          0.0      N   N   N   N    N    | No_MTC   | OK   | OK   | OK   | OK   | OK  
 study_1         20    F   K666N    1    N          0.2      N   N   Y   N    N    | No_MTC   | OK   | OK   | OK   | OK   | OK  
 73_control      33    F   S891A    1    N          6.9      N   N   N   N    N    | No_MTC   | OK   | OK   | OK   | OK   | OK  
@@ -233,7 +233,7 @@ mtc_s0_control  18    F   S891A    1    N          6.9      N   N   N   N    N  
 mtc_s4_control  53    F   K666N    1    N          6.9      N   N   N   N    N    | No_MTC   | OK   | OK   | OK   | OK   | OK  
 study_2         14    F   C634R    3    N          0.0      N   N   Y   N    N    | No_MTC   | XX   | OK   | OK   | OK   | XX  
 study_10        44    F   S891A    1    Y          8766.5   N   N   Y   N    N    | MTC      | OK   | OK   | OK   | OK   | OK  
-study_2         20    F   C634Y    3    N          0.0      N   N   Y   N    N    | No_MTC   | OK   | OK   | OK   | OK   | XX  
+study_2         20    F   C634Y    3    N          0.0      N   N   Y   N    N    | No_MTC   | OK   | OK   | OK   | OK   | OK  
 ========================================================================================================================================================================================================
 
 MODEL ACCURACY SUMMARY:
@@ -241,6 +241,6 @@ MODEL ACCURACY SUMMARY:
 LR         | 154/210 correct (73.3%)
 RF         | 195/210 correct (92.9%)
 LGB        | 202/210 correct (96.2%)
-XGB        | 187/210 correct (89.0%)
-SVM        | 173/210 correct (82.4%)
+XGB        | 188/210 correct (89.5%)
+SVM        | 166/210 correct (79.0%)
 ========================================================================================================================================================================================================

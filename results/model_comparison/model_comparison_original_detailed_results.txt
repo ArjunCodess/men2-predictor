@@ -30,7 +30,7 @@ study_9         4     F   S891A    1    N          1.0      N   N   Y   N    N  
 study_3         8     F   S891A    1    N          0.0      N   N   N   N    N    | No_MTC   | OK   | OK   | OK   | OK   | OK  
 study_5         42    F   K666N    1    Y          5.2      Y   N   Y   N    N    | No_MTC   | XX   | XX   | XX   | XX   | XX  
 study_2         27    F   C634W    3    N          0.0      N   N   Y   N    N    | No_MTC   | OK   | OK   | OK   | XX   | OK  
-study_7         9     M   C634Y    3    Y          18.9     N   N   Y   N    N    | MTC      | OK   | XX   | XX   | OK   | XX  
+study_7         9     M   C634Y    3    Y          18.9     N   N   Y   N    N    | MTC      | OK   | XX   | OK   | OK   | OK  
 study_2         18    M   S891A    1    N          0.0      N   N   N   N    N    | No_MTC   | OK   | OK   | OK   | OK   | OK  
 study_9         34    M   S891A    1    N          0.0      N   N   Y   N    N    | MTC      | OK   | XX   | OK   | OK   | OK  
 study_9         53    F   S891A    1    Y          3.6      N   N   Y   N    N    | MTC      | OK   | OK   | OK   | OK   | OK  
@@ -40,7 +40,7 @@ study_10        33    F   S891A    1    Y          33.3     Y   N   Y   N    N  
 study_9         46    F   S891A    1    Y          189.3    N   N   Y   Y    Y    | MTC      | OK   | OK   | OK   | OK   | OK  
 study_1         70    F   K666N    1    N          0.2      N   N   Y   N    N    | MTC      | OK   | OK   | XX   | OK   | XX  
 study_4         32    F   C634G    3    N          0.0      N   N   Y   N    N    | No_MTC   | XX   | OK   | OK   | XX   | XX  
-study_1         35    F   K666N    1    N          0.0      N   N   Y   N    N    | No_MTC   | XX   | OK   | OK   | XX   | XX  
+study_1         35    F   K666N    1    N          0.0      N   N   Y   N    N    | No_MTC   | XX   | OK   | OK   | XX   | OK  
 study_2         44    M   C620Y    2    Y          19.3     N   N   N   N    N    | MTC      | OK   | OK   | OK   | OK   | OK  
 study_9         17    F   S891A    1    Y          5.3      N   N   Y   N    Y    | MTC      | OK   | XX   | XX   | OK   | OK  
 study_9         17    M   S891A    1    N          0.0      N   N   Y   N    N    | No_MTC   | OK   | OK   | OK   | OK   | XX  
@@ -60,7 +60,7 @@ MODEL ACCURACY SUMMARY:
 --------------------------------------------------
 LR         | 24/30 correct (80.0%)
 RF         | 25/30 correct (83.3%)
-LGB        | 23/30 correct (76.7%)
+LGB        | 24/30 correct (80.0%)
 XGB        | 25/30 correct (83.3%)
-SVM        | 20/30 correct (66.7%)
+SVM        | 22/30 correct (73.3%)
 ========================================================================================================================================================================================================

@@ -5,14 +5,14 @@ Background size: 30
 Sample size: 30
 ============================================================
 Top features by mean |SHAP|:
- 1. calcitonin_elevated: 0.849927
- 2. pheochromocytoma: 0.597593
- 3. variant_C634G: 0.561400
- 4. risk_age_interaction: 0.556747
- 5. cea_level_numeric: 0.550185
- 6. age_group_middle: 0.413168
- 7. variant_S891A: 0.358040
- 8. age: 0.279934
- 9. age_group_young: 0.269625
-10. variant_C634W: 0.258955
+ 1. calcitonin_elevated: 0.847308
+ 2. pheochromocytoma: 0.652358
+ 3. variant_C634G: 0.588676
+ 4. cea_level_numeric: 0.558734
+ 5. risk_age_interaction: 0.550396
+ 6. age_group_middle: 0.420408
+ 7. variant_S891A: 0.382420
+ 8. variant_C634W: 0.290419
+ 9. age_group_young: 0.271193
+10. age: 0.269764
 ============================================================
