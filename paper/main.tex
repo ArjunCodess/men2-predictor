@@ -2,362 +2,231 @@
 
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
-\usepackage[left=1in,right=1in,top=0.5in,bottom=0.5in,headheight=14pt,headsep=0.15in,includehead]{geometry}
+\usepackage[margin=1in]{geometry}
 \usepackage{newtxtext,newtxmath}
 \usepackage{setspace}
-\usepackage{graphicx}
-\usepackage{subcaption}
 \usepackage{booktabs}
 \usepackage{longtable}
-\usepackage{amsmath}
+\usepackage{array}
+\usepackage{xurl}
 \usepackage{hyperref}
-\usepackage{tikz}
-\usetikzlibrary{arrows.meta,positioning}
-\usepackage{microtype}
+\usepackage{graphicx}
 \usepackage{placeins}
-\usepackage{fancyhdr}
-\usepackage{titlesec}
 
-\titleformat{\subsubsection}{\normalfont\normalsize\bfseries}{\thesubsubsection}{1em}{}
-\titleformat{\paragraph}[runin]{\normalfont\normalsize\itshape}{\theparagraph}{1em}{}
+\setstretch{1.0}
+\setlength{\parindent}{0.5in}
+\setlength{\parskip}{0pt}
+\setlength{\emergencystretch}{3em}
+\widowpenalty=10000
+\clubpenalty=10000
+\displaywidowpenalty=10000
+\brokenpenalty=10000
+\Urlmuskip=0mu plus 2mu
+\hypersetup{colorlinks=true, linkcolor=black, citecolor=black, urlcolor=blue, breaklinks=true}
+\sloppy
 
-\setstretch{1.15}
-\setlength{\parindent}{0pt}
-\setlength{\parskip}{\baselineskip}
-\setlength{\emergencystretch}{2em}
-
-\pagestyle{fancy}
-\fancyhf{}
-\fancyhead[R]{\thepage}
-\renewcommand{\headrulewidth}{0pt}
-
-\usepackage[
-  backend=biber,
-  style=numeric-comp,
-  sorting=none,
-  doi=true,
-  url=true,
-  maxnames=6,
-  minnames=6
-]{biblatex}
-\renewcommand*{\mkbibbrackets}[1]{(#1)}
-\addbibresource{references.bib}
-
-\hypersetup{
-  colorlinks=true,
-  linkcolor=black,
-  citecolor=black,
-  urlcolor=blue
-}
-
-\newcommand{\PaperTitle}{Predicting MEN2-Associated Medullary Thyroid Carcinoma in RET Carriers: A Reproducible Machine Learning Pipeline}
+\newcommand{\PaperTitle}{A Reproducible Machine-Learning Benchmark for Medullary Thyroid Carcinoma Status in Published MEN2/RET-Carrier Cohorts}
+\newcommand{\doi}[1]{\href{https://doi.org/#1}{\nolinkurl{#1}}}
+\newcommand{\weblink}[1]{\href{#1}{\nolinkurl{#1}}}
 
 \begin{document}
 
 \begin{titlepage}
 \centering
-\vspace*{\fill}
 {\Large\bfseries \PaperTitle\par}
-\vspace{1.5cm}
-{\large Harnoor Kaur$^{a}$, Arjun Vijay Prakash$^{a}$, Shashwat Mishra$^{a*}$\par}
 \vspace{1.0cm}
-$^{a}$ City Montessori School, Kanpur Road, Lucknow, Uttar Pradesh, India.\par
-E-mail: \href{mailto:har.nooor16@gmail.com}{har.nooor16@gmail.com} (H. Kaur); \href{mailto:arjunv.prakash12345@gmail.com}{arjunv.prakash12345@gmail.com} (A. V. Prakash); \href{mailto:mishra.shashwat4002@gmail.com}{mishra.shashwat4002@gmail.com} (S. Mishra, corresponding author)\par
-\vfill
+Harnoor Kaur$^{a}$, Arjun Vijay Prakash$^{a}$, Shashwat Mishra$^{a*}$\par
+\vspace{0.5cm}
+$^{a}$City Montessori School, Quality Building, Sector G, LDA Colony, Kanpur Road, Lucknow, Uttar Pradesh 226012, India.\par
+\vspace{0.5cm}
+E-mail addresses: \href{mailto:har.nooor16@gmail.com}{har.nooor16@gmail.com} (H. Kaur); \href{mailto:arjunv.prakash12345@gmail.com}{arjunv.prakash12345@gmail.com} (A. V. Prakash); \href{mailto:mishra.shashwat4002@gmail.com}{mishra.shashwat4002@gmail.com} (S. Mishra).\par
+\vspace{0.5cm}
+Corresponding author: Shashwat Mishra, City Montessori School, Quality Building, Sector G, LDA Colony, Kanpur Road, Lucknow, Uttar Pradesh 226012, India. E-mail: \href{mailto:mishra.shashwat4002@gmail.com}{mishra.shashwat4002@gmail.com}. Telephone: to be supplied before journal upload. Fax: not available.\par
 \end{titlepage}
 
-\setcounter{page}{1}
-
 \section*{Abstract}
-Multiple Endocrine Neoplasia syndrome type 2 (MEN2) is a rare hereditary endocrine cancer syndrome caused by germline mutations in the proto-oncogene REarranged during Transfection (RET). MEN2 is clinically associated with medullary thyroid carcinoma (MTC) and may also involve pheochromocytoma and primary hyperparathyroidism; biochemical evaluation often includes serum calcitonin and carcinoembryonic antigen (CEA), which are frequently elevated in MTC \cite{doi_10_1089_thy_2014_0335}.
-
-A key barrier in resource-limited settings is access to confirmatory RET genetic testing, which can be cost-prohibitive for many families. We address this gap by developing a reproducible machine learning workflow for screening-oriented risk stratification using routinely reported clinical features and biomarkers. The prediction task is binary classification of MTC status (MTC vs.\ no MTC) in literature-derived MEN2/RET-carrier cohorts, intended to support prioritization and follow-up rather than replace genetic diagnosis.
-
-Patient-level data were curated from published case reports and cohorts, yielding 149 confirmed RET carriers across 10 peer-reviewed studies spanning 14 RET variants across ATA risk categories (Moderate, High, and Highest risk per the 2015 revised guidelines \cite{doi_10_1089_thy_2014_0335}). Key inputs include demographic and presentation variables, RET variant and risk level (when known), and biomarkers including calcitonin and CEA.
-
-We implemented a pipeline that harmonizes heterogeneous sources, imputes missing CEA values using Multiple Imputation by Chained Equations with Predictive Mean Matching (MICE+PMM), engineers variant-aware interactions, benchmarks five model families (logistic regression, random forest, LightGBM, XGBoost, and linear SVM) under stratified validation with Synthetic Minority Over-sampling Technique (SMOTE) applied to training folds, and automatically quantifies uncertainty through bootstrap confidence intervals (1,000 iterations).
-
-On the original paper-only cohort, XGBoost achieved 100\% recall---100\% sensitivity with no false negatives---with 83.33\% accuracy, making it the screening-safe model. In the case-control setting (n = 1{,}047 total records), LightGBM achieved the highest accuracy (96.19\%) with 90.20\% recall. These results support MEN2 Predictor as a screening and risk-stratification aid to complement genetic testing and clinical guidelines, with prospective validation required prior to clinical deployment.
+Multiple Endocrine Neoplasia type 2 (MEN2) is a rare hereditary endocrine cancer syndrome in which published evidence is often distributed across small cohorts, pedigrees, and case reports. This study developed an exploratory, reproducible machine-learning benchmark for medullary thyroid carcinoma (MTC) status among published MEN2/RET-carrier records. We curated 149 RET carriers from 10 peer-reviewed sources spanning 14 RET variants, harmonized demographic, genotype, clinical, and biomarker variables, and evaluated logistic regression, random forest, XGBoost, LightGBM, and linear support vector machine models under an 80/20 stratified internal held-out split. The primary genotype-aware XGBoost analysis on the literature-derived cohort correctly identified 15 of 15 MTC cases in the internal test split, with 83.3\% accuracy (25/30), 100.0\% sensitivity (15/15; 95\% Wilson interval 79.6\%-100.0\%), and 66.7\% specificity (10/15; 95\% Wilson interval 41.7\%-84.8\%). A genotype-blind sensitivity analysis that removed RET variant and ATA risk features retained 93.3\% sensitivity (14/15) but lower accuracy (73.3\%). A secondary synthetic-augmentation experiment reached 96.2\% accuracy with LightGBM but is interpreted only as a simulation because synthetic controls may not represent real clinical heterogeneity. The main contribution is therefore not a deployable diagnostic tool, but a transparent rare-disease benchmarking workflow that exposes feature-dependence, imputation uncertainty, and biomarker-timing limitations. Independent prospective validation is required before clinical or screening use.
 
 \section*{Keywords}
 MEN2; RET; Medullary thyroid carcinoma; Calcitonin; Carcinoembryonic antigen; Rare disease; Machine learning; Screening; Risk stratification; Reproducibility
 
-\clearpage
-
 \section{Introduction}
-Multiple Endocrine Neoplasia (MEN) syndromes are hereditary endocrine disorders classically categorized as MEN1, MEN2, and MEN4. MEN2 is caused by germline mutations in the proto-oncogene RET and is clinically subdivided into MEN2A, MEN2B, and Familial Medullary Thyroid Carcinoma (FMTC). The central clinical threat across MEN2 subtypes is medullary thyroid carcinoma (MTC), a potentially fatal malignancy arising from parafollicular C-cells. MEN2A commonly involves MTC and may also present with pheochromocytoma and primary hyperparathyroidism; MEN2B is associated with aggressive MTC and pheochromocytoma and may include non-endocrine manifestations; and FMTC is typically characterized by MTC with limited extra-thyroid features \cite{doi_10_1089_thy_2014_0335}.
+Multiple Endocrine Neoplasia type 2 (MEN2) is a hereditary endocrine cancer syndrome caused by germline pathogenic variants in the RET proto-oncogene. MEN2 is clinically associated with medullary thyroid carcinoma (MTC), and may also involve pheochromocytoma and primary hyperparathyroidism depending on the MEN2 subtype and RET variant. Current clinical management is guided by genotype-phenotype correlations, serum calcitonin and carcinoembryonic antigen (CEA), family screening, and guideline-based timing of thyroidectomy or surveillance (1).
 
-Definitive diagnosis and cascade screening rely on genetic assays (e.g., Next Generation Sequencing or Sanger sequencing of RET exons), which can remain cost-prohibitive in resource-limited settings. In India, testing commonly ranges from approximately INR 19{,}000--20{,}000\footnote{Based on published price lists from diagnostic laboratories offering RET gene sequencing panels for MEN2/MTC in India (2024--2025).}, limiting access for many families. This creates a practical gap between clinical suspicion and confirmatory genotyping, especially when biomarker monitoring (e.g., calcitonin and CEA) or imaging suggests elevated risk.
+Computational modeling in MEN2 is limited by the rarity of the syndrome. The practical motivation is also human: Can we save those 20k Rs people with just a simple blood test? In India, MEN2-related RET genetic testing is advertised at about INR 20,000, or approximately 225 USD, which can put life-saving diagnosis out of reach for many families (19). This research therefore asks: \emph{can machine learning on routine blood biomarkers, including calcitonin and CEA, and clinical features predict MTC risk without expensive genetic sequencing?} The available literature is scientifically valuable for asking this question, but it creates methodological risks for machine learning: small sample size, overlapping familial patterns, inconsistent biomarker reporting, post-diagnostic measurements, missing CEA values, and possible circularity when genotype-derived risk categories are used to predict cancer status.
 
-Our goal is to translate published clinical observations into an accessible, reproducible machine learning workflow that supports screening-oriented risk stratification. Rather than replacing genetic diagnosis, the intended use is to aid prioritization and follow-up by estimating the likelihood of MTC given available clinical presentation features and biomarkers, and to benchmark how augmentation strategies affect sensitivity in a safety-critical setting. In settings where genetic testing remains economically inaccessible, such a tool could serve as a triage mechanism to identify patients most likely to benefit from confirmatory sequencing, ensuring efficient allocation of limited healthcare resources.
+This study asks a narrower question than clinical diagnosis: can published MEN2/RET-carrier data be converted into a reproducible benchmark that quantifies how model performance changes when genotype, biomarker, and synthetic-augmentation assumptions are varied? In plain terms, the project asks whether routine blood and clinical signals contain useful structure in a rare cancer dataset, while making clear that they cannot yet be used as a low-cost substitute for RET sequencing, clinical evaluation, or guideline-based care.
 
-Clinical decision-making for MEN2 is guided by genotype--phenotype correlations and evidence-based management recommendations, including biomarker-informed surveillance and intervention thresholds \cite{doi_10_1089_thy_2014_0335}. In contrast, machine learning for MEN2 is limited by the rarity of the condition and the lack of large, standardized datasets. Most published evidence consists of heterogeneous case reports and small cohorts, which are valuable for mechanistic insight but challenging for reproducible model training and evaluation.
-
-Rare-disease modeling introduces several challenges: small sample size, heterogeneous reporting across sources, incomplete biomarker measurements, and class imbalance between MTC and non-MTC cases. These issues can inflate apparent accuracy, destabilize sensitivity, and complicate fair model comparison. Additionally, synthetic augmentation can improve accuracy yet introduce clinically unacceptable recall volatility. MEN2 Predictor is designed to surface these trade-offs through a transparent pipeline with explicit evaluation on both the original paper-only cohort and an expanded case-control setting.
+To address the main validity concern, the analysis separates two modeling tracks. The genotype-aware benchmark includes RET variant and ATA-aligned risk features, and is relevant only after RET carrier status is already known. The genotype-blind sensitivity analysis removes RET variant and ATA risk features to test whether non-genetic clinical and biomarker variables carry signal. A secondary synthetic-augmentation experiment is reported separately as a simulation, not as an expanded real-world cohort.
 
 \section{Materials and Methods}
 
-\subsection{Data Sources}
-This study is a retrospective secondary analysis of published, de-identified, patient-level data extracted from ten peer-reviewed studies retained after raw-data filtering. The paper-only dataset contains 149 confirmed RET carriers across 14 variants with the binary target label MTC vs. no MTC.
+\subsection{Study Design}
+This was a retrospective secondary analysis of published, de-identified MEN2/RET-carrier records. No new patients were recruited, and no new biological specimens were collected. The primary dataset was the literature-derived cohort of 149 confirmed RET carriers. The target variable was binary MTC status: MTC present vs. MTC absent in the extracted source record.
 
-\subsection{Ethical Considerations}
-No new human participants were recruited and no animal experiments were conducted. The analysis uses only secondary data derived from published studies without additional identifiable patient information. Institutional review board approval was not required for analysis of published, de-identified secondary data. Informed consent was not obtained because the analysis did not involve direct interaction with participants; consent and ethics approvals (where applicable) were handled by the original studies.
+\subsection{Data Sources and Eligibility}
+Studies were eligible if they reported patient-level or reconstructable carrier-level information on RET-positive individuals, MTC status, age or demographic variables, and at least one clinical, genotype, or biomarker feature usable for harmonization. Sources were excluded if they lacked RET-carrier-level information, duplicated already extracted records, reported only aggregate non-reconstructable summaries, or focused on non-RET thyroid cancer without MEN2-carrier information.
 
-\subsection{Feature Construction}
-The pipeline constructs demographic, genetic, biomarker, and clinical features including age, sex, RET variant (one-hot encoded), ATA-aligned variant risk level (Moderate/High/Highest per 2015 ATA guidelines), calcitonin and CEA measurements (with missingness indicators), thyroid ultrasound nodule features, family history of MTC, pheochromocytoma, and hyperparathyroidism.
+\begin{longtable}{@{}p{0.08\linewidth}p{0.28\linewidth}p{0.22\linewidth}p{0.08\linewidth}p{0.24\linewidth}@{}}
+\caption{Published sources used to construct the literature-derived cohort.} \\
+\toprule
+Study & Source & Main variant context & n & DOI \\
+\midrule
+\endfirsthead
+\toprule
+Study & Source & Main variant context & n & DOI \\
+\midrule
+\endhead
+1 & Xu et al., 2016 (3) & RET K666N families & 24 & \doi{10.1089/thy.2016.0374} \\
+2 & Frank-Raue et al., 2006 (2) & Multiple RET variants after thyroidectomy & 46 & \doi{10.1530/eje.1.02216} \\
+3 & Qi et al., 2015 (5) & RET S891A/R525W familial MTC & 15 & \doi{10.18632/oncotarget.4992} \\
+4 & Florescu et al., 2024 (8) & RET C634G kindred & 6 & \doi{10.3390/clinpract14060179} \\
+5 & La Greca et al., 2024 (9) & RET K666N family & 4 & \doi{10.1530/EDM-24-0009} \\
+6 & Vijayan et al., 2021 (7) & Indian RET S891A pedigree & 7 & \doi{10.4103/ijc.IJC_639_19} \\
+7 & Zhang et al., 2024 (10) & RET C634Y family & 3 & \doi{10.12998/wjcc.v12.i15.2627} \\
+8 & Shankar et al., 2012 (11) & Familial MEN2B infant & 2 & \doi{10.1186/1687-9856-2012-25} \\
+9 & Schulte et al., 2010 (4) & RET S891A multicenter cohort & 36 & \doi{10.1210/jc.2010-0375} \\
+10 & Qi et al., 2014 (6) & Chinese Han RET S891A family & 6 & \doi{10.1007/s12038-014-9428-x} \\
+\bottomrule
+\end{longtable}
 
-\subsection{Biomarker Integration and Imputation}
-CEA missingness is handled using multivariate imputation by chained equations with predictive mean matching \cite{doi_10_18637_jss_v045_i03}. The imputation model is informed by 12 observed paired calcitonin--CEA measurements across six cohorts. The observed calcitonin--CEA Pearson correlation is 0.1158 (n = 12), and the imputation strategy is applied after cohort assembly to preserve reproducibility.
+\subsection{Data Extraction and Harmonization}
+Each source was converted into structured JSON and then into a tabular dataset. Extracted variables included age, sex, RET variant, ATA-aligned risk level, calcitonin elevation and numeric value, CEA numeric value, CEA missingness flag, thyroid nodule indicators, family history of MTC, pheochromocytoma, hyperparathyroidism, MEN2 syndrome status, C-cell disease status, and MTC diagnosis. RET variants were normalized to protein-level short notation where possible.
 
-MICE+PMM was selected specifically for its suitability in small biomedical datasets. Unlike simple mean or median imputation, MICE models each variable with missing data as a function of other observed variables, preserving inter-variable correlations. Predictive Mean Matching further enhances biological plausibility by selecting imputed values from observed donor cases rather than generating potentially impossible predicted values (e.g., negative biomarker concentrations). This approach has been validated for datasets of similar size (n $\approx$ 150) in rare disease contexts.
-
-\textbf{Biomarker Thresholds and Clinical Context:} Published evidence suggests that pre-operative calcitonin levels above approximately 90 pg/mL and CEA levels above approximately 17 ng/mL distinguish limited lymph node involvement (N0/N1a) from extensive nodal metastasis (N1b) with high sensitivity. While the current model does not directly encode these thresholds, calcitonin and CEA features contribute to risk stratification in a manner consistent with their established prognostic value.
-
-\subsection{Datasets: Paper-Only and Expanded Case-Control}
-Two datasets are evaluated:
-(i) \textbf{Original (paper-only)}: the 149-carrier cohort.
-(ii) \textbf{Case-control}: the original cohort augmented with variant-matched synthetic controls and trained with SMOTE class balancing applied only to the training split \cite{doi_10_1613_jair_953}. The case-control dataset comprises 1{,}047 total records.
-
-\subsection{Models}
-Five models are benchmarked: logistic regression, random forest, linear support vector machine (SVM), XGBoost \cite{doi_10_1145_2939672_2939785}, and LightGBM \cite{ke2017lightgbm}. Model training and evaluation follow a standardized pipeline implemented with scikit-learn \cite{pedregosa2011scikit}.
-Logistic regression is used as the linear baseline model to estimate the probability of MTC from the engineered feature vector.
-
-\subsection{Code Availability}
-The pipeline, data artifacts, and figure-generation scripts are available in the GitHub repository: \url{https://github.com/arjuncodess/men2-predictor}.
-
-\subsection{Training and Statistical Approach}
-Each dataset is split using an 80/20 stratified train/test partition with fixed random seed (random\_state = 42). Hyperparameter tuning is performed via cross-validation on the training split, and SMOTE is applied only to the training data to mitigate leakage. Performance metrics include accuracy, precision, recall (sensitivity), F1-score, ROC-AUC, and average precision. Uncertainty quantification through 95\% bootstrap confidence intervals (1{,}000 iterations) is automatically performed for all models. Recall stability between original and expanded workflows is evaluated using permutation testing (10{,}000 shuffles); McNemar's test is not applicable because positive cases differ between the original and expanded test sets.
-
-\section{Results}
-
-\subsection{Cohort Summary}
-The paper-only cohort includes 149 RET carriers across 10 studies and 14 RET variants, with 73 MTC cases and 99 females / 50 males. Mean age is 34.27 years (median 31.5; range 0.17--90). The imputation model is informed by 12 observed paired calcitonin--CEA measurements across six cohorts.
-
-\subsection{Screening-Safe Baseline on Paper-Only Data}
-On the paper-only test split (30 patients), XGBoost achieves 100\% recall (sensitivity) with 83.33\% accuracy. In safety-critical screening, sensitivity is prioritized because each missed case corresponds to a potentially undetected cancer.
-
-\subsection{Effect of Synthetic Augmentation}
-Synthetic expansion increases accuracy substantially for ensemble models, with LightGBM achieving 96.19\% accuracy and 90.20\% recall on the expanded test split (210 patients). Relative to the paper-only baseline, augmentation changes recall in a model-dependent way; permutation testing identified a significant recall improvement only for LightGBM under the study's test-set structure.
+The primary genotype-aware feature set included age, sex, RET variant one-hot encodings, ATA-aligned risk level, calcitonin features, CEA features, thyroid nodule variables, family history of MTC, pheochromocytoma, hyperparathyroidism, age group, and simple interaction terms. The genotype-blind sensitivity analysis removed RET variant encodings, ATA risk level, and ATA-risk interaction terms. The no-CEA sensitivity analysis removed CEA numeric values. The biomarker-timing sensitivity analysis removed calcitonin, CEA, and nodule-derived features, leaving genotype and demographic features.
 
 \begin{table}[ht]
 \centering
-\caption{Test-set accuracy and recall (sensitivity) for original (paper-only) and expanded datasets.}
-\begin{tabular}{@{}lcccc@{}}
+\caption{Key variable groups used in the benchmark.}
+\begin{tabular}{@{}p{0.25\linewidth}p{0.64\linewidth}@{}}
 \toprule
-Model & Acc (Original) & Recall (Original) & Acc (Expanded) & Recall (Expanded) \\
+Variable group & Variables \\
 \midrule
-Logistic Regression & 0.8000 & 1.0000 & 0.7333 & 0.9804 \\
-Random Forest & 0.8333 & 0.7333 & 0.9286 & 0.8431 \\
-LightGBM & 0.7667 & 0.6000 & 0.9619 & 0.9020 \\
-XGBoost & 0.8333 & 1.0000 & 0.8905 & 0.9608 \\
-SVM (Linear) & 0.6667 & 0.7333 & 0.8238 & 0.6078 \\
+Demographic & Age, sex, age group, age squared \\
+Genotype-aware & RET variant one-hot encodings, ATA-aligned risk level, risk-age and risk-calcitonin interactions \\
+Biomarker & Calcitonin elevated flag, numeric calcitonin, CEA numeric value, CEA missingness/imputation flag \\
+Clinical presentation & Thyroid nodule indicators, family history of MTC, pheochromocytoma, hyperparathyroidism \\
+Outcome & Binary MTC status extracted from source reports \\
 \bottomrule
 \end{tabular}
 \end{table}
 
+\subsection{Missing Data and CEA Imputation}
+CEA was observed in only 12 of 149 records before imputation. MICE with predictive mean matching was used as one exploratory imputation strategy and compared with no-CEA and simpler imputation alternatives in sensitivity analyses (12). CEA imputation was not treated as independently validated because the observed paired calcitonin-CEA subset was small and weakly correlated (r = 0.1158, n = 12). A binary CEA-imputed flag was retained to preserve missingness information.
+
+\begin{table}[ht]
+\centering
+\caption{Selected missingness and harmonization summary in the 149-record literature-derived cohort.}
+\begin{tabular}{@{}p{0.32\linewidth}ccp{0.34\linewidth}@{}}
+\toprule
+Field & Observed or nonzero & Total & Note \\
+\midrule
+Age & 149 & 149 & Missing ages were filled from source-level medians where required. \\
+Sex & 149 & 149 & Unknown values were mode-filled for modeling. \\
+RET variant & 149 & 149 & Required for genotype-aware inclusion. \\
+Calcitonin numeric value & 77 & 149 & Zero includes unavailable, normal, or undetectable values after harmonization. \\
+CEA observed before imputation & 12 & 149 & Observed paired CEA values seeded the imputation analysis. \\
+CEA imputed & 137 & 149 & Missingness flag retained in the model dataset. \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Biomarker Timing and Leakage Handling}
+Biomarker timing varied across sources. Some studies reported preoperative calcitonin, some reported surveillance values from cascade testing, and some case reports mixed diagnostic, preoperative, postoperative, or follow-up measurements. Because patient-level timing was not uniformly recoverable across all extracted records, the primary manuscript reports biomarker timing as a limitation and includes a conservative biomarker-exclusion sensitivity analysis.
+
+\begin{table}[ht]
+\centering
+\caption{Source-level biomarker timing classification used for leakage assessment.}
+\small
+\begin{tabular}{@{}p{0.12\linewidth}p{0.18\linewidth}p{0.60\linewidth}@{}}
+\toprule
+Study & Timing class & Leakage relevance \\
+\midrule
+1 & Mixed & Probands often had diagnostic/preoperative or follow-up values; relatives had cascade-surveillance values. \\
+2 & Preoperative & Basal/stimulated calcitonin before thyroidectomy; CEA not reported. \\
+3 & Preop./surv. & Family screening and surgery workup values; CEA mostly not individually reported. \\
+4 & Surv./preop. & Kindred-level MEN2A evaluation; CEA not central. \\
+5 & Preop./surv. & Family case-report values around diagnosis and carrier follow-up. \\
+6 & Surv./preop. & Pedigree screening values around family evaluation. \\
+7 & Post-diagnostic/Mixed & Small family report with values around established MEN2A diagnosis and surgery. \\
+8 & Mixed & Infant preoperative calcitonin plus postoperative/surveillance follow-up; mother post-diagnostic values. \\
+9 & Preoperative & Multicenter S891A cohort reports preoperative calcitonin multiples; CEA measured in subset. \\
+10 & Preop./postop. & Pedigree table includes pre- and postoperative calcitonin; extraction favored preoperative values where present. \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Models and Statistical Approach}
+Five model families were benchmarked: logistic regression, random forest, XGBoost, LightGBM, and linear support vector machine. Implementations used scikit-learn, XGBoost, and LightGBM (14-16). The dataset was split into 80\% training and 20\% internal held-out testing using stratification and fixed random seed 42. Feature scaling was fit on training data only and then applied to the held-out split. SMOTE was applied only to training folds where class balancing was used (13). Performance metrics included accuracy, precision, sensitivity, specificity, F1-score, ROC-AUC, and average precision. Raw confusion-matrix counts were reported with Wilson 95\% confidence intervals for binomial proportions so that small held-out sample sizes were visible.
+
+The primary endpoint was internal held-out sensitivity on the literature-derived cohort. Secondary endpoints were accuracy, specificity, ROC-AUC, genotype-blind performance, no-CEA performance, biomarker-exclusion performance, and performance in the synthetic-augmentation simulation. SHAP was used only as an exploratory interpretation method for supported models (17).
+
+\subsection{Synthetic-Augmentation Experiment}
+A secondary case-control simulation expanded the data to 1,047 records using variant-matched synthetic controls and synthetic MTC-like examples generated from source distributions, followed by SMOTE only within training data. These records are not real patients. Results from this experiment are therefore interpreted as a stress test of model behavior under augmentation, not as evidence of external clinical validity.
+
+\section{Results}
+
+\subsection{Cohort Summary}
+The literature-derived cohort contained 149 RET carriers from 10 studies. There were 73 records with MTC and 76 without MTC. The cohort included 99 female and 50 male carriers, with mean age 34.27 years, median age 31.5 years, and range 0.17 to 90 years. Fourteen RET variants were represented: S891A, K666N, C634Y, C634R, R525W, C634G, C630R, C634W, L790F, V804M, Y791F, C618S, C620Y, and M918T.
+
+Figure 1 shows the RET variant distribution, Figure 2 shows the age distribution, and Figure 3 shows the limited paired calcitonin-CEA data used for exploratory CEA imputation.
+
+\subsection{Primary Genotype-Aware Benchmark}
+In the primary internal held-out split of the 149-record literature-derived cohort, the genotype-aware XGBoost model produced a confusion matrix of TN = 10, FP = 5, FN = 0, and TP = 15. This corresponds to 83.3\% accuracy (25/30; 95\% Wilson interval 66.4\%-92.7\%), 100.0\% sensitivity (15/15; 95\% Wilson interval 79.6\%-100.0\%), and 66.7\% specificity (10/15; 95\% Wilson interval 41.7\%-84.8\%). The point estimate therefore had no false negatives in this one split, but the confidence interval remains wide because only 15 positive test cases were present.
+
+\begin{table}[ht]
+\centering
+\caption{Internal held-out performance with raw counts and Wilson confidence intervals.}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{@{}lllll@{}}
+\toprule
+Analysis & Model & Confusion matrix & Sensitivity & Accuracy \\
+\midrule
+Genotype-aware & XGBoost & TN=10, FP=5, FN=0, TP=15 & 100.0\% (15/15; 79.6\%-100.0\%) & 83.3\% (25/30; 66.4\%-92.7\%) \\
+Genotype-blind & XGBoost & TN=8, FP=7, FN=1, TP=14 & 93.3\% (14/15; 70.2\%-98.8\%) & 73.3\% (22/30; 55.6\%-85.8\%) \\
+No CEA & XGBoost & TN=12, FP=3, FN=0, TP=15 & 100.0\% (15/15; 79.6\%-100.0\%) & 90.0\% (27/30; 74.4\%-96.5\%) \\
+No biomarkers & XGBoost & TN=12, FP=3, FN=0, TP=15 & 100.0\% (15/15; 79.6\%-100.0\%) & 90.0\% (27/30; 74.4\%-96.5\%) \\
+Synthetic & LightGBM & TN=156, FP=3, FN=5, TP=46 & 90.2\% (46/51; 79.0\%-95.7\%) & 96.2\% (202/210; 92.7\%-98.1\%) \\
+\bottomrule
+\end{tabular}
+}
+\end{table}
+
+\subsection{Genotype-Blind and Feature Sensitivity Analyses}
+Removing RET variant encodings, ATA-aligned risk level, and risk interaction terms reduced XGBoost performance on the original held-out split to 73.3\% accuracy (22/30) and 93.3\% sensitivity (14/15). This result shows that non-genetic clinical and biomarker features carry some signal, but it also confirms that the genotype-aware model benefits from genetic context. Therefore, genotype-aware performance should not be presented as a substitute for genetic testing.
+
+Removing CEA improved the XGBoost result in the original split to 90.0\% accuracy while preserving 15/15 sensitivity. This supports treating CEA imputation as exploratory rather than essential to the main result. Removing calcitonin, CEA, and nodule-derived features as a conservative biomarker-timing sensitivity analysis also preserved 15/15 sensitivity in this split, but this should not be interpreted as evidence that biomarkers are clinically unnecessary. It only shows that this small internal test split was not driven entirely by biomarker timing.
+
+\subsection{Synthetic-Augmentation Simulation}
+In the synthetic-augmentation experiment, LightGBM achieved 96.2\% accuracy (202/210) and 90.2\% sensitivity (46/51) on the internal held-out split. These values were higher than the corresponding LightGBM result on the original 149-record cohort, but the augmented dataset contains synthetic records and synthetic controls. The result is therefore useful for studying how augmentation changes discrimination, not for estimating real-world clinical performance.
+
 \subsection{Interpretability}
-The pipeline computes SHAP attributions \cite{lundberg2017shap} for supported models and provides per-model feature-importance summaries. In the expanded LightGBM model, genotype and biomarker features jointly contribute to risk stratification, consistent with clinical expectations that risk depends on both variant class and biochemical phenotype.
-
-\begin{figure}[ht]
-\centering
-\begin{tikzpicture}[
-  node distance=10mm,
-  box/.style={draw, rounded corners, align=center, inner sep=5pt, minimum width=36mm},
-  arrow/.style={-{Latex[length=2.5mm]}, thick}
-]
-\node[box] (lit) {Published studies\\(10 sources)};
-\node[box, right=of lit] (json) {Structured extraction\\to JSON};
-\node[box, right=of json] (feat) {Feature engineering\\+ imputation};
-\node[box, right=of feat] (split) {Train/test split\\(80/20 stratified)};
-\node[box, below=of split] (train) {Train models\\(5 families)};
-\node[box, left=of train] (orig) {Original dataset\\n=149};
-\node[box, left=of orig] (exp) {Case-control dataset\\n=1{,}047\\(synthetic + SMOTE)};
-\node[box, below=of train] (eval) {Evaluation\\metrics + CIs\\permutation tests};
-
-\draw[arrow] (lit) -- (json);
-\draw[arrow] (json) -- (feat);
-\draw[arrow] (feat) -- (split);
-\draw[arrow] (split) -- (train);
-\draw[arrow] (orig) -- (train);
-\draw[arrow] (exp) -- (orig);
-\draw[arrow] (train) -- (eval);
-\end{tikzpicture}
-\caption{MEN2 Predictor workflow from cohort assembly to benchmarking across original and expanded datasets, with automatic confidence interval calculation for all models.}
-\end{figure}
-
-\begin{figure}[ht]
-\centering
-\includegraphics[width=\linewidth]{../charts/variant_distribution.png}
-\caption{Distribution of RET variants in the paper-only cohort (n = 149).}
-\end{figure}
-
-\begin{figure}[ht]
-\centering
-\includegraphics[width=\linewidth]{../charts/age_histograms.png}
-\caption{Age distribution of RET carriers in the paper-only cohort.}
-\end{figure}
-
-\begin{figure}[ht]
-\centering
-\includegraphics[width=\linewidth]{../charts/calcitonin_cea_relationship.png}
-\caption{Observed calcitonin--CEA relationship across cohorts with paired measurements (n = 12).}
-\end{figure}
-
-\begin{figure}[ht]
-\centering
-\begin{subfigure}{0.49\linewidth}
-\centering
-\includegraphics[width=\linewidth]{../charts/roc_curves/xgboost_original.png}
-\caption{XGBoost (Original)}
-\end{subfigure}
-\begin{subfigure}{0.49\linewidth}
-\centering
-\includegraphics[width=\linewidth]{../charts/roc_curves/lightgbm_expanded.png}
-\caption{LightGBM (Expanded)}
-\end{subfigure}
-\caption{Representative ROC curves: XGBoost on original data (100\% recall, zero-miss screening baseline) and LightGBM on expanded data (highest accuracy, 96.19\%).}
-\end{figure}
-
-\begin{figure}[ht]
-\centering
-\begin{subfigure}{\linewidth}
-\centering
-\includegraphics[width=\linewidth]{../charts/confusion_matrices/xgboost_original.png}
-\caption{XGBoost (Original) --- zero-miss screening baseline}
-\end{subfigure}
-
-\vspace{0.75\baselineskip}
-
-\begin{subfigure}{\linewidth}
-\centering
-\includegraphics[width=\linewidth]{../charts/confusion_matrices/lightgbm_expanded.png}
-\caption{LightGBM (Expanded) --- highest accuracy}
-\end{subfigure}
-\caption{Confusion matrices for recommended models (raw and normalized panels are embedded in each figure).}
-\end{figure}
-
-\begin{figure}[ht]
-\centering
-\includegraphics[width=\linewidth]{../charts/shap/lightgbm/expanded_bar.png}
-\caption{SHAP global feature importance (mean absolute SHAP) for LightGBM on the expanded dataset.}
-\end{figure}
-
-\begin{figure}[ht]
-\centering
-\includegraphics[width=\linewidth]{../charts/lime/lightgbm/lime_global_importance.png}
-\caption{LIME global feature importance (mean absolute LIME weight) computed over representative explained cases for LightGBM.}
-\end{figure}
-
-\FloatBarrier
+Exploratory SHAP analysis was generated for supported models. In the synthetic LightGBM analysis, genotype and biomarker-related features both contributed to predictions. Because the synthetic analysis may reflect assumptions used to generate controls, SHAP rankings from that experiment should not be treated as clinical feature rankings.
 
 \section{Discussion}
-The results demonstrate that the MEN2 Predictor pipeline achieves clinically acceptable sensitivity while maintaining reasonable specificity across multiple model architectures. However, methodological concerns have been raised regarding the use of genetic features and biomarker imputation strategies, which warrant detailed examination.
+This study presents a reproducible benchmark for machine-learning analysis of MTC status in published MEN2/RET-carrier records. The strongest point estimate in the original cohort came from a genotype-aware XGBoost model, which identified all 15 MTC cases in one internal held-out split. However, the Wilson interval for sensitivity was 79.6\%-100.0\%, making the sample-size limitation explicit. The result should be read as an exploratory internal benchmark, not as evidence that the model is ready for clinical screening.
 
-\subsection{Ablation Study: Feature Contribution Analysis}
+The most important methodological issue is the role of genotype. RET variant and ATA risk level are clinically meaningful variables, but they can also encode prior knowledge about disease risk. The genotype-aware model is therefore relevant only for confirmed or suspected RET-carrier datasets where genetic context is already known. The genotype-blind sensitivity analysis partially addresses this concern by removing RET/ATA features. Its lower accuracy and one false negative show that the full model does use genetic context and should not be described as a low-cost replacement for RET sequencing.
 
-A systematic ablation study was conducted to address the concern that ATA risk level and RET variant features may ``encode cancer a priori,'' thereby inflating apparent model performance through circular reasoning rather than genuine predictive learning.
+CEA imputation is another major limitation. Only 12 observed paired CEA values were available, and the observed calcitonin-CEA correlation was weak. Although MICE with predictive mean matching is a reasonable exploratory imputation method, the no-CEA sensitivity analysis is more important for credibility than the imputed CEA result. Future versions should either collect more observed CEA values or treat CEA as optional/missing rather than central.
 
-\textbf{Methodology:} We systematically removed feature groups in the ablation analyses for XGBoost on the original dataset and LightGBM on the expanded dataset, testing eight configurations including: removal of ATA risk level, removal of variant one-hot encodings, removal of all genetic features, and removal of biomarker features.
+Biomarker timing also limits interpretation. Some calcitonin and CEA values were preoperative or surveillance measurements, while others were post-diagnostic or mixed with follow-up information. If a biomarker was measured after cancer diagnosis or surgery, it could leak outcome information into the model. Because timing could not be standardized across all records, the manuscript reports a conservative biomarker-exclusion sensitivity analysis and treats all biomarker-based findings as provisional.
 
-\textbf{Key Findings:}
-\begin{enumerate}
-\item \textbf{The best accuracy model remains strong without full genetic context:} When all genetic features (ATA risk level + variant encodings) are removed, LightGBM on the expanded dataset still achieves 93.33\% accuracy with 82.35\% recall.
+The synthetic-augmentation experiment should be interpreted cautiously. Synthetic controls can make model training easier and improve apparent discrimination, but they may also encode assumptions about what non-MTC carriers look like. For this reason, the augmented LightGBM result is presented as a simulation of augmentation behavior, not as an expanded clinical cohort.
 
-\item \textbf{The best recall model behaves differently:} XGBoost on the original dataset preserves 100\% recall even after removing variant one-hot encodings, calcitonin, or CEA, but drops to 93.33\% recall when all genetic features are removed. This indicates that the screening-safe model depends on a narrower feature core than the expanded LightGBM model.
-
-\item \textbf{ATA risk level has model-dependent impact:} Removing ATA risk level lowers XGBoost-original accuracy from 83.33\% to 76.67\%, while lowering LightGBM-expanded accuracy only from 96.19\% to 95.24\%.
-
-\item \textbf{Variant encodings are more dispensable than full genetic context:} Removing variant one-hot features leaves XGBoost-original unchanged at 83.33\% accuracy and 100\% recall, whereas removing all genetic features reduces it to 73.33\% accuracy and 93.33\% recall.
-\end{enumerate}
-
-Complete ablation results are provided in Supplementary Table S2.
-
-\subsection{Calcitonin Feature Behavior: Real vs Synthetic Data}
-
-An important observation emerged from the ablation study: removing calcitonin features \textbf{reduces} LightGBM accuracy on the expanded dataset from 96.19\% to 95.24\% ($-$0.95\%), whereas XGBoost on the original dataset retains 100\% recall and unchanged 83.33\% accuracy without calcitonin.
-
-On the filtered original paper-only dataset, zero-miss performance is achievable without relying exclusively on calcitonin, and the best-performing screening model (XGBoost) appears more dependent on the retained genetic context than on individual biomarker features.
-
-\textbf{Interpretation:} In this cohort, calcitonin behaves consistently with its expected clinical role. Rather than acting like a noisy synthetic artifact, it contributes useful signal alongside genotype and family-history features.
-
-\textbf{Clinical implications:} This finding does not diminish calcitonin's established clinical value for MTC surveillance. Rather, it demonstrates that ablation studies comparing real and synthetic datasets are essential when evaluating synthetic-augmented models. Feature importance rankings derived from synthetic-trained models may not reflect clinical reality.
-
-\subsection{Empirical Validation of CEA Imputation}
-
-The observed calcitonin--CEA correlation (r = 0.1158, n = 12) represents a weak association. Concerns about imputation reliability remain valid given this modest correlation and the much smaller paired-lab subset. A sensitivity analysis was conducted using the best recall model (XGBoost-original) and the best accuracy model (LightGBM-expanded), comparing performance with and without CEA features and across multiple imputation methods.
-
-\textbf{CEA Contribution Analysis:} The effect of CEA is model-dependent. In XGBoost on the original dataset, removing CEA improves accuracy from 83.33\% to 90.00\% while preserving 100\% recall. In LightGBM on the expanded dataset, CEA improves accuracy from 92.86\% to 96.19\% and slightly improves recall from 88.24\% to 90.20\%.
-
-\textbf{Imputation Method Robustness:} In LightGBM-expanded, MICE+PMM remains the strongest overall strategy at 96.19\% accuracy. In XGBoost-original, MICE+PMM preserves 100\% recall, while mean, median, and zero imputation raise accuracy to 86.67\% but lower recall to 93.33\%.
-
-\textbf{Clinical Rationale for CEA Inclusion:} CEA provides a modest but measurable predictive contribution in addition to its clinical value. Calcitonin alone has specificity limitations---elevated levels can occur in hypergastrinemia, kidney insufficiency, other neuroendocrine tumors, and with certain medications (omeprazole, beta-blockers). More critically, CEA serves as a safety marker for dedifferentiated MTC: as tumors become more aggressive, they may lose calcitonin-producing capacity while continuing to secrete CEA. Rising CEA with stable or declining calcitonin is a recognized sign of tumor dedifferentiation and poor prognosis \cite{doi_10_12659_AJCR_935207}. Clinical guidelines therefore recommend combined calcitonin--CEA assessment, and including both markers aligns with standard practice for MEN2 management.
-
-\textbf{Safeguards:} The pipeline includes a binary \texttt{cea\_imputed\_flag} feature that explicitly preserves missingness information. Complete validation outputs for the LightGBM expanded analysis are available in the project repository under \texttt{results/cea\_validation/}.
-
-\subsection{Biomarker Collection Timing in Source Studies}
-
-Concerns have been raised that calcitonin and CEA measurements may be ``post-diagnostic markers'' collected after MTC was already clinically confirmed, which would introduce information leakage if the model is intended for screening.
-
-\subsection{Genotype-Phenotype Correlations and RET Variant Complexity}
-
-The 2015 revised ATA guidelines \cite{doi_10_1089_thy_2014_0335} classify RET mutations into three risk categories: Highest Risk (ATA-HST) including M918T and A883F mutations associated with MEN2B; High Risk (ATA-H) primarily encompassing C634 mutations characteristic of MEN2A; and Moderate Risk (ATA-MOD) covering codons 609, 611, 618, 620, 768, 790, 791, 804, and 891. While this classification informs prophylactic thyroidectomy timing, accumulating evidence suggests that factors beyond mutation classification---particularly age and tumor stage at diagnosis---may be stronger determinants of clinical outcome \cite{doi_10_1210_jc_2017_00317}.
-
-Several RET variants in our cohort merit specific discussion due to their clinical complexity:
-
-\textbf{RET K666N and Zygosity Dependence:} The K666N variant (exon 11) exhibits phenotypic heterogeneity dependent on gene dosage. Heterozygous carriers often present with low-penetrance or late-onset MTC \cite{doi_10_1089_thy_2016_0374,doi_10_1210_jcemcr_luaf002}, while homozygous K666N has been associated with fully penetrant MEN2A phenotypes including metastatic MTC and bilateral pheochromocytoma \cite{doi_10_1210_jc_2017_02402,doi_10_1530_EDM_24_0009}. This zygosity-dependent expressivity represents a limitation for binary feature encoding in machine learning models, as ``mutation present/absent'' may insufficiently capture clinical risk.
-
-\textbf{RET S891A and Population Specificity:} The S891A mutation (exon 15) is classified as ATA-MOD and appears with notable frequency in South Asian and Chinese populations \cite{doi_10_4103_ijc_IJC_639_19,doi_10_18632_oncotarget_4992}. In one Indian pedigree, 7 of 14 screened family members carried this specific variant. While generally associated with Familial MTC and a more indolent course, detection enables critical cascade screening of at-risk relatives.
-
-\textbf{RET C634Y and Cutaneous Lichen Amyloidosis:} Codon 634 mutations, particularly C634Y, define ATA-H risk and are strongly associated with the classic MEN2A phenotype. A notable genotype-phenotype correlation is Cutaneous Lichen Amyloidosis (CLA), presenting as pruritic hyperpigmented lesions in the interscapular region, which is highly specific to codon 634 mutations \cite{doi_10_3390_clinpract14060179,doi_10_12998_wjcc_v12_i15_2627}. If dermatological findings were systematically recorded in the dataset, CLA could serve as a high-specificity feature for predicting ATA-H status.
-
-\subsection{Clinical Implications: Family Screening and Prophylactic Surgery}
-
-The clinical value of accurate risk stratification extends beyond initial case detection to cascade screening of first-degree relatives. Identifying a proband with a pathogenic RET mutation triggers systematic family screening, potentially detecting mutation carriers before MTC development \cite{doi_10_1530_eje_1_02216}.
-
-For High-Risk (ATA-H) mutations such as C634Y, current guidelines recommend prophylactic thyroidectomy before age 5, as MTC can develop in early childhood \cite{doi_10_1089_thy_2014_0335}. In resource-limited settings where genetic testing costs approximately INR 19,000--20,000, a risk-stratification tool that prioritizes high-probability carriers for confirmatory testing could accelerate identification of at-risk children within the critical intervention window.
-
-\textbf{Positioning:} MEN2 Predictor is designed as a screening and triage aid that complements---but does not replace---confirmatory genetic testing and guideline-based clinical management. The intended use case is prioritization of patients for genetic referral based on accessible clinical features and biomarkers.
+Several biological observations remain relevant for future work. RET K666N can show heterogeneous penetrance, and allele dosage may matter in some reports (3,9). RET S891A has been reported in Indian and Chinese pedigrees and may show variable clinical behavior across families (5-7). Codon 634 variants are associated with MEN2A phenotypes and have been reported with cutaneous lichen amyloidosis in some kindreds (8,10). These examples show why simple binary variant encoding is likely insufficient for future clinical modeling.
 
 \subsection{Limitations}
-
-\begin{enumerate}
-\item \textbf{Sample size:} The paper-only cohort of 149 RET carriers is small by machine learning standards, limiting generalizability and increasing variance in performance estimates.
-
-\item \textbf{Heterogeneous data sources:} Biomarker collection protocols varied across studies, and the mixture of screening and clinical contexts introduces heterogeneity that should be addressed in prospective validation.
-
-\item \textbf{Imputation uncertainty:} Although CEA imputation demonstrated empirical utility, the weak underlying correlation means imputed values carry substantial uncertainty that is not fully captured by confidence intervals.
-
-\item \textbf{Synthetic augmentation:} The expanded dataset relies on variant-matched synthetic controls, which may not fully represent the clinical heterogeneity of real patient populations.
-
-\item \textbf{Prospective validation required:} External validation on independent cohorts is essential before any clinical deployment.
-
-\item \textbf{Calcitonin-negative MTC:} A small subset of MTC cases present with normal serum calcitonin levels due to tumor dedifferentiation or immunoassay interference (``hook effect''). In such cases, CEA may remain elevated and serve as an alternative marker, but calcitonin-dependent features may provide false reassurance \cite{doi_10_12659_AJCR_935207}. Clinical deployment should include explicit warning mechanisms for atypical biomarker profiles.
-
-\item \textbf{Zygosity and allele dosage:} The binary ``mutation present/absent'' encoding cannot distinguish heterozygous from homozygous carriers for variants like K666N where zygosity substantially affects phenotypic expression. Future iterations could incorporate allele frequency or copy number variation if such data become available.
-
-\item \textbf{Screening vs. diagnostic scope:} This model is positioned exclusively as a screening and prioritization tool. It estimates the probability of MTC given available clinical features to inform genetic testing referral decisions. It must not be used as a diagnostic substitute for confirmatory RET sequencing or as a basis for treatment decisions.
-\end{enumerate}
-
-\FloatBarrier
+The main limitations are small sample size, retrospective literature-derived data, heterogeneous source reporting, possible familial clustering, incomplete biomarker timing, extensive CEA imputation, and lack of independent external validation. The held-out split is internal to the curated literature dataset and does not test generalization to a new institution, new country, or prospective clinical population. The public dataset was reconstructed from published reports; although no new identifiers were collected, rare-disease pedigrees can carry re-identification risk. Public-facing datasets should therefore use anonymized row identifiers and avoid unnecessary family labels or exact relationship details.
 
 \section{Conclusion}
-MEN2 Predictor presents a reproducible machine learning workflow for rare-disease risk stratification by aggregating published MEN2/RET-carrier evidence into a structured dataset and standardized evaluation pipeline. On the literature-derived cohort of 149 confirmed RET carriers spanning 14 variants across ATA risk categories (Moderate, High, and Highest per the 2015 revised ATA guidelines), XGBoost delivered the best zero-miss screening profile with 100\% recall at 83.33\% accuracy.
-
-In a case-control setting (n = 1{,}047 total records) using variant-matched synthetic controls and SMOTE applied to training folds, LightGBM achieved the highest accuracy (96.19\%) with 90.20\% recall. These results suggest that augmentation can improve discrimination for triage-style use, but recall volatility remains a critical risk in safety-sensitive workflows where missed cancers are unacceptable.
-
-Key limitations include the cohort size, heterogeneity across published sources, and biomarker missingness requiring imputation. Prospective external validation is required before clinical deployment. Overall, MEN2 Predictor is best positioned as a screening and prioritization aid that complements, rather than replaces, genetic testing and guideline-based care.
-
-\textbf{Clinical disclaimer:} This work and the accompanying software are provided for research and educational purposes only. They are not medical advice and must not be used as a diagnostic tool or as a substitute for clinician judgment, guideline-based evaluation, and confirmatory genetic testing.
-
-\FloatBarrier
+MEN2 Predictor is best framed as a reproducible exploratory benchmark for rare-disease machine learning, not as a deployable diagnostic or screening system. The workflow shows how performance changes when genotype features, CEA imputation, biomarker-dependent features, and synthetic augmentation are varied. The results support further study of structured MEN2 data aggregation, but independent prospective validation with standardized pre-diagnostic variables is required before any clinical or screening use.
 
 \section*{Acknowledgements}
-We thank the authors of the contributing studies for publishing detailed clinical reports that enable secondary analyses in rare-disease research.
-
-We also thank Ms Unnati Saxena for mentoring support and for coordinating and facilitating the project work.
+We thank the authors of the contributing studies for publishing detailed clinical reports that enable secondary analyses in rare-disease research. We also thank Ms Unnati Saxena for mentoring support and for coordinating and facilitating the project work.
 
 \section*{Author Contributions}
-H.K. contributed to literature search, study identification, data curation, and biological interpretation. A.V.P. designed and implemented the machine learning pipeline, trained the models, and performed the computational analysis. S.M. provided mentorship, advised on methodological decisions including the MICE+PMM imputation strategy, and oversaw the project direction. All authors reviewed and approved the final manuscript.
+H.K. contributed to literature search, study identification, data curation, and biological interpretation. A.V.P. designed and implemented the machine-learning pipeline, trained the models, and performed the computational analysis. S.M. provided mentorship, advised on methodological decisions, and oversaw the project direction. All authors reviewed and approved the final manuscript.
 
 \section*{Conflict of Interest}
 The authors declare no conflicts of interest.
@@ -366,26 +235,35 @@ The authors declare no conflicts of interest.
 This research received no specific funding from any funding agency in the public, commercial, or not-for-profit sectors.
 
 \section*{Data Availability}
-All data and source code are publicly available in the GitHub repository at \url{https://github.com/arjuncodess/men2-predictor}. While pre-trained models are not included, the repository contains a fully reproducible pipeline to train and evaluate the models locally. The repository includes the curated patient-level dataset derived from published studies, the complete machine learning pipeline, and figure-generation scripts for full reproducibility.
+The analysis code, processed data artifacts, and figure-generation scripts are available in the GitHub repository at \url{https://github.com/arjuncodess/men2-predictor}. Anonymized submission copies of the processed original and augmented datasets are provided under \texttt{paper/submission\_data/} to reduce avoidable patient- or family-level identifiability in review materials. The hosted Hugging Face Space is provided for educational demonstration only and must not be used for diagnosis, treatment, triage, or any real-world clinical decision.
 
 \clearpage
-\FloatBarrier
 \section*{References}
-\printbibliography[heading=none]
+\begin{enumerate}
+\item Wells SA, Asa SL, Dralle H, Elisei R, Evans DB, Gagel RF, et al. Revised American Thyroid Association guidelines for the management of medullary thyroid carcinoma. Thyroid, 25: 567-610, 2015. \doi{10.1089/thy.2014.0335}
+\item Frank-Raue K, Buhr H, Dralle H, Klar E, Senninger N, Weber T, et al. Long-term outcome in 46 gene carriers of hereditary medullary thyroid carcinoma after prophylactic thyroidectomy: impact of individual RET genotype. Eur J Endocrinol, 155: 229-236, 2006. \doi{10.1530/eje.1.02216}
+\item Xu JY, Grubbs EG, Waguespack SG, Jimenez C, Gagel RF, Sosa JA, et al. Medullary thyroid carcinoma associated with germline RET K666N mutation. Thyroid, 26: 1744-1751, 2016. \doi{10.1089/thy.2016.0374}
+\item Schulte KM, Machens A, Fugazzola L, McGregor A, Diaz-Cano S, Izatt L, et al. The clinical spectrum of multiple endocrine neoplasia type 2a caused by the rare intracellular RET mutation S891A. J Clin Endocrinol Metab, 95: E92-E97, 2010. \doi{10.1210/jc.2010-0375}
+\item Qi XP, Zhao JQ, Chen ZG, Cao JL, Du J, Liu NF, et al. RET mutation p.S891A in a Chinese family with familial medullary thyroid carcinoma and associated cutaneous amyloidosis binding OSMR variant p.G513D. Oncotarget, 6: 33993-34003, 2015. \doi{10.18632/oncotarget.4992}
+\item Qi XP, Zhang RX, Cao JL, Chen ZG, Jin HY, Yang RR. The rare intracellular RET mutation p.S891A in a Chinese Han family with familial medullary thyroid carcinoma. J Biosci, 39: 505-512, 2014. \doi{10.1007/s12038-014-9428-x}
+\item Vijayan R, Nair V, Menon U, Kumar H. A rare RET mutation in an Indian pedigree with familial medullary thyroid carcinoma. Indian J Cancer, 58: 98, 2021. \doi{10.4103/ijc.IJC_639_19}
+\item Florescu AF, Sima OC, Nistor C, Ciobica ML, Costachescu M, Stanciu M, et al. Endocrine perspective of cutaneous lichen amyloidosis: RET-C634 pathogenic variant in multiple endocrine neoplasia type 2. Clin Pract, 14: 2284-2299, 2024. \doi{10.3390/clinpract14060179}
+\item La Greca A, Dawes D, Albuja-Cruz M, Raeburn C, Axell L, Ku L, et al. MEN2 phenotype in a family with germline heterozygous rare RET K666N variant. Endocrinol Diabetes Metab Case Rep, 2024: 24-0009, 2024. \doi{10.1530/EDM-24-0009}
+\item Zhang HF, Huang SL, Wang WL, Zhou YQ, Jiang J, Dai ZJ. C634Y mutation in RET-induced multiple endocrine neoplasia type 2A: a case report. World J Clin Cases, 12: 2627-2635, 2024. \doi{10.12998/wjcc.v12.i15.2627}
+\item Shankar RK, Rutter MJ, Chernausek SD, Samuels PJ, Mo JQ, Rutter MM. Medullary thyroid cancer in a 9-week-old infant with familial MEN 2B: implications for timing of prophylactic thyroidectomy. Int J Pediatr Endocrinol, 2012: 25, 2012. \doi{10.1186/1687-9856-2012-25}
+\item van Buuren S, Groothuis-Oudshoorn K. mice: multivariate imputation by chained equations in R. J Stat Softw, 45: 1-67, 2011. \doi{10.18637/jss.v045.i03}
+\item Chawla NV, Bowyer KW, Hall LO, Kegelmeyer WP. SMOTE: synthetic minority over-sampling technique. J Artif Intell Res, 16: 321-357, 2002. \doi{10.1613/jair.953}
+\item Pedregosa F, Varoquaux G, Gramfort A, Michel V, Thirion B, Grisel O, et al. Scikit-learn: machine learning in Python. J Mach Learn Res, 12: 2825-2830, 2011. \weblink{https://jmlr.org/papers/v12/pedregosa11a.html}
+\item Chen T, Guestrin C. XGBoost: a scalable tree boosting system. Proc 22nd ACM SIGKDD Int Conf Knowl Discov Data Min, 785-794, 2016. \doi{10.1145/2939672.2939785}
+\item Ke G, Meng Q, Finley T, Wang T, Chen W, Ma W, et al. LightGBM: a highly efficient gradient boosting decision tree. Advances in Neural Information Processing Systems, 30, 2017. \doi{10.48550/arXiv.1712.01043}
+\item Lundberg SM, Lee SI. A unified approach to interpreting model predictions. Advances in Neural Information Processing Systems, 30, 2017. \doi{10.48550/arXiv.1705.07874}
+\item Licata L, Di Fidio CA, Vacante M, Basile F, Biondi A, Richiusa P, et al. A rare case of negative serum calcitonin in metastatic medullary thyroid carcinoma: diagnosis, treatment, and follow-up strategy. Am J Case Rep, 23: e935207, 2022. \doi{10.12659/AJCR.935207}
+\item DNA Labs India. RET Gene RET, selective sequencing of exons 5, 8, 10, 11 and 13-16 NGS genetic DNA test. Accessed May 4, 2026. \weblink{https://dnalabsindia.com/test/ret-gene-ret-selective-sequencing-of-exons-5-8-10-11-and-13-16-ngs-genetic-dna-test}
+\end{enumerate}
 
 \clearpage
 \appendix
-\renewcommand{\thefigure}{S\arabic{figure}}
-\renewcommand{\thetable}{S\arabic{table}}
-\setcounter{figure}{0}
-\setcounter{table}{0}
-
 \section{Supplementary Materials}
-\subsection{Study Composition}
 \input{supplementary_tables.tex}
-
-Supplementary figures are available in the project GitHub repository at \url{https://github.com/arjuncodess/men2-predictor} under \texttt{charts/}.
-
-An interactive demonstration (Gradio web app) and a programmatic API are also available via the Hugging Face Space at \url{https://huggingface.co/spaces/arjuncodess/men2-predictor}. The hosted Space is provided as-is for demonstration only and must not be used for clinical decision-making.
 
 \end{document}
