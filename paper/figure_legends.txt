@@ -1,0 +1,6 @@
+Figure 1. Distribution of RET variants in the literature-derived MEN2/RET-carrier cohort.
+Figure 2. Age distribution of RET carriers in the literature-derived cohort.
+Figure 3. Observed calcitonin-CEA relationship in records with paired biomarker values. Only 12 paired observations were available, so CEA analyses are exploratory.
+Figure 4. Confusion matrix for the genotype-aware XGBoost model on the original held-out split.
+Figure 5. ROC curve for the genotype-aware XGBoost model on the original held-out split.
+Figure 6. SHAP feature-importance summary for the LightGBM synthetic-augmentation experiment. This figure supports interpretation of the simulation only and is not clinical validation.
