@@ -1,0 +1,7 @@
+COUNTERFACTUAL ANALYSIS (HIGH-RISK CASES)
+============================================================
+High-risk definition: predicted probability >= 0.20
+
+Patient study_7 (sample 6) - predicted risk 0.506
+  1. To reduce risk, patient would need to reduce calcitonin by 17.23 pg/mL (from 18.93 to 1.70)
+
