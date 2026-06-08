@@ -869,7 +869,9 @@ This project is licensed under the MIT License.
 
 ## Data Availability
 
-All data and source code are publicly available in this repository. While pre-trained models are not included, the repository contains a fully reproducible pipeline to train and evaluate the models locally.
+The anonymized MEN2/RET-carrier benchmark dataset is available on Zenodo: https://doi.org/10.5281/zenodo.20594453. The release includes the 149-record literature-derived cohort, a secondary synthetic simulation artifact, a data dictionary, source-study mapping, license, and citation metadata.
+
+The source code is publicly available in this repository. While pre-trained models are not included, the repository contains a fully reproducible pipeline to train and evaluate the models locally.
 
 ## Acknowledgements
 
