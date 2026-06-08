@@ -9,12 +9,13 @@
 
 In India, genetic testing for MEN2 costs INR 20,000 (~$225 USD), putting life-saving diagnosis out of reach for most families. This research asks: *can machine learning on routine blood biomarkers (calcitonin, CEA) and clinical features predict MTC risk without expensive genetic sequencing?*
 
-MEN2 Predictor evaluates whether published MEN2/RET-carrier records can support a transparent rare-disease machine-learning benchmark for MTC status. The scientific answer must stay modest: this is not a diagnostic, screening, triage, or clinical decision-support system.
+MEN2 Predictor evaluates whether published MEN2/RET-carrier records can support a transparent rare-disease machine-learning benchmark for MTC status. The project has two linked contributions: an open literature-derived dataset and a reproducible model benchmark spanning genotype-blind, genotype-aware, no-CEA, and synthetic-augmentation analyses. The scientific answer must stay modest: this is not a diagnostic, screening, triage, or clinical decision-support system.
 
-MEN2 Predictor now aggregates **149 confirmed RET carriers from 10 peer-reviewed studies (14 variants)** into a reproducible pipeline. On the real literature-derived cohort, **XGBoost reached 100% sensitivity** with **83.33% accuracy**. The expanded case-control workflow reaches **96.19% accuracy with LightGBM**, but those augmented records are not a real clinical cohort.
+MEN2 Predictor now aggregates **149 confirmed RET carriers from 10 peer-reviewed studies (14 variants)** into an open dataset and reproducible pipeline. The anonymized dataset is published on Zenodo at **https://doi.org/10.5281/zenodo.20594453**. On the real literature-derived cohort, **XGBoost reached 100% sensitivity** with **83.33% accuracy**. The expanded case-control workflow reaches **96.19% accuracy with LightGBM**, but those augmented records are not a real clinical cohort.
 
 ## Table of Contents
 - [Awards & Recognition](#awards--recognition)
+- [Dataset Release](#dataset-release)
 - [Key Findings](#key-findings)
 - [About The Project](#about-the-project)
 - [Benchmark Performance](#benchmark-performance)
@@ -45,11 +46,35 @@ This project was selected for the [INSEF Regional Fair (Online) 2025](https://sc
 
 ---
 
+## Dataset Release
+
+One major research output is the openly released MEN2/RET-carrier dataset:
+
+**Zenodo DOI:** https://doi.org/10.5281/zenodo.20594453
+
+This release is, to our knowledge, one of the first openly available patient-level benchmark datasets for MEN2/RET-carrier MTC-status modeling. Existing MEN2/RET resources are valuable for variant interpretation and genotype-phenotype context; this release addresses a different need by packaging carrier-level modeling records with clinical biomarkers and MTC outcome labels in a reusable tabular format.
+
+The Zenodo release includes:
+
+- **149 real literature-derived RET-carrier records** from 10 peer-reviewed studies.
+- **14 RET variants** spanning moderate, high, and highest ATA-aligned risk categories.
+- **MTC status labels** with 73 MTC-positive and 76 MTC-negative records.
+- **Routine biomarker and clinical features**, including calcitonin, CEA, thyroid nodule indicators, family history, pheochromocytoma, and hyperparathyroidism.
+- **Row-level source provenance**, including source DOI and source title.
+- **A data dictionary, source-study table, license, citation metadata, and checksums**.
+- **A secondary 1,047-row synthetic simulation file**, clearly marked with `is_synthetic`, for augmentation-method experiments only.
+
+This dataset should be cited independently of the code:
+
+> Prakash, A., Kaur, H., & Mishra, S. (2026). MEN2/RET Carrier Literature-Derived Benchmark Dataset for Medullary Thyroid Carcinoma Risk Stratification (1.0.0) [Data set]. Zenodo. https://doi.org/10.5281/zenodo.20594453
+
+> **Important:** The dataset is for research, reproducibility, education, and benchmark development only. It must not be used for diagnosis, treatment, screening, triage, or real-world clinical decision-making.
+
 ## Key Findings
 
 ### Real-Patient Cohort (149 carriers across 10 studies)
 
-The paper-only dataset now contains **149 confirmed carriers** across **14 RET variants**. On this filtered cohort, **XGBoost** is the primary exploratory model because it reached **100% sensitivity** with **83.33% accuracy**. The expanded synthetic-augmentation analysis is secondary; **LightGBM on expanded data achieves 96.19% accuracy** with **90.20% recall**.
+The paper-only dataset now contains **149 confirmed carriers** across **14 RET variants** and is publicly released on Zenodo as a reusable rare-disease benchmark. On this filtered cohort, **XGBoost** is the primary exploratory model because it reached **100% sensitivity** with **83.33% accuracy**. The expanded synthetic-augmentation analysis is secondary; **LightGBM on expanded data achieves 96.19% accuracy** with **90.20% recall**.
 
 ### Synthetic Augmentation Impact
 
@@ -89,6 +114,8 @@ In India, genetic testing for MEN2 costs INR 20,000 (~$225 USD), putting life-sa
 #### 2. Why This Matters for Rare-Disease ML
 
 Every documented carrier in these studies represents scarce published evidence, and every delayed answer can matter to a family trying to understand inherited cancer risk. The benchmark makes model assumptions visible, especially whether non-genetic blood biomarkers and clinical features retain signal when RET/ATA features are removed, along with CEA imputation uncertainty, biomarker-timing leakage risk, and the limits of synthetic augmentation.
+
+Limited access to shared patient-level datasets is part of the problem in rare-disease machine learning. Without a reusable benchmark, future researchers have to rebuild the same scattered evidence base before they can test a model. This project turns those scattered MEN2/RET-carrier reports into a citable dataset with source provenance, a data dictionary, and a reproducible pipeline.
 
 Even with the filtered cohort at **149 patients and 12 paired calcitonin/CEA observations**, synthetic augmentation remains model-dependent. Accuracy climbs into the 96% band, but the primary evidence remains the original-data benchmark rather than the expanded workflow.
 
@@ -147,7 +174,7 @@ Run the study: `python src/cea_validation_study.py --m=lightgbm --d=expanded`
 
 MEN2 (Multiple Endocrine Neoplasia type 2) is a rare hereditary cancer syndrome caused by RET gene mutations. This project developed machine learning models to predict MTC (medullary thyroid carcinoma) risk across **14 RET variants** using clinical and genetic features from **149 confirmed carriers** across 10 peer-reviewed research studies.
 
-**Scientific Contribution:** This work provides a reproducible rare-disease ML benchmark showing that synthetic augmentation changes performance in a strongly model-dependent way. Augmentation improves simulated accuracy substantially, while the primary literature-derived result comes from **XGBoost on original data**.
+**Scientific Contribution:** This work provides an open rare-disease dataset and a reproducible ML benchmark. The dataset gives future researchers a shared MEN2/RET-carrier modeling table in a disease area where reusable patient-level data are scarce. The model benchmark tests how routine clinical and biomarker features perform under genotype-blind, genotype-aware, no-CEA, and synthetic-augmentation settings. Augmentation improves simulated accuracy substantially, while the primary literature-derived result comes from **XGBoost on original data**.
 
 ## Benchmark Performance
 
@@ -186,21 +213,34 @@ MEN2 (Multiple Endocrine Neoplasia type 2) is a rare hereditary cancer syndrome 
 
 ## Scientific Contribution
 
-This project makes three main contributions to rare-disease machine learning:
+This project makes five linked contributions to rare-disease machine learning:
 
-### 1. Model-Dependent Evaluation of Synthetic Augmentation
+### 1. Open MEN2/RET-Carrier Benchmark Dataset
+
+- Releases a citable Zenodo dataset: https://doi.org/10.5281/zenodo.20594453.
+- Aggregates **149 confirmed RET carriers** from 10 peer-reviewed studies into a reusable tabular benchmark.
+- Provides source DOI/title provenance, a data dictionary, source-study mapping, citation metadata, and clear synthetic-record labeling.
+- Frames the dataset as a benchmark resource, not a clinical decision-support tool.
+
+### 2. Reproducible Model Benchmark
+
+- Benchmarks Logistic Regression, Random Forest, XGBoost, LightGBM, and linear SVM on the same curated cohort.
+- Separates genotype-blind and genotype-aware analyses so the low-cost triage question is not confused with sequencing-informed prediction.
+- Reports raw counts, sensitivity, specificity, accuracy, ROC-AUC, average precision, and confidence intervals for small-sample transparency.
+
+### 3. Model-Dependent Evaluation of Synthetic Augmentation
 
 - Shows that synthetic controls plus SMOTE can improve discrimination while affecting recall differently across algorithms.
 - **LightGBM improves from 80.00% to 96.19% accuracy** and from **66.7% to 90.2% recall** when moving from original to expanded data.
 - At the same time, the primary original-data benchmark remains with **XGBoost on original data**, which reached **100% sensitivity** in one internal held-out split.
 
-### 2. Methodological Framework for Rare Disease ML
+### 4. Methodological Framework for Rare Disease ML
 
 - Systematic comparison: 5 models × 2 datasets = 10 configurations
 - Emphasis on raw counts, sensitivity, and confidence intervals for small rare-disease benchmarks
 - Validation on real held-out data, not synthetic test sets
 
-### 3. Clinical Deployment Framing
+### 5. Clinical Deployment Framing
 
 - Reports **XGBoost on original data** as the primary literature-derived benchmark.
 - Reports **LightGBM on expanded data** as the highest-accuracy synthetic-augmentation benchmark.
