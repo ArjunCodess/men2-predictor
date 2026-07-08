@@ -119,3 +119,26 @@ LIME explained: 10 samples
 Correct: 5, Misclassified: 5
 ============================================================
 
+EXPLAINABILITY SUMMARY
+============================================================
+Model: xgboost
+Dataset: original
+LIME explained: 10 samples
+Correct: 5, Misclassified: 5
+LIME vs SHAP agreements: 9, partial: 1, disagree: 0
+
+Counterfactual highlights:
+Patient study_9 (sample 1) - predicted risk 0.608
+  1. To reduce risk, patient would need to reduce calcitonin by 2.20 pg/mL (from 2.30 to 0.10)
+
+============================================================
+
+EXPLAINABILITY SUMMARY
+============================================================
+Model: lightgbm
+Dataset: expanded
+LIME explained: 10 samples
+Correct: 5, Misclassified: 5
+LIME vs SHAP agreements: 4, partial: 6, disagree: 0
+============================================================
+
