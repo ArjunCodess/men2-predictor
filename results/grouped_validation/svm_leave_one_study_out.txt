@@ -1,0 +1,49 @@
+================================================================================
+LEAVE-ONE-STUDY-OUT GROUPED VALIDATION (SENSITIVITY ANALYSIS)
+================================================================================
+Model: SVM
+Records: 149 | Studies (groups): 10
+Grouping: study_id (proxy for family/pedigree). All records from a
+study stay entirely in train or test. Preprocessing is train-fold only.
+Metrics are pooled out-of-fold: point% (num/den; Wilson 95% low%-high%).
+
+--------------------------------------------------------------------------------
+Genotype-blind (triage) (config: no_genetics)
+--------------------------------------------------------------------------------
+  Confusion matrix (pooled OOF): TN=55, FP=21, FN=18, TP=55
+  Sensitivity: 75.3% (55/73; 64.4%-83.8%)
+  Specificity: 72.4% (55/76; 61.4%-81.2%)
+  Accuracy:    73.8% (110/149; 66.2%-80.2%)
+  ROC-AUC:     0.771
+  Per-fold (held-out study):
+    Fold  1 | study=study_1   | n= 24 | MTC=  9 | correct= 15/24
+    Fold  2 | study=study_10  | n=  6 | MTC=  5 | correct=  5/6
+    Fold  3 | study=study_2   | n= 46 | MTC= 17 | correct= 41/46
+    Fold  4 | study=study_3   | n= 15 | MTC=  0 | correct= 10/15
+    Fold  5 | study=study_4   | n=  6 | MTC=  5 | correct=  4/6
+    Fold  6 | study=study_5   | n=  4 | MTC=  2 | correct=  3/4
+    Fold  7 | study=study_6   | n=  7 | MTC=  5 | correct=  3/7
+    Fold  8 | study=study_7   | n=  3 | MTC=  3 | correct=  3/3
+    Fold  9 | study=study_8   | n=  2 | MTC=  2 | correct=  1/2
+    Fold 10 | study=study_9   | n= 36 | MTC= 25 | correct= 25/36
+
+--------------------------------------------------------------------------------
+Genotype-aware (sequencing-informed) (config: baseline)
+--------------------------------------------------------------------------------
+  Confusion matrix (pooled OOF): TN=43, FP=33, FN=23, TP=50
+  Sensitivity: 68.5% (50/73; 57.1%-78.0%)
+  Specificity: 56.6% (43/76; 45.4%-67.1%)
+  Accuracy:    62.4% (93/149; 54.4%-69.8%)
+  ROC-AUC:     0.723
+  Per-fold (held-out study):
+    Fold  1 | study=study_1   | n= 24 | MTC=  9 | correct= 14/24
+    Fold  2 | study=study_10  | n=  6 | MTC=  5 | correct=  4/6
+    Fold  3 | study=study_2   | n= 46 | MTC= 17 | correct= 32/46
+    Fold  4 | study=study_3   | n= 15 | MTC=  0 | correct=  6/15
+    Fold  5 | study=study_4   | n=  6 | MTC=  5 | correct=  4/6
+    Fold  6 | study=study_5   | n=  4 | MTC=  2 | correct=  2/4
+    Fold  7 | study=study_6   | n=  7 | MTC=  5 | correct=  3/7
+    Fold  8 | study=study_7   | n=  3 | MTC=  3 | correct=  2/3
+    Fold  9 | study=study_8   | n=  2 | MTC=  2 | correct=  0/2
+    Fold 10 | study=study_9   | n= 36 | MTC= 25 | correct= 26/36
+

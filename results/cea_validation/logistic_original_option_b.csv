@@ -1,5 +1,5 @@
 experiment,sample_size,train_size,test_size,features_used,accuracy,precision,recall,f1_score,roc_auc,avg_precision,config_name,description,imputation_method,confusion_matrix
-MICE+PMM (Current),149,119,30,33,0.6666666666666666,0.6923076923076923,0.6,0.6428571428571429,0.8177777777777777,0.792183883654472,mice_pmm,Multiple Imputation by Chained Equations with Predictive Mean Matching,mice,
+MICE+PMM (Current),149,119,30,33,0.7,0.75,0.6,0.6666666666666666,0.8222222222222222,0.798517685382674,mice_pmm,Multiple Imputation by Chained Equations with Predictive Mean Matching,mice,
 Mean Imputation,149,119,30,33,0.7333333333333333,0.8181818181818182,0.6,0.6923076923076923,0.84,0.8278136313814063,mean,Replace missing CEA with mean of observed values,mean,"[[13, 2], [6, 9]]"
 Median Imputation,149,119,30,33,0.7333333333333333,0.7692307692307693,0.6666666666666666,0.7142857142857143,0.8044444444444444,0.7634094602744489,median,Replace missing CEA with median of observed values,median,"[[12, 3], [5, 10]]"
 Zero Imputation,149,119,30,33,0.7333333333333333,0.7692307692307693,0.6666666666666666,0.7142857142857143,0.8088888888888889,0.7875389908745678,zero,Replace missing CEA with zero (conservative lower bound),zero,"[[12, 3], [5, 10]]"

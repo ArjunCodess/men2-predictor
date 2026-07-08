@@ -5,14 +5,14 @@ Background size: 30
 Sample size: 30
 ============================================================
 Top features by mean |SHAP|:
- 1. calcitonin_level_numeric: 0.065995
- 2. age_group_young: 0.048717
- 3. age: 0.044860
- 4. age_squared: 0.043824
- 5. risk_calcitonin_interaction: 0.042371
- 6. risk_age_interaction: 0.040425
- 7. calcitonin_age_interaction: 0.032678
- 8. cea_level_numeric: 0.012695
- 9. age_group_middle: 0.010152
-10. variant_K666N: 0.007646
+ 1. calcitonin_level_numeric: 0.060415
+ 2. age_group_young: 0.053813
+ 3. age_squared: 0.046858
+ 4. age: 0.046411
+ 5. risk_calcitonin_interaction: 0.042560
+ 6. risk_age_interaction: 0.038614
+ 7. calcitonin_age_interaction: 0.026939
+ 8. cea_level_numeric: 0.016608
+ 9. age_group_middle: 0.013627
+10. variant_S891A: 0.008214
 ============================================================

@@ -16,11 +16,11 @@ Configuration: With CEA Features
   Description: Full model including CEA features
   Sample Size: 1047
   Features: 34
-  Accuracy:  0.9619
-  Precision: 0.9388
-  Recall:    0.9020
-  F1 Score:  0.9200
-  ROC AUC:   0.9908
+  Accuracy:  0.9238
+  Precision: 0.8302
+  Recall:    0.8627
+  F1 Score:  0.8462
+  ROC AUC:   0.9811
 
 Configuration: Without CEA Features
   Description: Model without any CEA features
@@ -39,11 +39,11 @@ OPTION B: IMPUTATION METHOD COMPARISON
 Method: MICE+PMM (Current)
   Description: Multiple Imputation by Chained Equations with Predictive Mean Matching
   Sample Size: 1047
-  Accuracy:  0.9619
-  Precision: 0.9388
-  Recall:    0.9020
-  F1 Score:  0.9200
-  ROC AUC:   0.9908
+  Accuracy:  0.9238
+  Precision: 0.8302
+  Recall:    0.8627
+  F1 Score:  0.8462
+  ROC AUC:   0.9811
 
 Method: Mean Imputation
   Description: Replace missing CEA with mean of observed values
@@ -86,15 +86,15 @@ KEY FINDINGS
 ================================================================================
 
 1. CEA CONTRIBUTION:
-   With CEA:    96.19% accuracy
+   With CEA:    92.38% accuracy
    Without CEA: 92.86% accuracy
-   Difference:  +3.33%
-   -> CEA improves accuracy by 3.3%
-   -> Recall improves with CEA: 90.2% vs 88.2%
+   Difference:  -0.48%
+   -> Removing CEA improves accuracy by 0.5%
+   -> Recall improves without CEA: 88.2% vs 86.3%
 
 2. IMPUTATION METHOD ROBUSTNESS:
-   Accuracy range across methods: 69.23% - 96.19%
-   Maximum variation: 26.96%
+   Accuracy range across methods: 69.23% - 93.81%
+   Maximum variation: 24.58%
    -> Some sensitivity to imputation method detected
 
 CONCLUSION:

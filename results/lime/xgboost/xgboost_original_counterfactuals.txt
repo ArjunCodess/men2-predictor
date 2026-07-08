@@ -4,4 +4,5 @@ High-risk definition: predicted probability >= 0.20
 
 Patient study_9 (sample 1) - predicted risk 0.608
   1. To reduce risk, patient would need to reduce calcitonin by 2.20 pg/mL (from 2.30 to 0.10)
+  2. To reduce risk, patient would need to bring calcitonin into normal range (calcitonin_elevated: 1 -> 0)
 

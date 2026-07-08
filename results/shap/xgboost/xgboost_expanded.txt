@@ -5,14 +5,14 @@ Background size: 50
 Sample size: 200
 ============================================================
 Top features by mean |SHAP|:
- 1. thyroid_nodules_present: 0.072907
- 2. family_history_mtc: 0.067276
- 3. calcitonin_level_numeric: 0.050174
- 4. cea_level_numeric: 0.048028
- 5. calcitonin_age_interaction: 0.040556
- 6. variant_K666N: 0.039445
- 7. risk_calcitonin_interaction: 0.037796
- 8. age: 0.031510
- 9. variant_S891A: 0.025954
-10. risk_age_interaction: 0.020207
+ 1. family_history_mtc: 0.077567
+ 2. thyroid_nodules_present: 0.072276
+ 3. calcitonin_level_numeric: 0.053442
+ 4. calcitonin_age_interaction: 0.050340
+ 5. risk_calcitonin_interaction: 0.040161
+ 6. risk_age_interaction: 0.036683
+ 7. variant_S891A: 0.035496
+ 8. variant_K666N: 0.034714
+ 9. age: 0.029861
+10. age_group_young: 0.015570
 ============================================================

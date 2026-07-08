@@ -1,13 +1,21 @@
 EXPLAINABILITY SUMMARY
 ============================================================
+Model: svm
+Dataset: original
+LIME explained: 10 samples
+Correct: 5, Misclassified: 5
+============================================================
+
+EXPLAINABILITY SUMMARY
+============================================================
 Model: logistic
 Dataset: expanded
 LIME explained: 10 samples
 Correct: 5, Misclassified: 5
-LIME vs SHAP agreements: 0, partial: 4, disagree: 6
+LIME vs SHAP agreements: 0, partial: 5, disagree: 5
 
 Counterfactual highlights:
-Patient study_9 (sample 2) - predicted risk 0.919
+Patient study_9 (sample 2) - predicted risk 0.843
   1. To reduce risk, patient would need to bring calcitonin into normal range (calcitonin_elevated: 1 -> 0)
   2. To reduce risk, patient would need to resolve thyroid nodules (nodules_present: 1 -> 0)
 
@@ -16,24 +24,6 @@ Patient study_9 (sample 2) - predicted risk 0.919
 EXPLAINABILITY SUMMARY
 ============================================================
 Model: random_forest
-Dataset: expanded
-LIME explained: 10 samples
-Correct: 5, Misclassified: 5
-LIME vs SHAP agreements: 3, partial: 7, disagree: 0
-============================================================
-
-EXPLAINABILITY SUMMARY
-============================================================
-Model: xgboost
-Dataset: expanded
-LIME explained: 10 samples
-Correct: 5, Misclassified: 5
-LIME vs SHAP agreements: 4, partial: 6, disagree: 0
-============================================================
-
-EXPLAINABILITY SUMMARY
-============================================================
-Model: lightgbm
 Dataset: expanded
 LIME explained: 10 samples
 Correct: 5, Misclassified: 5
@@ -42,16 +32,28 @@ LIME vs SHAP agreements: 2, partial: 8, disagree: 0
 
 EXPLAINABILITY SUMMARY
 ============================================================
+Model: xgboost
+Dataset: expanded
+LIME explained: 10 samples
+Correct: 5, Misclassified: 5
+LIME vs SHAP agreements: 3, partial: 7, disagree: 0
+============================================================
+
+EXPLAINABILITY SUMMARY
+============================================================
+Model: lightgbm
+Dataset: expanded
+LIME explained: 10 samples
+Correct: 5, Misclassified: 5
+LIME vs SHAP agreements: 4, partial: 6, disagree: 0
+============================================================
+
+EXPLAINABILITY SUMMARY
+============================================================
 Model: svm
 Dataset: expanded
 LIME explained: 10 samples
 Correct: 5, Misclassified: 5
-
-Counterfactual highlights:
-Patient study_9 (sample 2) - predicted risk 0.422
-  1. To reduce risk, patient would need to bring calcitonin into normal range (calcitonin_elevated: 1 -> 0)
-  2. To reduce risk, patient would need to resolve thyroid nodules (nodules_present: 1 -> 0)
-
 ============================================================
 
 EXPLAINABILITY SUMMARY
@@ -60,11 +62,11 @@ Model: logistic
 Dataset: original
 LIME explained: 10 samples
 Correct: 5, Misclassified: 5
-LIME vs SHAP agreements: 4, partial: 6, disagree: 0
+LIME vs SHAP agreements: 0, partial: 10, disagree: 0
 
 Counterfactual highlights:
-Patient study_5 (sample 4) - predicted risk 0.458
-  1. To reduce risk, patient would need to resolve thyroid nodules (nodules_present: 1 -> 0)
+Patient study_5 (sample 4) - predicted risk 0.537
+  1. To reduce risk, patient would need to bring calcitonin into normal range (calcitonin_elevated: 1 -> 0)
 
 ============================================================
 
@@ -75,48 +77,6 @@ Dataset: original
 LIME explained: 10 samples
 Correct: 5, Misclassified: 5
 LIME vs SHAP agreements: 10, partial: 0, disagree: 0
-============================================================
-
-EXPLAINABILITY SUMMARY
-============================================================
-Model: xgboost
-Dataset: original
-LIME explained: 10 samples
-Correct: 5, Misclassified: 5
-LIME vs SHAP agreements: 7, partial: 3, disagree: 0
-
-Counterfactual highlights:
-Patient study_9 (sample 1) - predicted risk 0.624
-  1. To reduce risk, patient would need to reduce calcitonin by 2.30 pg/mL (from 2.30 to 0.00)
-
-Patient study_7 (sample 6) - predicted risk 0.658
-  1. To reduce risk, patient would need to reduce calcitonin by 18.93 pg/mL (from 18.93 to 0.00)
-
-Patient study_5 (sample 4) - predicted risk 0.749
-  1. To reduce risk, patient would need to reduce calcitonin by 5.10 pg/mL (from 5.20 to 0.10)
-
-============================================================
-
-EXPLAINABILITY SUMMARY
-============================================================
-Model: lightgbm
-Dataset: original
-LIME explained: 10 samples
-Correct: 5, Misclassified: 5
-LIME vs SHAP agreements: 10, partial: 0, disagree: 0
-
-Counterfactual highlights:
-Patient study_7 (sample 6) - predicted risk 0.506
-  1. To reduce risk, patient would need to reduce calcitonin by 17.23 pg/mL (from 18.93 to 1.70)
-
-============================================================
-
-EXPLAINABILITY SUMMARY
-============================================================
-Model: svm
-Dataset: original
-LIME explained: 10 samples
-Correct: 5, Misclassified: 5
 ============================================================
 
 EXPLAINABILITY SUMMARY
@@ -130,15 +90,24 @@ LIME vs SHAP agreements: 9, partial: 1, disagree: 0
 Counterfactual highlights:
 Patient study_9 (sample 1) - predicted risk 0.608
   1. To reduce risk, patient would need to reduce calcitonin by 2.20 pg/mL (from 2.30 to 0.10)
+  2. To reduce risk, patient would need to bring calcitonin into normal range (calcitonin_elevated: 1 -> 0)
 
 ============================================================
 
 EXPLAINABILITY SUMMARY
 ============================================================
 Model: lightgbm
-Dataset: expanded
+Dataset: original
 LIME explained: 10 samples
 Correct: 5, Misclassified: 5
-LIME vs SHAP agreements: 4, partial: 6, disagree: 0
+LIME vs SHAP agreements: 10, partial: 0, disagree: 0
+============================================================
+
+EXPLAINABILITY SUMMARY
+============================================================
+Model: svm
+Dataset: original
+LIME explained: 10 samples
+Correct: 5, Misclassified: 5
 ============================================================
 
