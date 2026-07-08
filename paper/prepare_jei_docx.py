@@ -48,8 +48,11 @@ def strip_tables(text):
 
 def latex_clean(text):
     text = strip_tables(text)
-    text = text.replace("\\%", "%").replace("\\&", "&").replace("\\_", "_")
+    # Strip LaTeX comments BEFORE unescaping \%, otherwise "\%" becomes "%" and
+    # the comment regex truncates every sentence at its first percentage (which
+    # also deleted the Wilson intervals that follow each reported percentage).
     text = re.sub(r"(?<!\\)%.*", "", text)
+    text = text.replace("\\%", "%").replace("\\&", "&").replace("\\_", "_")
     text = text.replace("\\clearpage", "").replace("\\appendix", "")
     text = text.replace("---", "-").replace("--", "-")
     text = re.sub(r"\\emph\{([^{}]*)\}", r"\1", text)
@@ -85,11 +88,13 @@ SUMMARY = (
     "vector machine models using an 80/20 stratified internal held-out split. "
     "The main genotype-blind XGBoost model removed RET variant and ATA risk "
     "features and retained 93.3% sensitivity with 73.3% accuracy. A "
-    "sequencing-informed genotype-aware XGBoost comparator reached 100.0% "
-    "sensitivity with 83.3% accuracy. A secondary synthetic-augmentation "
-    "experiment reached 96.2% accuracy with LightGBM, but this result was "
-    "interpreted only as a simulation because synthetic controls may not "
-    "represent real clinical heterogeneity. These findings do not provide a "
+    "sequencing-informed genotype-aware XGBoost comparator reached the same "
+    "93.3% sensitivity with higher specificity and 83.3% accuracy. A secondary "
+    "synthetic-augmentation experiment highlighted two complementary models on "
+    "the augmented dataset: logistic regression for the highest sensitivity "
+    "(96.1%) and LightGBM for the highest accuracy (93.3%). Both synthetic "
+    "results were interpreted only as simulations because synthetic controls may "
+    "not represent real clinical heterogeneity. These findings do not provide a "
     "deployable diagnostic tool. Instead, they provide an open rare-disease "
     "dataset and reproducible benchmark suggesting that routine clinical and "
     "biomarker features may help prioritize future prospective MEN2 triage "
@@ -138,7 +143,7 @@ TABLES = [
             ["Male sex, n (%)", "50 (33.6)", "27 (37.0)", "23 (30.3)"],
             ["Unique RET variants, n", "14", "11", "13"],
             ["Calcitonin elevated, n (%)", "58 (38.9)", "47 (64.4)", "11 (14.5)"],
-            ["CEA imputed, n (%)", "137 (91.9)", "65 (89.0)", "72 (94.7)"],
+            ["CEA missing (imputed within training folds), n (%)", "137 (91.9)", "65 (89.0)", "72 (94.7)"],
             ["Thyroid nodules present, n (%)", "10 (6.7)", "8 (11.0)", "2 (2.6)"],
             ["Family history of MTC, n (%)", "105 (70.5)", "53 (72.6)", "52 (68.4)"],
             ["Pheochromocytoma, n (%)", "9 (6.0)", "9 (12.3)", "0 (0.0)"],
@@ -180,19 +185,44 @@ TABLES = [
             ["Sex", "149", "149", "Unknown values were mode-filled for modeling."],
             ["RET variant", "149", "149", "Required for genotype-aware inclusion."],
             ["Calcitonin numeric value", "77", "149", "Zero includes unavailable, normal, or undetectable values after harmonization."],
-            ["CEA observed before imputation", "12", "149", "Observed paired CEA values seeded the imputation analysis."],
-            ["CEA imputed", "137", "149", "Missingness flag retained in the model dataset."],
+            ["CEA observed", "12", "149", "Observed CEA values; imputation was fit on training folds only."],
+            ["CEA missing (imputed within training folds)", "137", "149", "Missingness flag retained in the model dataset."],
         ],
     ),
     (
-        "Table 5. Internal held-out performance with raw counts and Wilson confidence intervals.",
-        ["Analysis", "Model", "Confusion matrix", "Sensitivity", "Accuracy"],
+        "Table 5. Model comparison across the five algorithms under the default full-feature configuration, on the internal held-out split of both datasets. Sensitivity is the positive-class recall. Metrics are from the standard evaluation harness applied uniformly to every model.",
+        ["Model", "Dataset", "Accuracy", "Sensitivity", "F1 score", "ROC-AUC"],
         [
-            ["Genotype-aware", "XGBoost", "TN=10, FP=5, FN=0, TP=15", "100.0% (15/15; 79.6%-100.0%)", "83.3% (25/30; 66.4%-92.7%)"],
-            ["Genotype-blind", "XGBoost", "TN=8, FP=7, FN=1, TP=14", "93.3% (14/15; 70.2%-98.8%)", "73.3% (22/30; 55.6%-85.8%)"],
-            ["No CEA", "XGBoost", "TN=12, FP=3, FN=0, TP=15", "100.0% (15/15; 79.6%-100.0%)", "90.0% (27/30; 74.4%-96.5%)"],
-            ["No biomarkers", "XGBoost", "TN=12, FP=3, FN=0, TP=15", "100.0% (15/15; 79.6%-100.0%)", "90.0% (27/30; 74.4%-96.5%)"],
-            ["Synthetic", "LightGBM", "TN=156, FP=3, FN=5, TP=46", "90.2% (46/51; 79.0%-95.7%)", "96.2% (202/210; 92.7%-98.1%)"],
+            ["Logistic regression", "Original (149)", "76.7%", "93.3%", "0.80", "0.82"],
+            ["Random forest", "Original (149)", "73.3%", "66.7%", "0.71", "0.90"],
+            ["XGBoost", "Original (149)", "83.3%", "93.3%", "0.85", "0.91"],
+            ["LightGBM", "Original (149)", "80.0%", "73.3%", "0.79", "0.89"],
+            ["Linear SVM", "Original (149)", "50.0%", "73.3%", "0.59", "0.72"],
+            ["Logistic regression", "Synthetic", "73.8%", "96.1%", "0.64", "0.94"],
+            ["Random forest", "Synthetic", "92.9%", "84.3%", "0.85", "0.96"],
+            ["XGBoost", "Synthetic", "88.1%", "90.2%", "0.79", "0.97"],
+            ["LightGBM", "Synthetic", "93.3%", "86.3%", "0.86", "0.98"],
+            ["Linear SVM", "Synthetic", "83.8%", "68.6%", "0.67", "0.77"],
+        ],
+    ),
+    (
+        "Table 6. Internal held-out performance with raw counts, Wilson 95% confidence intervals, specificity, and ROC-AUC. Sensitivity, specificity, and accuracy are shown as point% (count/total; Wilson interval); ROC-AUC is computed from model probability scores.",
+        ["Analysis", "Model", "Confusion matrix", "Sensitivity", "Specificity", "ROC-AUC", "Accuracy"],
+        [
+            ["Genotype-aware", "XGBoost", "TN=11, FP=4, FN=1, TP=14", "93.3% (14/15; 70.2%-98.8%)", "73.3% (11/15; 48.0%-89.1%)", "0.929", "83.3% (25/30; 66.4%-92.7%)"],
+            ["Genotype-blind", "XGBoost", "TN=8, FP=7, FN=1, TP=14", "93.3% (14/15; 70.2%-98.8%)", "53.3% (8/15; 30.1%-75.2%)", "0.902", "73.3% (22/30; 55.6%-85.8%)"],
+            ["No CEA", "XGBoost", "TN=12, FP=3, FN=0, TP=15", "100.0% (15/15; 79.6%-100.0%)", "80.0% (12/15; 54.8%-93.0%)", "0.938", "90.0% (27/30; 74.4%-96.5%)"],
+            ["No biomarkers", "XGBoost", "TN=12, FP=3, FN=0, TP=15", "100.0% (15/15; 79.6%-100.0%)", "80.0% (12/15; 54.8%-93.0%)", "0.929", "90.0% (27/30; 74.4%-96.5%)"],
+            ["Synthetic (accuracy)", "LightGBM", "TN=152, FP=7, FN=7, TP=44", "86.3% (44/51; 74.3%-93.2%)", "95.6% (152/159; 91.2%-97.9%)", "0.981", "93.3% (196/210; 89.1%-96.0%)"],
+            ["Synthetic (sensitivity)", "Logistic regression", "TN=106, FP=53, FN=2, TP=49", "96.1% (49/51; 86.8%-98.9%)", "66.7% (106/159; 59.0%-73.5%)", "0.941", "73.8% (155/210; 67.5%-79.3%)"],
+        ],
+    ),
+    (
+        "Table 7. Leave-one-study-out grouped validation on the 149-record cohort (pooled out-of-fold predictions), keyed on study_id. Preprocessing was fit on training folds only.",
+        ["Analysis", "Model", "Confusion matrix", "Sensitivity", "Specificity", "ROC-AUC", "Accuracy"],
+        [
+            ["Genotype-blind", "XGBoost", "TN=44, FP=32, FN=9, TP=64", "87.7% (64/73; 78.2%-93.4%)", "57.9% (44/76; 46.7%-68.4%)", "0.780", "72.5% (108/149; 64.8%-79.0%)"],
+            ["Genotype-aware", "XGBoost", "TN=37, FP=39, FN=13, TP=60", "82.2% (60/73; 71.9%-89.3%)", "48.7% (37/76; 37.8%-59.7%)", "0.725", "65.1% (97/149; 57.2%-72.3%)"],
         ],
     ),
 ]
@@ -201,7 +231,7 @@ TABLES = [
 FIGURES = [
     (
         BASE / "figures_jpeg" / "Figure_1_variant_distribution.jpg",
-        "Figure 1. RET variant distribution in the literature-derived MEN2/RET-carrier cohort. The chart summarizes the number of curated carrier records for each RET variant represented in the 149-record dataset.",
+        "Figure 1. RET variant distribution and MTC diagnosis rate in the literature-derived MEN2/RET-carrier cohort. Left: the number of curated carrier records for each RET variant represented in the 149-record dataset. Right: the proportion of records with a medullary thyroid carcinoma (MTC) diagnosis for each RET variant.",
     ),
     (
         BASE / "figures_jpeg" / "Figure_2_age_distribution.jpg",

@@ -4,6 +4,62 @@ import os
 import argparse
 from pathlib import Path
 
+
+def check_environment():
+    """Print a quick environment summary before the full pipeline runs."""
+    print("ENVIRONMENT CHECK")
+    print("-" * 40)
+    print(f"Python: {sys.version.split()[0]} ({sys.executable})")
+    print(f"Working directory: {Path.cwd()}")
+
+    required_packages = [
+        "pandas",
+        "numpy",
+        "sklearn",
+        "imblearn",
+        "xgboost",
+        "lightgbm",
+        "matplotlib",
+        "seaborn",
+        "shap",
+    ]
+    missing = []
+    for package in required_packages:
+        try:
+            __import__(package)
+        except ImportError:
+            missing.append(package)
+
+    if missing:
+        print(f"Missing Python packages: {', '.join(missing)}")
+        print("Install dependencies before running the full pipeline.")
+        return False
+
+    print("Required Python packages: OK")
+    print("-" * 40)
+    print()
+    return True
+
+
+def run_cross_model_comparison(dataset_types):
+    """Run side-by-side patient comparison once all models are trained."""
+    sys.path.insert(0, str(Path("src").resolve()))
+    try:
+        from test_model import compare_all_models_with_patient_data
+    except ImportError as exc:
+        print(f"Warning: could not import cross-model comparison helper: {exc}")
+        return
+
+    for dataset_type in dataset_types:
+        label = "EXPANDED" if dataset_type == "expanded" else "ORIGINAL"
+        print(f"\n{'=' * 80}")
+        print(f"CROSS-MODEL PATIENT COMPARISON ({label})")
+        print(f"{'=' * 80}")
+        try:
+            compare_all_models_with_patient_data(dataset_type)
+        except Exception as exc:  # noqa: BLE001
+            print(f"Warning: cross-model comparison failed for {dataset_type}: {exc}")
+
 ANONYMIZED_DATASETS = [
     (
         Path("data/processed/ret_multivariant_training_data.csv"),
@@ -174,10 +230,23 @@ def extract_model_metrics(model_type, dataset_type='expanded'):
     return metrics
 
 def print_comparison_table(results):
-    """Print a formatted comparison table of all model results"""
-    print("\n" + "=" * 120)
-    print("MODEL COMPARISON RESULTS")
-    print("=" * 120)
+    """Print a formatted comparison table of all model results.
+
+    The same table is also written to
+    results/model_comparison/model_comparison_summary.txt so the
+    "which model performs best" ranking is a durable pipeline artifact
+    and not only console output.
+    """
+    lines = []
+
+    def emit(text=""):
+        """Print to console and buffer for the persisted summary file."""
+        print(text)
+        lines.append(text)
+
+    emit("\n" + "=" * 120)
+    emit("MODEL COMPARISON RESULTS")
+    emit("=" * 120)
 
     # Define table headers
     headers = ["Model", "Dataset", "Accuracy", "Precision", "Avg Precision", "Recall", "F1 Score", "ROC AUC", "Status"]
@@ -185,8 +254,8 @@ def print_comparison_table(results):
 
     # Print header
     header_row = "".join(f"{h:<{w}}" for h, w in zip(headers, col_widths))
-    print(header_row)
-    print("-" * 120)
+    emit(header_row)
+    emit("-" * 120)
 
     # Print each model's results
     for key, data in results.items():
@@ -228,11 +297,50 @@ def print_comparison_table(results):
             row = [model_name, dataset_label, "N/A", "N/A", "N/A", "N/A", "N/A", "N/A", status]
 
         row_str = "".join(f"{str(val):<{w}}" for val, w in zip(row, col_widths))
-        print(row_str)
+        emit(row_str)
 
-    print("=" * 120)
+    emit("=" * 120)
 
-    # Find best performing model
+    # Highlight synthetic-dataset leaders on complementary metrics.
+    synthetic_sensitivity_leader = None
+    synthetic_sensitivity = -1.0
+    synthetic_accuracy_leader = None
+    synthetic_accuracy = -1.0
+    for key, data in results.items():
+        if not key.endswith("_expanded") or not data.get("metrics") or not data["success"]:
+            continue
+        model_type = key.replace("_expanded", "")
+        recall = data["metrics"].get("recall", 0)
+        accuracy = data["metrics"].get("accuracy", 0)
+        if recall > synthetic_sensitivity:
+            synthetic_sensitivity = recall
+            synthetic_sensitivity_leader = model_type
+        if accuracy > synthetic_accuracy:
+            synthetic_accuracy = accuracy
+            synthetic_accuracy_leader = model_type
+
+    model_names = {
+        'logistic': 'Logistic Regression',
+        'random_forest': 'Random Forest',
+        'xgboost': 'XGBoost',
+        'lightgbm': 'LightGBM',
+        'svm': 'SVM'
+    }
+
+    if synthetic_sensitivity_leader:
+        emit(
+            f"\nHighest synthetic-dataset sensitivity: "
+            f"{model_names[synthetic_sensitivity_leader]} "
+            f"({synthetic_sensitivity:.1%})"
+        )
+    if synthetic_accuracy_leader:
+        emit(
+            f"Highest synthetic-dataset accuracy: "
+            f"{model_names[synthetic_accuracy_leader]} "
+            f"({synthetic_accuracy:.1%})"
+        )
+
+    # Find best performing model overall by F1 on any dataset.
     best_model = None
     best_f1 = -1
     for key, data in results.items():
@@ -261,8 +369,18 @@ def print_comparison_table(results):
             'lightgbm': 'LightGBM',
             'svm': 'SVM'
         }
-        print(f"\nBest performing model: {model_names[model_type]} on {dataset_label} (F1 Score: {best_f1:.4f})")
-    print()
+        emit(f"\nBest overall F1 score: {model_names[model_type]} on {dataset_label} (F1 Score: {best_f1:.4f})")
+    emit()
+
+    # Persist the comparison table so the ranking is a durable artifact.
+    try:
+        os.makedirs('results/model_comparison', exist_ok=True)
+        summary_file = 'results/model_comparison/model_comparison_summary.txt'
+        with open(summary_file, 'w', encoding='utf-8') as f:
+            f.write("\n".join(lines).lstrip("\n") + "\n")
+        print(f"Model comparison summary saved to: {summary_file}")
+    except OSError as exc:
+        print(f"Warning: could not write model comparison summary: {exc}")
 
 def run_all_models(dataset_type='expanded'):
     """Run all model types and compare results"""
@@ -401,6 +519,9 @@ def run_all_models(dataset_type='expanded'):
     # Print comparison table
     print_comparison_table(results)
 
+    # Side-by-side patient comparison (all five models, same held-out split).
+    run_cross_model_comparison(dataset_types)
+
     # Final summary
     print("=" * 80)
     print("ALL MODELS PIPELINE COMPLETED!")
@@ -430,6 +551,80 @@ def run_all_models(dataset_type='expanded'):
     print()
 
     return True
+
+
+def run_full_suite():
+    """Run EVERYTHING: all models on both datasets, statistical tests, ablation,
+    CEA imputation validation, and leave-one-study-out grouped validation.
+
+    This is what a bare `python main.py` (no flags) executes.
+    """
+    if not check_environment():
+        return False
+
+    print("=" * 80)
+    print("FULL PIPELINE MODE (bare `python main.py`): running the complete suite")
+    print("=" * 80)
+    print()
+
+    # 1) Train/test/CI for all five models on both datasets + comparison table.
+    core_ok = run_all_models("both")
+    if not core_ok:
+        print("Full suite aborted: core model training/testing failed.")
+        return False
+
+    overall_ok = True
+
+    # 2) Statistical significance tests (original vs expanded).
+    overall_ok &= run_module(
+        "src/statistical_tests.py",
+        "Statistical Significance Tests - Recall comparison for original vs expanded datasets",
+        log_file="results/logs/statistical_tests.log",
+    )
+
+    # 3) Ablation study for all models on both datasets.
+    overall_ok &= run_module(
+        "src/ablation_study.py",
+        "Ablation Study - Feature-group removal analysis (all models, both datasets)",
+        ["--m=all", "--d=both"],
+        log_file="results/logs/ablation_study.log",
+    )
+
+    # 4) CEA imputation validation study for all models on both datasets.
+    overall_ok &= run_module(
+        "src/cea_validation_study.py",
+        "CEA Imputation Validation - Train-only imputation sensitivity (all models, both datasets)",
+        ["--m=all", "--d=both", "--option=both"],
+        log_file="results/logs/cea_validation_study.log",
+    )
+
+    # 5) Leave-one-study-out grouped validation for every model.
+    for model_type in ["logistic", "random_forest", "xgboost", "lightgbm", "svm"]:
+        overall_ok &= run_module(
+            "src/grouped_validation.py",
+            f"Grouped Validation - Leave-one-study-out for {model_type}",
+            [f"--m={model_type}"],
+            log_file=f"results/logs/grouped_validation_{model_type}.log",
+        )
+
+    print("\n" + "=" * 80)
+    print("FULL PIPELINE MODE COMPLETE")
+    print("=" * 80)
+    print(f"Core models + comparison table: {'OK' if core_ok else 'FAILED'}")
+    print(
+        "Statistical tests / ablation / CEA validation / grouped validation: "
+        f"{'OK' if overall_ok else 'SOME STEPS FAILED (see results/logs)'}"
+    )
+    print("\nKey artifacts:")
+    print("- results/model_comparison/model_comparison_summary.txt (best-model ranking)")
+    print("- results/model_comparison/*_detailed_results.txt")
+    print("- results/statistical_tests/statistical_significance_tests.txt")
+    print("- results/ablation/*_ablation_results.txt")
+    print("- results/cea_validation/*_cea_validation.txt")
+    print("- results/grouped_validation/*_leave_one_study_out.txt")
+
+    return core_ok and overall_ok
+
 
 def main(model_type='logistic', dataset_type='expanded'):
     """main orchestration function"""
@@ -512,8 +707,19 @@ def main(model_type='logistic', dataset_type='expanded'):
     return True
 
 if __name__ == "__main__":
+    # A bare `python main.py` (no flags at all) runs the COMPLETE suite:
+    # every model, both datasets, all tests, ablation, CEA validation, and grouped
+    # validation.
+    if len(sys.argv) == 1:
+        full_ok = run_full_suite()
+        sys.exit(0 if full_ok else 1)
+
     # parse command line arguments
-    parser = argparse.ArgumentParser(description='run complete mtc prediction pipeline')
+    parser = argparse.ArgumentParser(
+        description=('Run the MTC prediction pipeline. With NO flags, `python main.py` '
+                     'runs the COMPLETE suite (all models, both datasets, statistical '
+                     'tests, ablation, CEA validation, and grouped validation). '
+                     'Pass flags to run a targeted subset.'))
     parser.add_argument('--m', '--model', type=str, default='l',
                        choices=['l', 'r', 'x', 'g', 's', 'a', 'logistic', 'random_forest', 'xgboost', 'lightgbm', 'svm', 'all'],
                        help='model type: l/logistic (default), r/random_forest, x/xgboost, g/lightgbm, s/svm, a/all (compare all models)')
