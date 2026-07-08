@@ -8,6 +8,9 @@ import sys
 import os
 import argparse
 
+sys.path.append(os.path.dirname(__file__))
+from preprocessing import impute_cea_train_only, fill_remaining_na_train_only
+
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'models'))
 from logistic_regression_model import LogisticRegressionModel
 from random_forest_model import RandomForestModel
@@ -157,15 +160,16 @@ def train_evaluate_model(model_type='logistic', dataset_type='expanded'):
     features, target, groups = prepare_features_target(df, target_column='mtc_diagnosis')
     print(f"features shape: {features.shape}, target distribution: {target.value_counts().to_dict()}")
 
-    # Handle NaN values (fill with median for numeric columns)
-    if features.isnull().any().any():
-        print(f"WARNING: Found NaN values in features. Filling with column medians.")
-        features = features.fillna(features.median())
-
-    # SPLIT FIRST - fit preprocessing only on training data to avoid leakage.
+    # SPLIT FIRST - fit ALL preprocessing (CEA imputation, scaling, SMOTE) on
+    # training data only to avoid leakage. CEA arrives as observed-or-NaN.
     X_train, X_test, y_train, y_test = train_test_split(
         features, target, test_size=0.2, random_state=42, stratify=target
     )
+
+    # Training-only CEA imputation (MICE + PMM fit on training rows only).
+    X_train, X_test, cea_state = impute_cea_train_only(X_train, X_test, random_state=42)
+    train_medians = X_train.median(numeric_only=True)
+    X_train, X_test = fill_remaining_na_train_only(X_train, X_test)
 
     scaler = StandardScaler()
     X_train = scaler.fit_transform(X_train)
@@ -229,6 +233,11 @@ def train_evaluate_model(model_type='logistic', dataset_type='expanded'):
     
     # Train the model
     model.train(X_train, y_train, scaler, features.columns.tolist())
+
+    # Persist training-only preprocessing state so test-time reproduces the
+    # exact held-out features without re-touching test data.
+    model.cea_imputer_state = cea_state
+    model.train_medians = train_medians
     
     # Print model-specific information
     if hasattr(model, 'print_coefficients'):
