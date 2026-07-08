@@ -18,58 +18,58 @@ Configuration: Baseline (All Features)
   Description: Full model with all features including ATA risk and variants
   Features Used: 34
   Removed: None
-  Accuracy:  0.8952
-  Precision: 0.7101
-  Recall:    0.9608
-  F1 Score:  0.8167
-  ROC AUC:   0.9784
-  Avg Prec:  0.9363
+  Accuracy:  0.8810
+  Precision: 0.6970
+  Recall:    0.9020
+  F1 Score:  0.7863
+  ROC AUC:   0.9681
+  Avg Prec:  0.9147
 
-Configuration: Without ATA Risk Level (Delta = +0.00% from baseline)
+Configuration: Without ATA Risk Level (Delta = +0.95% from baseline)
   Description: Removes ret_risk_level and its interaction terms
   Features Used: 31
   Removed: ['ret_risk_level', 'risk_calcitonin_interaction', 'risk_age_interaction']
-  Accuracy:  0.8952
-  Precision: 0.7101
-  Recall:    0.9608
-  F1 Score:  0.8167
-  ROC AUC:   0.9761
-  Avg Prec:  0.9313
+  Accuracy:  0.8905
+  Precision: 0.7121
+  Recall:    0.9216
+  F1 Score:  0.8034
+  ROC AUC:   0.9726
+  Avg Prec:  0.9225
 
-Configuration: Without Variant Encodings (Delta = -10.00% from baseline)
+Configuration: Without Variant Encodings (Delta = -10.48% from baseline)
   Description: Removes all one-hot encoded RET variant features
   Features Used: 20
   Removed: ['variant_']
-  Accuracy:  0.7952
-  Precision: 0.5465
-  Recall:    0.9216
-  F1 Score:  0.6861
-  ROC AUC:   0.9483
-  Avg Prec:  0.8888
+  Accuracy:  0.7762
+  Precision: 0.5227
+  Recall:    0.9020
+  F1 Score:  0.6619
+  ROC AUC:   0.9455
+  Avg Prec:  0.8881
 
-Configuration: Without Any Genetic Features (Delta = -12.86% from baseline)
+Configuration: Without Any Genetic Features (Delta = -11.90% from baseline)
   Description: Removes all genetic-derived features (risk level + variants) - tests pure biomarker prediction
   Features Used: 17
   Removed: ['ret_risk_level', 'risk_calcitonin_interaction', 'risk_age_interaction', 'variant_']
-  Accuracy:  0.7667
-  Precision: 0.5109
-  Recall:    0.9216
-  F1 Score:  0.6573
-  ROC AUC:   0.9517
-  Avg Prec:  0.8918
+  Accuracy:  0.7619
+  Precision: 0.5055
+  Recall:    0.9020
+  F1 Score:  0.6479
+  ROC AUC:   0.9398
+  Avg Prec:  0.8795
 
-Configuration: Without Calcitonin (Delta = -1.90% from baseline)
+Configuration: Without Calcitonin (Delta = +0.00% from baseline)
   Description: Removes calcitonin features - tests genetic-only prediction
   Features Used: 31
   Removed: ['calcitonin_elevated', 'calcitonin_level_numeric', 'calcitonin_age_interaction']
-  Accuracy:  0.8762
-  Precision: 0.6712
-  Recall:    0.9608
-  F1 Score:  0.7903
+  Accuracy:  0.8810
+  Precision: 0.6857
+  Recall:    0.9412
+  F1 Score:  0.7934
   ROC AUC:   0.9729
-  Avg Prec:  0.9171
+  Avg Prec:  0.9266
 
-Configuration: Without CEA (Delta = -1.90% from baseline)
+Configuration: Without CEA (Delta = -0.48% from baseline)
   Description: Removes CEA to address reviewer concern about weak imputation
   Features Used: 33
   Removed: ['cea_level_numeric']
@@ -80,7 +80,7 @@ Configuration: Without CEA (Delta = -1.90% from baseline)
   ROC AUC:   0.9681
   Avg Prec:  0.9042
 
-Configuration: Genetics Only (No Biomarkers) (Delta = -4.76% from baseline)
+Configuration: Genetics Only (No Biomarkers) (Delta = -3.33% from baseline)
   Description: Only genetic features + demographics - tests if prediction is "just consensus"
   Features Used: 27
   Removed: ['calcitonin_elevated', 'calcitonin_level_numeric', 'calcitonin_age_interaction', 'cea_level_numeric', 'thyroid_nodules_present', 'multiple_nodules', 'nodule_severity']
@@ -91,26 +91,88 @@ Configuration: Genetics Only (No Biomarkers) (Delta = -4.76% from baseline)
   ROC AUC:   0.9596
   Avg Prec:  0.8846
 
-Configuration: Biomarkers Only (No Genetics) (Delta = -12.86% from baseline)
+Configuration: Biomarkers Only (No Genetics) (Delta = -11.90% from baseline)
   Description: Only biomarker features - tests clinical utility without genetic encoding
   Features Used: 17
   Removed: ['ret_risk_level', 'risk_calcitonin_interaction', 'risk_age_interaction', 'variant_']
-  Accuracy:  0.7667
-  Precision: 0.5109
-  Recall:    0.9216
-  F1 Score:  0.6573
-  ROC AUC:   0.9517
-  Avg Prec:  0.8918
+  Accuracy:  0.7619
+  Precision: 0.5055
+  Recall:    0.9020
+  F1 Score:  0.6479
+  ROC AUC:   0.9398
+  Avg Prec:  0.8795
+
+================================================================================
+MANUSCRIPT REPORTING METRICS (Wilson 95% CI)
+================================================================================
+Sensitivity, specificity, and accuracy are shown as point% (num/den; Wilson low%-high%).
+ROC-AUC is computed from model probability scores.
+
+Baseline (All Features)
+  Confusion matrix: TN=139, FP=20, FN=5, TP=46
+  Sensitivity: 90.2% (46/51; 79.0%-95.7%)
+  Specificity: 87.4% (139/159; 81.4%-91.7%)
+  Accuracy:    88.1% (185/210; 83.0%-91.8%)
+  ROC-AUC:     0.968
+
+Without ATA Risk Level
+  Confusion matrix: TN=140, FP=19, FN=4, TP=47
+  Sensitivity: 92.2% (47/51; 81.5%-96.9%)
+  Specificity: 88.1% (140/159; 82.1%-92.2%)
+  Accuracy:    89.0% (187/210; 84.1%-92.6%)
+  ROC-AUC:     0.973
+
+Without Variant Encodings
+  Confusion matrix: TN=117, FP=42, FN=5, TP=46
+  Sensitivity: 90.2% (46/51; 79.0%-95.7%)
+  Specificity: 73.6% (117/159; 66.2%-79.8%)
+  Accuracy:    77.6% (163/210; 71.5%-82.7%)
+  ROC-AUC:     0.945
+
+Without Any Genetic Features
+  Confusion matrix: TN=114, FP=45, FN=5, TP=46
+  Sensitivity: 90.2% (46/51; 79.0%-95.7%)
+  Specificity: 71.7% (114/159; 64.2%-78.1%)
+  Accuracy:    76.2% (160/210; 70.0%-81.4%)
+  ROC-AUC:     0.940
+
+Without Calcitonin
+  Confusion matrix: TN=137, FP=22, FN=3, TP=48
+  Sensitivity: 94.1% (48/51; 84.1%-98.0%)
+  Specificity: 86.2% (137/159; 79.9%-90.7%)
+  Accuracy:    88.1% (185/210; 83.0%-91.8%)
+  ROC-AUC:     0.973
+
+Without CEA
+  Confusion matrix: TN=136, FP=23, FN=3, TP=48
+  Sensitivity: 94.1% (48/51; 84.1%-98.0%)
+  Specificity: 85.5% (136/159; 79.2%-90.2%)
+  Accuracy:    87.6% (184/210; 82.5%-91.4%)
+  ROC-AUC:     0.968
+
+Genetics Only (No Biomarkers)
+  Confusion matrix: TN=127, FP=32, FN=0, TP=51
+  Sensitivity: 100.0% (51/51; 93.0%-100.0%)
+  Specificity: 79.9% (127/159; 73.0%-85.4%)
+  Accuracy:    84.8% (178/210; 79.3%-89.0%)
+  ROC-AUC:     0.960
+
+Biomarkers Only (No Genetics)
+  Confusion matrix: TN=114, FP=45, FN=5, TP=46
+  Sensitivity: 90.2% (46/51; 79.0%-95.7%)
+  Specificity: 71.7% (114/159; 64.2%-78.1%)
+  Accuracy:    76.2% (160/210; 70.0%-81.4%)
+  ROC-AUC:     0.940
 
 ================================================================================
 KEY FINDINGS FOR REVIEWER RESPONSE
 ================================================================================
 
 1. Removing ALL genetic features (ATA risk + variants):
-   Accuracy drops 12.9% (89.5% -> 76.7%)
+   Accuracy drops 11.9% (88.1% -> 76.2%)
 
 2. Removing calcitonin features:
-   Accuracy drops 1.9% (89.5% -> 87.6%)
+   Accuracy increases 0.0% (88.1% -> 88.1%)
    -> Calcitonin is the PRIMARY signal, not ATA risk level
 
 3. Using ONLY genetic features (no biomarkers):

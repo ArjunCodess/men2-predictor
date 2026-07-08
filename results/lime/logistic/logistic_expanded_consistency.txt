@@ -4,5 +4,5 @@ Model: logistic
 Dataset: expanded
 Samples compared: 10
 Agree: 0
-Partial: 4
-Disagree: 6
+Partial: 5
+Disagree: 5

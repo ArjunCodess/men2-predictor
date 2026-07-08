@@ -1,7 +1,7 @@
 # MEN2 Predictor: Rare Disease Machine Learning Pipeline
 
-![Accuracy](https://img.shields.io/badge/Accuracy-96.19%25-brightgreen)
-![Recall](https://img.shields.io/badge/Recall%20(Original)-100%25-success)
+![Accuracy](https://img.shields.io/badge/Synthetic%20Accuracy%20(LightGBM)-93.3%25-brightgreen)
+![Sensitivity](https://img.shields.io/badge/Synthetic%20Sensitivity%20(Logistic)-96.1%25-success)
 ![Models](https://img.shields.io/badge/Models-5-blue)
 ![Variants](https://img.shields.io/badge/RET%20Variants-14-blue)
 
@@ -11,7 +11,7 @@ In India, genetic testing for MEN2 costs INR 20,000 (~$225 USD), putting life-sa
 
 MEN2 Predictor evaluates whether published MEN2/RET-carrier records can support a transparent rare-disease machine-learning benchmark for MTC status. The project has two linked contributions: an open literature-derived dataset and a reproducible model benchmark spanning genotype-blind, genotype-aware, no-CEA, and synthetic-augmentation analyses. The scientific answer must stay modest: this is not a diagnostic, screening, triage, or clinical decision-support system.
 
-MEN2 Predictor now aggregates **149 confirmed RET carriers from 10 peer-reviewed studies (14 variants)** into an open dataset and reproducible pipeline. The anonymized dataset is published on Zenodo at **https://doi.org/10.5281/zenodo.20594453**. On the real literature-derived cohort, **XGBoost reached 100% sensitivity** with **83.33% accuracy**. The expanded case-control workflow reaches **96.19% accuracy with LightGBM**, but those augmented records are not a real clinical cohort.
+MEN2 Predictor now aggregates **149 confirmed RET carriers from 10 peer-reviewed studies (14 variants)** into an open dataset and reproducible pipeline. The anonymized dataset is published on Zenodo at **https://doi.org/10.5281/zenodo.20594453**. On the real literature-derived cohort, **XGBoost reached 93.3% sensitivity** with **83.3% accuracy** and anchors the genotype-blind and genotype-aware analyses. On the synthetic-augmentation dataset, **logistic regression reached the highest sensitivity (96.1%)** and **LightGBM the highest accuracy (93.3%)**; both are simulation-only results, not real clinical cohort estimates.
 
 ## Table of Contents
 - [Awards & Recognition](#awards--recognition)
@@ -74,36 +74,44 @@ This dataset should be cited independently of the code:
 
 ### Real-Patient Cohort (149 carriers across 10 studies)
 
-The paper-only dataset now contains **149 confirmed carriers** across **14 RET variants** and is publicly released on Zenodo as a reusable rare-disease benchmark. On this filtered cohort, **XGBoost** is the primary exploratory model because it reached **100% sensitivity** with **83.33% accuracy**. The expanded synthetic-augmentation analysis is secondary; **LightGBM on expanded data achieves 96.19% accuracy** with **90.20% recall**.
+The paper-only dataset contains **149 confirmed carriers** across **14 RET variants** and is publicly released on Zenodo as a reusable rare-disease benchmark. On this filtered cohort, **XGBoost** is the primary exploratory model because it reached **93.3% sensitivity** with **83.3% accuracy** and was carried forward for genotype-blind and genotype-aware ablations.
 
-### Synthetic Augmentation Impact
+### Synthetic-Augmentation Cohort (1,047 records)
 
-Synthetic controls + SMOTE expand the case-control dataset to **1,047 records**. After filtering out the post-diagnostic and mixed-heavy papers, the biomarker coupling analysis is based on **12 paired calcitonin/CEA observations from 6 studies**. Expanded models improve discrimination in simulation, while the original-data XGBoost model remains the primary literature-derived benchmark.
+Synthetic controls + SMOTE expand the case-control dataset to **1,047 records**. On the internal held-out split of this augmented dataset, two models are reported together because they optimize different metrics:
+
+- **Logistic regression — synthetic — sensitivity:** **96.1%** (49/51), highest among all five algorithms.
+- **LightGBM — synthetic — accuracy:** **93.3%** (196/210), highest among all five algorithms.
+
+These augmented records are not a real clinical cohort. They are included only to study how augmentation changes sensitivity- versus accuracy-oriented discrimination.
 
 | Model                | Dataset      | Accuracy   | Precision  | Avg Precision   | Recall     | F1 Score  | ROC AUC  |
 | ---------------------- | ------------ | ---------- | ---------- | --------------- | ---------- | ---------- | -------- |
-| **Logistic Regression**| Original     | 80.00%     | 71.43%     | 79.93%          | **100%**   | 83.33%     | 0.8267   |
-| **Logistic Regression**| Expanded     | 73.33%     | 47.62%     | 85.01%          | **98.04%** | 64.10%     | 0.9457   |
-| **Random Forest**      | Original     | 83.33%     | 91.67%     | 90.68%          | 73.33%     | 81.48%     | 0.9156   |
-| **Random Forest**      | Expanded     | 92.86%     | 86.00%     | 92.19%          | 84.31%     | 85.15%     | 0.9686   |
-| **LightGBM**           | Original     | 80.00%     | 90.91%     | 91.39%          | 66.67%     | 76.92%     | 0.9156   |
-| **LightGBM**           | Expanded     | **96.19%** | **93.88%** | **97.40%**      | 90.20%     | **92.00%** | **0.9917** |
-| **XGBoost**            | Original     | **83.33%** | 75.00%     | **92.08%**      | **100%**   | **85.71%** | 0.9156   |
-| **XGBoost**            | Expanded     | 89.52%     | 71.01%     | 93.63%          | 96.08%     | 81.67%     | 0.9784   |
-| **SVM (Linear)**       | Original     | 73.33%     | 70.59%     | 75.26%          | 80.00%     | 75.00%     | 0.7867   |
-| **SVM (Linear)**       | Expanded     | 79.05%     | 55.93%     | 60.62%          | 64.71%     | 60.00%     | 0.7267   |
+| **Logistic Regression**| Original     | 76.67%     | 70.00%     | 79.14%          | **93.33%** | 80.00%     | 0.8178   |
+| **Logistic Regression**| Synthetic    | 73.81%     | 48.04%     | 83.58%          | **96.08%** | 64.05%     | 0.9407   |
+| **Random Forest**      | Original     | 73.33%     | 76.92%     | 89.43%          | 66.67%     | 71.43%     | 0.8978   |
+| **Random Forest**      | Synthetic    | 92.86%     | 86.00%     | 90.68%          | 84.31%     | 85.15%     | 0.9578   |
+| **LightGBM**           | Original     | 80.00%     | 84.62%     | 89.52%          | 73.33%     | 78.57%     | 0.8911   |
+| **LightGBM**           | Synthetic    | **93.33%** | 86.27%     | 94.73%          | 86.27%     | 86.27%     | **0.9807** |
+| **XGBoost**            | Original     | **83.33%** | 77.78%     | 91.20%          | **93.33%** | **84.85%** | 0.9111   |
+| **XGBoost**            | Synthetic    | 88.10%     | 69.70%     | 91.61%          | 90.20%     | 78.63%     | 0.9680   |
+| **SVM (Linear)**       | Original     | 50.00%     | 50.00%     | 74.79%          | 73.33%     | 59.46%     | 0.7156   |
+| **SVM (Linear)**       | Synthetic    | 83.81%     | 66.04%     | 66.01%          | 68.63%     | 67.31%     | 0.7668   |
+
+Metrics come from the standard held-out evaluation harness in `results/model_comparison/model_comparison_summary.txt`.
 
 ### Clinical Interpretation
 
-- **Primary exploratory result:** XGBoost on the paper-only cohort reached **100% sensitivity** with **83.33% accuracy**.
-- **Highest simulated accuracy:** LightGBM on expanded data achieves **96.19% accuracy** with **90.20% recall**.
-- **Model interpretation:** XGBoost-original is the primary literature-derived benchmark; LightGBM-expanded is a secondary synthetic-augmentation result.
+- **Primary real-data benchmark:** XGBoost on the 149-record cohort reached **93.3% sensitivity** with **83.3% accuracy**.
+- **Synthetic sensitivity leader:** Logistic regression on the augmented dataset reached **96.1% sensitivity**.
+- **Synthetic accuracy leader:** LightGBM on the augmented dataset reached **93.3% accuracy**.
+- **Model interpretation:** XGBoost-original anchors the literature-derived genotype-blind and genotype-aware analyses; logistic regression (synthetic sensitivity) and LightGBM (synthetic accuracy) summarize the augmentation simulation.
 
 ### Statistical Tests on Recall Drops
 
-- Permutation tests show **no significant recall loss** for Logistic Regression, Random Forest, XGBoost, or SVM. LightGBM shows a significant **recall gain** on the expanded dataset (`p = 0.0422`), improving from 66.7% to 90.2%.
-- McNemar's test remains mostly uninformative because overlapping positive patients are sparse across original and expanded test sets.
-- Full bootstrap and permutation summaries live at `results/statistical_tests/statistical_significance_tests.txt` (generated automatically when running both datasets together via `python main.py --m=all --d=both`; statistical tests run only in the both-datasets workflow).
+- Permutation tests did **not** flag statistically significant recall drops for any model when moving from original to synthetic data (`results/statistical_tests/statistical_significance_tests.txt`).
+- McNemar's test remains mostly uninformative because overlapping positive patients are sparse across original and synthetic test sets.
+- Full bootstrap and permutation summaries are generated automatically when running the complete pipeline via `python main.py` (both datasets).
 
 ### Why This Matters
 
@@ -117,7 +125,7 @@ Every documented carrier in these studies represents scarce published evidence, 
 
 Limited access to shared patient-level datasets is part of the problem in rare-disease machine learning. Without a reusable benchmark, future researchers have to rebuild the same scattered evidence base before they can test a model. This project turns those scattered MEN2/RET-carrier reports into a citable dataset with source provenance, a data dictionary, and a reproducible pipeline.
 
-Even with the filtered cohort at **149 patients and 12 paired calcitonin/CEA observations**, synthetic augmentation remains model-dependent. Accuracy climbs into the 96% band, but the primary evidence remains the original-data benchmark rather than the expanded workflow.
+Even with the filtered cohort at **149 patients and 12 paired calcitonin/CEA observations**, synthetic augmentation remains model-dependent. On the augmented held-out split, **logistic regression reached 96.1% sensitivity** and **LightGBM reached 93.3% accuracy**; the primary evidence remains the original-data XGBoost benchmark (93.3% sensitivity, 83.3% accuracy).
 
 ### Learning Paradigm Coverage
 
@@ -151,20 +159,21 @@ This comprehensive coverage ensures findings generalize across fundamentally dif
 
 | Analysis | Result |
 |----------|--------|
-| Best recall model | **XGBoost-original** keeps **100% recall** with or without CEA, and reaches **90.00% accuracy without CEA** |
-| Best accuracy model | **LightGBM-expanded** improves from **92.86% without CEA** to **96.19% with CEA** |
-| Conclusion | CEA is **model-dependent**: optional for XGBoost-original, helpful for LightGBM-expanded |
+| Primary real-data benchmark | **XGBoost — original** reaches **93.3% sensitivity** with **83.3% accuracy** |
+| Synthetic sensitivity leader | **Logistic regression — synthetic** reaches **96.1% sensitivity** |
+| Synthetic accuracy leader | **LightGBM — synthetic** reaches **93.3% accuracy** |
+| CEA effect | CEA contribution is model-dependent; see [detailed rationale](reports/cea_imputation_validation.md) |
 
-**Imputation Method Comparison (LightGBM, Expanded Dataset):**
+**Imputation Method Comparison (LightGBM, synthetic dataset):**
 
 | Method | Accuracy | Recall | Δ vs MICE |
 |--------|----------|--------|-----------|
-| MICE+PMM | **96.19%** | 90.20% | --- |
-| Mean imputation | 93.81% | 86.27% | -2.38% |
-| Median imputation | 92.86% | 90.20% | -3.33% |
-| Zero imputation | 93.81% | 86.27% | -2.38% |
+| MICE+PMM | **93.33%** | 86.27% | --- |
+| Mean imputation | 93.81% | 86.27% | +0.48% |
+| Median imputation | 92.86% | 90.20% | -0.48% |
+| Zero imputation | 93.81% | 86.27% | +0.48% |
 
-**Why include CEA?** Because the highest-accuracy simulation model benefits from it. Removing CEA lowers LightGBM-expanded accuracy from **96.19%** to **92.86%**, while XGBoost-original keeps **100% recall** either way. See [detailed rationale](reports/cea_imputation_validation.md).
+**Why include CEA?** CEA effects vary by model and dataset. LightGBM on the synthetic dataset is the accuracy-oriented simulation benchmark; XGBoost on the original cohort anchors genotype-blind and genotype-aware analyses. See [detailed rationale](reports/cea_imputation_validation.md).
 
 Run the study: `python src/cea_validation_study.py --m=lightgbm --d=expanded`
 
@@ -174,40 +183,53 @@ Run the study: `python src/cea_validation_study.py --m=lightgbm --d=expanded`
 
 MEN2 (Multiple Endocrine Neoplasia type 2) is a rare hereditary cancer syndrome caused by RET gene mutations. This project developed machine learning models to predict MTC (medullary thyroid carcinoma) risk across **14 RET variants** using clinical and genetic features from **149 confirmed carriers** across 10 peer-reviewed research studies.
 
-**Scientific Contribution:** This work provides an open rare-disease dataset and a reproducible ML benchmark. The dataset gives future researchers a shared MEN2/RET-carrier modeling table in a disease area where reusable patient-level data are scarce. The model benchmark tests how routine clinical and biomarker features perform under genotype-blind, genotype-aware, no-CEA, and synthetic-augmentation settings. Augmentation improves simulated accuracy substantially, while the primary literature-derived result comes from **XGBoost on original data**.
+**Scientific Contribution:** This work provides an open rare-disease dataset and a reproducible ML benchmark. The dataset gives future researchers a shared MEN2/RET-carrier modeling table in a disease area where reusable patient-level data are scarce. The model benchmark tests how routine clinical and biomarker features perform under genotype-blind, genotype-aware, no-CEA, and synthetic-augmentation settings. On real data, **XGBoost on the original cohort** anchors the analysis; on synthetic augmentation, **logistic regression (sensitivity)** and **LightGBM (accuracy)** summarize complementary simulation behavior.
 
 ## Benchmark Performance
 
 ### Primary Original-Data Model
 
-**XGBoost on the paper-only dataset** - primary exploratory literature-derived benchmark.
+**XGBoost — original** — primary literature-derived benchmark.
 
 | Metric                   | Value     |
 | ------------------------ | --------- |
 | **Accuracy**             | 83.33%    |
-| **Recall (Sensitivity)** | **100%**  |
-| **Precision**            | 75.00%    |
-| **F1 Score**             | 85.71%    |
-| **ROC AUC**              | 0.9156    |
+| **Recall (Sensitivity)** | **93.33%**|
+| **Precision**            | 77.78%    |
+| **F1 Score**             | 84.85%    |
+| **ROC AUC**              | 0.9111    |
 
-### Highest-Accuracy Expanded Model
+### Synthetic-Augmentation Models (complementary pair)
 
-**LightGBM on the expanded dataset** - highest accuracy in the synthetic-augmentation experiment.
+Two models are reported on the synthetic held-out split because they optimize different metrics:
+
+**Logistic regression — synthetic — sensitivity**
 
 | Metric                   | Value     |
 | ------------------------ | --------- |
-| **Accuracy**             | **96.19%**|
-| **Recall (Sensitivity)** | 90.20%    |
-| **Precision**            | 93.88%    |
-| **F1 Score**             | 92.00%    |
-| **ROC AUC**              | 0.9917    |
+| **Recall (Sensitivity)** | **96.08%**|
+| **Accuracy**             | 73.81%    |
+| **Precision**            | 48.04%    |
+| **F1 Score**             | 64.05%    |
+| **ROC AUC**              | 0.9407    |
+
+**LightGBM — synthetic — accuracy**
+
+| Metric                   | Value     |
+| ------------------------ | --------- |
+| **Accuracy**             | **93.33%**|
+| **Recall (Sensitivity)** | 86.27%    |
+| **Precision**            | 86.27%    |
+| **F1 Score**             | 86.27%    |
+| **ROC AUC**              | 0.9807    |
 
 ### Performance Comparison
 
 | Model              | Dataset   | Accuracy   | Recall     | Use Case                        |
 | ------------------ | --------- | ---------- | ---------- | ------------------------------- |
-| **XGBoost**        | Original  | **83.33%** | **100%**   | Primary original-data benchmark |
-| **LightGBM**       | Expanded  | **96.19%** | 90.20%     | Synthetic-augmentation benchmark |
+| **XGBoost**        | Original  | **83.33%** | **93.33%** | Primary original-data benchmark |
+| **Logistic Regression** | Synthetic | 73.81% | **96.08%** | Highest synthetic sensitivity |
+| **LightGBM**       | Synthetic | **93.33%** | 86.27%     | Highest synthetic accuracy      |
 
 > **Important:** These are internal benchmark results only. They should not be used for diagnosis, screening, triage, or treatment decisions.
 
@@ -231,8 +253,8 @@ This project makes five linked contributions to rare-disease machine learning:
 ### 3. Model-Dependent Evaluation of Synthetic Augmentation
 
 - Shows that synthetic controls plus SMOTE can improve discrimination while affecting recall differently across algorithms.
-- **LightGBM improves from 80.00% to 96.19% accuracy** and from **66.7% to 90.2% recall** when moving from original to expanded data.
-- At the same time, the primary original-data benchmark remains with **XGBoost on original data**, which reached **100% sensitivity** in one internal held-out split.
+- On the synthetic held-out split, **logistic regression reached 96.1% sensitivity** and **LightGBM reached 93.3% accuracy**.
+- The primary original-data benchmark remains **XGBoost on the original cohort** (93.3% sensitivity, 83.3% accuracy).
 
 ### 4. Methodological Framework for Rare Disease ML
 
@@ -242,8 +264,8 @@ This project makes five linked contributions to rare-disease machine learning:
 
 ### 5. Clinical Deployment Framing
 
-- Reports **XGBoost on original data** as the primary literature-derived benchmark.
-- Reports **LightGBM on expanded data** as the highest-accuracy synthetic-augmentation benchmark.
+- Reports **XGBoost — original** as the primary literature-derived benchmark.
+- Reports **logistic regression — synthetic (sensitivity)** and **LightGBM — synthetic (accuracy)** as the complementary synthetic-augmentation pair.
 - Provides a reproducible template for comparing genotype-aware, genotype-blind, no-CEA, and augmented analyses in small rare-disease cohorts.
 
 ### Publication Status
@@ -548,7 +570,7 @@ Run the complete pipeline:
 python main.py
 ```
 
-This executes all stages: data preparation, analysis, expansion, training, and testing.
+This executes the full suite: all five models on both datasets, statistical tests, ablation, CEA validation, grouped validation, and cross-model patient comparison. Document generation (DOCX/PDF) is not part of the pipeline.
 
 ### Model Selection (`--m`)
 
@@ -655,9 +677,9 @@ python src/ablation_study.py --m=random_forest --d=both
 - `{model}_{dataset}_ablation_results.txt` - Detailed findings
 - `{model}_{dataset}_ablation_results.csv` - For analysis
 
-**Key Finding:** In the highest-accuracy model, LightGBM-expanded still reaches **93.33% accuracy** after removing all genetic features. In the primary original-data benchmark, XGBoost-original preserves **100% recall** even after removing CEA and variant one-hot encodings.
+**Key Finding:** On the synthetic dataset, **LightGBM** is the accuracy leader (93.3% baseline); ablations quantify how much each feature group contributes. On the original cohort, **XGBoost** anchors genotype-blind and genotype-aware analyses (93.3% sensitivity at baseline).
 
-**Calcitonin Feature Behavior:** In the highest-accuracy model, removing calcitonin lowers LightGBM-expanded accuracy from **96.19% to 95.24%**. In the primary original-data benchmark, XGBoost-original retains **100% recall** even without calcitonin. Full analysis in [ablation_feature_contribution_analysis.md](reports/ablation_feature_contribution_analysis.md).
+**Calcitonin Feature Behavior:** Feature-removal effects are reported in `results/ablation/` and summarized in [ablation_feature_contribution_analysis.md](reports/ablation_feature_contribution_analysis.md).
 
 ### Explainability (SHAP + LIME)
 

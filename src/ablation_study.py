@@ -24,6 +24,10 @@ from sklearn.metrics import (
 )
 from imblearn.over_sampling import SMOTE
 
+sys.path.append(os.path.dirname(__file__))
+from preprocessing import impute_cea_train_only, fill_remaining_na_train_only
+from reporting_metrics import metrics_from_counts, format_metric
+
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'models'))
 from logistic_regression_model import LogisticRegressionModel
 from random_forest_model import RandomForestModel
@@ -179,14 +183,15 @@ def run_single_ablation(features, target, config_name, model_type='lightgbm'):
     # Apply ablation
     ablated_features = apply_ablation(features, config_name)
 
-    # Handle NaN
-    if ablated_features.isnull().any().any():
-        ablated_features = ablated_features.fillna(ablated_features.median())
-
-    # Split BEFORE scaling to prevent data leakage
+    # Split BEFORE any imputation/scaling to prevent data leakage
     X_train, X_test, y_train, y_test = train_test_split(
         ablated_features, target, test_size=0.2, random_state=42, stratify=target
     )
+
+    # Training-only CEA imputation (MICE + PMM fit on training rows only),
+    # then fill any residual NaNs with training medians.
+    X_train, X_test, _ = impute_cea_train_only(X_train, X_test, random_state=42)
+    X_train, X_test = fill_remaining_na_train_only(X_train, X_test)
 
     # Scale - fit only on training data
     scaler = StandardScaler()
@@ -334,6 +339,23 @@ def save_ablation_results(results, model_type, dataset_type):
             f.write(f"  ROC AUC:   {r['roc_auc']:.4f}\n")
             f.write(f"  Avg Prec:  {r['avg_precision']:.4f}\n")
             f.write("\n")
+
+        f.write("=" * 80 + "\n")
+        f.write("MANUSCRIPT REPORTING METRICS (Wilson 95% CI)\n")
+        f.write("=" * 80 + "\n")
+        f.write("Sensitivity, specificity, and accuracy are shown as "
+                "point% (num/den; Wilson low%-high%).\n")
+        f.write("ROC-AUC is computed from model probability scores.\n\n")
+        for r in results:
+            cm = r['confusion_matrix']
+            (tn, fp), (fn, tp) = cm[0], cm[1]
+            rep = metrics_from_counts(tn, fp, fn, tp)
+            f.write(f"{r['config_display']}\n")
+            f.write(f"  Confusion matrix: TN={tn}, FP={fp}, FN={fn}, TP={tp}\n")
+            f.write(f"  Sensitivity: {format_metric(rep['sensitivity'])}\n")
+            f.write(f"  Specificity: {format_metric(rep['specificity'])}\n")
+            f.write(f"  Accuracy:    {format_metric(rep['accuracy'])}\n")
+            f.write(f"  ROC-AUC:     {r['roc_auc']:.3f}\n\n")
 
         f.write("=" * 80 + "\n")
         f.write("KEY FINDINGS FOR REVIEWER RESPONSE\n")

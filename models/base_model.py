@@ -29,6 +29,9 @@ class BaseModel(ABC):
         self.threshold = threshold
         self.feature_columns = None
         self.is_trained = False
+        # Training-only CEA imputation state (fit on training rows only).
+        self.cea_imputer_state = None
+        self.train_medians = None
         
     @abstractmethod
     def _create_model(self, **kwargs):
@@ -178,7 +181,9 @@ class BaseModel(ABC):
             'scaler': self.scaler,
             'feature_columns': self.feature_columns,
             'threshold': self.threshold,
-            'model_name': self.model_name
+            'model_name': self.model_name,
+            'cea_imputer_state': self.cea_imputer_state,
+            'train_medians': self.train_medians
         }
         
         # create directory if filepath contains a directory
@@ -205,6 +210,8 @@ class BaseModel(ABC):
         self.feature_columns = model_data['feature_columns']
         self.threshold = model_data.get('threshold', 0.5)
         self.model_name = model_data.get('model_name', 'unknown')
+        self.cea_imputer_state = model_data.get('cea_imputer_state')
+        self.train_medians = model_data.get('train_medians')
         self.is_trained = True
         
         print(f"{self.model_name} model loaded from {filepath}")

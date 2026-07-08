@@ -16,6 +16,6 @@ Pair contributions by study:
 MICE + PMM Imputation
 Observed CEA values before: 12
 Missing CEA values before: 137
-Strategy: mice_pmm
-MICE iterations: 20
-Missing after imputation: 0
+Strategy: deferred_train_only
+MICE iterations: 0
+Missing after imputation: 137

@@ -1,0 +1,21 @@
+========================================================================================================================
+MODEL COMPARISON RESULTS
+========================================================================================================================
+Model                Dataset        Accuracy    Precision   Avg Precision    Recall      F1 Score    ROC AUC     Status         
+------------------------------------------------------------------------------------------------------------------------
+Logistic Regression  Expanded       0.7381      0.4804      0.8358           0.9608      0.6405      0.9407      SUCCESS        
+Random Forest        Expanded       0.9286      0.8600      0.9068           0.8431      0.8515      0.9578      SUCCESS        
+XGBoost              Expanded       0.8810      0.6970      0.9161           0.9020      0.7863      0.9680      SUCCESS        
+LightGBM             Expanded       0.9333      0.8627      0.9473           0.8627      0.8627      0.9807      SUCCESS        
+SVM                  Expanded       0.8381      0.6604      0.6601           0.6863      0.6731      0.7668      SUCCESS        
+Logistic Regression  Original       0.7667      0.7000      0.7914           0.9333      0.8000      0.8178      SUCCESS        
+Random Forest        Original       0.7333      0.7692      0.8943           0.6667      0.7143      0.8978      SUCCESS        
+XGBoost              Original       0.8333      0.7778      0.9120           0.9333      0.8485      0.9111      SUCCESS        
+LightGBM             Original       0.8000      0.8462      0.8952           0.7333      0.7857      0.8911      SUCCESS        
+SVM                  Original       0.5000      0.5000      0.7479           0.7333      0.5946      0.7156      SUCCESS        
+========================================================================================================================
+
+Highest synthetic-dataset sensitivity: Logistic Regression (96.1%)
+Highest synthetic-dataset accuracy: LightGBM (93.3%)
+
+Best overall F1 score: LightGBM on Expanded (F1 Score: 0.8627)

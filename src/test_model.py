@@ -10,6 +10,11 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import seaborn as sns
 from explainability import run_explainability
+from preprocessing import (
+    impute_cea_train_only,
+    fill_remaining_na_train_only,
+    apply_cea_imputer,
+)
 
 # Add models directory to path
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'models'))
@@ -160,24 +165,32 @@ def load_model_and_test_data(model_type='logistic', dataset_type='expanded'):
         if col not in features.columns:
             features[col] = 0
 
-    # Handle NaN values (fill with median for numeric columns) - same as training
-    if features.isnull().any().any():
-        print(f"WARNING: Found NaN values in features. Filling with column medians.")
-        features = features.fillna(features.median())
+    # Reproduce the EXACT same split as training BEFORE any imputation/scaling,
+    # so training-only CEA imputation is applied identically to the held-out set.
+    from sklearn.model_selection import train_test_split
+    X_train, X_test, y_train, y_test = train_test_split(
+        features, df['mtc_diagnosis'], test_size=0.2, random_state=42, stratify=df['mtc_diagnosis']
+    )
+
+    # Apply training-only CEA imputation. Prefer the imputer state persisted with
+    # the model; otherwise re-fit deterministically on the reconstructed X_train.
+    if getattr(model, 'cea_imputer_state', None) is not None:
+        X_test = apply_cea_imputer(X_test, model.cea_imputer_state, random_state=42)
+        if getattr(model, 'train_medians', None) is not None:
+            X_test = X_test.fillna(model.train_medians).fillna(0.0)
+        else:
+            _, X_test = fill_remaining_na_train_only(X_train, X_test)
+    else:
+        X_train, X_test, _ = impute_cea_train_only(X_train, X_test, random_state=42)
+        _, X_test = fill_remaining_na_train_only(X_train, X_test)
 
     # Use the SAVED scaler directly (don't create new one)
-    features_scaled = model.scaler.transform(features)
-    
-    # use the EXACT same split as training
-    from sklearn.model_selection import train_test_split
-    _, X_test, _, y_test = train_test_split(
-        features_scaled, df['mtc_diagnosis'], test_size=0.2, random_state=42, stratify=df['mtc_diagnosis']
-    )
+    X_test_scaled = model.scaler.transform(X_test)
 
     # get test patient indices and return original patient data (not processed)
     test_indices = y_test.index
 
-    return model, X_test, y_test, df_original.iloc[test_indices]
+    return model, X_test_scaled, y_test, df_original.iloc[test_indices]
 
 def generate_predictions(model, X_test_scaled, y_test, threshold=None):
     """generate predictions and probabilities using new model structure"""

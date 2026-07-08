@@ -1,5 +1,5 @@
 experiment,sample_size,train_size,test_size,features_used,accuracy,precision,recall,f1_score,roc_auc,avg_precision,config_name,description,imputation_method,confusion_matrix
-MICE+PMM (Current),1047,837,210,34,0.8571428571428571,0.6842105263157895,0.7647058823529411,0.7222222222222222,0.9066469355037613,0.7645861785831165,mice_pmm,Multiple Imputation by Chained Equations with Predictive Mean Matching,mice,
+MICE+PMM (Current),1047,837,210,34,0.8952380952380953,0.7843137254901961,0.7843137254901961,0.7843137254901961,0.9009742261684547,0.7604093207837791,mice_pmm,Multiple Imputation by Chained Equations with Predictive Mean Matching,mice,
 Mean Imputation,1047,837,210,34,0.9047619047619048,0.803921568627451,0.803921568627451,0.803921568627451,0.9223085460599335,0.7983469882907388,mean,Replace missing CEA with mean of observed values,mean,"[[149, 10], [10, 41]]"
 Median Imputation,1047,837,210,34,0.8714285714285714,0.7222222222222222,0.7647058823529411,0.7428571428571429,0.8982611912689604,0.7539049492238367,median,Replace missing CEA with median of observed values,median,"[[144, 15], [12, 39]]"
 Zero Imputation,1047,837,210,34,0.9047619047619048,0.7924528301886793,0.8235294117647058,0.8076923076923077,0.9269946972499692,0.7904715833860311,zero,Replace missing CEA with zero (conservative lower bound),zero,"[[148, 11], [9, 42]]"

@@ -1515,8 +1515,21 @@ def create_paper_dataset():
     regression_input = biomarker_pairs_df[['calcitonin_level_numeric', 'cea_level_numeric']] \
         if not biomarker_pairs_df.empty else biomarker_pairs_df
     regression_params = fit_biomarker_regression(regression_input)
-    df, imputation_info = run_mice_pmm_imputation(df, biomarker_pairs_df)
-    df['cea_elevated'] = (df['cea_level_numeric'].fillna(0) > 5).astype(int)
+
+    # CEA is intentionally NOT imputed here. Fitting MICE on the full 149-record
+    # cohort before the train/test split would leak held-out information into the
+    # training rows (and vice versa). Instead we keep observed-or-NaN CEA plus a
+    # missingness flag, and defer imputation to training-only folds downstream
+    # (see src/preprocessing.py).
+    imputation_info = {
+        'observed_before': int(df['cea_level_numeric'].notna().sum()),
+        'missing_before': int(df['cea_level_numeric'].isna().sum()),
+        'strategy': 'deferred_train_only',
+        'mice_iterations': 0,
+        'missing_after': int(df['cea_level_numeric'].isna().sum()),
+    }
+    df['cea_imputed_flag'] = df['cea_level_numeric'].isna().astype(int)
+    df['cea_elevated'] = (df['cea_level_numeric'] > 5).astype('Int64')
 
     summary_path = Path('results') / 'biomarker_summary' / 'biomarker_ceaimputation_summary.txt'
     save_biomarker_summary(summary_path, correlation_value, biomarker_pairs_df, imputation_info, regression_params)

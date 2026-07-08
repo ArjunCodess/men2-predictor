@@ -20,7 +20,7 @@ Configuration: With CEA Features
   Precision: 0.8600
   Recall:    0.8431
   F1 Score:  0.8515
-  ROC AUC:   0.9676
+  ROC AUC:   0.9591
 
 Configuration: Without CEA Features
   Description: Model without any CEA features
@@ -43,7 +43,7 @@ Method: MICE+PMM (Current)
   Precision: 0.8600
   Recall:    0.8431
   F1 Score:  0.8515
-  ROC AUC:   0.9676
+  ROC AUC:   0.9591
 
 Method: Mean Imputation
   Description: Replace missing CEA with mean of observed values
